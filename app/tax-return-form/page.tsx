@@ -488,55 +488,74 @@ export default function TaxReturnFormPage() {
         <label htmlFor="LocationDescriptionOwnershipProportionOfProperty">
           Location, description and ownership proportion of property:
         </label>
-      <textarea  {...register("locationDescriptionOwnershipProportionOfProperty")}
+        <textarea
+          {...register("locationDescriptionOwnershipProportionOfProperty")}
           name="locationDescriptionOwnershipProportionOfProperty"
-          id="locationDescriptionOwnershipProportionOfProperty" ></textarea>
-        {errors.locationDescriptionOwnershipProportionOfProperty && <span>{errors.locationDescriptionOwnershipProportionOfProperty.message}</span>}
+          id="locationDescriptionOwnershipProportionOfProperty"
+        ></textarea>
+        {errors.locationDescriptionOwnershipProportionOfProperty && (
+          <span>
+            {errors.locationDescriptionOwnershipProportionOfProperty.message}
+          </span>
+        )}
       </div>
 
       <div>
-        <label htmlFor="rentReceivedOrAnnualValue">Rent Received or Annual value
-        (whichever is higher)</label>
-        <input {...register("rentReceivedOrAnnualValue")} id="rentReceivedOrAnnualValue" />
-        {errors.rentReceivedOrAnnualValue && <span>{errors.rentReceivedOrAnnualValue.message}</span>}
+        <label htmlFor="rentReceivedOrAnnualValue">
+          Rent Received or Annual value (whichever is higher)
+        </label>
+        <input
+          {...register("rentReceivedOrAnnualValue")}
+          id="rentReceivedOrAnnualValue"
+        />
+        {errors.rentReceivedOrAnnualValue && (
+          <span>{errors.rentReceivedOrAnnualValue.message}</span>
+        )}
       </div>
       <div>
         <label htmlFor="advanceRentReceived">Advance Rent Received</label>
         <input {...register("advanceRentReceived")} id="advanceRentReceived" />
-        {errors.advanceRentReceived && <span>{errors.advanceRentReceived.message}</span>}
+        {errors.advanceRentReceived && (
+          <span>{errors.advanceRentReceived.message}</span>
+        )}
       </div>
 
       <div>
-        <label htmlFor="valueOfAnyBenefit">Value of any Benefit in addition to 1 & 2</label>
+        <label htmlFor="valueOfAnyBenefit">
+          Value of any Benefit in addition to 1 & 2
+        </label>
         <input {...register("valueOfAnyBenefit")} id="valueOfAnyBenefit" />
-        {errors.valueOfAnyBenefit && <span>{errors.valueOfAnyBenefit.message}</span>}
+        {errors.valueOfAnyBenefit && (
+          <span>{errors.valueOfAnyBenefit.message}</span>
+        )}
       </div>
 
       <div>
         <label htmlFor="adjustedAdvanceRent">Adjusted Advance Rent</label>
         <input {...register("adjustedAdvanceRent")} id="adjustedAdvanceRent" />
-        {errors.adjustedAdvanceRent && <span>{errors.adjustedAdvanceRent.message}</span>}
+        {errors.adjustedAdvanceRent && (
+          <span>{errors.adjustedAdvanceRent.message}</span>
+        )}
       </div>
 
       <div>
         <label htmlFor="vacancyAllowance">Vacancy Allowance</label>
         <input {...register("vacancyAllowance")} id="vacancyAllowance" />
-        {errors.vacancyAllowance && <span>{errors.vacancyAllowance.message}</span>}
+        {errors.vacancyAllowance && (
+          <span>{errors.vacancyAllowance.message}</span>
+        )}
       </div>
-     
 
       <div>
         <label htmlFor="repairCollection" className="block mb-1">
-        Repair, Collection etc.
+          Repair, Collection etc.
         </label>
         <select
           {...register("repairCollection")}
           id="repairCollection"
           className="w-full px-3 py-2 border rounded"
         >
-          <option value="">
-          Choose One
-          </option>
+          <option value="">Choose One</option>
           {REPAIR_COLLECTION_OPTIONS.map((options) => (
             <option key={options} value={options}>
               {kebabToNormal(options)}
@@ -553,7 +572,9 @@ export default function TaxReturnFormPage() {
       <div>
         <label htmlFor="municipalOrLocalTax">Municipal or Local Tax</label>
         <input {...register("municipalOrLocalTax")} id="municipalOrLocalTax" />
-        {errors.municipalOrLocalTax && <span>{errors.municipalOrLocalTax.message}</span>}
+        {errors.municipalOrLocalTax && (
+          <span>{errors.municipalOrLocalTax.message}</span>
+        )}
       </div>
       <div>
         <label htmlFor="landRevenue">Land Revenue</label>
@@ -561,15 +582,26 @@ export default function TaxReturnFormPage() {
         {errors.landRevenue && <span>{errors.landRevenue.message}</span>}
       </div>
       <div>
-        <label htmlFor="interestMortgageCapitalCharge">Interest Paid on Loan / Mortgage /
-        Capital Charge</label>
-        <input {...register("interestMortgageCapitalCharge")} id="interestMortgageCapitalCharge" />
-        {errors.interestMortgageCapitalCharge && <span>{errors.interestMortgageCapitalCharge.message}</span>}
+        <label htmlFor="interestMortgageCapitalCharge">
+          Interest Paid on Loan / Mortgage / Capital Charge
+        </label>
+        <input
+          {...register("interestMortgageCapitalCharge")}
+          id="interestMortgageCapitalCharge"
+        />
+        {errors.interestMortgageCapitalCharge && (
+          <span>{errors.interestMortgageCapitalCharge.message}</span>
+        )}
       </div>
       <div>
         <label htmlFor="insurancePremiumPaid">Insurance Premium Paid</label>
-        <input {...register("insurancePremiumPaid")} id="insurancePremiumPaid" />
-        {errors.insurancePremiumPaid && <span>{errors.insurancePremiumPaid.message}</span>}
+        <input
+          {...register("insurancePremiumPaid")}
+          id="insurancePremiumPaid"
+        />
+        {errors.insurancePremiumPaid && (
+          <span>{errors.insurancePremiumPaid.message}</span>
+        )}
       </div>
       <div>
         <label htmlFor="others">Others, if any</label>
@@ -577,19 +609,37 @@ export default function TaxReturnFormPage() {
         {errors.others && <span>{errors.others.message}</span>}
       </div>
       <div>
-        <label htmlFor="TaxpayersShare">Taxpayer&apos;s Share, if applicable</label>
-        <input value="100" {...register("TaxpayersShare")} id="TaxpayersShare" /> %
-        {errors.TaxpayersShare && <span>{errors.TaxpayersShare.message}</span>}
+        <label htmlFor="TaxpayersShare">
+          Taxpayer&apos;s Share, if applicable
+        </label>
+        <input
+          value="100"
+          {...register("TaxpayersShare")}
+          id="TaxpayersShare"
+        />{" "}
+        %{errors.TaxpayersShare && <span>{errors.TaxpayersShare.message}</span>}
       </div>
       <div>
-        <label htmlFor="taxDeductedSourceFromIncomeRent">Tax Deducted at Source from Income from Rent</label>
-        <input {...register("taxDeductedSourceFromIncomeRent")} id="taxDeductedSourceFromIncomeRent" />
-        {errors.taxDeductedSourceFromIncomeRent && <span>{errors.taxDeductedSourceFromIncomeRent.message}</span>}
+        <label htmlFor="taxDeductedSourceFromIncomeRent">
+          Tax Deducted at Source from Income from Rent
+        </label>
+        <input
+          {...register("taxDeductedSourceFromIncomeRent")}
+          id="taxDeductedSourceFromIncomeRent"
+        />
+        {errors.taxDeductedSourceFromIncomeRent && (
+          <span>{errors.taxDeductedSourceFromIncomeRent.message}</span>
+        )}
       </div>
       <div>
         <label htmlFor="salesTurnoverReceipt">Sales / Turnover / Receipt</label>
-        <input {...register("salesTurnoverReceipt")} id="salesTurnoverReceipt" />
-        {errors.salesTurnoverReceipt && <span>{errors.salesTurnoverReceipt.message}</span>}
+        <input
+          {...register("salesTurnoverReceipt")}
+          id="salesTurnoverReceipt"
+        />
+        {errors.salesTurnoverReceipt && (
+          <span>{errors.salesTurnoverReceipt.message}</span>
+        )}
       </div>
       <div>
         <label htmlFor="grossProfit">Gross Profit</label>
@@ -597,10 +647,17 @@ export default function TaxReturnFormPage() {
         {errors.grossProfit && <span>{errors.grossProfit.message}</span>}
       </div>
       <div>
-        <label htmlFor="generalExpensesSellingExpenses">General Expenses, Selling Expenses, Land Revenue, Rates, Loan Interest,
-        Insurance Premium and Other Expenses</label>
-        <input {...register("generalExpensesSellingExpenses")} id="generalExpensesSellingExpenses" />
-        {errors.generalExpensesSellingExpenses && <span>{errors.generalExpensesSellingExpenses.message}</span>}
+        <label htmlFor="generalExpensesSellingExpenses">
+          General Expenses, Selling Expenses, Land Revenue, Rates, Loan
+          Interest, Insurance Premium and Other Expenses
+        </label>
+        <input
+          {...register("generalExpensesSellingExpenses")}
+          id="generalExpensesSellingExpenses"
+        />
+        {errors.generalExpensesSellingExpenses && (
+          <span>{errors.generalExpensesSellingExpenses.message}</span>
+        )}
       </div>
 
       <h2>Page 6</h2>
@@ -612,31 +669,49 @@ export default function TaxReturnFormPage() {
       <div>
         <label htmlFor="natureOfBusiness">Nature of Business:</label>
         <input {...register("natureOfBusiness")} id="natureOfBusiness" />
-        {errors.natureOfBusiness && <span>{errors.natureOfBusiness.message}</span>}
+        {errors.natureOfBusiness && (
+          <span>{errors.natureOfBusiness.message}</span>
+        )}
       </div>
 
       <div>
         <label htmlFor="addressOfBusiness">Address of Business:</label>
         <input {...register("addressOfBusiness")} id="addressOfBusiness" />
-        {errors.addressOfBusiness && <span>{errors.addressOfBusiness.message}</span>}
+        {errors.addressOfBusiness && (
+          <span>{errors.addressOfBusiness.message}</span>
+        )}
       </div>
 
       <div>
         <label htmlFor="salesTurnoverReceipts">Sales/ Turnover/ Receipts</label>
-        <input {...register("salesTurnoverReceipts")} id="salesTurnoverReceipts" />
-        {errors.salesTurnoverReceipts && <span>{errors.salesTurnoverReceipts.message}</span>}
+        <input
+          {...register("salesTurnoverReceipts")}
+          id="salesTurnoverReceipts"
+        />
+        {errors.salesTurnoverReceipts && (
+          <span>{errors.salesTurnoverReceipts.message}</span>
+        )}
       </div>
 
       <div>
         <label htmlFor="grossProfitAmount">Gross Profit </label>
         <input {...register("grossProfitAmount")} id="grossProfitAmount" />
-        {errors.grossProfitAmount && <span>{errors.grossProfitAmount.message}</span>}
+        {errors.grossProfitAmount && (
+          <span>{errors.grossProfitAmount.message}</span>
+        )}
       </div>
 
       <div>
-        <label htmlFor="generalAdministrativeSellingExpenses">General, administrative, selling and other expenses </label>
-        <input {...register("generalAdministrativeSellingExpenses")} id="generalAdministrativeSellingExpenses" />
-        {errors.generalAdministrativeSellingExpenses && <span>{errors.generalAdministrativeSellingExpenses.message}</span>}
+        <label htmlFor="generalAdministrativeSellingExpenses">
+          General, administrative, selling and other expenses{" "}
+        </label>
+        <input
+          {...register("generalAdministrativeSellingExpenses")}
+          id="generalAdministrativeSellingExpenses"
+        />
+        {errors.generalAdministrativeSellingExpenses && (
+          <span>{errors.generalAdministrativeSellingExpenses.message}</span>
+        )}
       </div>
 
       <div>
@@ -664,9 +739,16 @@ export default function TaxReturnFormPage() {
       </div>
 
       <div>
-        <label htmlFor="withdrawalsInTheIncomeYear">Withdrawals in the income year</label>
-        <input {...register("withdrawalsInTheIncomeYear")} id="withdrawalsInTheIncomeYear" />
-        {errors.withdrawalsInTheIncomeYear && <span>{errors.withdrawalsInTheIncomeYear.message}</span>}
+        <label htmlFor="withdrawalsInTheIncomeYear">
+          Withdrawals in the income year
+        </label>
+        <input
+          {...register("withdrawalsInTheIncomeYear")}
+          id="withdrawalsInTheIncomeYear"
+        />
+        {errors.withdrawalsInTheIncomeYear && (
+          <span>{errors.withdrawalsInTheIncomeYear.message}</span>
+        )}
       </div>
 
       <div>
@@ -677,170 +759,639 @@ export default function TaxReturnFormPage() {
 
       <div>
         <label htmlFor="liabilities">Interest/ Profit from Bank / FI</label>
-        <input {...register("interestProfitFromBankFIAmount")} id="interestProfitFromBankFIAmount" />
-        {errors.interestProfitFromBankFIAmount && <span>{errors.interestProfitFromBankFIAmount.message}</span>}
-        <input {...register("interestProfitFromBankFIDeductions")} id="interestProfitFromBankFIDeductions" />
-        {errors.interestProfitFromBankFIDeductions && <span>{errors.interestProfitFromBankFIDeductions.message}</span>}
-        <input {...register("interestProfitFromBankFITax")} id="interestProfitFromBankFITax" />
-        {errors.interestProfitFromBankFITax && <span>{errors.interestProfitFromBankFITax.message}</span>}
+        <input
+          {...register("interestProfitFromBankFIAmount")}
+          id="interestProfitFromBankFIAmount"
+        />
+        {errors.interestProfitFromBankFIAmount && (
+          <span>{errors.interestProfitFromBankFIAmount.message}</span>
+        )}
+        <input
+          {...register("interestProfitFromBankFIDeductions")}
+          id="interestProfitFromBankFIDeductions"
+        />
+        {errors.interestProfitFromBankFIDeductions && (
+          <span>{errors.interestProfitFromBankFIDeductions.message}</span>
+        )}
+        <input
+          {...register("interestProfitFromBankFITax")}
+          id="interestProfitFromBankFITax"
+        />
+        {errors.interestProfitFromBankFITax && (
+          <span>{errors.interestProfitFromBankFITax.message}</span>
+        )}
       </div>
 
       <div>
-        <label htmlFor="incomeFromSavingCertificatesAmount">Income from Saving Certificates</label>
-        <input {...register("incomeFromSavingCertificatesAmount")} id="incomeFromSavingCertificatesAmount" />
-        {errors.incomeFromSavingCertificatesAmount && <span>{errors.incomeFromSavingCertificatesAmount.message}</span>}
-        <input {...register("incomeFromSavingCertificatesDeductions")} id="incomeFromSavingCertificatesDeductions" />
-        {errors.incomeFromSavingCertificatesDeductions && <span>{errors.incomeFromSavingCertificatesDeductions.message}</span>}
-        <input {...register("incomeFromSavingCertificatesTax")} id="incomeFromSavingCertificatesTax" />
-        {errors.incomeFromSavingCertificatesTax && <span>{errors.incomeFromSavingCertificatesTax.message}</span>}
+        <label htmlFor="incomeFromSavingCertificatesAmount">
+          Income from Saving Certificates
+        </label>
+        <input
+          {...register("incomeFromSavingCertificatesAmount")}
+          id="incomeFromSavingCertificatesAmount"
+        />
+        {errors.incomeFromSavingCertificatesAmount && (
+          <span>{errors.incomeFromSavingCertificatesAmount.message}</span>
+        )}
+        <input
+          {...register("incomeFromSavingCertificatesDeductions")}
+          id="incomeFromSavingCertificatesDeductions"
+        />
+        {errors.incomeFromSavingCertificatesDeductions && (
+          <span>{errors.incomeFromSavingCertificatesDeductions.message}</span>
+        )}
+        <input
+          {...register("incomeFromSavingCertificatesTax")}
+          id="incomeFromSavingCertificatesTax"
+        />
+        {errors.incomeFromSavingCertificatesTax && (
+          <span>{errors.incomeFromSavingCertificatesTax.message}</span>
+        )}
       </div>
 
       <div>
-        <label htmlFor="incomeFromSecuritiesDebenturesAmount">Income From Securities / Debentures</label>
-        <input {...register("incomeFromSecuritiesDebenturesAmount")} id="incomeFromSecuritiesDebenturesAmount" />
-        {errors.incomeFromSecuritiesDebenturesAmount && <span>{errors.incomeFromSecuritiesDebenturesAmount.message}</span>}
-        <input {...register("incomeFromSecuritiesDebenturesDeductions")} id="incomeFromSecuritiesDebenturesDeductions" />
-        {errors.incomeFromSecuritiesDebenturesDeductions && <span>{errors.incomeFromSecuritiesDebenturesDeductions.message}</span>}
-        <input {...register("incomeFromSecuritiesDebenturesTax")} id="incomeFromSecuritiesDebenturesTax" />
-        {errors.incomeFromSecuritiesDebenturesTax && <span>{errors.incomeFromSecuritiesDebenturesTax.message}</span>}
+        <label htmlFor="incomeFromSecuritiesDebenturesAmount">
+          Income From Securities / Debentures
+        </label>
+        <input
+          {...register("incomeFromSecuritiesDebenturesAmount")}
+          id="incomeFromSecuritiesDebenturesAmount"
+        />
+        {errors.incomeFromSecuritiesDebenturesAmount && (
+          <span>{errors.incomeFromSecuritiesDebenturesAmount.message}</span>
+        )}
+        <input
+          {...register("incomeFromSecuritiesDebenturesDeductions")}
+          id="incomeFromSecuritiesDebenturesDeductions"
+        />
+        {errors.incomeFromSecuritiesDebenturesDeductions && (
+          <span>{errors.incomeFromSecuritiesDebenturesDeductions.message}</span>
+        )}
+        <input
+          {...register("incomeFromSecuritiesDebenturesTax")}
+          id="incomeFromSecuritiesDebenturesTax"
+        />
+        {errors.incomeFromSecuritiesDebenturesTax && (
+          <span>{errors.incomeFromSecuritiesDebenturesTax.message}</span>
+        )}
       </div>
 
       <div>
-        <label htmlFor="incomeFromFinancialProductSchemeAmount">Income From Financial Product / Scheme</label>
-        <input {...register("incomeFromFinancialProductSchemeAmount")} id="incomeFromFinancialProductSchemeAmount" />
-        {errors.incomeFromFinancialProductSchemeAmount && <span>{errors.incomeFromFinancialProductSchemeAmount.message}</span>}
-        <input {...register("incomeFromFinancialProductSchemeDeductions")} id="incomeFromFinancialProductSchemeDeductions" />
-        {errors.incomeFromFinancialProductSchemeDeductions && <span>{errors.incomeFromFinancialProductSchemeDeductions.message}</span>}
-        <input {...register("incomeFromFinancialProductSchemeTax")} id="incomeFromFinancialProductSchemeTax" />
-        {errors.incomeFromFinancialProductSchemeTax && <span>{errors.incomeFromFinancialProductSchemeTax.message}</span>}
+        <label htmlFor="incomeFromFinancialProductSchemeAmount">
+          Income From Financial Product / Scheme
+        </label>
+        <input
+          {...register("incomeFromFinancialProductSchemeAmount")}
+          id="incomeFromFinancialProductSchemeAmount"
+        />
+        {errors.incomeFromFinancialProductSchemeAmount && (
+          <span>{errors.incomeFromFinancialProductSchemeAmount.message}</span>
+        )}
+        <input
+          {...register("incomeFromFinancialProductSchemeDeductions")}
+          id="incomeFromFinancialProductSchemeDeductions"
+        />
+        {errors.incomeFromFinancialProductSchemeDeductions && (
+          <span>
+            {errors.incomeFromFinancialProductSchemeDeductions.message}
+          </span>
+        )}
+        <input
+          {...register("incomeFromFinancialProductSchemeTax")}
+          id="incomeFromFinancialProductSchemeTax"
+        />
+        {errors.incomeFromFinancialProductSchemeTax && (
+          <span>{errors.incomeFromFinancialProductSchemeTax.message}</span>
+        )}
       </div>
 
       <div>
         <label htmlFor="dividendIncomeAmount">Dividend Income</label>
-        <input {...register("dividendIncomeAmount")} id="dividendIncomeAmount" />
-        {errors.dividendIncomeAmount && <span>{errors.dividendIncomeAmount.message}</span>}
-        <input {...register("dividendIncomeDeductions")} id="dividendIncomeDeductions" />
-        {errors.dividendIncomeDeductions && <span>{errors.dividendIncomeDeductions.message}</span>}
+        <input
+          {...register("dividendIncomeAmount")}
+          id="dividendIncomeAmount"
+        />
+        {errors.dividendIncomeAmount && (
+          <span>{errors.dividendIncomeAmount.message}</span>
+        )}
+        <input
+          {...register("dividendIncomeDeductions")}
+          id="dividendIncomeDeductions"
+        />
+        {errors.dividendIncomeDeductions && (
+          <span>{errors.dividendIncomeDeductions.message}</span>
+        )}
         <input {...register("dividendIncomeTax")} id="dividendIncomeTax" />
-        {errors.dividendIncomeTax && <span>{errors.dividendIncomeTax.message}</span>}
+        {errors.dividendIncomeTax && (
+          <span>{errors.dividendIncomeTax.message}</span>
+        )}
       </div>
 
       <div>
-        <label htmlFor="capitalGainFromTransferOfPropertyAmount">Capital Gain From Transfer of Property</label>
-        <input {...register("capitalGainFromTransferOfPropertyAmount")} id="capitalGainFromTransferOfPropertyAmount" />
-        {errors.capitalGainFromTransferOfPropertyAmount && <span>{errors.capitalGainFromTransferOfPropertyAmount.message}</span>}
-        <input {...register("capitalGainFromTransferOfPropertyDeductions")} id="capitalGainFromTransferOfPropertyDeductions" />
-        {errors.capitalGainFromTransferOfPropertyDeductions && <span>{errors.capitalGainFromTransferOfPropertyDeductions.message}</span>}
-        <input {...register("capitalGainFromTransferOfPropertyTax")} id="capitalGainFromTransferOfPropertyTax" />
-        {errors.capitalGainFromTransferOfPropertyTax && <span>{errors.capitalGainFromTransferOfPropertyTax.message}</span>}
+        <label htmlFor="capitalGainFromTransferOfPropertyAmount">
+          Capital Gain From Transfer of Property
+        </label>
+        <input
+          {...register("capitalGainFromTransferOfPropertyAmount")}
+          id="capitalGainFromTransferOfPropertyAmount"
+        />
+        {errors.capitalGainFromTransferOfPropertyAmount && (
+          <span>{errors.capitalGainFromTransferOfPropertyAmount.message}</span>
+        )}
+        <input
+          {...register("capitalGainFromTransferOfPropertyDeductions")}
+          id="capitalGainFromTransferOfPropertyDeductions"
+        />
+        {errors.capitalGainFromTransferOfPropertyDeductions && (
+          <span>
+            {errors.capitalGainFromTransferOfPropertyDeductions.message}
+          </span>
+        )}
+        <input
+          {...register("capitalGainFromTransferOfPropertyTax")}
+          id="capitalGainFromTransferOfPropertyTax"
+        />
+        {errors.capitalGainFromTransferOfPropertyTax && (
+          <span>{errors.capitalGainFromTransferOfPropertyTax.message}</span>
+        )}
       </div>
 
       <div>
         <label htmlFor="incomeFromBusinessAmount">Income From Business</label>
-        <input {...register("incomeFromBusinessAmount")} id="incomeFromBusinessAmount" />
-        {errors.incomeFromBusinessAmount && <span>{errors.incomeFromBusinessAmount.message}</span>}
-        <input {...register("incomeFromBusinessDeductions")} id="incomeFromBusinessDeductions" />
-        {errors.incomeFromBusinessDeductions && <span>{errors.incomeFromBusinessDeductions.message}</span>}
-        <input {...register("incomeFromBusinessTax")} id="incomeFromBusinessTax" />
-        {errors.incomeFromBusinessTax && <span>{errors.incomeFromBusinessTax.message}</span>}
+        <input
+          {...register("incomeFromBusinessAmount")}
+          id="incomeFromBusinessAmount"
+        />
+        {errors.incomeFromBusinessAmount && (
+          <span>{errors.incomeFromBusinessAmount.message}</span>
+        )}
+        <input
+          {...register("incomeFromBusinessDeductions")}
+          id="incomeFromBusinessDeductions"
+        />
+        {errors.incomeFromBusinessDeductions && (
+          <span>{errors.incomeFromBusinessDeductions.message}</span>
+        )}
+        <input
+          {...register("incomeFromBusinessTax")}
+          id="incomeFromBusinessTax"
+        />
+        {errors.incomeFromBusinessTax && (
+          <span>{errors.incomeFromBusinessTax.message}</span>
+        )}
       </div>
 
       <div>
-        <label htmlFor="workersParticipationFundAmount">Workers Participation Fund</label>
-        <input {...register("workersParticipationFundAmount")} id="workersParticipationFundAmount" />
-        {errors.workersParticipationFundAmount && <span>{errors.workersParticipationFundAmount.message}</span>}
-        <input {...register("workersParticipationFundDeductions")} id="workersParticipationFundDeductions" />
-        {errors.workersParticipationFundDeductions && <span>{errors.workersParticipationFundDeductions.message}</span>}
-        <input {...register("workersParticipationFundTax")} id="workersParticipationFundTax" />
-        {errors.workersParticipationFundTax && <span>{errors.workersParticipationFundTax.message}</span>}
+        <label htmlFor="workersParticipationFundAmount">
+          Workers Participation Fund
+        </label>
+        <input
+          {...register("workersParticipationFundAmount")}
+          id="workersParticipationFundAmount"
+        />
+        {errors.workersParticipationFundAmount && (
+          <span>{errors.workersParticipationFundAmount.message}</span>
+        )}
+        <input
+          {...register("workersParticipationFundDeductions")}
+          id="workersParticipationFundDeductions"
+        />
+        {errors.workersParticipationFundDeductions && (
+          <span>{errors.workersParticipationFundDeductions.message}</span>
+        )}
+        <input
+          {...register("workersParticipationFundTax")}
+          id="workersParticipationFundTax"
+        />
+        {errors.workersParticipationFundTax && (
+          <span>{errors.workersParticipationFundTax.message}</span>
+        )}
       </div>
 
       <div>
-        <label htmlFor="incomeFromOtherSourcesAmount">Income from Other Sources</label>
-        <input {...register("incomeFromOtherSourcesAmount")} id="incomeFromOtherSourcesAmount" />
-        {errors.incomeFromOtherSourcesAmount && <span>{errors.incomeFromOtherSourcesAmount.message}</span>}
-        <input {...register("incomeFromOtherSourcesDeductions")} id="incomeFromOtherSourcesDeductions" />
-        {errors.incomeFromOtherSourcesDeductions && <span>{errors.incomeFromOtherSourcesDeductions.message}</span>}
-        <input {...register("incomeFromOtherSourcesTax")} id="incomeFromOtherSourcesTax" />
-        {errors.incomeFromOtherSourcesTax && <span>{errors.incomeFromOtherSourcesTax.message}</span>}
+        <label htmlFor="incomeFromOtherSourcesAmount">
+          Income from Other Sources
+        </label>
+        <input
+          {...register("incomeFromOtherSourcesAmount")}
+          id="incomeFromOtherSourcesAmount"
+        />
+        {errors.incomeFromOtherSourcesAmount && (
+          <span>{errors.incomeFromOtherSourcesAmount.message}</span>
+        )}
+        <input
+          {...register("incomeFromOtherSourcesDeductions")}
+          id="incomeFromOtherSourcesDeductions"
+        />
+        {errors.incomeFromOtherSourcesDeductions && (
+          <span>{errors.incomeFromOtherSourcesDeductions.message}</span>
+        )}
+        <input
+          {...register("incomeFromOtherSourcesTax")}
+          id="incomeFromOtherSourcesTax"
+        />
+        {errors.incomeFromOtherSourcesTax && (
+          <span>{errors.incomeFromOtherSourcesTax.message}</span>
+        )}
       </div>
 
       <h2>Page 7</h2>
       <div>
-        <label htmlFor="lifeInsurancePremium">Life Insurance Premium or Contractual Deferred Annuity Paid in Bangladesh</label>
-        <input {...register("lifeInsurancePremium")} id="lifeInsurancePremium" />
-        {errors.lifeInsurancePremium && <span>{errors.lifeInsurancePremium.message}</span>}
-       
+        <label htmlFor="lifeInsurancePremium">
+          Life Insurance Premium or Contractual Deferred Annuity Paid in
+          Bangladesh
+        </label>
+        <input
+          {...register("lifeInsurancePremium")}
+          id="lifeInsurancePremium"
+        />
+        {errors.lifeInsurancePremium && (
+          <span>{errors.lifeInsurancePremium.message}</span>
+        )}
       </div>
 
       <div>
-        <label htmlFor="contributionToDeposit">Contribution to deposit pension scheme (not exceeding allowable limit)</label>
-        <input {...register("contributionToDeposit")} id="contributionToDeposit" />
-        {errors.contributionToDeposit && <span>{errors.contributionToDeposit.message}</span>}
-       
+        <label htmlFor="contributionToDeposit">
+          Contribution to deposit pension scheme (not exceeding allowable limit)
+        </label>
+        <input
+          {...register("contributionToDeposit")}
+          id="contributionToDeposit"
+        />
+        {errors.contributionToDeposit && (
+          <span>{errors.contributionToDeposit.message}</span>
+        )}
       </div>
       <div>
-        <label htmlFor="investmentInGovernmentSecurities1">Investment in Government Securities, Unit Certificate, Mutual Fund. ETF or
-        Joint Investment Scheme Unit Certificate</label>
-        <input {...register("investmentInGovernmentSecurities1")} id="investmentInGovernmentSecurities1" />
-        {errors.investmentInGovernmentSecurities1 && <span>{errors.investmentInGovernmentSecurities1.message}</span>}
-        <input {...register("investmentInGovernmentSecurities2")} id="investmentInGovernmentSecurities2" />
-        {errors.investmentInGovernmentSecurities2 && <span>{errors.investmentInGovernmentSecurities2.message}</span>}
-       
-      </div>
-
-      <div>
-        <label htmlFor="investmentInSecurities">Investment in Securities listed with Approved Stock Exchanee</label>
-        <input {...register("investmentInSecurities")} id="investmentInSecurities" />
-        {errors.investmentInSecurities && <span>{errors.investmentInSecurities.message}</span>}             
-      </div>
-
-      <div>
-        <label htmlFor="contributionToProvidentFund">Contribution to provident fund to which Provident Fund Act, 1925 applies</label>
-        <input {...register("contributionToProvidentFund")} id="contributionToProvidentFund" />
-        {errors.contributionToProvidentFund && <span>{errors.contributionToProvidentFund.message}</span>}             
-      </div>
-
-      <div>
-        <label htmlFor="SelfAndEmployersContribution">Self and employer&apos;s contribution to Recognized Provident Fund</label>
-        <input {...register("SelfAndEmployersContribution")} id="SelfAndEmployersContribution" />
-        {errors.SelfAndEmployersContribution && <span>{errors.SelfAndEmployersContribution.message}</span>}             
-      </div>
-      
-      <div>
-        <label htmlFor="contributionToSuperAnnuationFund">Contribution to Super Annuation Fund</label>
-        <input {...register("contributionToSuperAnnuationFund")} id="contributionToSuperAnnuationFund" />
-        {errors.contributionToSuperAnnuationFund && <span>{errors.contributionToSuperAnnuationFund.message}</span>}    
+        <label htmlFor="investmentInGovernmentSecurities1">
+          Investment in Government Securities, Unit Certificate, Mutual Fund.
+          ETF or Joint Investment Scheme Unit Certificate
+        </label>
+        <input
+          {...register("investmentInGovernmentSecurities1")}
+          id="investmentInGovernmentSecurities1"
+        />
+        {errors.investmentInGovernmentSecurities1 && (
+          <span>{errors.investmentInGovernmentSecurities1.message}</span>
+        )}
+        <input
+          {...register("investmentInGovernmentSecurities2")}
+          id="investmentInGovernmentSecurities2"
+        />
+        {errors.investmentInGovernmentSecurities2 && (
+          <span>{errors.investmentInGovernmentSecurities2.message}</span>
+        )}
       </div>
 
       <div>
-        <label htmlFor="contributionToBenevolentFund">Contribution to Benevolent Fund / Group Insurance Premium</label>
-        <input {...register("contributionToBenevolentFund")} id="contributionToBenevolentFund" />
-        {errors.contributionToBenevolentFund && <span>{errors.contributionToBenevolentFund.message}</span>}    
+        <label htmlFor="investmentInSecurities">
+          Investment in Securities listed with Approved Stock Exchanee
+        </label>
+        <input
+          {...register("investmentInSecurities")}
+          id="investmentInSecurities"
+        />
+        {errors.investmentInSecurities && (
+          <span>{errors.investmentInSecurities.message}</span>
+        )}
       </div>
 
       <div>
-        <label htmlFor="contributionToZakatFund1">Contribution to Zakat Fund</label>
-        <input {...register("contributionToZakatFund1")} id="contributionToZakatFund1" />
-        {errors.contributionToZakatFund1 && <span>{errors.contributionToZakatFund1.message}</span>}    
-        <input {...register("contributionToZakatFund2")} id="contributionToZakatFund2" />
-        {errors.contributionToZakatFund2 && <span>{errors.contributionToZakatFund2.message}</span>}    
+        <label htmlFor="contributionToProvidentFund">
+          Contribution to provident fund to which Provident Fund Act, 1925
+          applies
+        </label>
+        <input
+          {...register("contributionToProvidentFund")}
+          id="contributionToProvidentFund"
+        />
+        {errors.contributionToProvidentFund && (
+          <span>{errors.contributionToProvidentFund.message}</span>
+        )}
+      </div>
+
+      <div>
+        <label htmlFor="SelfAndEmployersContribution">
+          Self and employer&apos;s contribution to Recognized Provident Fund
+        </label>
+        <input
+          {...register("SelfAndEmployersContribution")}
+          id="SelfAndEmployersContribution"
+        />
+        {errors.SelfAndEmployersContribution && (
+          <span>{errors.SelfAndEmployersContribution.message}</span>
+        )}
+      </div>
+
+      <div>
+        <label htmlFor="contributionToSuperAnnuationFund">
+          Contribution to Super Annuation Fund
+        </label>
+        <input
+          {...register("contributionToSuperAnnuationFund")}
+          id="contributionToSuperAnnuationFund"
+        />
+        {errors.contributionToSuperAnnuationFund && (
+          <span>{errors.contributionToSuperAnnuationFund.message}</span>
+        )}
+      </div>
+
+      <div>
+        <label htmlFor="contributionToBenevolentFund">
+          Contribution to Benevolent Fund / Group Insurance Premium
+        </label>
+        <input
+          {...register("contributionToBenevolentFund")}
+          id="contributionToBenevolentFund"
+        />
+        {errors.contributionToBenevolentFund && (
+          <span>{errors.contributionToBenevolentFund.message}</span>
+        )}
+      </div>
+
+      <div>
+        <label htmlFor="contributionToZakatFund1">
+          Contribution to Zakat Fund
+        </label>
+        <input
+          {...register("contributionToZakatFund1")}
+          id="contributionToZakatFund1"
+        />
+        {errors.contributionToZakatFund1 && (
+          <span>{errors.contributionToZakatFund1.message}</span>
+        )}
+        <input
+          {...register("contributionToZakatFund2")}
+          id="contributionToZakatFund2"
+        />
+        {errors.contributionToZakatFund2 && (
+          <span>{errors.contributionToZakatFund2.message}</span>
+        )}
       </div>
 
       <div>
         <label htmlFor="OthersIf1">Others, if any (provide detail)</label>
         <input {...register("OthersIf1")} id="OthersIf1" />
-        {errors.OthersIf1 && <span>{errors.OthersIf1.message}</span>}    
+        {errors.OthersIf1 && <span>{errors.OthersIf1.message}</span>}
         <input {...register("OthersIf2")} id="OthersIf2" />
-        {errors.OthersIf2 && <span>{errors.OthersIf2.message}</span>}    
+        {errors.OthersIf2 && <span>{errors.OthersIf2.message}</span>}
       </div>
 
+      <h2>Page 8</h2>
+      <div>
+        <label htmlFor="ExpensesForFoodAmount">
+          Expenses for food, clothing and other essentials
+        </label>
+        <input
+          {...register("ExpensesForFoodAmount")}
+          id="ExpensesForFoodAmount"
+        />
+        {errors.ExpensesForFoodAmount && (
+          <span>{errors.ExpensesForFoodAmount.message}</span>
+        )}
+        <input
+          {...register("ExpensesForFoodComment")}
+          id="ExpensesForFoodComment"
+        />
+        {errors.ExpensesForFoodComment && (
+          <span>{errors.ExpensesForFoodComment.message}</span>
+        )}
+      </div>
 
+      <div>
+        <label htmlFor="housingExpenseAmount">Housing expense</label>
+        <input
+          {...register("housingExpenseAmount")}
+          id="housingExpenseAmount"
+        />
+        {errors.housingExpenseAmount && (
+          <span>{errors.housingExpenseAmount.message}</span>
+        )}
+        <input
+          {...register("housingExpenseComment")}
+          id="housingExpenseComment"
+        />
+        {errors.housingExpenseComment && (
+          <span>{errors.housingExpenseComment.message}</span>
+        )}
+      </div>
 
+      <div>
+        <label htmlFor="personalTransportationExpensesAmount">
+          Personal transportation expenses
+        </label>
+        <input
+          {...register("personalTransportationExpensesAmount")}
+          id="personalTransportationExpensesAmount"
+        />
+        {errors.personalTransportationExpensesAmount && (
+          <span>{errors.personalTransportationExpensesAmount.message}</span>
+        )}
+        <input
+          {...register("personalTransportationExpensesAmountComment")}
+          id="personalTransportationExpensesAmountComment"
+        />
+        {errors.personalTransportationExpensesAmountComment && (
+          <span>
+            {errors.personalTransportationExpensesAmountComment.message}
+          </span>
+        )}
+      </div>
 
+      <div>
+        <label htmlFor="utilityExpenseAmount">
+          Utility Expense (Electricity, C Mobile, Internet etc. Bills)
+        </label>
+        <input
+          {...register("utilityExpenseAmount")}
+          id="utilityExpenseAmount"
+        />
+        {errors.utilityExpenseAmount && (
+          <span>{errors.utilityExpenseAmount.message}</span>
+        )}
+        <input
+          {...register("utilityExpenseComment")}
+          id="utilityExpenseComment"
+        />
+        {errors.utilityExpenseComment && (
+          <span>{errors.utilityExpenseComment.message}</span>
+        )}
+      </div>
 
+      <div>
+        <label htmlFor="educationExpensesAmount">Education expenses</label>
+        <input
+          {...register("educationExpensesAmount")}
+          id="educationExpensesAmount"
+        />
+        {errors.educationExpensesAmount && (
+          <span>{errors.educationExpensesAmount.message}</span>
+        )}
+        <input
+          {...register("educationExpensesComment")}
+          id="educationExpensesComment"
+        />
+        {errors.educationExpensesComment && (
+          <span>{errors.educationExpensesComment.message}</span>
+        )}
+      </div>
 
-        <button type="submit">Submit</button>         
+      <div>
+        <label htmlFor="personalExpenseAmount">
+          Personal Expense for Local and Foreign Travel, Vacation etc.
+        </label>
+        <input
+          {...register("personalExpenseAmount")}
+          id="personalExpenseAmount"
+        />
+        {errors.personalExpenseAmount && (
+          <span>{errors.personalExpenseAmount.message}</span>
+        )}
+        <input
+          {...register("personalExpenseComment")}
+          id="personalExpenseComment"
+        />
+        {errors.personalExpenseComment && (
+          <span>{errors.personalExpenseComment.message}</span>
+        )}
+      </div>
+
+      <div>
+        <label htmlFor="festivalExpenseAmount">
+          Festival and Other Special Expense
+        </label>
+        <input
+          {...register("festivalExpenseAmount")}
+          id="festivalExpenseAmount"
+        />
+        {errors.festivalExpenseAmount && (
+          <span>{errors.festivalExpenseAmount.message}</span>
+        )}
+        <input
+          {...register("festivalExpenseComment")}
+          id="festivalExpenseComment"
+        />
+        {errors.festivalExpenseComment && (
+          <span>{errors.festivalExpenseComment.message}</span>
+        )}
+      </div>
+
+      <div>
+        <label htmlFor="taxDeductedAmount">
+          Tax Deducted / Collected at Source (with TDS on Profit of
+          Sanchaypatra)
+        </label>
+        <input {...register("taxDeductedAmount")} id="taxDeductedAmount" />
+        {errors.taxDeductedAmount && (
+          <span>{errors.taxDeductedAmount.message}</span>
+        )}
+        <input {...register("taxDeductedComment")} id="taxDeductedComment" />
+        {errors.taxDeductedComment && (
+          <span>{errors.taxDeductedComment.message}</span>
+        )}
+      </div>
+
+      <div>
+        <label htmlFor="advanceTaxPaid2Amount">Advance Tax paid</label>
+        <input
+          {...register("advanceTaxPaid2Amount")}
+          id="advanceTaxPaid2Amount"
+        />
+        {errors.advanceTaxPaid2Amount && (
+          <span>{errors.advanceTaxPaid2Amount.message}</span>
+        )}
+        <input
+          {...register("advanceTaxPaidComment")}
+          id="advanceTaxPaidComment"
+        />
+        {errors.advanceTaxPaidComment && (
+          <span>{errors.advanceTaxPaidComment.message}</span>
+        )}
+      </div>
+
+      <div>
+        <label htmlFor="taxSurchargePaidAmount">
+          Tax & Surcharge Paid based on Tax Return of Last Year (paid with last
+          year&apos;s tax return)
+        </label>
+        <input
+          {...register("taxSurchargePaidAmount")}
+          id="taxSurchargePaidAmount"
+        />
+        {errors.taxSurchargePaidAmount && (
+          <span>{errors.taxSurchargePaidAmount.message}</span>
+        )}
+        <input
+          {...register("taxSurchargePaidComment")}
+          id="taxSurchargePaidComment"
+        />
+        {errors.taxSurchargePaidComment && (
+          <span>{errors.taxSurchargePaidComment.message}</span>
+        )}
+      </div>
+
+      <div>
+        <label htmlFor="interestPaidAmount">
+          Interest Paid on Personal Loan Received from Institution & Other
+          Source
+        </label>
+        <input {...register("interestPaidAmount")} id="interestPaidAmount" />
+        {errors.interestPaidAmount && (
+          <span>{errors.interestPaidAmount.message}</span>
+        )}
+        <input {...register("interestPaidComment")} id="interestPaidComment" />
+        {errors.interestPaidComment && (
+          <span>{errors.interestPaidComment.message}</span>
+        )}
+      </div>
+
+      <div>
+        <label htmlFor="total">Total</label>
+        <input {...register("total")} id="total" />
+        {errors.total && <span>{errors.total.message}</span>}
+      </div>
+
+      <div>
+        <label htmlFor="exemptedIncomeFromBusiness">Exempted Income from Business</label>
+        <input {...register("exemptedIncomeFromBusiness")} id="exemptedIncomeFromBusiness" />
+        {errors.exemptedIncomeFromBusiness && <span>{errors.exemptedIncomeFromBusiness.message}</span>}
+      </div>
+
+      <div>
+        <label htmlFor="exemptedAgriculturalIncome">Exempted Agricultural income</label>
+        <input {...register("exemptedAgriculturalIncome")} id="exemptedAgriculturalIncome" />
+        {errors.exemptedAgriculturalIncome && <span>{errors.exemptedAgriculturalIncome.message}</span>}
+      </div>
+
+      <div>
+        <label htmlFor="incomeFromProvidentFund">Income from Provident Fund / Recognized Provident Fund</label>
+        <input {...register("incomeFromProvidentFund")} id="incomeFromProvidentFund" />
+        {errors.incomeFromProvidentFund && <span>{errors.incomeFromProvidentFund.message}</span>}
+      </div>
+
+      <div>
+        <label htmlFor="foreignRemittance">Foreign Remittance</label>
+        <input {...register("foreignRemittance")} id="foreignRemittance" />
+        {errors.foreignRemittance && <span>{errors.foreignRemittance.message}</span>}
+      </div>
+
+      <div>
+        <label htmlFor="typeOfReceipts1">Type of receipts</label>
+        <input {...register("typeOfReceipts1")} id="typeOfReceipts1" />
+        {errors.typeOfReceipts1 && <span>{errors.typeOfReceipts1.message}</span>}
+        <input {...register("typeOfReceiptsAmount1")} id="typeOfReceiptsAmount1" />
+        {errors.typeOfReceiptsAmount1 && <span>{errors.typeOfReceiptsAmount1.message}</span>}
+        <input {...register("typeOfReceipts2")} id="typeOfReceipts2" />
+        {errors.typeOfReceipts2 && <span>{errors.typeOfReceipts2.message}</span>}
+        <input {...register("typeOfReceiptsAmount2")} id="typeOfReceiptsAmount2" />
+        {errors.typeOfReceiptsAmount2 && <span>{errors.typeOfReceiptsAmount2.message}</span>}
+        <input {...register("typeOfReceipts3")} id="typeOfReceipts3" />
+        {errors.typeOfReceipts3 && <span>{errors.typeOfReceipts3.message}</span>}
+        <input {...register("typeOfReceiptsAmount3")} id="typeOfReceiptsAmount3" />
+        {errors.typeOfReceiptsAmount3 && <span>{errors.typeOfReceiptsAmount3.message}</span>}
+      </div>
+
+      <button type="submit">Submit</button>
     </form>
   );
 }

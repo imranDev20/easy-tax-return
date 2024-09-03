@@ -166,6 +166,57 @@ export const taxReturnFormSchema = z.object({
     OthersIf1: z.string().optional(),
     OthersIf2: z.string().optional(),
 
+    ExpensesForFoodAmount: z.string().optional(),
+    ExpensesForFoodComment: z.string().optional(),
+
+    housingExpenseAmount: z.string().optional(),
+    housingExpenseComment: z.string().optional(),
+    
+    personalTransportationExpensesAmount: z.string().optional(),
+    personalTransportationExpensesAmountComment: z.string().optional(),
+
+    utilityExpenseAmount: z.string().optional(),
+    utilityExpenseComment: z.string().optional(),
+
+    educationExpensesAmount: z.string().optional(),
+    educationExpensesComment: z.string().optional(),
+
+    personalExpenseAmount: z.string().optional(),
+    personalExpenseComment: z.string().optional(),
+
+    festivalExpenseAmount: z.string().optional(),
+    festivalExpenseComment: z.string().optional(),
+
+    taxDeductedAmount: z.string().optional(),
+    taxDeductedComment: z.string().optional(),
+
+    advanceTaxPaid2Amount: z.string().optional(),
+    advanceTaxPaidComment: z.string().optional(),
+
+     taxSurchargePaidAmount: z.string().optional(),
+     taxSurchargePaidComment: z.string().optional(),
+
+     interestPaidAmount: z.string().optional(),
+     interestPaidComment: z.string().optional(),
+
+     total: z.string().optional(),
+
+     exemptedIncomeFromBusiness: z.string().optional(),
+
+     exemptedAgriculturalIncome: z.string().optional(),
+
+     incomeFromProvidentFund: z.string().optional(),
+
+     foreignRemittance: z.string().optional(),
+
+     typeOfReceipts1: z.string().optional(),
+     typeOfReceipts2: z.string().optional(),
+     typeOfReceipts3: z.string().optional(),
+     typeOfReceiptsAmount1: z.string().optional(),
+     typeOfReceiptsAmount2: z.string().optional(),
+     typeOfReceiptsAmount3: z.string().optional(),
+    
+
 
 });
 
