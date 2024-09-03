@@ -142,11 +142,29 @@ export const taxReturnFormSchema = z.object({
     incomeFromOtherSourcesAmount: z.string().optional(),
     incomeFromOtherSourcesDeductions: z.string().optional(),
     incomeFromOtherSourcesTax: z.string().optional(),
+    
+    lifeInsurancePremium: z.string().optional(),
+    
+    contributionToDeposit: z.string().optional(),
+    
+    investmentInGovernmentSecurities1: z.string().optional(),
+    investmentInGovernmentSecurities2: z.string().optional(),
 
+    investmentInSecurities: z.string().optional(),
 
+    contributionToProvidentFund: z.string().optional(),
+    
+    SelfAndEmployersContribution: z.string().optional(),
 
+    contributionToSuperAnnuationFund: z.string().optional(),
+    
+    contributionToBenevolentFund: z.string().optional(),
 
+    contributionToZakatFund1: z.string().optional(),
+    contributionToZakatFund2: z.string().optional(),
 
+    OthersIf1: z.string().optional(),
+    OthersIf2: z.string().optional(),
 
 
 });

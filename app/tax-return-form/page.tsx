@@ -765,9 +765,82 @@ export default function TaxReturnFormPage() {
         {errors.incomeFromOtherSourcesTax && <span>{errors.incomeFromOtherSourcesTax.message}</span>}
       </div>
 
+      <h2>Page 7</h2>
+      <div>
+        <label htmlFor="lifeInsurancePremium">Life Insurance Premium or Contractual Deferred Annuity Paid in Bangladesh</label>
+        <input {...register("lifeInsurancePremium")} id="lifeInsurancePremium" />
+        {errors.lifeInsurancePremium && <span>{errors.lifeInsurancePremium.message}</span>}
+       
+      </div>
+
+      <div>
+        <label htmlFor="contributionToDeposit">Contribution to deposit pension scheme (not exceeding allowable limit)</label>
+        <input {...register("contributionToDeposit")} id="contributionToDeposit" />
+        {errors.contributionToDeposit && <span>{errors.contributionToDeposit.message}</span>}
+       
+      </div>
+      <div>
+        <label htmlFor="investmentInGovernmentSecurities1">Investment in Government Securities, Unit Certificate, Mutual Fund. ETF or
+        Joint Investment Scheme Unit Certificate</label>
+        <input {...register("investmentInGovernmentSecurities1")} id="investmentInGovernmentSecurities1" />
+        {errors.investmentInGovernmentSecurities1 && <span>{errors.investmentInGovernmentSecurities1.message}</span>}
+        <input {...register("investmentInGovernmentSecurities2")} id="investmentInGovernmentSecurities2" />
+        {errors.investmentInGovernmentSecurities2 && <span>{errors.investmentInGovernmentSecurities2.message}</span>}
+       
+      </div>
+
+      <div>
+        <label htmlFor="investmentInSecurities">Investment in Securities listed with Approved Stock Exchanee</label>
+        <input {...register("investmentInSecurities")} id="investmentInSecurities" />
+        {errors.investmentInSecurities && <span>{errors.investmentInSecurities.message}</span>}             
+      </div>
+
+      <div>
+        <label htmlFor="contributionToProvidentFund">Contribution to provident fund to which Provident Fund Act, 1925 applies</label>
+        <input {...register("contributionToProvidentFund")} id="contributionToProvidentFund" />
+        {errors.contributionToProvidentFund && <span>{errors.contributionToProvidentFund.message}</span>}             
+      </div>
+
+      <div>
+        <label htmlFor="SelfAndEmployersContribution">Self and employer&apos;s contribution to Recognized Provident Fund</label>
+        <input {...register("SelfAndEmployersContribution")} id="SelfAndEmployersContribution" />
+        {errors.SelfAndEmployersContribution && <span>{errors.SelfAndEmployersContribution.message}</span>}             
+      </div>
+      
+      <div>
+        <label htmlFor="contributionToSuperAnnuationFund">Contribution to Super Annuation Fund</label>
+        <input {...register("contributionToSuperAnnuationFund")} id="contributionToSuperAnnuationFund" />
+        {errors.contributionToSuperAnnuationFund && <span>{errors.contributionToSuperAnnuationFund.message}</span>}    
+      </div>
+
+      <div>
+        <label htmlFor="contributionToBenevolentFund">Contribution to Benevolent Fund / Group Insurance Premium</label>
+        <input {...register("contributionToBenevolentFund")} id="contributionToBenevolentFund" />
+        {errors.contributionToBenevolentFund && <span>{errors.contributionToBenevolentFund.message}</span>}    
+      </div>
+
+      <div>
+        <label htmlFor="contributionToZakatFund1">Contribution to Zakat Fund</label>
+        <input {...register("contributionToZakatFund1")} id="contributionToZakatFund1" />
+        {errors.contributionToZakatFund1 && <span>{errors.contributionToZakatFund1.message}</span>}    
+        <input {...register("contributionToZakatFund2")} id="contributionToZakatFund2" />
+        {errors.contributionToZakatFund2 && <span>{errors.contributionToZakatFund2.message}</span>}    
+      </div>
+
+      <div>
+        <label htmlFor="OthersIf1">Others, if any (provide detail)</label>
+        <input {...register("OthersIf1")} id="OthersIf1" />
+        {errors.OthersIf1 && <span>{errors.OthersIf1.message}</span>}    
+        <input {...register("OthersIf2")} id="OthersIf2" />
+        {errors.OthersIf2 && <span>{errors.OthersIf2.message}</span>}    
+      </div>
 
 
-      <button type="submit">Submit</button>
+
+
+
+
+        <button type="submit">Submit</button>         
     </form>
   );
 }
