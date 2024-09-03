@@ -249,6 +249,66 @@ export const taxReturnFormSchema = z.object({
       capitalContributed2: z.string().optional(),
       capitalContributed3: z.string().optional(),
 
+      locationDescription1: z.string().optional(),
+      locationDescription2: z.string().optional(),
+      locationDescription3: z.string().optional(),
+      locationDescription4: z.string().optional(),
+      locationDescription5: z.string().optional(),
+
+      locationValue1: z.string().optional(),
+      locationValue2: z.string().optional(),
+      locationValue3: z.string().optional(),
+      locationValue4: z.string().optional(),
+      locationValue5: z.string().optional(),
+
+      agriculturalLocationAndDescription1: z.string().optional(),
+      agriculturalLocationAndDescription2: z.string().optional(),
+      agriculturalLocationAndDescription3: z.string().optional(),
+
+      agriculturalLocationValue1: z.string().optional(),
+      agriculturalLocationValue2: z.string().optional(),
+      agriculturalLocationValue3: z.string().optional(),
+      
+      shareDebentureUnitCertificate: z.string().optional(),
+      
+      bondsGovernment: z.string().optional(),
+      sanchayapatraSavingsCertificate: z.string().optional(),
+
+      depositPensionScheme: z.string().optional(),
+      loansGivenToOthers: z.string().optional(),
+
+      name:z.string().optional(), 
+      nid:z.string().optional(),
+      nidValue:   z.string().optional(),
+
+      savingDeposit: z.string().optional(),
+      providentFund: z.string().optional(),
+      otherInvestment1: z.string().optional(),
+      otherInvestment2: z.string().optional(),
+
+      typeOfMotorVehicle1: z.string().optional(),
+      typeOfMotorVehicle2: z.string().optional(),
+
+      registrationNumber1:z.string().optional(),
+      registrationNumber2:z.string().optional(),
+
+      motorValue1:z.string().optional(),
+      motorValue2:z.string().optional(),
+
+      ornaments1:z.string().optional(),
+      ornaments2:z.string().optional(),
+      furnitureAndElectronic: z.string().optional(),
+
+      othersAssets1: z.string().optional(),
+      othersAssets2:  z.string().optional(),
+
+      bankBalance:  z.string().optional(),
+      cashInHand: z.string().optional(),
+      
+      others1:  z.string().optional(),
+      others2:  z.string().optional(),
+
+      assetOutsideBangladesh: z.string().optional(),
 
 });
 

@@ -1589,6 +1589,197 @@ contributed</label>
         {errors.capitalContributed3 && <span>{errors.capitalContributed3.message}</span>}
       </div>
 
+      <h2>Page 10</h2>
+
+      <div>
+        <label htmlFor="locationDescription1">Location and Description</label>
+        <input {...register("locationDescription1")} id="locationDescription1" />
+        {errors.locationDescription1 && <span>{errors.locationDescription1.message}</span>}
+        <input {...register("locationDescription2")} id="locationDescription2" />
+        {errors.locationDescription2 && <span>{errors.locationDescription2.message}</span>}
+        <input {...register("locationDescription3")} id="locationDescription3" />
+        {errors.locationDescription3 && <span>{errors.locationDescription3.message}</span>}
+        <input {...register("locationDescription4")} id="locationDescription4" />
+        {errors.locationDescription4 && <span>{errors.locationDescription4.message}</span>}
+        <input {...register("locationDescription5")} id="locationDescription5" />
+        {errors.locationDescription5 && <span>{errors.locationDescription5.message}</span>}
+      </div>
+
+      <div>
+        <label htmlFor="locationValue1">Value (Taka)</label>
+        <input {...register("locationValue1")} id="locationValue1" />
+        {errors.locationValue1 && <span>{errors.locationValue1.message}</span>}
+        <input {...register("locationValue2")} id="locationValue2" />
+        {errors.locationValue2 && <span>{errors.locationValue2.message}</span>}
+        <input {...register("locationValue3")} id="locationValue3" />
+        {errors.locationValue3 && <span>{errors.locationValue3.message}</span>}
+        <input {...register("locationValue4")} id="locationValue4" />
+        {errors.locationValue4 && <span>{errors.locationValue4.message}</span>}
+        <input {...register("locationValue5")} id="locationValue5" />
+        {errors.locationValue5 && <span>{errors.locationValue5.message}</span>}
+      </div>
+
+      <div>
+        <label htmlFor="agriculturalLocationAndDescription1">Location and Description</label>
+        <input {...register("agriculturalLocationAndDescription1")} id="agriculturalLocationAndDescription1" />
+        {errors.agriculturalLocationAndDescription1 && <span>{errors.agriculturalLocationAndDescription1.message}</span>}
+        <input {...register("agriculturalLocationAndDescription2")} id="agriculturalLocationAndDescription2" />
+        {errors.agriculturalLocationAndDescription2 && <span>{errors.agriculturalLocationAndDescription2.message}</span>}
+        <input {...register("agriculturalLocationAndDescription3")} id="agriculturalLocationAndDescription3" />
+        {errors.agriculturalLocationAndDescription3 && <span>{errors.agriculturalLocationAndDescription3.message}</span>}       
+      </div>
+
+      <div>
+        <label htmlFor="agriculturalLocationValue1">Value (Taka)</label>
+        <input {...register("agriculturalLocationValue1")} id="agriculturalLocationValue1" />
+        {errors.agriculturalLocationValue1 && <span>{errors.agriculturalLocationValue1.message}</span>}
+        <input {...register("agriculturalLocationValue2")} id="agriculturalLocationValue2" />
+        {errors.agriculturalLocationValue2 && <span>{errors.agriculturalLocationValue2.message}</span>}
+        <input {...register("agriculturalLocationValue3")} id="agriculturalLocationValue3" />
+        {errors.agriculturalLocationValue3 && <span>{errors.agriculturalLocationValue3.message}</span>}       
+      </div>
+      <div>
+        <label htmlFor="shareDebentureUnitCertificate">Share / Debenture / Unit Certificate etc.</label>
+        <input {...register("shareDebentureUnitCertificate")} id="shareDebentureUnitCertificate" />
+        {errors.shareDebentureUnitCertificate && <span>{errors.shareDebentureUnitCertificate.message}</span>}              
+      </div>
+
+      <div>
+        <label htmlFor="bondsGovernment">Bonds and other Government Securities</label>
+        <input {...register("bondsGovernment")} id="bondsGovernment" />
+        {errors.bondsGovernment && <span>{errors.bondsGovernment.message}</span>}              
+      </div>
+
+      <div>
+        <label htmlFor="sanchayapatraSavingsCertificate">(i1) Sanchayapatra / Savings certificate</label>
+        <input {...register("sanchayapatraSavingsCertificate")} id="sanchayapatraSavingsCertificate" />
+        {errors.sanchayapatraSavingsCertificate && <span>{errors.sanchayapatraSavingsCertificate.message}</span>}              
+      </div>
+
+      <div>
+        <label htmlFor="depositPensionScheme">Deposit Pension Scheme</label>
+        <input {...register("depositPensionScheme")} id="depositPensionScheme" />
+        {errors.depositPensionScheme && <span>{errors.depositPensionScheme.message}</span>}              
+      </div>
+
+      <div>
+        <label htmlFor="loansGivenToOthers">(111) Loans given to others</label>
+        <input {...register("loansGivenToOthers")} id="loansGivenToOthers" />
+        {errors.loansGivenToOthers && <span>{errors.loansGivenToOthers.message}</span>}              
+      </div>
+
+      <div>
+        <label htmlFor="name">Name</label>
+        <input {...register("name")} id="name" />
+        {errors.name && <span>{errors.name.message}</span>}              
+      </div>
+
+      <div>
+        <label htmlFor="nid">NID</label>
+        <input {...register("nid")} id="nid" />
+        {errors.nid && <span>{errors.nid.message}</span>}              
+        <input {...register("nidValue")} id="nidValue" />
+        {errors.nidValue && <span>{errors.nidValue.message}</span>}              
+      </div>
+
+      <div>
+        <label htmlFor="savingDeposit">(1v) Savings Deposit / Term Deposit / Fixed deposits</label>
+        <input {...register("savingDeposit")} id="savingDeposit" />
+        {errors.savingDeposit && <span>{errors.savingDeposit.message}</span>}                                
+      </div>
+      <div>
+        <label htmlFor="providentFund">(v) Provident Fund or Other Fund (if any)</label>
+        <input {...register("providentFund")} id="providentFund" />
+        {errors.providentFund && <span>{errors.providentFund.message}</span>}                                
+      </div>
+
+      <div>
+        <label htmlFor="otherInvestment1">(vi) Other Investment</label>
+        <input {...register("otherInvestment1")} id="otherInvestment1" />
+        {errors.otherInvestment1 && <span>{errors.otherInvestment1.message}</span>}                                
+        <input {...register("otherInvestment2")} id="otherInvestment2" />
+        {errors.otherInvestment2 && <span>{errors.otherInvestment2.message}</span>}                                
+      </div>
+      <div>
+        <label htmlFor="typeOfMotorVehicle1">Type of Motor Vehicle</label>
+        <input {...register("typeOfMotorVehicle1")} id="typeOfMotorVehicle1" />
+        {errors.typeOfMotorVehicle1 && <span>{errors.typeOfMotorVehicle1.message}</span>}                                
+        <input {...register("typeOfMotorVehicle2")} id="typeOfMotorVehicle2" />
+        {errors.typeOfMotorVehicle2 && <span>{errors.typeOfMotorVehicle2.message}</span>}                                
+      </div>
+
+      <div>
+        <label htmlFor="typeOfMotorVehicle1">Type of Motor Vehicle</label>
+        <input {...register("typeOfMotorVehicle1")} id="typeOfMotorVehicle1" />
+        {errors.typeOfMotorVehicle1 && <span>{errors.typeOfMotorVehicle1.message}</span>}                                
+        <input {...register("typeOfMotorVehicle2")} id="typeOfMotorVehicle2" />
+        {errors.typeOfMotorVehicle2 && <span>{errors.typeOfMotorVehicle2.message}</span>}                                
+      </div>
+
+      <div>
+        <label htmlFor="registrationNumber1">Registration Number</label>
+        <input {...register("registrationNumber1")} id="registrationNumber1" />
+        {errors.registrationNumber1 && <span>{errors.registrationNumber1.message}</span>}                                
+        <input {...register("registrationNumber2")} id="registrationNumber2" />
+        {errors.registrationNumber2 && <span>{errors.registrationNumber2.message}</span>}                                
+      </div>
+
+      <div>
+        <label htmlFor="motorValue1">Value (Taka)</label>
+        <input {...register("motorValue1")} id="motorValue1" />
+        {errors.motorValue1 && <span>{errors.motorValue1.message}</span>}                                
+        <input {...register("motorValue2")} id="motorValue2" />
+        {errors.motorValue2 && <span>{errors.motorValue2.message}</span>}                                
+      </div>
+
+      <div>
+        <label htmlFor="ornaments1">Ornaments (Mention Quantity)</label>
+        <input {...register("ornaments1")} id="ornaments1" />
+        {errors.ornaments1 && <span>{errors.ornaments1.message}</span>}                                
+        <input {...register("ornaments2")} id="ornaments2" />
+        {errors.ornaments2 && <span>{errors.ornaments2.message}</span>}                                
+      </div>
+
+      <div>
+        <label htmlFor="furnitureAndElectronic">Furniture and Electronic Items</label>
+        <input {...register("furnitureAndElectronic")} id="furnitureAndElectronic" />
+        {errors.furnitureAndElectronic && <span>{errors.furnitureAndElectronic.message}</span>}                
+      </div>
+
+      <div>
+        <label htmlFor="furnitureAndElectronic">Other Assets (Except Assets Mentioned in SL. 8K)</label>
+        <input {...register("othersAssets1")} id="othersAssets1" />
+        {errors.othersAssets1 && <span>{errors.othersAssets1.message}</span>}                
+        <input {...register("othersAssets2")} id="othersAssets2" />
+        {errors.othersAssets2 && <span>{errors.othersAssets2.message}</span>}                
+      </div>
+      <div>
+        <label htmlFor="bankBalance">Bank Balance</label>
+        <input {...register("bankBalance")} id="bankBalance" />
+        {errors.bankBalance && <span>{errors.bankBalance.message}</span>}                
+                      
+      </div>
+      <div>
+        <label htmlFor="cashInHand">Cash in Hand</label>
+        <input {...register("cashInHand")} id="cashInHand" />
+        {errors.cashInHand && <span>{errors.cashInHand.message}</span>}                                      
+      </div>
+
+      <div>
+        <label htmlFor="others1">Others</label>
+        <input {...register("others1")} id="others1" />
+        {errors.others1 && <span>{errors.others1.message}</span>}                                      
+        <input {...register("others2")} id="others2" />
+        {errors.others2 && <span>{errors.others2.message}</span>}                                      
+      </div>
+      <div>
+        <label htmlFor="assetOutsideBangladesh">Asset Outside Bangladesh</label>
+        <input {...register("assetOutsideBangladesh")} id="assetOutsideBangladesh" />
+        {errors.assetOutsideBangladesh && <span>{errors.assetOutsideBangladesh.message}</span>}                                      
+                                           
+      </div>
+
+
       <button type="submit">Submit</button>
     </form>
   );
