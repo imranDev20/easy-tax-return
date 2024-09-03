@@ -1,4 +1,5 @@
-import { FaFacebookF, FaLinkedinIn, FaYoutube } from "react-icons/fa";
+import Link from "next/link";
+import { FaFacebookSquare, FaLinkedinIn, FaYoutube } from "react-icons/fa";
 
 export default function Footer() {
   return (
@@ -13,9 +14,15 @@ export default function Footer() {
             market.
           </p>
           <div className="flex space-x-4 text-blue-600">
-            <FaFacebookF />
-            <FaLinkedinIn />
-            <FaYoutube />
+            <Link href="#">
+              <FaFacebookSquare />
+            </Link>
+            <Link href="#">
+              <FaLinkedinIn />
+            </Link>
+            <Link href="#">
+              <FaYoutube />
+            </Link>
           </div>
         </div>
 
