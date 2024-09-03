@@ -215,7 +215,39 @@ export const taxReturnFormSchema = z.object({
      typeOfReceiptsAmount1: z.string().optional(),
      typeOfReceiptsAmount2: z.string().optional(),
      typeOfReceiptsAmount3: z.string().optional(),
-    
+     netWealthLastDate: z.enum([ "YES",
+      "NO_I_AM_A_NEW_TAXPAYER"]),
+
+      giftExpense: z.string().optional(),
+      institutionalLiabilities: z.string().optional(),
+      nonInstitutionalLiabilities: z.string().optional(),
+      otherLiabilities: z.string().optional(),
+      totalAssetOfBusiness: z.string().optional(),
+      lessBusinessLiabilities: z.string().optional(),
+
+      companyName1: z.string().optional(),
+      companyName2: z.string().optional(),
+      companyName3: z.string().optional(),
+
+      noOfShare1: z.string().optional(),
+      noOfShare2: z.string().optional(),
+      noOfShare3: z.string().optional(),
+      
+      value1: z.string().optional(),
+      value2: z.string().optional(),
+      value3: z.string().optional(),
+
+      nameOfPartnershipFirm1: z.string().optional(),
+      nameOfPartnershipFirm2: z.string().optional(),
+      nameOfPartnershipFirm3: z.string().optional(),
+
+      shareOfProfit1: z.string().optional(),
+      shareOfProfit2: z.string().optional(),
+      shareOfProfit3: z.string().optional(),
+
+      capitalContributed1: z.string().optional(),
+      capitalContributed2: z.string().optional(),
+      capitalContributed3: z.string().optional(),
 
 
 });

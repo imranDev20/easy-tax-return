@@ -5,6 +5,7 @@ import { useForm } from "react-hook-form";
 import { TaxReturnFormInput, taxReturnFormSchema } from "./schema";
 import {
   MINIMUM_TAX_OPTIONS,
+  NET_WEALTH_LAST_DATE,
   NET_WEALTH_SURCHARGE_OPTIONS,
   REPAIR_COLLECTION_OPTIONS,
 } from "../lib/constants";
@@ -1352,43 +1353,240 @@ export default function TaxReturnFormPage() {
       </div>
 
       <div>
-        <label htmlFor="exemptedIncomeFromBusiness">Exempted Income from Business</label>
-        <input {...register("exemptedIncomeFromBusiness")} id="exemptedIncomeFromBusiness" />
-        {errors.exemptedIncomeFromBusiness && <span>{errors.exemptedIncomeFromBusiness.message}</span>}
+        <label htmlFor="exemptedIncomeFromBusiness">
+          Exempted Income from Business
+        </label>
+        <input
+          {...register("exemptedIncomeFromBusiness")}
+          id="exemptedIncomeFromBusiness"
+        />
+        {errors.exemptedIncomeFromBusiness && (
+          <span>{errors.exemptedIncomeFromBusiness.message}</span>
+        )}
       </div>
 
       <div>
-        <label htmlFor="exemptedAgriculturalIncome">Exempted Agricultural income</label>
-        <input {...register("exemptedAgriculturalIncome")} id="exemptedAgriculturalIncome" />
-        {errors.exemptedAgriculturalIncome && <span>{errors.exemptedAgriculturalIncome.message}</span>}
+        <label htmlFor="exemptedAgriculturalIncome">
+          Exempted Agricultural income
+        </label>
+        <input
+          {...register("exemptedAgriculturalIncome")}
+          id="exemptedAgriculturalIncome"
+        />
+        {errors.exemptedAgriculturalIncome && (
+          <span>{errors.exemptedAgriculturalIncome.message}</span>
+        )}
       </div>
 
       <div>
-        <label htmlFor="incomeFromProvidentFund">Income from Provident Fund / Recognized Provident Fund</label>
-        <input {...register("incomeFromProvidentFund")} id="incomeFromProvidentFund" />
-        {errors.incomeFromProvidentFund && <span>{errors.incomeFromProvidentFund.message}</span>}
+        <label htmlFor="incomeFromProvidentFund">
+          Income from Provident Fund / Recognized Provident Fund
+        </label>
+        <input
+          {...register("incomeFromProvidentFund")}
+          id="incomeFromProvidentFund"
+        />
+        {errors.incomeFromProvidentFund && (
+          <span>{errors.incomeFromProvidentFund.message}</span>
+        )}
       </div>
 
       <div>
         <label htmlFor="foreignRemittance">Foreign Remittance</label>
         <input {...register("foreignRemittance")} id="foreignRemittance" />
-        {errors.foreignRemittance && <span>{errors.foreignRemittance.message}</span>}
+        {errors.foreignRemittance && (
+          <span>{errors.foreignRemittance.message}</span>
+        )}
       </div>
 
       <div>
         <label htmlFor="typeOfReceipts1">Type of receipts</label>
         <input {...register("typeOfReceipts1")} id="typeOfReceipts1" />
-        {errors.typeOfReceipts1 && <span>{errors.typeOfReceipts1.message}</span>}
-        <input {...register("typeOfReceiptsAmount1")} id="typeOfReceiptsAmount1" />
-        {errors.typeOfReceiptsAmount1 && <span>{errors.typeOfReceiptsAmount1.message}</span>}
+        {errors.typeOfReceipts1 && (
+          <span>{errors.typeOfReceipts1.message}</span>
+        )}
+        <input
+          {...register("typeOfReceiptsAmount1")}
+          id="typeOfReceiptsAmount1"
+        />
+        {errors.typeOfReceiptsAmount1 && (
+          <span>{errors.typeOfReceiptsAmount1.message}</span>
+        )}
         <input {...register("typeOfReceipts2")} id="typeOfReceipts2" />
-        {errors.typeOfReceipts2 && <span>{errors.typeOfReceipts2.message}</span>}
-        <input {...register("typeOfReceiptsAmount2")} id="typeOfReceiptsAmount2" />
-        {errors.typeOfReceiptsAmount2 && <span>{errors.typeOfReceiptsAmount2.message}</span>}
+        {errors.typeOfReceipts2 && (
+          <span>{errors.typeOfReceipts2.message}</span>
+        )}
+        <input
+          {...register("typeOfReceiptsAmount2")}
+          id="typeOfReceiptsAmount2"
+        />
+        {errors.typeOfReceiptsAmount2 && (
+          <span>{errors.typeOfReceiptsAmount2.message}</span>
+        )}
         <input {...register("typeOfReceipts3")} id="typeOfReceipts3" />
-        {errors.typeOfReceipts3 && <span>{errors.typeOfReceipts3.message}</span>}
-        <input {...register("typeOfReceiptsAmount3")} id="typeOfReceiptsAmount3" />
-        {errors.typeOfReceiptsAmount3 && <span>{errors.typeOfReceiptsAmount3.message}</span>}
+        {errors.typeOfReceipts3 && (
+          <span>{errors.typeOfReceipts3.message}</span>
+        )}
+        <input
+          {...register("typeOfReceiptsAmount3")}
+          id="typeOfReceiptsAmount3"
+        />
+        {errors.typeOfReceiptsAmount3 && (
+          <span>{errors.typeOfReceiptsAmount3.message}</span>
+        )}
+      </div>
+
+      <h2>Page 9</h2>
+
+      <div>
+        <label htmlFor="minimumTax" className="block mb-1">
+          Net wealth at the last date of the previous income year
+        </label>
+        <select
+          {...register("netWealthLastDate")}
+          id="netWealthLastDate"
+          className="w-full px-3 py-2 border rounded"
+        >
+          <option value="">Did you file a tax return last year?</option>
+          {NET_WEALTH_LAST_DATE.map((minimumTax) => (
+            <option key={minimumTax} value={minimumTax}>
+              {kebabToNormal(minimumTax)}
+            </option>
+          ))}
+        </select>
+        {errors.netWealthLastDate && (
+          <span className="text-red-500 text-sm">
+            {errors.netWealthLastDate.message}
+          </span>
+        )}
+      </div>
+
+      <div>
+        <label htmlFor="giftExpense">
+          Gift / Expenses / Loss Not Mentioned in IT-10BB
+        </label>
+        <input {...register("giftExpense")} id="giftExpense" />
+        {errors.giftExpense && <span>{errors.giftExpense.message}</span>}
+      </div>
+
+      <div>
+        <label htmlFor="institutionalLiabilities">
+          Institutional Liabilities
+        </label>
+        <input
+          {...register("institutionalLiabilities")}
+          id="institutionalLiabilities"
+        />
+        {errors.institutionalLiabilities && (
+          <span>{errors.institutionalLiabilities.message}</span>
+        )}
+      </div>
+
+      <div>
+        <label htmlFor="nonInstitutionalLiabilities">
+          Non-Institutional Liabilities
+        </label>
+        <input
+          {...register("nonInstitutionalLiabilities")}
+          id="nonInstitutionalLiabilities"
+        />
+        {errors.nonInstitutionalLiabilities && (
+          <span>{errors.nonInstitutionalLiabilities.message}</span>
+        )}
+      </div>
+
+      <div>
+        <label htmlFor="otherLiabilities">Other Liabilities</label>
+        <input {...register("otherLiabilities")} id="otherLiabilities" />
+        {errors.otherLiabilities && (
+          <span>{errors.otherLiabilities.message}</span>
+        )}
+      </div>
+
+      <div>
+        <label htmlFor="totalAssetOfBusiness">Total Asset of Business</label>
+        <input
+          {...register("totalAssetOfBusiness")}
+          id="totalAssetOfBusiness"
+        />
+        {errors.totalAssetOfBusiness && (
+          <span>{errors.totalAssetOfBusiness.message}</span>
+        )}
+      </div>
+
+      <div>
+        <label htmlFor="lessBusinessLiabilities">
+          Less: Business Liabilities (Institutional & Non-Institutional)
+        </label>
+        <input
+          {...register("lessBusinessLiabilities")}
+          id="lessBusinessLiabilities"
+        />
+        {errors.lessBusinessLiabilities && (
+          <span>{errors.lessBusinessLiabilities.message}</span>
+        )}
+      </div>
+
+      <div>
+        <label htmlFor="companyName1">Company Name</label>
+        <input {...register("companyName1")} id="companyName1" />
+        {errors.companyName1 && <span>{errors.companyName1.message}</span>}
+        <input {...register("companyName2")} id="companyName2" />
+        {errors.companyName2 && <span>{errors.companyName2.message}</span>}
+        <input {...register("companyName3")} id="companyName3" />
+        {errors.companyName3 && <span>{errors.companyName3.message}</span>}
+      </div>
+
+      <div>
+        <label htmlFor="noOfShare1">No. of shares</label>
+        <input {...register("noOfShare1")} id="noOfShare1" />
+        {errors.noOfShare1 && <span>{errors.noOfShare1.message}</span>}
+        <input {...register("noOfShare2")} id="noOfShare2" />
+        {errors.noOfShare2 && <span>{errors.noOfShare2.message}</span>}
+        <input {...register("noOfShare3")} id="noOfShare3" />
+        {errors.noOfShare3 && <span>{errors.noOfShare3.message}</span>}
+      </div>
+
+      <div>
+        <label htmlFor="value1">Value (TK)</label>
+        <input {...register("value1")} id="value1" />
+        {errors.value1 && <span>{errors.value1.message}</span>}
+        <input {...register("value2")} id="value2" />
+        {errors.value2 && <span>{errors.value2.message}</span>}
+        <input {...register("value3")} id="value3" />
+        {errors.value3 && <span>{errors.value3.message}</span>}
+      </div>
+
+      <div>
+        <label htmlFor="nameOfPartnershipFirm1">Name of Partnership Firm</label>
+        <input {...register("nameOfPartnershipFirm1")} id="nameOfPartnershipFirm1" />
+        {errors.nameOfPartnershipFirm1 && <span>{errors.nameOfPartnershipFirm1.message}</span>}
+        <input {...register("nameOfPartnershipFirm2")} id="nameOfPartnershipFirm2" />
+        {errors.nameOfPartnershipFirm2 && <span>{errors.nameOfPartnershipFirm2.message}</span>}
+        <input {...register("nameOfPartnershipFirm3")} id="nameOfPartnershipFirm3" />
+        {errors.nameOfPartnershipFirm3 && <span>{errors.nameOfPartnershipFirm3.message}</span>}
+      </div>
+
+      <div>
+        <label htmlFor="shareOfProfit1">Share of
+        profit (%)</label>
+        <input {...register("shareOfProfit1")} id="shareOfProfit1" />
+        {errors.shareOfProfit1 && <span>{errors.shareOfProfit1.message}</span>}
+        <input {...register("shareOfProfit2")} id="shareOfProfit2" />
+        {errors.shareOfProfit2 && <span>{errors.shareOfProfit2.message}</span>}
+        <input {...register("shareOfProfit3")} id="shareOfProfit3" />
+        {errors.shareOfProfit3 && <span>{errors.shareOfProfit3.message}</span>}
+      </div>
+
+      <div>
+        <label htmlFor="capitalContributed1">Capital
+contributed</label>
+        <input {...register("capitalContributed1")} id="capitalContributed1" />
+        {errors.capitalContributed1 && <span>{errors.capitalContributed1.message}</span>}
+        <input {...register("capitalContributed2")} id="capitalContributed2" />
+        {errors.capitalContributed2 && <span>{errors.capitalContributed2.message}</span>}
+        <input {...register("capitalContributed3")} id="capitalContributed3" />
+        {errors.capitalContributed3 && <span>{errors.capitalContributed3.message}</span>}
       </div>
 
       <button type="submit">Submit</button>
