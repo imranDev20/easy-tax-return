@@ -1773,7 +1773,7 @@ contributed</label>
         {errors.others2 && <span>{errors.others2.message}</span>}                                      
       </div>
       <div>
-        <label htmlFor="others1">Asset Outside Bangladesh</label>
+        <label htmlFor="assetOutsideBangladesh">Asset Outside Bangladesh</label>
         <input {...register("assetOutsideBangladesh")} id="assetOutsideBangladesh" />
         {errors.assetOutsideBangladesh && <span>{errors.assetOutsideBangladesh.message}</span>}                                              
       </div>
