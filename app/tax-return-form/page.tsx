@@ -10,11 +10,14 @@ import {
   REPAIR_COLLECTION_OPTIONS,
 } from "../lib/constants";
 import { kebabToNormal } from "../lib/utils";
-
+import Image1 from "@/public/images/1.png";
+import Image from "next/image";
+import CheckedMark from "./_components/checked-mark";
 export default function TaxReturnFormPage() {
   const {
     register,
     handleSubmit,
+    watch,
     formState: { errors },
   } = useForm<TaxReturnFormInput>({
     resolver: zodResolver(taxReturnFormSchema),
@@ -27,152 +30,378 @@ export default function TaxReturnFormPage() {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="taxpayer-form">
-      <h1>First Page</h1>
-      <div>
-        <label htmlFor="taxpayerName">Name of the Taxpayer:</label>
-        <input {...register("taxpayerName")} id="taxpayerName" />
-        {errors.taxpayerName && <span>{errors.taxpayerName.message}</span>}
-      </div>
+      {/* fist page start*/}
+      <div className="first-page container">
+        <div className="relative w-[100vw] h-[1976px]">
+          <Image style={{objectFit:"contain"}} fill src={Image1} alt="image1" />
+          <div className="absolute">
+            <input
+              className="relative w-full h-full block border bg-[#E8F9FD] border-[#0ac0e9] focus:bg-white outline-none pr-4"
+              value=""
+              {...register("taxpayerName")}
+              id="taxpayerName"
+            />
+            {errors.taxpayerName && (
+              <span className="text-red-500 z-[1000]">
+                {errors.taxpayerName.message}
+              </span>
+            )}
 
-      <div>
-        <label htmlFor="nationalId">
-          National ID (NID) No. / Passport No.:
-        </label>
-        <input {...register("nationalId")} id="nationalId" />
-        {errors.nationalId && <span>{errors.nationalId.message}</span>}
-      </div>
+            {/* Triangle with * symbol */}
+            <div className="absolute top-0 right-0 w-0 h-0 border-t-[24px] border-t-[#0ac0e93b] border-l-[24px] border-l-transparent">
+              <span className="absolute top-[-25px] right-[2px] text-white text-md font-bold">
+                *
+              </span>
+            </div>
+          </div>
 
-      <div>
-        <label htmlFor="tin">Taxpayer Identification Number (TIN):</label>
-        <input {...register("tin")} id="tin" />
-        {errors.tin && <span>{errors.tin.message}</span>}
-      </div>
+          <div className="absolute top-[665px] left-[820px] w-[600px] h-[50px]">
+            <input
+              className="relative w-full h-full block border bg-[#E8F9FD] border-[#0ac0e9] focus:bg-white outline-none pr-4"
+              value=""
+              {...register("nationalId")}
+              id="nationalId"
+            />
+            {errors.nationalId && (
+              <span className="text-red-500 z-[1000] inline-block">
+                {errors.nationalId.message}
+              </span>
+            )}
 
-      <div>
-        <label htmlFor="circle">Circle:</label>
-        <input {...register("circle")} id="circle" />
-        {errors.circle && <span>{errors.circle.message}</span>}
-      </div>
+            {/* Triangle with * symbol */}
+            <div className="absolute top-0 right-0 w-0 h-0 border-t-[24px] border-t-[#0ac0e93b] border-l-[24px] border-l-transparent">
+              <span className="absolute top-[-25px] right-[2px] text-white text-md font-bold">
+                *
+              </span>
+            </div>
+          </div>
+          <div className="absolute top-[730px] left-[820px] w-[600px] h-[50px]">
+            <input
+              className="relative w-full h-full block border bg-[#E8F9FD] border-[#0ac0e9] focus:bg-white outline-none pr-4"
+              value=""
+              {...register("tin")}
+              id="tin"
+            />
+            {errors.tin && (
+              <span className="text-red-500 z-[1000]">
+                {errors.tin.message}
+              </span>
+            )}
 
-      <div>
-        <label htmlFor="zone">Zone:</label>
-        <input {...register("zone")} id="zone" />
-        {errors.zone && <span>{errors.zone.message}</span>}
-      </div>
+            {/* Triangle with * symbol */}
+            <div className="absolute top-0 right-0 w-0 h-0 border-t-[24px] border-t-[#0ac0e93b] border-l-[24px] border-l-transparent">
+              <span className="absolute top-[-25px] right-[2px] text-white text-md font-bold">
+                *
+              </span>
+            </div>
+          </div>
 
-      <div>
-        <label>Residential Status:</label>
-        <label>
-          <input
-            type="radio"
-            {...register("residentialStatus")}
-            value="Resident"
-          />
-          Resident
-        </label>
-        <label>
-          <input
-            type="radio"
-            {...register("residentialStatus")}
-            value="Non-resident"
-          />
-          Non-resident
-        </label>
-        {errors.residentialStatus && (
-          <span>{errors.residentialStatus.message}</span>
-        )}
-      </div>
+          <div className="absolute top-[795px] left-[390px] w-[420px] h-[50px]">
+            <input
+              className="relative w-full h-full block border bg-[#E8F9FD] border-[#0ac0e9] focus:bg-white outline-none pr-4"
+              value=""
+              {...register("circle")}
+              id="circle"
+            />
+            {errors.circle && (
+              <span className="text-red-500 z-[1000]">
+                {errors.circle.message}
+              </span>
+            )}
 
-      <div>
-        <label>
-          <input type="checkbox" {...register("isParentOfDisabledPerson")} />A
-          parent/legal guardian of a disabled person
-        </label>
-      </div>
+            {/* Triangle with * symbol */}
+            <div className="absolute top-0 right-0 w-0 h-0 border-t-[24px] border-t-[#0ac0e93b] border-l-[24px] border-l-transparent">
+              <span className="absolute top-[-25px] right-[2px] text-white text-md font-bold">
+                *
+              </span>
+            </div>
+          </div>
 
-      <div>
-        <label htmlFor="dateOfBirth">Date of Birth (DD-MM-YYYY):</label>
-        <input {...register("dateOfBirth")} id="dateOfBirth" />
-        {errors.dateOfBirth && <span>{errors.dateOfBirth.message}</span>}
-      </div>
+          <div className="absolute top-[795px] left-[390px] w-[420px] h-[50px]">
+            <input
+              className="relative w-full h-full block border bg-[#E8F9FD] border-[#0ac0e9] focus:bg-white outline-none pr-4"
+              value=""
+              {...register("circle")}
+              id="circle"
+            />
+            {errors.circle && (
+              <span className="text-red-500 z-[1000]">
+                {errors.circle.message}
+              </span>
+            )}
 
-      <div>
-        <label htmlFor="spouseName">Spouse Name:</label>
-        <input {...register("spouseName")} id="spouseName" />
-        {errors.spouseName && <span>{errors.spouseName.message}</span>}
-      </div>
+            {/* Triangle with * symbol */}
+            <div className="absolute top-0 right-0 w-0 h-0 border-t-[24px] border-t-[#0ac0e93b] border-l-[24px] border-l-transparent">
+              <span className="absolute top-[-25px] right-[2px] text-white text-md font-bold">
+                *
+              </span>
+            </div>
+          </div>
+          <div className="absolute top-[795px] left-[1050px] w-[360px] h-[50px]">
+            <input
+              className="relative w-full h-full block border bg-[#E8F9FD] border-[#0ac0e9] focus:bg-white outline-none pr-4"
+              value=""
+              {...register("zone")}
+              id="zone"
+            />
+            {errors.zone && (
+              <span className="text-red-500 z-[1000]">
+                {errors.zone.message}
+              </span>
+            )}
 
-      <div>
-        <label htmlFor="spouseTin">Spouse TIN:</label>
-        <input {...register("spouseTin")} id="spouseTin" />
-        {errors.spouseTin && <span>{errors.spouseTin.message}</span>}
-      </div>
+            {/* Triangle with * symbol */}
+            <div className="absolute top-0 right-0 w-0 h-0 border-t-[24px] border-t-[#0ac0e93b] border-l-[24px] border-l-transparent">
+              <span className="absolute top-[-25px] right-[2px] text-white text-md font-bold">
+                *
+              </span>
+            </div>
+          </div>
 
-      <div>
-        <label htmlFor="addressLine1">Address:</label>
-        <input {...register("addressLine1")} id="addressLine1" />
-        {errors.addressLine1 && <span>{errors.addressLine1.message}</span>}
-      </div>
+          <div className="absolute top-[900px] left-[1085px] w-[59px] h-[59px]">
+            <input
+              className="relative w-full h-full block border bg-[#E8F9FD] border-[#0ac0e9] focus:bg-white outline-none pr-4"
+              type="checkbox"
+              {...register("residentialStatus")}
+              value="Resident"
+              id="Resident"
+            />
+            <label
+              htmlFor="Resident"
+              className="absolute inset-0 flex items-center justify-center bg-[#E8F9FD] border border-[#0ac0e9] cursor-pointer"
+            >
+              {watch("residentialStatus") == "Resident" && <CheckedMark />}
+            </label>
+            {errors.residentialStatus && (
+              <span className="text-red-500 z-[1000]">
+                {errors.residentialStatus.message}
+              </span>
+            )}
 
-      <div>
-        <input {...register("addressLine2")} id="addressLine2" />
-        {errors.addressLine2 && <span>{errors.addressLine2.message}</span>}
-      </div>
+            {/* Triangle with * symbol */}
+            <div className="absolute top-0 right-0 w-0 h-0 border-t-[24px] border-t-[#0ac0e93b] border-l-[24px] border-l-transparent">
+              <span className="absolute top-[-25px] right-[2px] text-white text-md font-bold">
+                *
+              </span>
+            </div>
+          </div>
 
-      <div>
-        <label htmlFor="telephone">Telephone:</label>
-        <input {...register("telephone")} id="telephone" />
-        {errors.telephone && <span>{errors.telephone.message}</span>}
-      </div>
-      <div>
-        <label htmlFor="mobile">Mobile:</label>
-        <input {...register("mobile")} id="mobile" />
-        {errors.mobile && <span>{errors.mobile.message}</span>}
-      </div>
-      <div>
-        <label htmlFor="email">E-mail:</label>
-        <input {...register("email")} id="email" />
-        {errors.email && <span>{errors.email.message}</span>}
-      </div>
-      <div>
-        <label htmlFor="employerName">
-          If employed, employer&apos;s (latest employer&apos;s name in case of
-          multiple employement):
-        </label>
-        <input {...register("employerName")} id="employerName" />
-        {errors.employerName && <span>{errors.employerName.message}</span>}
-      </div>
-      <div>
-        <label htmlFor="businessName">Business Name:</label>
-        <input {...register("businessName")} id="businessName" />
-        {errors.businessName && <span>{errors.businessName.message}</span>}
-      </div>
-      <div>
-        <label htmlFor="bin">Business Identification number (BIN):</label>
-        <input {...register("bin")} id="bin" />
-        {errors.bin && <span>{errors.bin.message}</span>}
-      </div>
-      <div>
-        <label htmlFor="partnersMembersAssociation1">
-          Name and TIN of Partners / Members in case of Firm / Association of
-          Person:
-        </label>
-        <input
-          {...register("partnersMembersAssociation1")}
-          id="partnersMembersAssociation1"
-        />
-        {errors.partnersMembersAssociation1 && (
-          <span>{errors.partnersMembersAssociation1.message}</span>
-        )}
-      </div>
-      <div>
-        <input
-          {...register("partnersMembersAssociation2")}
-          id="partnersMembersAssociation2"
-        />
-        {errors.partnersMembersAssociation2 && (
-          <span>{errors.partnersMembersAssociation2.message}</span>
-        )}
+          <div className="absolute top-[900px] left-[1355px] w-[59px] h-[59px]">
+            <input
+              className="relative w-full h-full block border bg-[#E8F9FD] border-[#0ac0e9] focus:bg-white outline-none pr-4"
+              type="checkbox"
+              {...register("residentialStatus")}
+              value="Non-resident"
+              id="Non-resident"
+            />
+            <label
+              htmlFor="Non-resident"
+              className="absolute inset-0 flex items-center justify-center bg-[#E8F9FD] border border-[#0ac0e9] cursor-pointer"
+            >
+              {watch("residentialStatus") == "Non-resident" && <CheckedMark />}
+            </label>
+            {errors.residentialStatus && (
+              <span className="text-red-500 z-[1000]">
+                {errors.residentialStatus.message}
+              </span>
+            )}
+
+            {/* Triangle with * symbol */}
+            <div className="absolute top-0 right-0 w-0 h-0 border-t-[24px] border-t-[#0ac0e93b] border-l-[24px] border-l-transparent">
+              <span className="absolute top-[-25px] right-[2px] text-white text-md font-bold">
+                *
+              </span>
+            </div>
+          </div>
+
+          <div>
+            <label>
+              <input
+                type="checkbox"
+                {...register("isParentOfDisabledPerson")}
+              />
+              A parent/legal guardian of a disabled person
+            </label>
+          </div>
+
+          <div>
+            <label htmlFor="dateOfBirth">Date of Birth (DD-MM-YYYY):</label>
+            <input {...register("dateOfBirth")} id="dateOfBirth" />
+            {errors.dateOfBirth && <span>{errors.dateOfBirth.message}</span>}
+          </div>
+
+          <div className="absolute top-[1250px] left-[1000px] w-[420px] h-[50px]">
+            <input
+              className="relative w-full h-full block border bg-[#E8F9FD] border-[#0ac0e9] focus:bg-white outline-none pr-4"
+              {...register("spouseName")}
+              id="spouseName"
+            />
+            {errors.spouseName && (
+              <span className="text-red-500 z-[1000]">
+                {errors.spouseName.message}
+              </span>
+            )}
+          </div>
+
+          <div className="absolute top-[1330px] left-[1000px] w-[420px] h-[50px]">
+            <input
+              className="relative w-full h-full block border bg-[#E8F9FD] border-[#0ac0e9] focus:bg-white outline-none pr-4"
+              {...register("spouseTin")}
+              id="spouseTin"
+            />
+            {errors.spouseTin && (
+              <span className="text-red-500 z-[1000]">
+                {errors.spouseTin.message}
+              </span>
+            )}
+          </div>
+
+          <div className="absolute top-[1410px] left-[345px] w-[1070px] h-[50px]">
+            <input
+              className="relative w-full h-full block border bg-[#E8F9FD] border-[#0ac0e9] focus:bg-white outline-none pr-4"
+              {...register("addressLine1")}
+              id="addressLine1"
+            />
+            {errors.addressLine1 && (
+              <span className="text-red-500 z-[1000]">
+                {errors.addressLine1.message}
+              </span>
+            )}
+            <div className="absolute top-0 right-0 w-0 h-0 border-t-[24px] border-t-[#0ac0e93b] border-l-[24px] border-l-transparent">
+              <span className="absolute top-[-25px] right-[2px] text-white text-md font-bold">
+                *
+              </span>
+            </div>
+          </div>
+
+          <div className="absolute top-[1475px] left-[345px] w-[1070px] h-[50px]">
+            <input
+              className="relative w-full h-full block border bg-[#E8F9FD] border-[#0ac0e9] focus:bg-white outline-none pr-4"
+              {...register("addressLine2")}
+              id="addressLine2"
+            />
+            {errors.addressLine2 && (
+              <span className="text-red-500 z-[1000]">
+                {errors.addressLine2.message}
+              </span>
+            )}
+           
+          </div>
+          <div className="absolute top-[1575px] left-[205px] w-[390px] h-[50px]">
+            <input
+              className="relative w-full h-full block border bg-[#E8F9FD] border-[#0ac0e9] focus:bg-white outline-none pr-4"
+              {...register("telephone")}
+              id="telephone"
+            />
+            {errors.telephone && (
+              <span className="text-red-500 z-[1000]">
+                {errors.telephone.message}
+              </span>
+            )}
+           
+          </div>
+
+          <div className="absolute top-[1575px] left-[610px] w-[410px] h-[50px]">
+            <input
+              className="relative w-full h-full block border bg-[#E8F9FD] border-[#0ac0e9] focus:bg-white outline-none pr-4"
+              {...register("mobile")}
+              id="mobile"
+            />
+            {errors.mobile && (
+              <span className="text-red-500 z-[1000]">
+                {errors.mobile.message}
+              </span>
+            )}
+           <div className="absolute top-0 right-0 w-0 h-0 border-t-[24px] border-t-[#0ac0e93b] border-l-[24px] border-l-transparent">
+              <span className="absolute top-[-25px] right-[2px] text-white text-md font-bold">
+                *
+              </span>
+            </div>
+          </div>
+
+          <div className="absolute top-[1575px] left-[1040px] w-[380px] h-[50px]">
+            <input
+              className="relative w-full h-full block border bg-[#E8F9FD] border-[#0ac0e9] focus:bg-white outline-none pr-4"
+              {...register("email")}
+              id="email"
+            />
+            {errors.email && (
+              <span className="text-red-500 z-[1000]">
+                {errors.email.message}
+              </span>
+            )}
+           <div className="absolute top-0 right-0 w-0 h-0 border-t-[24px] border-t-[#0ac0e93b] border-l-[24px] border-l-transparent">
+              <span className="absolute top-[-25px] right-[2px] text-white text-md font-bold">
+                *
+              </span>
+            </div>
+          </div>
+
+          <div className="absolute top-[1685px] left-[210px] w-[1200px] h-[50px]">
+            <input
+              className="relative w-full h-full block border bg-[#E8F9FD] border-[#0ac0e9] focus:bg-white outline-none pr-4"
+              {...register("employerName")}
+              id="employerName"
+            />
+            {errors.employerName && (
+              <span className="text-red-500 z-[1000]">
+                {errors.employerName.message}
+              </span>
+            )}         
+          </div>
+
+          <div className="absolute top-[1750px] left-[750px] w-[670px] h-[50px]">
+            <input
+              className="relative w-full h-full block border bg-[#E8F9FD] border-[#0ac0e9] focus:bg-white outline-none pr-4"
+              {...register("businessName")}
+              id="businessName"
+            />
+            {errors.businessName && (
+              <span className="text-red-500 z-[1000]">
+                {errors.businessName.message}
+              </span>
+            )}         
+          </div>
+
+          <div className="absolute top-[1820px] left-[750px] w-[670px] h-[50px]">
+            <input
+              className="relative w-full h-full block border bg-[#E8F9FD] border-[#0ac0e9] focus:bg-white outline-none pr-4"
+              {...register("bin")}
+              id="bin"
+            />
+            {errors.bin && (
+              <span className="text-red-500 z-[1000]">
+                {errors.bin.message}
+              </span>
+            )}         
+          </div>
+
+          <div className="absolute top-[1930px] left-[200px] w-[1150px] h-[50px]">
+            <input
+              className="relative w-full h-full block border bg-[#E8F9FD] border-[#0ac0e9] focus:bg-white outline-none pr-4"
+              {...register("partnersMembersAssociation1")}
+              id="bin"
+            />
+            {errors.partnersMembersAssociation1 && (
+              <span className="text-red-500 z-[1000]">
+                {errors.partnersMembersAssociation1.message}
+              </span>
+            )}         
+          </div>
+               
+         
+          <div>
+            <input
+              {...register("partnersMembersAssociation2")}
+              id="partnersMembersAssociation2"
+            />
+            {errors.partnersMembersAssociation2 && (
+              <span>{errors.partnersMembersAssociation2.message}</span>
+            )}
+          </div>
+        </div>
+
+        {/* first page end */}
       </div>
 
       <h2>Page 2</h2>
@@ -1559,17 +1788,31 @@ export default function TaxReturnFormPage() {
 
       <div>
         <label htmlFor="nameOfPartnershipFirm1">Name of Partnership Firm</label>
-        <input {...register("nameOfPartnershipFirm1")} id="nameOfPartnershipFirm1" />
-        {errors.nameOfPartnershipFirm1 && <span>{errors.nameOfPartnershipFirm1.message}</span>}
-        <input {...register("nameOfPartnershipFirm2")} id="nameOfPartnershipFirm2" />
-        {errors.nameOfPartnershipFirm2 && <span>{errors.nameOfPartnershipFirm2.message}</span>}
-        <input {...register("nameOfPartnershipFirm3")} id="nameOfPartnershipFirm3" />
-        {errors.nameOfPartnershipFirm3 && <span>{errors.nameOfPartnershipFirm3.message}</span>}
+        <input
+          {...register("nameOfPartnershipFirm1")}
+          id="nameOfPartnershipFirm1"
+        />
+        {errors.nameOfPartnershipFirm1 && (
+          <span>{errors.nameOfPartnershipFirm1.message}</span>
+        )}
+        <input
+          {...register("nameOfPartnershipFirm2")}
+          id="nameOfPartnershipFirm2"
+        />
+        {errors.nameOfPartnershipFirm2 && (
+          <span>{errors.nameOfPartnershipFirm2.message}</span>
+        )}
+        <input
+          {...register("nameOfPartnershipFirm3")}
+          id="nameOfPartnershipFirm3"
+        />
+        {errors.nameOfPartnershipFirm3 && (
+          <span>{errors.nameOfPartnershipFirm3.message}</span>
+        )}
       </div>
 
       <div>
-        <label htmlFor="shareOfProfit1">Share of
-        profit (%)</label>
+        <label htmlFor="shareOfProfit1">Share of profit (%)</label>
         <input {...register("shareOfProfit1")} id="shareOfProfit1" />
         {errors.shareOfProfit1 && <span>{errors.shareOfProfit1.message}</span>}
         <input {...register("shareOfProfit2")} id="shareOfProfit2" />
@@ -1579,30 +1822,60 @@ export default function TaxReturnFormPage() {
       </div>
 
       <div>
-        <label htmlFor="capitalContributed1">Capital
-contributed</label>
+        <label htmlFor="capitalContributed1">Capital contributed</label>
         <input {...register("capitalContributed1")} id="capitalContributed1" />
-        {errors.capitalContributed1 && <span>{errors.capitalContributed1.message}</span>}
+        {errors.capitalContributed1 && (
+          <span>{errors.capitalContributed1.message}</span>
+        )}
         <input {...register("capitalContributed2")} id="capitalContributed2" />
-        {errors.capitalContributed2 && <span>{errors.capitalContributed2.message}</span>}
+        {errors.capitalContributed2 && (
+          <span>{errors.capitalContributed2.message}</span>
+        )}
         <input {...register("capitalContributed3")} id="capitalContributed3" />
-        {errors.capitalContributed3 && <span>{errors.capitalContributed3.message}</span>}
+        {errors.capitalContributed3 && (
+          <span>{errors.capitalContributed3.message}</span>
+        )}
       </div>
 
       <h2>Page 10</h2>
 
       <div>
         <label htmlFor="locationDescription1">Location and Description</label>
-        <input {...register("locationDescription1")} id="locationDescription1" />
-        {errors.locationDescription1 && <span>{errors.locationDescription1.message}</span>}
-        <input {...register("locationDescription2")} id="locationDescription2" />
-        {errors.locationDescription2 && <span>{errors.locationDescription2.message}</span>}
-        <input {...register("locationDescription3")} id="locationDescription3" />
-        {errors.locationDescription3 && <span>{errors.locationDescription3.message}</span>}
-        <input {...register("locationDescription4")} id="locationDescription4" />
-        {errors.locationDescription4 && <span>{errors.locationDescription4.message}</span>}
-        <input {...register("locationDescription5")} id="locationDescription5" />
-        {errors.locationDescription5 && <span>{errors.locationDescription5.message}</span>}
+        <input
+          {...register("locationDescription1")}
+          id="locationDescription1"
+        />
+        {errors.locationDescription1 && (
+          <span>{errors.locationDescription1.message}</span>
+        )}
+        <input
+          {...register("locationDescription2")}
+          id="locationDescription2"
+        />
+        {errors.locationDescription2 && (
+          <span>{errors.locationDescription2.message}</span>
+        )}
+        <input
+          {...register("locationDescription3")}
+          id="locationDescription3"
+        />
+        {errors.locationDescription3 && (
+          <span>{errors.locationDescription3.message}</span>
+        )}
+        <input
+          {...register("locationDescription4")}
+          id="locationDescription4"
+        />
+        {errors.locationDescription4 && (
+          <span>{errors.locationDescription4.message}</span>
+        )}
+        <input
+          {...register("locationDescription5")}
+          id="locationDescription5"
+        />
+        {errors.locationDescription5 && (
+          <span>{errors.locationDescription5.message}</span>
+        )}
       </div>
 
       <div>
@@ -1620,164 +1893,253 @@ contributed</label>
       </div>
 
       <div>
-        <label htmlFor="agriculturalLocationAndDescription1">Location and Description</label>
-        <input {...register("agriculturalLocationAndDescription1")} id="agriculturalLocationAndDescription1" />
-        {errors.agriculturalLocationAndDescription1 && <span>{errors.agriculturalLocationAndDescription1.message}</span>}
-        <input {...register("agriculturalLocationAndDescription2")} id="agriculturalLocationAndDescription2" />
-        {errors.agriculturalLocationAndDescription2 && <span>{errors.agriculturalLocationAndDescription2.message}</span>}
-        <input {...register("agriculturalLocationAndDescription3")} id="agriculturalLocationAndDescription3" />
-        {errors.agriculturalLocationAndDescription3 && <span>{errors.agriculturalLocationAndDescription3.message}</span>}       
+        <label htmlFor="agriculturalLocationAndDescription1">
+          Location and Description
+        </label>
+        <input
+          {...register("agriculturalLocationAndDescription1")}
+          id="agriculturalLocationAndDescription1"
+        />
+        {errors.agriculturalLocationAndDescription1 && (
+          <span>{errors.agriculturalLocationAndDescription1.message}</span>
+        )}
+        <input
+          {...register("agriculturalLocationAndDescription2")}
+          id="agriculturalLocationAndDescription2"
+        />
+        {errors.agriculturalLocationAndDescription2 && (
+          <span>{errors.agriculturalLocationAndDescription2.message}</span>
+        )}
+        <input
+          {...register("agriculturalLocationAndDescription3")}
+          id="agriculturalLocationAndDescription3"
+        />
+        {errors.agriculturalLocationAndDescription3 && (
+          <span>{errors.agriculturalLocationAndDescription3.message}</span>
+        )}
       </div>
 
       <div>
         <label htmlFor="agriculturalLocationValue1">Value (Taka)</label>
-        <input {...register("agriculturalLocationValue1")} id="agriculturalLocationValue1" />
-        {errors.agriculturalLocationValue1 && <span>{errors.agriculturalLocationValue1.message}</span>}
-        <input {...register("agriculturalLocationValue2")} id="agriculturalLocationValue2" />
-        {errors.agriculturalLocationValue2 && <span>{errors.agriculturalLocationValue2.message}</span>}
-        <input {...register("agriculturalLocationValue3")} id="agriculturalLocationValue3" />
-        {errors.agriculturalLocationValue3 && <span>{errors.agriculturalLocationValue3.message}</span>}       
+        <input
+          {...register("agriculturalLocationValue1")}
+          id="agriculturalLocationValue1"
+        />
+        {errors.agriculturalLocationValue1 && (
+          <span>{errors.agriculturalLocationValue1.message}</span>
+        )}
+        <input
+          {...register("agriculturalLocationValue2")}
+          id="agriculturalLocationValue2"
+        />
+        {errors.agriculturalLocationValue2 && (
+          <span>{errors.agriculturalLocationValue2.message}</span>
+        )}
+        <input
+          {...register("agriculturalLocationValue3")}
+          id="agriculturalLocationValue3"
+        />
+        {errors.agriculturalLocationValue3 && (
+          <span>{errors.agriculturalLocationValue3.message}</span>
+        )}
       </div>
       <div>
-        <label htmlFor="shareDebentureUnitCertificate">Share / Debenture / Unit Certificate etc.</label>
-        <input {...register("shareDebentureUnitCertificate")} id="shareDebentureUnitCertificate" />
-        {errors.shareDebentureUnitCertificate && <span>{errors.shareDebentureUnitCertificate.message}</span>}              
+        <label htmlFor="shareDebentureUnitCertificate">
+          Share / Debenture / Unit Certificate etc.
+        </label>
+        <input
+          {...register("shareDebentureUnitCertificate")}
+          id="shareDebentureUnitCertificate"
+        />
+        {errors.shareDebentureUnitCertificate && (
+          <span>{errors.shareDebentureUnitCertificate.message}</span>
+        )}
       </div>
 
       <div>
-        <label htmlFor="bondsGovernment">Bonds and other Government Securities</label>
+        <label htmlFor="bondsGovernment">
+          Bonds and other Government Securities
+        </label>
         <input {...register("bondsGovernment")} id="bondsGovernment" />
-        {errors.bondsGovernment && <span>{errors.bondsGovernment.message}</span>}              
+        {errors.bondsGovernment && (
+          <span>{errors.bondsGovernment.message}</span>
+        )}
       </div>
 
       <div>
-        <label htmlFor="sanchayapatraSavingsCertificate">(i1) Sanchayapatra / Savings certificate</label>
-        <input {...register("sanchayapatraSavingsCertificate")} id="sanchayapatraSavingsCertificate" />
-        {errors.sanchayapatraSavingsCertificate && <span>{errors.sanchayapatraSavingsCertificate.message}</span>}              
+        <label htmlFor="sanchayapatraSavingsCertificate">
+          (i1) Sanchayapatra / Savings certificate
+        </label>
+        <input
+          {...register("sanchayapatraSavingsCertificate")}
+          id="sanchayapatraSavingsCertificate"
+        />
+        {errors.sanchayapatraSavingsCertificate && (
+          <span>{errors.sanchayapatraSavingsCertificate.message}</span>
+        )}
       </div>
 
       <div>
         <label htmlFor="depositPensionScheme">Deposit Pension Scheme</label>
-        <input {...register("depositPensionScheme")} id="depositPensionScheme" />
-        {errors.depositPensionScheme && <span>{errors.depositPensionScheme.message}</span>}              
+        <input
+          {...register("depositPensionScheme")}
+          id="depositPensionScheme"
+        />
+        {errors.depositPensionScheme && (
+          <span>{errors.depositPensionScheme.message}</span>
+        )}
       </div>
 
       <div>
         <label htmlFor="loansGivenToOthers">(111) Loans given to others</label>
         <input {...register("loansGivenToOthers")} id="loansGivenToOthers" />
-        {errors.loansGivenToOthers && <span>{errors.loansGivenToOthers.message}</span>}              
+        {errors.loansGivenToOthers && (
+          <span>{errors.loansGivenToOthers.message}</span>
+        )}
       </div>
 
       <div>
         <label htmlFor="name">Name</label>
         <input {...register("name")} id="name" />
-        {errors.name && <span>{errors.name.message}</span>}              
+        {errors.name && <span>{errors.name.message}</span>}
       </div>
 
       <div>
         <label htmlFor="nid">NID</label>
         <input {...register("nid")} id="nid" />
-        {errors.nid && <span>{errors.nid.message}</span>}              
+        {errors.nid && <span>{errors.nid.message}</span>}
         <input {...register("nidValue")} id="nidValue" />
-        {errors.nidValue && <span>{errors.nidValue.message}</span>}              
+        {errors.nidValue && <span>{errors.nidValue.message}</span>}
       </div>
 
       <div>
-        <label htmlFor="savingDeposit">(1v) Savings Deposit / Term Deposit / Fixed deposits</label>
+        <label htmlFor="savingDeposit">
+          (1v) Savings Deposit / Term Deposit / Fixed deposits
+        </label>
         <input {...register("savingDeposit")} id="savingDeposit" />
-        {errors.savingDeposit && <span>{errors.savingDeposit.message}</span>}                                
+        {errors.savingDeposit && <span>{errors.savingDeposit.message}</span>}
       </div>
       <div>
-        <label htmlFor="providentFund">(v) Provident Fund or Other Fund (if any)</label>
+        <label htmlFor="providentFund">
+          (v) Provident Fund or Other Fund (if any)
+        </label>
         <input {...register("providentFund")} id="providentFund" />
-        {errors.providentFund && <span>{errors.providentFund.message}</span>}                                
+        {errors.providentFund && <span>{errors.providentFund.message}</span>}
       </div>
 
       <div>
         <label htmlFor="otherInvestment1">(vi) Other Investment</label>
         <input {...register("otherInvestment1")} id="otherInvestment1" />
-        {errors.otherInvestment1 && <span>{errors.otherInvestment1.message}</span>}                                
+        {errors.otherInvestment1 && (
+          <span>{errors.otherInvestment1.message}</span>
+        )}
         <input {...register("otherInvestment2")} id="otherInvestment2" />
-        {errors.otherInvestment2 && <span>{errors.otherInvestment2.message}</span>}                                
+        {errors.otherInvestment2 && (
+          <span>{errors.otherInvestment2.message}</span>
+        )}
       </div>
       <div>
         <label htmlFor="typeOfMotorVehicle1">Type of Motor Vehicle</label>
         <input {...register("typeOfMotorVehicle1")} id="typeOfMotorVehicle1" />
-        {errors.typeOfMotorVehicle1 && <span>{errors.typeOfMotorVehicle1.message}</span>}                                
+        {errors.typeOfMotorVehicle1 && (
+          <span>{errors.typeOfMotorVehicle1.message}</span>
+        )}
         <input {...register("typeOfMotorVehicle2")} id="typeOfMotorVehicle2" />
-        {errors.typeOfMotorVehicle2 && <span>{errors.typeOfMotorVehicle2.message}</span>}                                
+        {errors.typeOfMotorVehicle2 && (
+          <span>{errors.typeOfMotorVehicle2.message}</span>
+        )}
       </div>
 
       <div>
         <label htmlFor="typeOfMotorVehicle1">Type of Motor Vehicle</label>
         <input {...register("typeOfMotorVehicle1")} id="typeOfMotorVehicle1" />
-        {errors.typeOfMotorVehicle1 && <span>{errors.typeOfMotorVehicle1.message}</span>}                                
+        {errors.typeOfMotorVehicle1 && (
+          <span>{errors.typeOfMotorVehicle1.message}</span>
+        )}
         <input {...register("typeOfMotorVehicle2")} id="typeOfMotorVehicle2" />
-        {errors.typeOfMotorVehicle2 && <span>{errors.typeOfMotorVehicle2.message}</span>}                                
+        {errors.typeOfMotorVehicle2 && (
+          <span>{errors.typeOfMotorVehicle2.message}</span>
+        )}
       </div>
 
       <div>
         <label htmlFor="registrationNumber1">Registration Number</label>
         <input {...register("registrationNumber1")} id="registrationNumber1" />
-        {errors.registrationNumber1 && <span>{errors.registrationNumber1.message}</span>}                                
+        {errors.registrationNumber1 && (
+          <span>{errors.registrationNumber1.message}</span>
+        )}
         <input {...register("registrationNumber2")} id="registrationNumber2" />
-        {errors.registrationNumber2 && <span>{errors.registrationNumber2.message}</span>}                                
+        {errors.registrationNumber2 && (
+          <span>{errors.registrationNumber2.message}</span>
+        )}
       </div>
 
       <div>
         <label htmlFor="motorValue1">Value (Taka)</label>
         <input {...register("motorValue1")} id="motorValue1" />
-        {errors.motorValue1 && <span>{errors.motorValue1.message}</span>}                                
+        {errors.motorValue1 && <span>{errors.motorValue1.message}</span>}
         <input {...register("motorValue2")} id="motorValue2" />
-        {errors.motorValue2 && <span>{errors.motorValue2.message}</span>}                                
+        {errors.motorValue2 && <span>{errors.motorValue2.message}</span>}
       </div>
 
       <div>
         <label htmlFor="ornaments1">Ornaments (Mention Quantity)</label>
         <input {...register("ornaments1")} id="ornaments1" />
-        {errors.ornaments1 && <span>{errors.ornaments1.message}</span>}                                
+        {errors.ornaments1 && <span>{errors.ornaments1.message}</span>}
         <input {...register("ornaments2")} id="ornaments2" />
-        {errors.ornaments2 && <span>{errors.ornaments2.message}</span>}                                
+        {errors.ornaments2 && <span>{errors.ornaments2.message}</span>}
       </div>
 
       <div>
-        <label htmlFor="furnitureAndElectronic">Furniture and Electronic Items</label>
-        <input {...register("furnitureAndElectronic")} id="furnitureAndElectronic" />
-        {errors.furnitureAndElectronic && <span>{errors.furnitureAndElectronic.message}</span>}                
+        <label htmlFor="furnitureAndElectronic">
+          Furniture and Electronic Items
+        </label>
+        <input
+          {...register("furnitureAndElectronic")}
+          id="furnitureAndElectronic"
+        />
+        {errors.furnitureAndElectronic && (
+          <span>{errors.furnitureAndElectronic.message}</span>
+        )}
       </div>
 
       <div>
-        <label htmlFor="furnitureAndElectronic">Other Assets (Except Assets Mentioned in SL. 8K)</label>
+        <label htmlFor="furnitureAndElectronic">
+          Other Assets (Except Assets Mentioned in SL. 8K)
+        </label>
         <input {...register("othersAssets1")} id="othersAssets1" />
-        {errors.othersAssets1 && <span>{errors.othersAssets1.message}</span>}                
+        {errors.othersAssets1 && <span>{errors.othersAssets1.message}</span>}
         <input {...register("othersAssets2")} id="othersAssets2" />
-        {errors.othersAssets2 && <span>{errors.othersAssets2.message}</span>}                
+        {errors.othersAssets2 && <span>{errors.othersAssets2.message}</span>}
       </div>
       <div>
         <label htmlFor="bankBalance">Bank Balance</label>
         <input {...register("bankBalance")} id="bankBalance" />
-        {errors.bankBalance && <span>{errors.bankBalance.message}</span>}                
-                      
+        {errors.bankBalance && <span>{errors.bankBalance.message}</span>}
       </div>
       <div>
         <label htmlFor="cashInHand">Cash in Hand</label>
         <input {...register("cashInHand")} id="cashInHand" />
-        {errors.cashInHand && <span>{errors.cashInHand.message}</span>}                                      
+        {errors.cashInHand && <span>{errors.cashInHand.message}</span>}
       </div>
 
       <div>
         <label htmlFor="others1">Others</label>
         <input {...register("others1")} id="others1" />
-        {errors.others1 && <span>{errors.others1.message}</span>}                                      
+        {errors.others1 && <span>{errors.others1.message}</span>}
         <input {...register("others2")} id="others2" />
-        {errors.others2 && <span>{errors.others2.message}</span>}                                      
+        {errors.others2 && <span>{errors.others2.message}</span>}
       </div>
       <div>
         <label htmlFor="assetOutsideBangladesh">Asset Outside Bangladesh</label>
-        <input {...register("assetOutsideBangladesh")} id="assetOutsideBangladesh" />
-        {errors.assetOutsideBangladesh && <span>{errors.assetOutsideBangladesh.message}</span>}                                              
+        <input
+          {...register("assetOutsideBangladesh")}
+          id="assetOutsideBangladesh"
+        />
+        {errors.assetOutsideBangladesh && (
+          <span>{errors.assetOutsideBangladesh.message}</span>
+        )}
       </div>
-
 
       <button type="submit">Submit</button>
     </form>
