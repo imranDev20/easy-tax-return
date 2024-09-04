@@ -8,8 +8,8 @@ import {
   NET_WEALTH_LAST_DATE,
   NET_WEALTH_SURCHARGE_OPTIONS,
   REPAIR_COLLECTION_OPTIONS,
-} from "../lib/constants";
-import { kebabToNormal } from "../lib/utils";
+} from "../../lib/constants";
+import { kebabToNormal } from "../../lib/utils";
 import Image1 from "@/public/images/1.png";
 import Image from "next/image";
 import CheckedMark from "./_components/checked-mark";
@@ -31,9 +31,16 @@ export default function TaxReturnFormPage() {
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="taxpayer-form">
       {/* fist page start*/}
-      <div className="first-page container">
-        <div className="relative w-[100vw] h-[1976px]">
-          <Image style={{objectFit:"contain"}} fill src={Image1} alt="image1" />
+      <div className="container mx-auto">
+        <div className="relative w-screen h-full min-h-[1900px] border-4 border-gray-600">
+          <Image
+            style={{ objectFit: "contain" }}
+            fill
+            src={Image1}
+            alt="image1"
+            className="h-full w-full"
+          />
+
           <div className="absolute">
             <input
               className="relative w-full h-full block border bg-[#E8F9FD] border-[#0ac0e9] focus:bg-white outline-none pr-4"
@@ -285,7 +292,6 @@ export default function TaxReturnFormPage() {
                 {errors.addressLine2.message}
               </span>
             )}
-           
           </div>
           <div className="absolute top-[1575px] left-[205px] w-[390px] h-[50px]">
             <input
@@ -298,7 +304,6 @@ export default function TaxReturnFormPage() {
                 {errors.telephone.message}
               </span>
             )}
-           
           </div>
 
           <div className="absolute top-[1575px] left-[610px] w-[410px] h-[50px]">
@@ -312,7 +317,7 @@ export default function TaxReturnFormPage() {
                 {errors.mobile.message}
               </span>
             )}
-           <div className="absolute top-0 right-0 w-0 h-0 border-t-[24px] border-t-[#0ac0e93b] border-l-[24px] border-l-transparent">
+            <div className="absolute top-0 right-0 w-0 h-0 border-t-[24px] border-t-[#0ac0e93b] border-l-[24px] border-l-transparent">
               <span className="absolute top-[-25px] right-[2px] text-white text-md font-bold">
                 *
               </span>
@@ -330,7 +335,7 @@ export default function TaxReturnFormPage() {
                 {errors.email.message}
               </span>
             )}
-           <div className="absolute top-0 right-0 w-0 h-0 border-t-[24px] border-t-[#0ac0e93b] border-l-[24px] border-l-transparent">
+            <div className="absolute top-0 right-0 w-0 h-0 border-t-[24px] border-t-[#0ac0e93b] border-l-[24px] border-l-transparent">
               <span className="absolute top-[-25px] right-[2px] text-white text-md font-bold">
                 *
               </span>
@@ -347,7 +352,7 @@ export default function TaxReturnFormPage() {
               <span className="text-red-500 z-[1000]">
                 {errors.employerName.message}
               </span>
-            )}         
+            )}
           </div>
 
           <div className="absolute top-[1750px] left-[750px] w-[670px] h-[50px]">
@@ -360,7 +365,7 @@ export default function TaxReturnFormPage() {
               <span className="text-red-500 z-[1000]">
                 {errors.businessName.message}
               </span>
-            )}         
+            )}
           </div>
 
           <div className="absolute top-[1820px] left-[750px] w-[670px] h-[50px]">
@@ -373,7 +378,7 @@ export default function TaxReturnFormPage() {
               <span className="text-red-500 z-[1000]">
                 {errors.bin.message}
               </span>
-            )}         
+            )}
           </div>
 
           <div className="absolute top-[1930px] left-[200px] w-[1150px] h-[50px]">
@@ -386,10 +391,9 @@ export default function TaxReturnFormPage() {
               <span className="text-red-500 z-[1000]">
                 {errors.partnersMembersAssociation1.message}
               </span>
-            )}         
+            )}
           </div>
-               
-         
+
           <div>
             <input
               {...register("partnersMembersAssociation2")}
