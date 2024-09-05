@@ -24,12 +24,18 @@ type FieldType =
   | "select";
 
 // Define the structure for each form field
-interface FormField {
+interface DateFieldPosition {
+  x: number;
+  y: number;
+  width: number;
+  height: number;
+}
+
+interface BaseFormField {
   name: keyof FormData;
   type: FieldType;
   label: string;
   placeholder?: string;
-  options?: Array<{ label: string; value: string; x?: number; y?: number }>;
   x: number;
   y: number;
   width: number;
@@ -37,9 +43,41 @@ interface FormField {
   imageIndex: number;
 }
 
+interface RadioFormField extends BaseFormField {
+  type: "radio";
+  options: Array<{
+    label: string;
+    value: string;
+    x: number;
+    y: number;
+    width: number;
+    height: number;
+  }>;
+}
+
+interface SelectFormField extends BaseFormField {
+  type: "select";
+  options: Array<{ label: string; value: string }>;
+}
+
+interface DateFormField extends BaseFormField {
+  type: "date";
+  dayPosition: DateFieldPosition;
+  monthPosition: DateFieldPosition;
+  yearPosition: DateFieldPosition;
+}
+
+type OtherFormField = Omit<BaseFormField, "type"> & {
+  type: Exclude<FieldType, "radio" | "select" | "date">;
+};
+type FormField =
+  | RadioFormField
+  | SelectFormField
+  | DateFormField
+  | OtherFormField;
+
 const images = [ImageOne, ImageTwo, ImageThree];
 
-// Array of form fields with positioning information
 const formFields: FormField[] = [
   {
     name: "fullName",
@@ -73,7 +111,7 @@ const formFields: FormField[] = [
     width: 397,
     height: 29,
     imageIndex: 1,
-    dayPosition: { x: 538, y: 475, width: 60, height: 29 },
+    dayPosition: { x: 500, y: 400, width: 60, height: 29 },
     monthPosition: { x: 608, y: 475, width: 60, height: 29 },
     yearPosition: { x: 678, y: 475, width: 100, height: 29 },
   },
@@ -82,9 +120,30 @@ const formFields: FormField[] = [
     type: "radio",
     label: "Choose an option",
     options: [
-      { label: "Option 1", value: "option1", x: 100, y: 550 },
-      { label: "Option 2", value: "option2", x: 300, y: 550 },
-      { label: "Option 3", value: "option3", x: 500, y: 550 },
+      {
+        label: "Option 1",
+        value: "option1",
+        x: 100,
+        y: 550,
+        width: 40,
+        height: 30,
+      },
+      {
+        label: "Option 2",
+        value: "option2",
+        x: 300,
+        y: 550,
+        width: 40,
+        height: 30,
+      },
+      {
+        label: "Option 3",
+        value: "option3",
+        x: 400,
+        y: 550,
+        width: 40,
+        height: 30,
+      },
     ],
     x: 0,
     y: 0,
@@ -104,10 +163,11 @@ const formFields: FormField[] = [
     x: 538,
     y: 550,
     width: 300,
-    height: 43,
+    height: 29,
     imageIndex: 2,
   },
 ];
+
 const ResponsiveFormOverlay: React.FC = () => {
   const [scale, setScale] = useState(1);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
@@ -185,13 +245,14 @@ const ResponsiveFormOverlay: React.FC = () => {
             <RadioGroup
               control={control}
               name={field.name as "radioOption"}
-              options={
-                field.options?.map((option) => ({
-                  ...option,
-                  x: option.x ? option.x * scale : 0,
-                  y: option.y ? option.y * scale : 0,
-                })) || []
-              }
+              options={field.options.map((option) => ({
+                ...option,
+                x: option.x,
+                y: option.y,
+                width: option.width,
+                height: option.height,
+              }))}
+              scale={scale}
             />
           </div>
         );
@@ -203,11 +264,12 @@ const ResponsiveFormOverlay: React.FC = () => {
               control={control}
               render={({ field: { onChange, value } }) => (
                 <CustomSelect
-                  options={field.options || []}
+                  options={field.options}
                   value={value}
                   onChange={onChange}
                   name={field.name}
                   placeholder={field.placeholder}
+                  scale={scale}
                 />
               )}
             />

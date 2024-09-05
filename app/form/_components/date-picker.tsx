@@ -1,6 +1,10 @@
 import React, { useState, useEffect, useRef } from "react";
-import Flatpickr from "react-flatpickr";
+import flatpickr from "flatpickr";
 import "flatpickr/dist/themes/airbnb.css";
+
+// Import types from the main flatpickr module
+type FlatpickrInstance = flatpickr.Instance;
+type FlatpickrOptions = flatpickr.Options.Options;
 
 interface DateFieldPosition {
   x: number;
@@ -25,9 +29,11 @@ const CustomDatePicker: React.FC<CustomDatePickerProps> = ({
   scale,
 }) => {
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
-  const flatpickrRef = useRef<Flatpickr>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const dayInputRef = useRef<HTMLInputElement>(null);
+  const hiddenInputRef = useRef<HTMLInputElement>(null);
+  const flatpickrInstance = useRef<FlatpickrInstance | null>(null);
+  const scrollPositionRef = useRef<number>(0);
 
   const formatDate = (date: Date | null) => {
     if (!date) return { day: "", month: "", year: "" };
@@ -44,11 +50,13 @@ const CustomDatePicker: React.FC<CustomDatePickerProps> = ({
     const newDate = selectedDates[0] || null;
     setSelectedDate(newDate);
     onChange(newDate);
+    window.scrollTo(0, scrollPositionRef.current);
   };
 
   const openDatepicker = () => {
-    if (flatpickrRef.current) {
-      flatpickrRef.current.flatpickr.open();
+    if (flatpickrInstance.current) {
+      scrollPositionRef.current = window.pageYOffset;
+      flatpickrInstance.current.open();
     }
   };
 
@@ -81,23 +89,44 @@ const CustomDatePicker: React.FC<CustomDatePickerProps> = ({
   );
 
   useEffect(() => {
-    if (flatpickrRef.current && containerRef.current && dayInputRef.current) {
-      const flatpickrInstance = flatpickrRef.current.flatpickr;
-      const calendarElem = flatpickrInstance.calendarContainer;
-      const containerRect = containerRef.current.getBoundingClientRect();
-      const dayInputRect = dayInputRef.current.getBoundingClientRect();
+    if (hiddenInputRef.current && containerRef.current && dayInputRef.current) {
+      const options: FlatpickrOptions = {
+        dateFormat: "Y-m-d",
+        allowInput: false,
+        disableMobile: true,
+        static: true,
+        appendTo: containerRef.current,
+        onChange: handleDateChange,
+        onOpen: () => {
+          const calendarElem = flatpickrInstance.current?.calendarContainer;
+          const containerRect = containerRef.current!.getBoundingClientRect();
+          const dayInputRect = dayInputRef.current!.getBoundingClientRect();
 
-      if (calendarElem) {
-        calendarElem.style.position = "absolute";
-        calendarElem.style.top = `${
-          dayInputRect.bottom - containerRect.top + 5
-        }px`;
-        calendarElem.style.left = `${dayInputRect.left - containerRect.left}px`;
-        calendarElem.style.zIndex = "9999";
-      }
+          if (calendarElem) {
+            calendarElem.style.position = "absolute";
+            calendarElem.style.top = `${
+              dayInputRect.bottom - containerRect.top + 5
+            }px`;
+            calendarElem.style.left = `${
+              dayInputRect.left - containerRect.left
+            }px`;
+            calendarElem.style.zIndex = "9999";
+          }
+        },
+        onClose: () => {
+          window.scrollTo(0, scrollPositionRef.current);
+        },
+      };
+
+      flatpickrInstance.current = flatpickr(hiddenInputRef.current, options);
     }
-  }, []);
 
+    return () => {
+      if (flatpickrInstance.current) {
+        flatpickrInstance.current.destroy();
+      }
+    };
+  }, []);
   return (
     <div
       ref={containerRef}
@@ -106,17 +135,11 @@ const CustomDatePicker: React.FC<CustomDatePickerProps> = ({
       {renderDateField(day, dayPosition, "DD", dayInputRef)}
       {renderDateField(month, monthPosition, "MM")}
       {renderDateField(year, yearPosition, "YYYY")}
-      <Flatpickr
-        ref={flatpickrRef}
-        value={selectedDate}
-        onChange={handleDateChange}
-        options={{
-          dateFormat: "Y-m-d",
-          allowInput: false,
-          disableMobile: true,
-          static: true,
-          appendTo: containerRef.current || undefined,
-        }}
+      <input
+        ref={hiddenInputRef}
+        type="text"
+        style={{ display: "none", position: "absolute", left: "-9999px" }}
+        readOnly
       />
     </div>
   );
