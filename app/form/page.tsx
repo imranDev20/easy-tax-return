@@ -1,7 +1,7 @@
 "use client";
 import Image from "next/image";
 import React, { useState, useRef, useEffect } from "react";
-import { useForm, SubmitHandler, Controller } from "react-hook-form";
+import { useForm, SubmitHandler } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import ImageOne from "@/public/images/1.png";
 
@@ -14,14 +14,13 @@ const formSchema = z.object({
   dateOfBirth: z.date(),
   favoriteNumber: z.number().min(1).max(100),
   agreeToTerms: z.boolean(),
-  radioOption: z.enum(["option1", "option2", "option3"]),
 });
 
 // Infer the TypeScript type from the Zod schema
 type FormData = z.infer<typeof formSchema>;
 
 // Define the possible field types
-type FieldType = "text" | "email" | "number" | "date" | "checkbox" | "radio";
+type FieldType = "text" | "email" | "number" | "date" | "checkbox" | "select";
 
 // Define the structure for each form field
 interface FormField {
@@ -29,7 +28,7 @@ interface FormField {
   type: FieldType;
   label: string;
   placeholder?: string;
-  options?: Array<{ label: string; value: string; x: number; y: number }>;
+  options?: string[]; // For select fields
   x: number;
   y: number;
   width: number;
@@ -67,35 +66,20 @@ const formFields: FormField[] = [
     width: 397,
     height: 43,
   },
-  {
-    name: "radioOption",
-    type: "radio",
-    label: "Choose an option",
-    options: [
-      { label: "Option 1", value: "option1", x: 710, y: 587 },
-      { label: "Option 2", value: "option2", x: 888, y: 587 },
-    ],
-    x: 0,
-    y: 0,
-    width: 0,
-    height: 0,
-  },
 ];
+
+export { formSchema, formFields };
+export type { FormData, FormField };
 
 const ResponsiveFormOverlay: React.FC = () => {
   const [scale, setScale] = useState(1);
   const containerRef = useRef<HTMLDivElement | null>(null);
-
   const {
     register,
     handleSubmit,
-    control,
     formState: { errors },
   } = useForm<FormData>({
     resolver: zodResolver(formSchema),
-    defaultValues: {
-      radioOption: undefined,
-    },
   });
 
   useEffect(() => {
@@ -144,7 +128,7 @@ const ResponsiveFormOverlay: React.FC = () => {
             style={{
               left: `${field.x}px`,
               top: `${field.y}px`,
-              width: `${field.width + 200}px`,
+              width: `${field.width + 200}px`, // Increased width to accommodate label
               height: `${field.height}px`,
             }}
           >
@@ -152,32 +136,7 @@ const ResponsiveFormOverlay: React.FC = () => {
             <label>{field.label}</label>
           </div>
         );
-      case "radio":
-        return (
-          <Controller
-            name={field.name as "radioOption"}
-            control={control}
-            render={({ field: { onChange, value } }) => (
-              <div className="absolute">
-                {field.options?.map((option) => (
-                  <CustomRadio
-                    key={option.value}
-                    label={option.label}
-                    checked={value === option.value}
-                    onChange={() => onChange(option.value)}
-                    name={field.name}
-                    value={option.value}
-                    style={{
-                      position: "absolute",
-                      left: `${option.x}px`,
-                      top: `${option.y}px`,
-                    }}
-                  />
-                ))}
-              </div>
-            )}
-          />
-        );
+      // Add cases for other field types as needed
       default:
         return null;
     }
@@ -187,7 +146,7 @@ const ResponsiveFormOverlay: React.FC = () => {
     <div className="flex justify-center w-full">
       <div
         ref={containerRef}
-        className="relative w-full lg:max-w-7xl xl:max-w-[1480px] overflow-hidden"
+        className="relative w-full max-w-[1480px] overflow-hidden"
       >
         <Image src={ImageOne} alt="Form Background" layout="responsive" />
         <form onSubmit={handleSubmit(onSubmit)}>
@@ -209,51 +168,6 @@ const ResponsiveFormOverlay: React.FC = () => {
         </form>
       </div>
     </div>
-  );
-};
-
-interface CustomRadioProps
-  extends Omit<React.InputHTMLAttributes<HTMLInputElement>, "onChange"> {
-  label: string;
-  checked: boolean;
-  onChange: () => void;
-  style?: React.CSSProperties;
-}
-
-const CustomRadio: React.FC<CustomRadioProps> = ({
-  label,
-  checked,
-  onChange,
-  style,
-  ...props
-}) => {
-  return (
-    <label className="flex items-center cursor-pointer" style={style}>
-      <div className="relative">
-        <input
-          type="radio"
-          className="hidden"
-          checked={checked}
-          onChange={onChange}
-          {...props}
-        />
-        <div
-          className={`w-12 h-12 bg-white border-2 border-gray-400 rounded ${
-            checked ? "flex items-center justify-center" : ""
-          }`}
-        >
-          {checked && (
-            <svg
-              viewBox="0 0 150 150"
-              className="w-12 h-12 text-black fill-current"
-            >
-              <path d="M39.323,124.635c-1.979-0.026-10.5-12.115-18.951-26.871L5,70.939l3.987-3.778c2.19-2.076,8.072-3.772,13.083-3.772h9.097 l4.576,13.658l4.577,13.665l36.4-37.755c20.019-20.764,43.139-41.175,51.394-45.353L143.106,0L112.84,32.579 C96.206,50.495,73.66,78.551,62.752,94.916C51.845,111.282,41.302,124.654,39.323,124.635z" />
-            </svg>
-          )}
-        </div>
-      </div>
-      {/* {label && <span className="ml-2">{label}</span>} */}
-    </label>
   );
 };
 
