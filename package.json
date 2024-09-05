@@ -3,17 +3,21 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "next dev --turbo",
     "build": "next build",
     "start": "next start",
     "lint": "next lint"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.9.0",
+    "choices.js": "^11.0.1",
     "dayjs": "^1.11.13",
+    "flatpickr": "^4.6.13",
+    "lucide-react": "^0.438.0",
     "next": "14.2.5",
     "react": "^18",
     "react-dom": "^18",
+    "react-flatpickr": "^3.10.13",
     "react-hook-form": "^7.52.2",
     "zod": "^3.23.8"
   },
@@ -21,6 +25,7 @@
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
+    "@types/react-flatpickr": "^3.8.11",
     "autoprefixer": "^10.4.20",
     "eslint": "^8",
     "eslint-config-next": "14.2.5",
