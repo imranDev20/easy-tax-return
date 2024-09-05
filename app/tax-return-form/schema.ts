@@ -47,16 +47,12 @@ export const taxReturnFormSchema = z.object({
 
  
   incomeYearEndedOn: z.string().date().optional(),
-  incomeFishFarming: z.boolean().optional(),
-  incomeFishFarmingAmount: z.string().optional(),
-  shareOfIncomeFromAOP: z.string().optional(),
-  incomeOfMinor: z.string().optional(),
-  taxableIncomeFromAbroad: z.string().optional(),
+ 
+
   minimumTax: z.enum(["DHAKA_/_CHATTOGRAM_CITY_CORPORATION_AREA","OTHER_CITY_CORPORATION_AREA","OTHER_AREA"]),
   netWealthSurcharge: z.enum(["YES", "NO"]),
-  environmentalSurcharge: z.string().optional(),
-  delayInterest: z.string().optional(),
-  calculate: z.string(),
+  
+  
   advanceTaxPaidAmount: z.string().optional(),
   adjustmentOfTaxRefund: z.string().optional(),
   taxPaidWithThisReturn :  z.string(),
