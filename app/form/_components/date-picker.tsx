@@ -24,29 +24,26 @@ const CustomDatePicker: React.FC<CustomDatePickerProps> = ({
   yearPosition,
   scale,
 }) => {
-  const [day, setDay] = useState("");
-  const [month, setMonth] = useState("");
-  const [year, setYear] = useState("");
-  const [date, setDate] = useState<Date | null>(null);
+  const [selectedDate, setSelectedDate] = useState<Date | null>(null);
   const flatpickrRef = useRef<Flatpickr>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const dayInputRef = useRef<HTMLInputElement>(null);
 
-  useEffect(() => {
-    if (day && month && year) {
-      const newDate = new Date(`${year}-${month}-${day}`);
-      if (!isNaN(newDate.getTime())) {
-        setDate(newDate);
-        onChange(newDate);
-      }
-    }
-  }, [day, month, year, onChange]);
+  const formatDate = (date: Date | null) => {
+    if (!date) return { day: "", month: "", year: "" };
+    return {
+      day: date.getDate().toString().padStart(2, "0"),
+      month: (date.getMonth() + 1).toString().padStart(2, "0"),
+      year: date.getFullYear().toString(),
+    };
+  };
+
+  const { day, month, year } = formatDate(selectedDate);
 
   const handleDateChange = (selectedDates: Date[]) => {
-    if (selectedDates[0]) {
-      const newDate = selectedDates[0];
-      setDay(newDate.getDate().toString().padStart(2, "0"));
-      setMonth((newDate.getMonth() + 1).toString().padStart(2, "0"));
-      setYear(newDate.getFullYear().toString());
-    }
+    const newDate = selectedDates[0] || null;
+    setSelectedDate(newDate);
+    onChange(newDate);
   };
 
   const openDatepicker = () => {
@@ -57,14 +54,14 @@ const CustomDatePicker: React.FC<CustomDatePickerProps> = ({
 
   const renderDateField = (
     value: string,
-    setter: React.Dispatch<React.SetStateAction<string>>,
     position: DateFieldPosition,
-    placeholder: string
+    placeholder: string,
+    ref?: React.RefObject<HTMLInputElement>
   ) => (
     <input
+      ref={ref}
       type="text"
       value={value}
-      onChange={(e) => setter(e.target.value)}
       onClick={openDatepicker}
       placeholder={placeholder}
       style={{
@@ -73,7 +70,7 @@ const CustomDatePicker: React.FC<CustomDatePickerProps> = ({
         top: `${position.y / 10}%`,
         width: `${position.width / 10}%`,
         height: `${position.height / 10}%`,
-        fontSize: `${1 * scale}rem`,
+        fontSize: `${14 * scale}px`,
         padding: "4px",
         border: "1px solid #ccc",
         borderRadius: "4px",
@@ -83,23 +80,45 @@ const CustomDatePicker: React.FC<CustomDatePickerProps> = ({
     />
   );
 
+  useEffect(() => {
+    if (flatpickrRef.current && containerRef.current && dayInputRef.current) {
+      const flatpickrInstance = flatpickrRef.current.flatpickr;
+      const calendarElem = flatpickrInstance.calendarContainer;
+      const containerRect = containerRef.current.getBoundingClientRect();
+      const dayInputRect = dayInputRef.current.getBoundingClientRect();
+
+      if (calendarElem) {
+        calendarElem.style.position = "absolute";
+        calendarElem.style.top = `${
+          dayInputRect.bottom - containerRect.top + 5
+        }px`;
+        calendarElem.style.left = `${dayInputRect.left - containerRect.left}px`;
+        calendarElem.style.zIndex = "9999";
+      }
+    }
+  }, []);
+
   return (
-    <>
-      {renderDateField(day, setDay, dayPosition, "DD")}
-      {renderDateField(month, setMonth, monthPosition, "MM")}
-      {renderDateField(year, setYear, yearPosition, "YYYY")}
+    <div
+      ref={containerRef}
+      style={{ position: "relative", width: "100%", height: "100%" }}
+    >
+      {renderDateField(day, dayPosition, "DD", dayInputRef)}
+      {renderDateField(month, monthPosition, "MM")}
+      {renderDateField(year, yearPosition, "YYYY")}
       <Flatpickr
         ref={flatpickrRef}
-        value={date}
+        value={selectedDate}
         onChange={handleDateChange}
         options={{
           dateFormat: "Y-m-d",
-          allowInput: true,
+          allowInput: false,
           disableMobile: true,
-          appendTo: document.body,
+          static: true,
+          appendTo: containerRef.current || undefined,
         }}
       />
-    </>
+    </div>
   );
 };
 

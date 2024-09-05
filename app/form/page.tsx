@@ -73,7 +73,7 @@ const formFields: FormField[] = [
     width: 397,
     height: 29,
     imageIndex: 1,
-    dayPosition: { x: 538, y: 460, width: 60, height: 29 },
+    dayPosition: { x: 538, y: 475, width: 60, height: 29 },
     monthPosition: { x: 608, y: 475, width: 60, height: 29 },
     yearPosition: { x: 678, y: 475, width: 100, height: 29 },
   },
