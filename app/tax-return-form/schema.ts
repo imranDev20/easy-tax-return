@@ -310,6 +310,11 @@ export const taxReturnFormSchema = z.object({
 
       assetOutsideBangladesh: z.string().optional(),
 
+      fullName: z.string().min(2, "Name must be at least 2 characters"),
+  
+      radioOption: z.enum(["option1", "option2", "option3"]),
+      favoriteColor: z.enum(["red", "blue", "green"]).optional(),
+
 });
 
 export type TaxReturnFormInput = z.infer<typeof taxReturnFormSchema>;
