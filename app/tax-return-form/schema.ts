@@ -41,11 +41,12 @@ export const taxReturnFormSchema = z.object({
   employerName: z.string().optional(),
   businessName: z.string().optional(),
   bin: z.string().optional(),
-  
+  partnersInfo: z.string().optional(),
 
   specialFarmingIncome: z.boolean(),
 
- 
+  partnersMembersAssociation1: z.string().optional(),
+  partnersMembersAssociation2: z.string().optional(),
   incomeYearEndedOn: z.string().date().optional(),
   incomeFishFarming: z.boolean().optional(),
   incomeFishFarmingAmount: z.string().optional(),
