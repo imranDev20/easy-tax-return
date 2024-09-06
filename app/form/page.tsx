@@ -1,4 +1,5 @@
 "use client";
+
 import Image from "next/image";
 import React, { useState, useRef, useEffect, useCallback } from "react";
 import { useForm, SubmitHandler, Controller } from "react-hook-form";
@@ -6,7 +7,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import ImageOne from "@/public/images/1.png";
 import ImageTwo from "@/public/images/2.png";
 import ImageThree from "@/public/images/3.png";
-import { FormData, formSchema } from "./schema";
+import { isFieldRequired, TaxpayerForm, taxpayerSchema } from "./schema";
 import { RadioGroup } from "./_components/radio";
 import CustomSelect from "./_components/select";
 
@@ -23,7 +24,6 @@ type FieldType =
   | "radio"
   | "select";
 
-// Define the structure for each form field
 interface DateFieldPosition {
   x: number;
   y: number;
@@ -32,7 +32,7 @@ interface DateFieldPosition {
 }
 
 interface BaseFormField {
-  name: keyof FormData;
+  name: keyof TaxpayerForm;
   type: FieldType;
   label: string;
   placeholder?: string;
@@ -83,22 +83,22 @@ const formFields: FormField[] = [
     name: "fullName",
     type: "text",
     label: "Full Name",
-    placeholder: "Enter your full name",
-    x: 341,
-    y: 276,
-    width: 594,
-    height: 29,
+    placeholder: "",
+    x: 344,
+    y: 277.5,
+    width: 589,
+    height: 26,
     imageIndex: 0,
   },
   {
-    name: "email",
-    type: "email",
+    name: "nationalIdOrPassport",
+    type: "text",
     label: "Email Address",
-    placeholder: "Enter your email",
-    x: 538,
-    y: 306,
-    width: 397,
-    height: 29,
+    placeholder: "",
+    x: 542,
+    y: 308,
+    width: 390,
+    height: 26,
     imageIndex: 0,
   },
   {
@@ -109,62 +109,55 @@ const formFields: FormField[] = [
     x: 538,
     y: 475,
     width: 397,
-    height: 29,
-    imageIndex: 1,
-    dayPosition: { x: 500, y: 400, width: 60, height: 29 },
-    monthPosition: { x: 608, y: 475, width: 60, height: 29 },
-    yearPosition: { x: 678, y: 475, width: 100, height: 29 },
+    height: 100,
+    imageIndex: 0,
+    dayPosition: { x: 140, y: 618, width: 60, height: 27 },
+    monthPosition: { x: 210, y: 618, width: 60, height: 27 },
+    yearPosition: { x: 280, y: 618, width: 100, height: 27 },
   },
   {
-    name: "radioOption",
+    name: "residentialStatus",
     type: "radio",
     label: "Choose an option",
     options: [
       {
         label: "Option 1",
-        value: "option1",
-        x: 100,
-        y: 550,
-        width: 40,
-        height: 30,
+        value: "resident",
+        x: 715,
+        y: 418,
+        width: 39,
+        height: 28,
       },
       {
         label: "Option 2",
-        value: "option2",
-        x: 300,
-        y: 550,
-        width: 40,
-        height: 30,
-      },
-      {
-        label: "Option 3",
-        value: "option3",
-        x: 400,
-        y: 550,
-        width: 40,
-        height: 30,
+        value: "non-resident",
+        x: 892,
+        y: 418,
+        width: 39,
+        height: 28,
       },
     ],
     x: 0,
     y: 0,
     width: 1000,
     height: 1000,
-    imageIndex: 2,
+    imageIndex: 0,
   },
   {
-    name: "favoriteColor",
+    name: "tin",
     type: "select",
     label: "Favorite Color",
+    placeholder: "Minimum Tax Area",
     options: [
-      { label: "Red", value: "red" },
-      { label: "Blue", value: "blue" },
-      { label: "Green", value: "green" },
+      { label: "Dhaka / Chittagong City Corporation", value: "red" },
+      { label: "Other City Corporation Area", value: "blue" },
+      { label: "Other Area", value: "green" },
     ],
-    x: 538,
-    y: 550,
+    x: 350,
+    y: 709,
     width: 300,
-    height: 29,
-    imageIndex: 2,
+    height: 26,
+    imageIndex: 1,
   },
 ];
 
@@ -173,18 +166,16 @@ const ResponsiveFormOverlay: React.FC = () => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const containerRef = useRef<HTMLDivElement | null>(null);
   const imageRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const formContainerRefs = useRef<(HTMLDivElement | null)[]>([]);
 
   const {
     register,
     handleSubmit,
     control,
     formState: { errors },
-  } = useForm<FormData>({
-    resolver: zodResolver(formSchema),
-    defaultValues: {
-      radioOption: undefined,
-      favoriteColor: undefined,
-    },
+  } = useForm<TaxpayerForm>({
+    resolver: zodResolver(taxpayerSchema),
+    defaultValues: {},
   });
 
   useEffect(() => {
@@ -202,35 +193,46 @@ const ResponsiveFormOverlay: React.FC = () => {
     return () => window.removeEventListener("resize", updateScale);
   }, []);
 
-  const onSubmit: SubmitHandler<FormData> = (data) => {
+  const onSubmit: SubmitHandler<TaxpayerForm> = (data) => {
     console.log(data);
     // Handle form submission
   };
 
-  console.log(errors);
+  const renderField = (field: FormField, imageIndex: number) => {
+    if (field.imageIndex !== imageIndex) return null;
 
-  const renderField = (field: FormField) => {
     const fieldStyle = {
       position: "absolute" as const,
       left: `${field.x / 10}%`,
       top: `${field.y / 10}%`,
       width: `${field.width / 10}%`,
       height: `${field.height / 10}%`,
-      fontSize: `${1 * scale}rem`,
     };
+
+    const isRequired = isFieldRequired(field.name);
 
     switch (field.type) {
       case "text":
       case "email":
       case "number":
         return (
-          <input
-            {...register(field.name)}
-            type={field.type}
-            placeholder={field.placeholder}
-            className="absolute border border-gray-300 rounded px-2 py-1"
-            style={fieldStyle}
-          />
+          <div style={fieldStyle} className="relative overflow-hidden">
+            <input
+              {...register(field.name)}
+              type={field.type}
+              placeholder={field.placeholder}
+              className="w-full h-full absolute border px-2 border-sky-300 rounded-none bg-sky-300/10 focus:border-sky-500 focus:ring-0 focus:outline-0 focus:bg-transparent hover:border-sky-500"
+              style={{ fontSize: `${14 * scale}px` }}
+            />
+
+            {isRequired && (
+              <span className="absolute top-0 right-0 -translate-y-1/2 translate-x-1/2 h-10 w-10 bg-sky-300/70 rotate-45 transform origin-center transition-colors">
+                <span className="absolute text-white top-[23px] left-[17px] text-lg">
+                  *
+                </span>
+              </span>
+            )}
+          </div>
         );
       case "checkbox":
         return (
@@ -241,26 +243,18 @@ const ResponsiveFormOverlay: React.FC = () => {
         );
       case "radio":
         return (
-          <div style={fieldStyle}>
-            <RadioGroup
-              control={control}
-              name={field.name as "radioOption"}
-              options={field.options.map((option) => ({
-                ...option,
-                x: option.x,
-                y: option.y,
-                width: option.width,
-                height: option.height,
-              }))}
-              scale={scale}
-            />
-          </div>
+          <RadioGroup
+            control={control}
+            name={field.name}
+            options={field.options}
+            scale={scale}
+          />
         );
       case "select":
         return (
           <div style={fieldStyle}>
             <Controller
-              name={field.name as "favoriteColor"}
+              name={field.name}
               control={control}
               render={({ field: { onChange, value } }) => (
                 <CustomSelect
@@ -275,16 +269,18 @@ const ResponsiveFormOverlay: React.FC = () => {
             />
           </div>
         );
+
       case "date":
         return (
           <Controller
-            name={field.name as "dateOfBirth"}
+            name={field.name}
             control={control}
             render={({ field: { onChange, value } }) => (
               <CustomDatePicker
                 onChange={(date) => {
                   onChange(date);
                 }}
+                name={field.name}
                 dayPosition={field.dayPosition}
                 monthPosition={field.monthPosition}
                 yearPosition={field.yearPosition}
@@ -306,6 +302,13 @@ const ResponsiveFormOverlay: React.FC = () => {
   const setImageRef = useCallback(
     (index: number) => (el: HTMLDivElement | null) => {
       imageRefs.current[index] = el;
+    },
+    []
+  );
+
+  const setFormContainerRef = useCallback(
+    (index: number) => (el: HTMLDivElement | null) => {
+      formContainerRefs.current[index] = el;
     },
     []
   );
@@ -338,17 +341,18 @@ const ResponsiveFormOverlay: React.FC = () => {
                 alt={`Form Background ${index + 1}`}
                 layout="responsive"
               />
-              <div className="absolute top-0 left-0 w-full h-full">
-                {formFields
-                  .filter((field) => field.imageIndex === index)
-                  .map(renderField)}
+              <div
+                ref={setFormContainerRef(index)}
+                className="absolute top-0 left-0 w-full h-full"
+              >
+                {formFields.map((field) => renderField(field, index))}
               </div>
             </div>
           ))}
           <button
             type="submit"
             className="fixed bottom-4 left-1/2 transform -translate-x-1/2 px-4 py-2 bg-blue-500 text-white rounded"
-            style={{ fontSize: `${1.6 * scale}rem` }} // Scale submit button font size
+            style={{ fontSize: `${1.6 * scale}rem` }}
           >
             Submit
           </button>

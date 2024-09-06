@@ -1,6 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
 import { ChevronDown } from "lucide-react";
-import { isFieldRequired, TaxpayerForm } from "../schema";
 
 interface Option {
   label: string;
@@ -11,7 +10,7 @@ interface CustomSelectProps {
   options: Option[];
   value: string | undefined;
   onChange: (value: string | undefined) => void;
-  name: keyof TaxpayerForm;
+  name: string;
   placeholder?: string;
   style?: React.CSSProperties;
   scale: number;
@@ -55,10 +54,8 @@ const CustomSelect: React.FC<CustomSelectProps> = ({
   // Combine the passed style with our scaled font size
   const combinedStyle = {
     ...style,
-    fontSize: `${0.875 * scale}rem`,
+    fontSize: `${1 * scale}rem`,
   };
-
-  const isRequired = isFieldRequired(name);
 
   return (
     <div
@@ -67,26 +64,16 @@ const CustomSelect: React.FC<CustomSelectProps> = ({
       style={combinedStyle}
     >
       <div
-        className="w-full h-full bg-white border border-sky-300 hover:border-sky-500  cursor-pointer relative"
+        className="w-full h-full bg-white border-2 border-gray-400 rounded flex items-center justify-between px-2 cursor-pointer"
         onClick={() => setIsOpen(!isOpen)}
       >
-        <div className="relative items-center justify-between flex px-2 overflow-hidden w-full h-full">
-          <span className="truncate">
-            {selectedOption ? selectedOption.label : placeholder}
-          </span>
-          <ChevronDown
-            className="flex-shrink-0"
-            style={{ width: "8%", height: "40%" }}
-          />
-
-          {isRequired && (
-            <span className="absolute top-0 right-0 -translate-y-1/2 translate-x-1/2 h-10 w-10 bg-sky-300/70 rotate-45 transform origin-center transition-colors">
-              <span className="absolute text-white top-[23px] left-[17px] text-lg">
-                *
-              </span>
-            </span>
-          )}
-        </div>
+        <span className="truncate">
+          {selectedOption ? selectedOption.label : placeholder}
+        </span>
+        <ChevronDown
+          className="flex-shrink-0"
+          style={{ width: "10%", height: "50%" }}
+        />
       </div>
       {isOpen && (
         <div className="absolute top-full left-0 right-0 mt-1 bg-white border border-gray-300 rounded shadow-lg z-10">
@@ -97,10 +84,7 @@ const CustomSelect: React.FC<CustomSelectProps> = ({
                 option.value === value ? "bg-blue-100" : ""
               }`}
               onClick={() => handleSelect(option)}
-              style={{
-                padding: `${2 * scale}% ${4 * scale}%`,
-                fontSize: `${0.675 * scale}rem`,
-              }}
+              style={{ padding: `${2 * scale}% ${4 * scale}%` }}
             >
               {option.label}
             </div>

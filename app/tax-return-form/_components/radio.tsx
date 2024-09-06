@@ -1,12 +1,12 @@
 import React from "react";
 import { Controller, Control } from "react-hook-form";
-import { isFieldRequired, TaxpayerForm } from "../schema";
+import { FormData } from "../schema";
 
 interface CustomRadioProps {
   label: string;
   checked: boolean;
   onChange: () => void;
-  name: keyof TaxpayerForm;
+  name: string;
   value: string;
   style?: React.CSSProperties;
   scale: number;
@@ -32,14 +32,9 @@ const CustomRadio: React.FC<CustomRadioProps> = ({
     height: `${height / 10}%`, // Convert to percentage
   };
 
-  const isRequired = isFieldRequired(name);
-
   return (
     <label className="flex items-center cursor-pointer" style={combinedStyle}>
-      <div
-        className="relative overflow-hidden w-full h-full border border-sky-300 rounded-none bg-sky-300/10 focus:border-sky-500 focus:ring-0 focus:outline-0 focus:bg-transparent hover:border-sky-500"
-        style={{ width: "100%", height: "100%" }}
-      >
+      <div className="relative" style={{ width: "100%", height: "100%" }}>
         <input
           type="radio"
           className="hidden"
@@ -48,16 +43,10 @@ const CustomRadio: React.FC<CustomRadioProps> = ({
           name={name}
           value={value}
         />
-
-        {isRequired && (
-          <span className="absolute top-0 right-0 -translate-y-1/2 translate-x-1/2 h-10 w-10 bg-sky-300/70 rotate-45 transform origin-center transition-colors">
-            <span className="absolute text-white top-[23px] left-[17px] text-lg">
-              *
-            </span>
-          </span>
-        )}
         <div
-          className={`${checked ? "flex items-center justify-center" : ""}`}
+          className={`bg-white border-2 border-gray-400 rounded ${
+            checked ? "flex items-center justify-center" : ""
+          }`}
           style={{ width: "100%", height: "100%" }}
         >
           {checked && (
@@ -76,8 +65,8 @@ const CustomRadio: React.FC<CustomRadioProps> = ({
 };
 
 interface RadioGroupProps {
-  control: Control<TaxpayerForm>;
-  name: keyof TaxpayerForm;
+  control: Control<FormData>;
+  name: keyof FormData;
   options: Array<{
     label: string;
     value: string;
@@ -100,7 +89,10 @@ const RadioGroup: React.FC<RadioGroupProps> = ({
       name={name}
       control={control}
       render={({ field: { onChange, value } }) => (
-        <div>
+        <div
+          className="absolute inset-0"
+          style={{ width: "100%", height: "100%" }}
+        >
           {options.map((option) => (
             <CustomRadio
               key={option.value}

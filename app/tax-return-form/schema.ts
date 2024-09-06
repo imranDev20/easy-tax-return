@@ -53,11 +53,11 @@ export const taxReturnFormSchema = z.object({
   shareOfIncomeFromAOP: z.string().optional(),
   incomeOfMinor: z.string().optional(),
   taxableIncomeFromAbroad: z.string().optional(),
-  minimumTax: z.enum(["DHAKA_/_CHATTOGRAM_CITY_CORPORATION_AREA","OTHER_CITY_CORPORATION_AREA","OTHER_AREA"]),
-  netWealthSurcharge: z.enum(["YES", "NO"]),
+  minimumTax: z.enum(["Dhaka/ChattogramCityCorporationArea","OtherCityCorporationArea","OtherArea"]),
+  netWealthSurcharge: z.enum(["Yes", "No"]),
   environmentalSurcharge: z.string().optional(),
   delayInterest: z.string().optional(),
-  calculate: z.string(),
+  calculate: z.enum(["Calculate", "Re-Calculate"]),
   advanceTaxPaidAmount: z.string().optional(),
   adjustmentOfTaxRefund: z.string().optional(),
   taxPaidWithThisReturn :  z.string(),
@@ -309,6 +309,11 @@ export const taxReturnFormSchema = z.object({
       others2:  z.string().optional(),
 
       assetOutsideBangladesh: z.string().optional(),
+
+      fullName: z.string().min(2, "Name must be at least 2 characters"),
+  
+      radioOption: z.enum(["option1", "option2", "option3"]),
+      favoriteColor: z.enum(["red", "blue", "green"]).optional(),
 
 });
 
