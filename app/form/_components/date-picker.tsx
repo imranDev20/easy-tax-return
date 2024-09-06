@@ -46,13 +46,6 @@ const CustomDatePicker: React.FC<CustomDatePickerProps> = ({
 
   const { day, month, year } = formatDate(selectedDate);
 
-  const handleDateChange = (selectedDates: Date[]) => {
-    const newDate = selectedDates[0] || null;
-    setSelectedDate(newDate);
-    onChange(newDate);
-    window.scrollTo(0, scrollPositionRef.current);
-  };
-
   const openDatepicker = () => {
     if (flatpickrInstance.current) {
       scrollPositionRef.current = window.pageYOffset;
@@ -89,6 +82,13 @@ const CustomDatePicker: React.FC<CustomDatePickerProps> = ({
   );
 
   useEffect(() => {
+    const handleDateChange = (selectedDates: Date[]) => {
+      const newDate = selectedDates[0] || null;
+      setSelectedDate(newDate);
+      onChange(newDate);
+      window.scrollTo(0, scrollPositionRef.current);
+    };
+
     if (hiddenInputRef.current && containerRef.current && dayInputRef.current) {
       const options: FlatpickrOptions = {
         dateFormat: "Y-m-d",
@@ -126,12 +126,10 @@ const CustomDatePicker: React.FC<CustomDatePickerProps> = ({
         flatpickrInstance.current.destroy();
       }
     };
-  }, []);
+  }, [onChange]);
+
   return (
-    <div
-      ref={containerRef}
-      style={{ position: "relative", width: "100%", height: "100%" }}
-    >
+    <div ref={containerRef}>
       {renderDateField(day, dayPosition, "DD", dayInputRef)}
       {renderDateField(month, monthPosition, "MM")}
       {renderDateField(year, yearPosition, "YYYY")}
