@@ -6,7 +6,7 @@ const taxpayerSchema = z.object({
     .string()
     .min(1, "National ID or Passport number is required")
     .optional(),
-  tin: z.string().optional(),
+  tin: z.string(),
   circle: z.string().optional(),
   zone: z.string().optional(),
   assessmentYear: z

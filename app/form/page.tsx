@@ -109,11 +109,11 @@ const formFields: FormField[] = [
     x: 538,
     y: 475,
     width: 397,
-    height: 27,
+    height: 100,
     imageIndex: 0,
-    dayPosition: { x: 140, y: 616, width: 60, height: 27 },
-    monthPosition: { x: 210, y: 616, width: 60, height: 29 },
-    yearPosition: { x: 280, y: 616, width: 100, height: 29 },
+    dayPosition: { x: 140, y: 618, width: 60, height: 27 },
+    monthPosition: { x: 210, y: 618, width: 60, height: 27 },
+    yearPosition: { x: 280, y: 618, width: 100, height: 27 },
   },
   {
     name: "residentialStatus",
@@ -147,16 +147,17 @@ const formFields: FormField[] = [
     name: "tin",
     type: "select",
     label: "Favorite Color",
+    placeholder: "Minimum Tax Area",
     options: [
-      { label: "Red", value: "red" },
-      { label: "Blue", value: "blue" },
-      { label: "Green", value: "green" },
+      { label: "Dhaka / Chittagong City Corporation", value: "red" },
+      { label: "Other City Corporation Area", value: "blue" },
+      { label: "Other Area", value: "green" },
     ],
-    x: 538,
-    y: 550,
+    x: 350,
+    y: 709,
     width: 300,
-    height: 29,
-    imageIndex: 2,
+    height: 26,
+    imageIndex: 1,
   },
 ];
 
@@ -220,7 +221,7 @@ const ResponsiveFormOverlay: React.FC = () => {
               {...register(field.name)}
               type={field.type}
               placeholder={field.placeholder}
-              className="w-full h-full absolute border px-2 py-1 border-sky-300 rounded-none bg-sky-300/10 focus:border-sky-500 focus:ring-0 focus:outline-0 focus:bg-transparent hover:border-sky-500"
+              className="w-full h-full absolute border px-2 border-sky-300 rounded-none bg-sky-300/10 focus:border-sky-500 focus:ring-0 focus:outline-0 focus:bg-transparent hover:border-sky-500"
               style={{ fontSize: `${14 * scale}px` }}
             />
 
@@ -279,6 +280,7 @@ const ResponsiveFormOverlay: React.FC = () => {
                 onChange={(date) => {
                   onChange(date);
                 }}
+                name={field.name}
                 dayPosition={field.dayPosition}
                 monthPosition={field.monthPosition}
                 yearPosition={field.yearPosition}
