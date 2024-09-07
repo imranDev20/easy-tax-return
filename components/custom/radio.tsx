@@ -4,7 +4,7 @@ import { Controller, Control, FieldValues, Path } from "react-hook-form";
 interface CustomRadioProps {
   label: string;
   checked: boolean;
-  onChange: () => void;
+  onChange: (newValue: string | undefined) => void;
   name: string;
   value: string;
   style?: React.CSSProperties;
@@ -29,25 +29,25 @@ const CustomRadio: React.FC<CustomRadioProps> = ({
   const combinedStyle = {
     ...style,
     fontSize: `${1 * scale}rem`,
-    width: `${width / 10}%`, // Convert to percentage
-    height: `${height / 10}%`, // Convert to percentage
+    width: `${width / 10}%`,
+    height: `${height / 10}%`,
+  };
+
+  const handleClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    onChange(checked && !required ? undefined : value);
   };
 
   return (
-    <label className="flex items-center cursor-pointer" style={combinedStyle}>
+    <div
+      className="flex items-center cursor-pointer"
+      style={combinedStyle}
+      onClick={handleClick}
+    >
       <div
         className="relative overflow-hidden w-full h-full border border-sky-300 rounded-none bg-sky-300/10 focus:border-sky-500 focus:ring-0 focus:outline-0 focus:bg-transparent hover:border-sky-500"
         style={{ width: "100%", height: "100%" }}
       >
-        <input
-          type="radio"
-          className="hidden"
-          checked={checked}
-          onChange={onChange}
-          name={name}
-          value={value}
-        />
-
         {required && (
           <span className="absolute top-0 right-0 -translate-y-1/2 translate-x-1/2 h-10 w-10 bg-sky-300/70 rotate-45 transform origin-center transition-colors">
             <span className="absolute text-white top-[23px] left-[17px] text-lg">
@@ -70,7 +70,7 @@ const CustomRadio: React.FC<CustomRadioProps> = ({
           )}
         </div>
       </div>
-    </label>
+    </div>
   );
 };
 
@@ -107,7 +107,7 @@ function RadioGroup<TFieldValues extends FieldValues>({
               key={option.value}
               label={option.label}
               checked={value === option.value}
-              onChange={() => onChange(option.value)}
+              onChange={(newValue) => onChange(newValue)}
               name={name}
               value={option.value}
               style={{

@@ -1,7 +1,13 @@
 "use client";
 
 import Image from "next/image";
-import React, { useState, useRef, useEffect, useCallback } from "react";
+import React, {
+  useState,
+  useRef,
+  useEffect,
+  useCallback,
+  Fragment,
+} from "react";
 import { useForm, SubmitHandler, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { RadioGroup } from "@/components/custom/radio";
@@ -630,7 +636,7 @@ const formFields: FormField[] = [
   },
 ];
 
-const ResponsiveFormOverlay: React.FC = () => {
+const IndividualTaxReturnPage: React.FC = () => {
   const [scale, setScale] = useState(1);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const containerRef = useRef<HTMLDivElement | null>(null);
@@ -860,4 +866,4 @@ const ResponsiveFormOverlay: React.FC = () => {
   );
 };
 
-export default ResponsiveFormOverlay;
+export default IndividualTaxReturnPage;
