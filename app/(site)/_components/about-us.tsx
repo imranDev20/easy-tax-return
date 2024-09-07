@@ -1,8 +1,9 @@
-import aboutImage from "@/images/about-us.jpg";
+import aboutImage from "@/public/about-us.jpg";
 import Image from "next/image";
 import Link from "next/link";
 import { FaCheck } from "react-icons/fa";
 import { LuPhone } from "react-icons/lu";
+
 export default function AboutUs() {
   return (
     <section className="max-w-6xl mx-auto my-10">

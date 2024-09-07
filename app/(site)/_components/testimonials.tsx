@@ -1,6 +1,6 @@
-import testimonialsImg1 from "@/images/testimonials-img1.jpg";
-import testimonialsImg2 from "@/images/testimonials-img2.jpg";
-import testimonialsImg3 from "@/images/testimonials-img3.jpg";
+import testimonialsImg1 from "@/public/testimonials-img1.jpg";
+import testimonialsImg2 from "@/public/testimonials-img2.jpg";
+import testimonialsImg3 from "@/public/testimonials-img3.jpg";
 import Image from "next/image";
 import { FaRegStar } from "react-icons/fa";
 import { MdOutlineArrowBack, MdOutlineArrowForward } from "react-icons/md";
