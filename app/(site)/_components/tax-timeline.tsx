@@ -13,32 +13,9 @@ const TimelineStep: React.FC<TimelineStepProps> = ({ text }) => (
   </div>
 );
 
-const CurvedArrow: React.FC = () => (
-  <svg
-    className="w-full h-16"
-    viewBox="0 0 200 64"
-    fill="none"
-    xmlns="http://www.w3.org/2000/svg"
-  >
-    <path
-      d="M0 32C22 0 44 0 66 32C88 64 110 64 132 32C154 0 176 0 200 32"
-      stroke="#E5E7EB"
-      strokeWidth="2"
-      strokeDasharray="4 4"
-    />
-    <path
-      d="M200 32L195 27"
-      stroke="#E5E7EB"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    />
-  </svg>
-);
-
 const TaxTimeline: React.FC = () => {
   return (
-    <section className="bg-white">
+    <section className="bg-white" id="process">
       <div className="container mx-auto px-4 my-20 text-center">
         <h2 className="text-blue-500 text-sm font-medium mb-2 uppercase">
           How We Works

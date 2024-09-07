@@ -1,25 +1,34 @@
-import aboutImage from "@/public/about-us.jpg";
+import React from "react";
 import Image from "next/image";
-import Link from "next/link";
-import { FaCheck } from "react-icons/fa";
-import { LuPhone } from "react-icons/lu";
+import { Check, Phone } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import AboutImage from "@/public/about-us.jpg";
 
-export default function AboutUs() {
+const AboutUs = () => {
   return (
-    <section className="max-w-6xl mx-auto my-10">
-      <div className="container mx-auto px-4 flex flex-col md:flex-row items-center">
-        <div className="  mb-8 md:mb-0 relative">
-          <Image src={aboutImage} alt="aboutImage" className="w-96" />
-          <div className="absolute bottom-8 -left-8 bg-[#CBEBBD] text-[#73866B] py-2 px-4 leading-none rounded-md shadow">
-            10+ Years <br /> of Experience
+    <section className="max-w-7xl mx-auto my-52 px-4 md:px-8" id="about-us">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+        <div className="lg:col-span-5 mb-8 lg:mb-0 relative px-8">
+          <div className="relative rounded-t-full overflow-hidden max-w-full mx-auto min-h-[550px]">
+            <Image
+              src={AboutImage}
+              alt="About Us"
+              fill
+              className="object-cover"
+            />
+          </div>
+
+          <div className="absolute bottom-8 left-0 bg-[#CBEBBD] text-[#222C1E] py-2 px-4 rounded-md shadow-md font-serif ">
+            <p className="font-medium text-2xl">10+ Years</p>
+            <p className="font-medium text-2xl">of Experience</p>
           </div>
         </div>
 
-        <div className="md:w-1/2 md:pl-12">
-          <h4 className="text-sm text-blue-600 font-semibold uppercase mb-2">
-            About Us
+        <div className="lg:col-span-7 lg:pl-5 flex flex-col justify-center">
+          <h4 className="text-sm text-primary font-medium uppercase mb-2">
+            ABOUT US
           </h4>
-          <h2 className="text-3xl font-bold mb-6">
+          <h2 className="text-3xl md:text-[2.5rem] font-bold mb-6 leading-tight font-serif">
             We&apos;re not your typical CPA firm, an outsourced accounting
             service
           </h2>
@@ -31,38 +40,32 @@ export default function AboutUs() {
           </p>
 
           <ul className="space-y-4 mb-8">
-            <li className="flex items-center">
-              <FaCheck className="text-blue-600 mr-2" />
-              We create a Comprehensive Tax Reduction Plan
-            </li>
-            <li className="flex items-center">
-              <FaCheck className="text-blue-600 mr-2" />
-              We clean up your Bookkeeping, Payroll, Accounting & Operations
-            </li>
-            <li className="flex items-center">
-              <FaCheck className="text-blue-600 mr-2" />
-              We pro-actively manage your S-Corp or LLC salary decisions & tax
-              payments
-            </li>
-            <li className="flex items-center">
-              <FaCheck className="text-blue-600 mr-2" />
-              We keep your Bookkeeping up-to-date & accurate
-            </li>
+            {[
+              "We create a Comprehensive Tax Reduction Plan",
+              "We clean up your Bookkeeping, Payroll, Accounting & Operations",
+              "We pro-actively manage your S-Corp or LLC salary decisions & tax payments",
+              "We keep your Bookkeeping up-to-date & accurate",
+            ].map((item, index) => (
+              <li key={index} className="flex items-start">
+                <Check className="text-primary mr-3 w-5 h-5 mt-1" />
+                <p>{item}</p>
+              </li>
+            ))}
           </ul>
 
-          <div className="flex items-center">
-            <span className="text-gray-400 mr-4">Still not confident?</span>
-
-            <Link
-              href="#"
-              className="inline-flex items-center text-white bg-blue-600 py-2 px-4 "
-            >
-              <LuPhone className="mr-2" />
-              Contact Us
-            </Link>
+          <div className="flex items-center flex-wrap mt-4">
+            <span className="text-gray-400 mr-4 mb-4 lg:mb-0">
+              Still not confident?
+            </span>
+            <Button className="inline-flex items-center text-white px-4 transition duration-300 py-5 rounded-none">
+              <Phone className="mr-2 w-5 h-5" />
+              CONTACT US
+            </Button>
           </div>
         </div>
       </div>
     </section>
   );
-}
+};
+
+export default AboutUs;

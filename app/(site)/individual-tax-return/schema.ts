@@ -2,7 +2,7 @@ import dayjs from "dayjs";
 import z from "zod";
 
 // Define the Zod schema
-export const taxReturnFormSchema = z.object({
+export const individualTaxReturnSchema = z.object({
   taxpayerName: z.string().min(1, "Name is required"),
   nationalId: z.string().min(1, "National ID or Passport number is required"),
   tin: z.string().min(1, "TIN is required"),
@@ -319,4 +319,6 @@ export const taxReturnFormSchema = z.object({
   assetOutsideBangladesh: z.string().optional(),
 });
 
-export type TaxReturnFormInput = z.infer<typeof taxReturnFormSchema>;
+export type IndividualTaxReturnFormInput = z.infer<
+  typeof individualTaxReturnSchema
+>;

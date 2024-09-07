@@ -1,5 +1,3 @@
-"use client";
-
 import Image from "next/image";
 import heroImage from "@/public/hero-image.jpg";
 import Link from "next/link";
@@ -13,7 +11,7 @@ const HERO_CARD_OPTIONS = [
   {
     label: "Individual Tax Return",
     Icon: DocumentIcon,
-    href: "tax-return-form",
+    href: "individual-tax-return",
     color: "bg-[rgba(168,241,229,0.2)]",
     hoverColor: "bg-[rgba(168,241,229,0.4)]",
   },
@@ -86,7 +84,7 @@ export default function Hero() {
             </div>
           </div>
 
-          <div className="grid grid-cols-3 gap-2 mt-14">
+          <div className="grid grid-cols-3 gap-2 mt-14" id="services">
             {HERO_CARD_OPTIONS.map((item) => (
               <Link
                 href={`/${item.href}`}
