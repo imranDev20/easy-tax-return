@@ -26,7 +26,7 @@ export default function Footer() {
           </div>
         </div>
 
-        <div className="grid grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           <div>
             <h4 className="font-semibold text-lg">Office</h4>
             <p className="text-sm">

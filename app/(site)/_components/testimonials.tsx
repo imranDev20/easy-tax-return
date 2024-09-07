@@ -1,88 +1,96 @@
-import testimonialsImg1 from "@/images/testimonials-img1.jpg";
-import testimonialsImg2 from "@/images/testimonials-img2.jpg";
-import testimonialsImg3 from "@/images/testimonials-img3.jpg";
+"use client";
+
+import React from "react";
+import useEmblaCarousel from "embla-carousel-react";
+import { Star } from "lucide-react";
 import Image from "next/image";
-import { FaRegStar } from "react-icons/fa";
-import { MdOutlineArrowBack, MdOutlineArrowForward } from "react-icons/md";
+import TestimonialImage from "@/public/testimonials-person.png";
+import AvatarOne from "@/public/testimonials-img1.jpg";
 
-export default function Testimonials() {
-  const testimonials = [
-    {
-      name: "Ralph Edwards",
-      location: "New Zealand",
-      image: testimonialsImg1,
-      review:
-        "I have received excellent customer service at all times. It is true that the staff has had a bug that I had to solve by hand, but in general the attention has been impeccable. I recommend it!",
-      rating: 5,
-    },
-    {
-      name: "Courtney Henry",
-      location: "Brazil",
-      image: testimonialsImg2,
-      review:
-        "I must say the theme is awesome. If somebody bought it just have in mind to correctly configure it and to contact support if facing a problem; support is fast and reliable. Thanks e-taxbd!",
-      rating: 5,
-    },
-    {
-      name: "Darrell Steward",
-      location: "Japan",
-      image: testimonialsImg3,
-      review:
-        "I have received excellent customer service at all times. It is true that the staff has had a bug that I had to solve by hand, but in general the attention has been impeccable. I recommend it!",
-      rating: 5,
-    },
-  ];
+const testimonials = [
+  {
+    id: 1,
+    name: "Ralph Edwards",
+    location: "New Zealand",
+    rating: 5,
+    text: "I have received excellent customer service at all times. It is true that the staff has had a bug that I had to solve by hand, but in general the attention has been impeccable. I recommend it",
+    avatar: AvatarOne,
+  },
+  {
+    id: 2,
+    name: "Ralph Edwards",
+    location: "New Zealand",
+    rating: 5,
+    text: "I have received excellent customer service at all times. It is true that the staff has had a bug that I had to solve by hand, but in general the attention has been impeccable. I recommend it",
+    avatar: AvatarOne,
+  },
+  // Add more testimonials here
+];
+
+const TestimonialCarousel = () => {
+  const [emblaRef] = useEmblaCarousel({ loop: true });
+
   return (
-    <section className="  my-20 bg-white">
-      <div className="  text-center">
-        <h3 className="text-blue-600 font-semibold text-sm mb-1">
-          TESTIMONIALS
-        </h3>
-        <h2 className="text-3xl font-bold text-gray-800 mb-6">
-          Our client&apos;s reviews inspired us the <br /> most to improve our
-          services
-        </h2>
+    <section className="w-full max-w-7xl mx-auto px-4 my-20" id="testimonials">
+      <div className="grid grid-cols-1 lg:grid-cols-5 gap-8 items-center">
+        <div className="lg:col-span-3 lg:pr-8">
+          <h4 className="text-sm text-primary font-medium uppercase mb-2">
+            TESTIMONIALS
+          </h4>
+          <h2 className="text-3xl md:text-[2.5rem] font-bold mb-6 leading-tight font-serif">
+            Our client&apos;s reviews inspired us the most to improve our
+            services
+          </h2>
+          <div className="overflow-hidden mt-10" ref={emblaRef}>
+            <div className="flex">
+              {testimonials.map((testimonial) => (
+                <div key={testimonial.id} className="flex-[0_0_100%] min-w-0">
+                  <div className="flex mb-2">
+                    {[...Array(5)].map((_, i) => (
+                      <Star
+                        key={i}
+                        className={`w-5 h-5 fill-current ${
+                          i < testimonial.rating
+                            ? "text-yellow-400"
+                            : "text-gray-300"
+                        }`}
+                      />
+                    ))}
+                  </div>
 
-        <div className="flex items-center justify-evenly">
-          <button className="text-xl">
-            <MdOutlineArrowBack />
-          </button>
+                  <p className="text-gray-700">{testimonial.text}</p>
 
-          <div className="flex   overflow-x-auto">
-            {testimonials.map((testimonial, index) => (
-              <div key={index} className="flex-shrink-0 w-72 p-6  ">
-                <div className="flex justify-center space-x-1 mb-4">
-                  {[...Array(testimonial.rating)].map((_, i) => (
-                    <FaRegStar key={i} className="text-yellow-400" />
-                  ))}
-                </div>
-                <p className="text-sm text-center text-gray-600 mb-6">
-                  {testimonial.review}
-                </p>
-                <div className="flex flex-col items-center  ">
-                  <Image
-                    src={testimonial.image}
-                    alt={testimonial.name}
-                    className="w-14 h-14 rounded-full object-cover"
-                  />
-                  <div>
-                    <h4 className="font-semibold text-gray-800">
-                      {testimonial.name}
-                    </h4>
-                    <p className="text-sm text-gray-500">
-                      {testimonial.location}
-                    </p>
+                  <div className="flex items-center mb-4 mt-4">
+                    <Image
+                      className="w-16 h-16 rounded-full border-2 border-white object-cover mr-2"
+                      src={AvatarOne}
+                      alt={`Client ${testimonial.name}`}
+                    />
+                    <div>
+                      <h3 className="font-semibold">{testimonial.name}</h3>
+                      <p className="text-gray-500 text-sm">
+                        {testimonial.location}
+                      </p>
+                    </div>
                   </div>
                 </div>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
-
-          <button className="text-xl">
-            <MdOutlineArrowForward />
-          </button>
+        </div>
+        <div className="lg:col-span-2 px-10">
+          <div className="relative min-h-[500px] rounded-t-full overflow-hidden">
+            <Image
+              src={TestimonialImage}
+              fill
+              alt="Testimonial"
+              className="object-cover"
+            />
+          </div>
         </div>
       </div>
     </section>
   );
-}
+};
+
+export default TestimonialCarousel;

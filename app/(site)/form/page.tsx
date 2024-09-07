@@ -13,6 +13,9 @@ import CustomSelect from "./_components/select";
 
 import "flatpickr/dist/themes/airbnb.css";
 import CustomDatePicker from "./_components/date-picker";
+import { Button } from "@/components/ui/button";
+import { ArrowRight } from "lucide-react";
+import SignatureField from "./_components/signature";
 
 // Define the possible field types
 type FieldType =
@@ -22,7 +25,8 @@ type FieldType =
   | "date"
   | "checkbox"
   | "radio"
-  | "select";
+  | "select"
+  | "signature";
 
 interface DateFieldPosition {
   x: number;
@@ -67,13 +71,19 @@ interface DateFormField extends BaseFormField {
   yearPosition: DateFieldPosition;
 }
 
+interface SignatureFormField extends BaseFormField {
+  type: "signature";
+}
+
 type OtherFormField = Omit<BaseFormField, "type"> & {
-  type: Exclude<FieldType, "radio" | "select" | "date">;
+  type: Exclude<FieldType, "radio" | "select" | "date" | "signature">;
 };
+
 type FormField =
   | RadioFormField
   | SelectFormField
   | DateFormField
+  | SignatureFormField
   | OtherFormField;
 
 const images = [ImageOne, ImageTwo, ImageThree];
@@ -158,6 +168,17 @@ const formFields: FormField[] = [
     width: 300,
     height: 26,
     imageIndex: 1,
+  },
+
+  {
+    name: "signature",
+    type: "signature",
+    label: "Signature",
+    x: 538,
+    y: 700,
+    width: 500,
+    height: 200,
+    imageIndex: 2,
   },
 ];
 
@@ -289,6 +310,19 @@ const ResponsiveFormOverlay: React.FC = () => {
             )}
           />
         );
+
+      case "signature":
+        return (
+          <div style={fieldStyle}>
+            <Controller
+              name={field.name}
+              control={control}
+              render={({ field: { onChange, value } }) => (
+                <SignatureField onChange={onChange} />
+              )}
+            />
+          </div>
+        );
       default:
         return null;
     }
@@ -314,49 +348,65 @@ const ResponsiveFormOverlay: React.FC = () => {
   );
 
   return (
-    <div className="relative">
-      <div className="fixed right-4 top-1/2 transform -translate-y-1/2 z-10">
-        {images.map((_, index) => (
-          <button
-            key={index}
-            onClick={() => scrollToImage(index)}
-            className={`block mb-2 w-8 h-8 rounded-full ${
-              currentImageIndex === index ? "bg-blue-500" : "bg-gray-300"
-            }`}
-          >
-            {index + 1}
-          </button>
-        ))}
-      </div>
-      <div ref={containerRef} className="w-full max-w-[1480px] mx-auto">
-        <form onSubmit={handleSubmit(onSubmit)}>
-          {images.map((image, index) => (
-            <div
-              key={index}
-              ref={setImageRef(index)}
-              className="relative border-4 border-blue-500"
-            >
-              <Image
-                src={image}
-                alt={`Form Background ${index + 1}`}
-                layout="responsive"
-              />
-              <div
-                ref={setFormContainerRef(index)}
-                className="absolute top-0 left-0 w-full h-full"
-              >
-                {formFields.map((field) => renderField(field, index))}
+    <div className="bg-secondary min-h-screen">
+      <div className="container mx-auto py-12">
+        <h1 className="text-4xl md:text-5xl font-bold text-primary mb-4 font-serif text-center">
+          Online Tax Return Form
+        </h1>
+        <p className="text-gray-700 mb-8 text-center max-w-2xl mx-auto">
+          Complete your tax return easily and securely. Our form is designed to
+          guide you through the process step by step.
+        </p>
+
+        <div className="bg-white shadow-lg rounded-lg overflow-hidden">
+          <div className="p-6">
+            <form onSubmit={handleSubmit(onSubmit)}>
+              <div className="relative" ref={containerRef}>
+                {images.map((image, index) => (
+                  <div
+                    key={index}
+                    ref={setImageRef(index)}
+                    className="relative border-2 border-gray-200 rounded-lg mb-8"
+                  >
+                    <Image
+                      src={image}
+                      alt={`Form Background ${index + 1}`}
+                      layout="responsive"
+                    />
+                    <div
+                      ref={setFormContainerRef(index)}
+                      className="absolute top-0 left-0 w-full h-full"
+                    >
+                      {formFields.map((field) => renderField(field, index))}
+                    </div>
+                  </div>
+                ))}
               </div>
-            </div>
-          ))}
-          <button
-            type="submit"
-            className="fixed bottom-4 left-1/2 transform -translate-x-1/2 px-4 py-2 bg-blue-500 text-white rounded"
-            style={{ fontSize: `${1.6 * scale}rem` }}
-          >
-            Submit
-          </button>
-        </form>
+
+              <div className="mt-8 flex justify-center">
+                <Button
+                  type="submit"
+                  className="px-6 py-3 bg-primary text-white rounded-lg font-semibold text-lg transition duration-300 hover:bg-primary-dark"
+                >
+                  Submit Tax Return
+                  <ArrowRight className="ml-2 w-5 h-5" />
+                </Button>
+              </div>
+            </form>
+          </div>
+        </div>
+
+        <div className="mt-12 text-center">
+          <h3 className="text-2xl font-semibold mb-4 font-serif text-primary">
+            Need Assistance?
+          </h3>
+          <p className="text-gray-700 mb-4">
+            Our tax experts are here to help you with any questions or concerns.
+          </p>
+          <Button className="px-6 py-3 bg-secondary text-primary border-2 border-primary rounded-lg font-semibold text-lg transition duration-300 hover:bg-primary hover:text-white">
+            Contact Support
+          </Button>
+        </div>
       </div>
     </div>
   );

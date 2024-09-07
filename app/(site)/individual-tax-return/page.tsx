@@ -1,17 +1,32 @@
 "use client";
+
+import Image from "next/image";
+import React, { useState, useRef, useEffect, useCallback } from "react";
+import { useForm, SubmitHandler, Controller } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { RadioGroup } from "@/components/custom/radio";
+import CustomSelect from "@/components/custom/select";
+
+import "flatpickr/dist/themes/airbnb.css";
+import CustomDatePicker from "@/components/custom/date-picker";
+import { Button } from "@/components/ui/button";
+import { ArrowRight } from "lucide-react";
+import SignatureField from "@/components/custom/signature";
+import {
+  IndividualTaxReturnFormInput,
+  individualTaxReturnSchema,
+} from "./schema";
+import { isFieldRequired } from "@/lib/utils";
+
 import ImageOne from "@/public/images/1.png";
 import ImageTwo from "@/public/images/2.png";
 import ImageThree from "@/public/images/3.png";
-import { zodResolver } from "@hookform/resolvers/zod";
-import Image from "next/image";
-import React, { useCallback, useEffect, useRef, useState } from "react";
-import { Controller, SubmitHandler, useForm } from "react-hook-form";
-import { RadioGroup } from "./_components/radio";
-import CustomSelect from "./_components/select";
-import { TaxReturnFormInput, taxReturnFormSchema } from "./schema";
-
-import "flatpickr/dist/themes/airbnb.css";
-import CustomDatePicker from "./_components/date-picker";
+import ImageFour from "@/public/images/4.png";
+import ImageFive from "@/public/images/5.png";
+import ImageSix from "@/public/images/6.png";
+import ImageSeven from "@/public/images/7.png";
+import ImageEight from "@/public/images/8.png";
+import ImageNine from "@/public/images/8.png";
 
 // Define the possible field types
 type FieldType =
@@ -21,9 +36,9 @@ type FieldType =
   | "date"
   | "checkbox"
   | "radio"
-  | "select";
+  | "select"
+  | "signature";
 
-// Define the structure for each form field
 interface DateFieldPosition {
   x: number;
   y: number;
@@ -32,10 +47,9 @@ interface DateFieldPosition {
 }
 
 interface BaseFormField {
-  name: keyof TaxReturnFormInput;
+  name: keyof IndividualTaxReturnFormInput;
   type: FieldType;
   label: string;
-  placeholder?: string;
   x: number;
   y: number;
   width: number;
@@ -58,6 +72,7 @@ interface RadioFormField extends BaseFormField {
 interface SelectFormField extends BaseFormField {
   type: "select";
   options: Array<{ label: string; value: string }>;
+  placeholder: string;
 }
 
 interface DateFormField extends BaseFormField {
@@ -67,71 +82,87 @@ interface DateFormField extends BaseFormField {
   yearPosition: DateFieldPosition;
 }
 
+interface SignatureFormField extends BaseFormField {
+  type: "signature";
+}
+
 type OtherFormField = Omit<BaseFormField, "type"> & {
-  type: Exclude<FieldType, "radio" | "select" | "date">;
+  type: Exclude<FieldType, "radio" | "select" | "date" | "signature">;
 };
+
 type FormField =
   | RadioFormField
   | SelectFormField
   | DateFormField
+  | SignatureFormField
   | OtherFormField;
 
-const images = [ImageOne, ImageTwo, ImageThree];
+const images = [
+  ImageOne,
+  ImageTwo,
+  ImageThree,
+  ImageFour,
+  ImageFive,
+  ImageSix,
+  ImageSeven,
+  ImageEight,
+  ImageNine,
+];
 
 const formFields: FormField[] = [
   {
     name: "taxpayerName",
     type: "text",
     label: "Tax payer name",
-    placeholder: "Enter your full name",
+
     x: 341,
-    y: 276,
+    y: 275,
     width: 594,
-    height: 29,
+    height: 30,
     imageIndex: 0,
   },
   {
     name: "nationalId",
     type: "text",
     label: "National ID No / Passport No.",
-    placeholder: "National ID No / Passport No.",
+
     x: 538,
     y: 306,
     width: 397,
-    height: 29,
+    height: 30,
     imageIndex: 0,
   },
   {
     name: "tin",
     type: "text",
     label: "TIN",
-    placeholder: "TIN",
+
     x: 538,
-    y: 336,
+    y: 337,
     width: 397,
-    height: 29,
+    height: 30,
     imageIndex: 0,
   },
   {
     name: "circle",
     type: "text",
     label: "Circle",
-    placeholder: "Circle",
-    x: 250,
+
+    x: 252,
     y: 367,
-    width: 290,
-    height: 29,
+    width: 285,
+    height: 30,
     imageIndex: 0,
   },
   {
     name: "zone",
     type: "text",
     label: "Zone",
-    placeholder: "Zone",
-    x: 580,
-    y: 365,
-    width: 355,
-    height: 29,
+
+    x: 685,
+    y: 367,
+    width: 250,
+    height: 30,
     imageIndex: 0,
   },
   {
@@ -143,17 +174,17 @@ const formFields: FormField[] = [
         label: "Option 1",
         value: "Resident",
         x: 712,
-        y: 415,
+        y: 416,
         width: 45,
-        height: 35,
+        height: 32,
       },
       {
         label: "Option 2",
         value: "Non-resident",
         x: 890,
-        y: 415,
+        y: 416,
         width: 45,
-        height: 35,
+        height: 32,
       },
     ],
     x: 0,
@@ -239,7 +270,7 @@ const formFields: FormField[] = [
     name: "dateOfBirth",
     type: "date",
     label: "Date of Birth",
-    placeholder: "Select your date of birth",
+
     x: 538,
     y: 475,
     width: 397,
@@ -253,7 +284,7 @@ const formFields: FormField[] = [
     name: "spouseName",
     type: "text",
     label: "spouse name",
-    placeholder: "Spouse Name",
+
     x: 650,
     y: 580,
     width: 290,
@@ -264,7 +295,7 @@ const formFields: FormField[] = [
     name: "spouseTin",
     type: "text",
     label: "Spouse Tin",
-    placeholder: "Spouse TIN",
+
     x: 650,
     y: 615,
     width: 290,
@@ -275,7 +306,7 @@ const formFields: FormField[] = [
     name: "addressLine1",
     type: "text",
     label: "Spouse Tin",
-    placeholder: "Address",
+
     x: 225,
     y: 650,
     width: 700,
@@ -286,7 +317,7 @@ const formFields: FormField[] = [
     name: "addressLine2",
     type: "text",
     label: "Spouse Tin",
-    placeholder: "Address",
+
     x: 225,
     y: 680,
     width: 700,
@@ -297,7 +328,7 @@ const formFields: FormField[] = [
     name: "telephone",
     type: "text",
     label: "Telephone",
-    placeholder: "Telephone",
+
     x: 130,
     y: 730,
     width: 250,
@@ -308,7 +339,7 @@ const formFields: FormField[] = [
     name: "mobile",
     type: "text",
     label: "Mobile",
-    placeholder: "Mobile",
+
     x: 400,
     y: 730,
     width: 250,
@@ -319,7 +350,7 @@ const formFields: FormField[] = [
     name: "email",
     type: "email",
     label: "Email",
-    placeholder: "E-mail",
+
     x: 680,
     y: 730,
     width: 250,
@@ -330,7 +361,7 @@ const formFields: FormField[] = [
     name: "employerName",
     type: "text",
     label: "Employer Name",
-    placeholder: "Employer Name",
+
     x: 130,
     y: 780,
     width: 700,
@@ -341,7 +372,7 @@ const formFields: FormField[] = [
     name: "businessName",
     type: "text",
     label: "Business Name",
-    placeholder: "Business Name",
+
     x: 490,
     y: 815,
     width: 400,
@@ -352,7 +383,7 @@ const formFields: FormField[] = [
     name: "bin",
     type: "text",
     label: "BIN",
-    placeholder: "BIN",
+
     x: 490,
     y: 845,
     width: 400,
@@ -363,7 +394,7 @@ const formFields: FormField[] = [
     name: "partnersMembersAssociation1",
     type: "text",
     label: "Partner Name",
-    placeholder: "Partner Name",
+
     x: 130,
     y: 890,
     width: 700,
@@ -374,7 +405,7 @@ const formFields: FormField[] = [
     name: "partnersMembersAssociation2",
     type: "text",
     label: "Partner Name",
-    placeholder: "Partner Name",
+
     x: 130,
     y: 925,
     width: 700,
@@ -405,7 +436,7 @@ const formFields: FormField[] = [
     name: "incomeFishFarmingAmount",
     type: "text",
     label: "Fish farming amount",
-    placeholder: "Fish Farming Amount",
+
     x: 780,
     y: 265,
     width: 150,
@@ -416,7 +447,7 @@ const formFields: FormField[] = [
     name: "shareOfIncomeFromAOP",
     type: "text",
     label: "shareOfIncomeFromAOP",
-    placeholder: "Share Of Income From AOP",
+
     x: 780,
     y: 450,
     width: 150,
@@ -427,7 +458,7 @@ const formFields: FormField[] = [
     name: "incomeOfMinor",
     type: "text",
     label: "incomeOfMinor",
-    placeholder: "Income Of Minor",
+
     x: 780,
     y: 480,
     width: 150,
@@ -438,7 +469,7 @@ const formFields: FormField[] = [
     name: "taxableIncomeFromAbroad",
     type: "text",
     label: "incomeOfMinor",
-    placeholder: "Taxable Income From Abroad",
+
     x: 780,
     y: 510,
     width: 150,
@@ -449,6 +480,7 @@ const formFields: FormField[] = [
     name: "minimumTax",
     type: "select",
     label: "Choose One",
+    placeholder: "Minimum Tax Area",
     options: [
       {
         label: "Dhaka / Chattogram City Corporation Area",
@@ -461,30 +493,32 @@ const formFields: FormField[] = [
       { label: "Other Area", value: "OtherArea" },
     ],
     x: 270,
-    y: 705,
-    width: 300,
-    height: 29,
+    y: 708,
+    width: 350,
+    height: 28,
     imageIndex: 1,
   },
   {
     name: "netWealthSurcharge",
     type: "select",
     label: "Choose One",
+    placeholder:
+      "Do you have more than one motor vehicle or more than 8000 sqft house property/properties (in city corporation area)?",
     options: [
       { label: "Yes", value: "Yes" },
       { label: "No", value: "No" },
     ],
-    x: 140,
+    x: 170,
     y: 780,
-    width: 600,
-    height: 10,
+    width: 599,
+    height: 12,
     imageIndex: 1,
   },
   {
     name: "environmentalSurcharge",
     type: "text",
     label: "environmentalSurcharge",
-    placeholder: "Environmental Surcharge",
+
     x: 780,
     y: 795,
     width: 150,
@@ -495,7 +529,7 @@ const formFields: FormField[] = [
     name: "delayInterest",
     type: "text",
     label: "delay Interest",
-    placeholder: "Delay Interest",
+
     x: 780,
     y: 820,
     width: 150,
@@ -506,6 +540,7 @@ const formFields: FormField[] = [
     name: "netWealthSurcharge",
     type: "select",
     label: "Choose One",
+    placeholder: "placeholder",
     options: [
       { label: "Calculate", value: "Calculate" },
       { label: "Re-Calculate", value: "Re-Calculate" },
@@ -521,7 +556,7 @@ const formFields: FormField[] = [
     name: "advanceTaxPaidAmount",
     type: "text",
     label: "Advance Tax PaidAmount",
-    placeholder: "Advance tax paid amount",
+
     x: 780,
     y: 135,
     width: 150,
@@ -532,7 +567,7 @@ const formFields: FormField[] = [
     name: "adjustmentOfTaxRefund",
     type: "text",
     label: "adjustmentOfTaxRefund",
-    placeholder: "Adjustment of tax refund",
+
     x: 780,
     y: 165,
     width: 150,
@@ -543,7 +578,7 @@ const formFields: FormField[] = [
     name: "taxPaidWithThisReturn",
     type: "text",
     label: "taxPaidWithThisReturn",
-    placeholder: "Tax paid",
+
     x: 780,
     y: 195,
     width: 150,
@@ -554,7 +589,7 @@ const formFields: FormField[] = [
     name: "listOfDocumentsFurnishedWithThisReturn1",
     type: "text",
     label: "listOfDocumentsFurnishedWithThisReturn1",
-    placeholder: "List of document",
+
     x: 95,
     y: 385,
     width: 420,
@@ -565,7 +600,7 @@ const formFields: FormField[] = [
     name: "listOfDocumentsFurnishedWithThisReturn2",
     type: "text",
     label: "listOfDocumentsFurnishedWithThisReturn2",
-    placeholder: "List of document",
+
     x: 520,
     y: 385,
     width: 420,
@@ -576,7 +611,7 @@ const formFields: FormField[] = [
     name: "fatherOrHusband",
     type: "text",
     label: "fatherOrHusband",
-    placeholder: "Father or Husband",
+
     x: 650,
     y: 730,
     width: 300,
@@ -587,7 +622,6 @@ const formFields: FormField[] = [
     name: "placeOfSignature",
     type: "text",
     label: "placeOfSignature",
-    placeholder: "Place of Signature",
     x: 140,
     y: 870,
     width: 250,
@@ -601,20 +635,21 @@ const ResponsiveFormOverlay: React.FC = () => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const containerRef = useRef<HTMLDivElement | null>(null);
   const imageRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const formContainerRefs = useRef<(HTMLDivElement | null)[]>([]);
 
   const {
     register,
     handleSubmit,
     control,
     formState: { errors },
-  } = useForm<TaxReturnFormInput>({
-    resolver: zodResolver(taxReturnFormSchema),
+  } = useForm<IndividualTaxReturnFormInput>({
+    resolver: zodResolver(individualTaxReturnSchema),
+    defaultValues: {},
   });
 
   useEffect(() => {
     const updateScale = () => {
       if (containerRef.current && imageRefs.current[0]) {
-        const containerWidth = containerRef.current.offsetWidth;
         const imageWidth = imageRefs.current[0].offsetWidth;
         const newScale = imageWidth / 1000; // Assuming 1000px as base width
         setScale(newScale);
@@ -626,35 +661,45 @@ const ResponsiveFormOverlay: React.FC = () => {
     return () => window.removeEventListener("resize", updateScale);
   }, []);
 
-  const onSubmit: SubmitHandler<TaxReturnFormInput> = (data) => {
+  const onSubmit: SubmitHandler<IndividualTaxReturnFormInput> = (data) => {
     console.log(data);
     // Handle form submission
   };
 
-  console.log(errors);
+  const renderField = (field: FormField, imageIndex: number) => {
+    if (field.imageIndex !== imageIndex) return null;
 
-  const renderField = (field: FormField) => {
     const fieldStyle = {
       position: "absolute" as const,
       left: `${field.x / 10}%`,
       top: `${field.y / 10}%`,
       width: `${field.width / 10}%`,
       height: `${field.height / 10}%`,
-      fontSize: `${1 * scale}rem`,
     };
+
+    const isRequired = isFieldRequired(individualTaxReturnSchema, field.name);
 
     switch (field.type) {
       case "text":
       case "email":
       case "number":
         return (
-          <input
-            {...register(field.name)}
-            type={field.type}
-            placeholder={field.placeholder}
-            className="absolute border border-gray-300 rounded px-2 py-1"
-            style={fieldStyle}
-          />
+          <div style={fieldStyle} className="relative overflow-hidden">
+            <input
+              {...register(field.name)}
+              type={field.type}
+              className="w-full h-full absolute border px-2 border-sky-300 rounded-none bg-sky-300/10 focus:border-sky-500 focus:ring-0 focus:outline-0 focus:bg-transparent hover:border-sky-500"
+              style={{ fontSize: `${14 * scale}px` }}
+            />
+
+            {isRequired && (
+              <span className="absolute top-0 right-0 -translate-y-1/2 translate-x-1/2 h-10 w-10 bg-sky-300/70 rotate-45 transform origin-center transition-colors">
+                <span className="absolute text-white top-[23px] left-[17px] text-lg">
+                  *
+                </span>
+              </span>
+            )}
+          </div>
         );
       case "checkbox":
         return (
@@ -665,50 +710,46 @@ const ResponsiveFormOverlay: React.FC = () => {
         );
       case "radio":
         return (
-          <div style={fieldStyle}>
-            <RadioGroup
-              control={control}
-              name={field.name as "radioOption"}
-              options={field.options.map((option) => ({
-                ...option,
-                x: option.x,
-                y: option.y,
-                width: option.width,
-                height: option.height,
-              }))}
-              scale={scale}
-            />
-          </div>
+          <RadioGroup
+            control={control}
+            name={field.name}
+            options={field.options}
+            scale={scale}
+            required={isRequired}
+          />
         );
       case "select":
         return (
           <div style={fieldStyle}>
             <Controller
-              name={field.name as "favoriteColor"}
+              name={field.name}
               control={control}
               render={({ field: { onChange, value } }) => (
                 <CustomSelect
                   options={field.options}
-                  value={value}
+                  value={value as string}
                   onChange={onChange}
                   name={field.name}
-                  placeholder={field.placeholder}
                   scale={scale}
+                  required={isRequired}
+                  placeholder={field.placeholder}
                 />
               )}
             />
           </div>
         );
+
       case "date":
         return (
           <Controller
-            name={field.name as "dateOfBirth"}
+            name={field.name}
             control={control}
             render={({ field: { onChange, value } }) => (
               <CustomDatePicker
                 onChange={(date) => {
                   onChange(date);
                 }}
+                name={field.name}
                 dayPosition={field.dayPosition}
                 monthPosition={field.monthPosition}
                 yearPosition={field.yearPosition}
@@ -716,6 +757,19 @@ const ResponsiveFormOverlay: React.FC = () => {
               />
             )}
           />
+        );
+
+      case "signature":
+        return (
+          <div style={fieldStyle}>
+            <Controller
+              name={field.name}
+              control={control}
+              render={({ field: { onChange, value } }) => (
+                <SignatureField onChange={onChange} />
+              )}
+            />
+          </div>
         );
       default:
         return null;
@@ -734,49 +788,73 @@ const ResponsiveFormOverlay: React.FC = () => {
     []
   );
 
+  const setFormContainerRef = useCallback(
+    (index: number) => (el: HTMLDivElement | null) => {
+      formContainerRefs.current[index] = el;
+    },
+    []
+  );
+
   return (
-    <div className="relative">
-      <div className="fixed right-4 top-1/2 transform -translate-y-1/2 z-10">
-        {images.map((_, index) => (
-          <button
-            key={index}
-            onClick={() => scrollToImage(index)}
-            className={`block mb-2 w-8 h-8 rounded-full ${
-              currentImageIndex === index ? "bg-blue-500" : "bg-gray-300"
-            }`}
-          >
-            {index + 1}
-          </button>
-        ))}
-      </div>
-      <div ref={containerRef} className="w-full max-w-[1480px] mx-auto">
-        <form onSubmit={handleSubmit(onSubmit)}>
-          {images.map((image, index) => (
-            <div
-              key={index}
-              ref={setImageRef(index)}
-              className="relative border-4 border-blue-500"
-            >
-              <Image
-                src={image}
-                alt={`Form Background ${index + 1}`}
-                layout="responsive"
-              />
-              <div className="absolute top-0 left-0 w-full h-full">
-                {formFields
-                  .filter((field) => field.imageIndex === index)
-                  .map(renderField)}
+    <div className="bg-secondary min-h-screen">
+      <div className="container mx-auto py-12">
+        <h1 className="text-4xl md:text-5xl font-bold text-primary mb-4 font-serif text-center">
+          Online Tax Return Form
+        </h1>
+        <p className="text-gray-700 mb-8 text-center max-w-2xl mx-auto">
+          Complete your tax return easily and securely. Our form is designed to
+          guide you through the process step by step.
+        </p>
+
+        <div className="bg-white shadow-lg rounded-lg overflow-hidden">
+          <div className="p-6">
+            <form onSubmit={handleSubmit(onSubmit)}>
+              <div className="relative" ref={containerRef}>
+                {images.map((image, index) => (
+                  <div
+                    key={index}
+                    ref={setImageRef(index)}
+                    className="relative border-2 border-gray-200 rounded-lg mb-8"
+                  >
+                    <Image
+                      src={image}
+                      alt={`Form Background ${index + 1}`}
+                      layout="responsive"
+                    />
+                    <div
+                      ref={setFormContainerRef(index)}
+                      className="absolute top-0 left-0 w-full h-full"
+                    >
+                      {formFields.map((field) => renderField(field, index))}
+                    </div>
+                  </div>
+                ))}
               </div>
-            </div>
-          ))}
-          <button
-            type="submit"
-            className="fixed bottom-4 left-1/2 transform -translate-x-1/2 px-4 py-2 bg-blue-500 text-white rounded"
-            style={{ fontSize: `${1.6 * scale}rem` }} // Scale submit button font size
-          >
-            Submit
-          </button>
-        </form>
+
+              <div className="mt-8 flex justify-center">
+                <Button
+                  type="submit"
+                  className="px-6 py-3 bg-primary text-white rounded-lg font-semibold text-lg transition duration-300 hover:bg-primary-dark"
+                >
+                  Submit Tax Return
+                  <ArrowRight className="ml-2 w-5 h-5" />
+                </Button>
+              </div>
+            </form>
+          </div>
+        </div>
+
+        <div className="mt-12 text-center">
+          <h3 className="text-2xl font-semibold mb-4 font-serif text-primary">
+            Need Assistance?
+          </h3>
+          <p className="text-gray-700 mb-4">
+            Our tax experts are here to help you with any questions or concerns.
+          </p>
+          <Button className="px-6 py-3 bg-secondary text-primary border-2 border-primary rounded-lg font-semibold text-lg transition duration-300 hover:bg-primary hover:text-white">
+            Contact Support
+          </Button>
+        </div>
       </div>
     </div>
   );

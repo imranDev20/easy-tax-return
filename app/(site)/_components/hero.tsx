@@ -1,40 +1,137 @@
-import { Button } from "@/components/ui/button";
 import Image from "next/image";
-import heroImage from "../../../images/hero-image.jpg";
+import heroImage from "@/public/hero-image.jpg";
+import Link from "next/link";
+import { ArrowRight, Star } from "lucide-react";
+import DocumentIcon from "@/public/icons/document-icon";
+import BankIcon from "@/public/icons/bank-icon";
+import CompanyIcon from "@/public/icons/company-icon";
+import AvatarOne from "@/public/avatar-1.jpg";
+
+const HERO_CARD_OPTIONS = [
+  {
+    label: "Individual Tax Return",
+    Icon: DocumentIcon,
+    href: "individual-tax-return",
+    color: "bg-[rgba(168,241,229,0.2)]",
+    hoverColor: "bg-[rgba(168,241,229,0.4)]",
+  },
+  {
+    label: "Firm Tax Return",
+    Icon: BankIcon,
+    href: "tax-return-form",
+    color: "bg-[rgba(235,189,189,0.2)]",
+    hoverColor: "bg-[rgba(235,189,189,0.4)]",
+  },
+  {
+    label: "Company Tax Return",
+    Icon: CompanyIcon,
+    href: "tax-return-form",
+    color: "bg-[rgba(241,239,168,0.2)]",
+    hoverColor: "bg-[rgba(241,239,168,0.4)]",
+  },
+];
 
 export default function Hero() {
+  const rating = 5.0;
+  const maxRating = 5;
+
   return (
-    <div className=" bg-[#F8F8F8] py-9">
-      <div className="flex max-w-6xl mx-auto ">
-        <div className="flex justify-center items-center">
-          <div>
-            <h1 className="text-4xl font-semibold text-[#0074D9]">
-              Bangladesh Tax <br /> Preparation & Consulting
-            </h1>
-            <p className="texr-sm w-3/4 my-4">
-              Tax services that are customized to enhance your financial
-              strategy and minimize tax liabilities. Trust us for tax
-              preparation, planning, and filing needs to thrive in today&apos;s
-              competitive market.
-            </p>
-            <Button className="mt-8 bg-[#0074D9] text-white rounded-none">
-              Discover
-            </Button>
+    <section className="bg-secondary">
+      <div className="container mx-auto py-12 grid grid-cols-1 md:grid-cols-5 gap-8 items-center">
+        <div className="md:col-span-3">
+          <h1 className="text-[4rem] leading-none font-bold text-primary mb-4 font-serif">
+            #1 Online Tax Return Preparer in Bangladesh
+          </h1>
+          <p className="text-gray-700 mb-6">
+            Tax services that are customized to enhance your financial strategy
+            and minimize tax liabilities. Trust us for tax preparation,
+            planning, and filing needs to thrive in today&apos;s competitive
+            market.
+          </p>
+
+          <div className="flex items-center">
+            <div className="flex -space-x-6 mr-4">
+              {[1, 2, 3, 4].map((index) => (
+                <Image
+                  key={index}
+                  className="w-12 h-12 rounded-full border-2 border-white object-cover"
+                  src={AvatarOne}
+                  alt={`Client ${index}`}
+                />
+              ))}
+            </div>
+            <div>
+              <div className="flex items-center">
+                <span className="text-xl font-bold mr-2">
+                  {rating.toFixed(2)}
+                </span>
+                <div className="flex">
+                  {[...Array(maxRating)].map((_, index) => (
+                    <Star
+                      key={index}
+                      className={`w-4 h-4 ${
+                        index < rating
+                          ? "text-yellow-400 fill-current"
+                          : "text-gray-300"
+                      }`}
+                    />
+                  ))}
+                </div>
+              </div>
+              <p className="text-gray-600 text-sm">
+                Our clients rate us as excellent.
+              </p>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-3 gap-2 mt-14" id="services">
+            {HERO_CARD_OPTIONS.map((item) => (
+              <Link
+                href={`/${item.href}`}
+                key={item.label}
+                className={`p-5 ease-in-out duration-300 cursor-pointer group block relative overflow-hidden ${item.color}`}
+              >
+                <div
+                  className={`absolute inset-0 ${item.hoverColor} opacity-0 group-hover:opacity-100 transition-opacity duration-300`}
+                ></div>
+                <div className="relative z-10">
+                  <item.Icon height={48} width={48} />
+                  <h3 className="text-font font-serif text-[1.35rem] mt-3">
+                    {item.label}
+                  </h3>
+                  <div className="text-sm mt-2 flex items-center text-gray-600 group-hover:text-gray-900 transition-colors duration-300">
+                    <span className="font-medium">Discover</span>
+                    <ArrowRight className="w-4 h-4 ml-1 transform transition-transform duration-300 group-hover:translate-x-2" />
+                  </div>
+                </div>
+              </Link>
+            ))}
           </div>
         </div>
-        <div className="relative mt-8">
-          <Image className=" rounded-t-full" src={heroImage} alt="hero-image" />
-          <div className="absolute top-4 left-4 bg-[#EBBDBD] rounded-lg text-[#513B3B] px-2 py-1 ">
-            Tax Advice
-          </div>
-          <div className="absolute top-32 -right-8 bg-[#A8F1E5] rounded-lg text-teal-600 px-2 py-1  ">
-            Legal Advice
-          </div>
-          <div className="absolute bottom-4 -left-10 bg-[#F1EFA8] rounded-lg text-[#535237] px-2 py-1  ">
-            Financial Advice
+
+        <div className="md:col-span-2 ">
+          <div className="relative p-6">
+            <div className="relative w-full rounded-t-full overflow-hidden min-h-[500px]">
+              <Image
+                src={heroImage}
+                alt="Easy tax return hero image"
+                fill
+                objectFit="cover"
+              />
+            </div>
+
+            <p className="absolute top-32 left-0 bg-[#EBBDBD] py-1 rounded font-serif text-xl px-5 text-[#513B3B] shadow-md transform hover:scale-105 transition-transform duration-300">
+              Tax Advice
+            </p>
+            <div className="absolute top-56 right-0 bg-[#A8F1E5] text-[#324F4B] py-1 rounded font-serif text-xl px-5 shadow-md transform hover:scale-105 transition-transform duration-300">
+              Legal Advice
+            </div>
+            <div className="absolute top-0 left-1/2 -translate-x-1/2 bg-[#F1EFA8] py-1 rounded text-[#535237] font-serif text-xl px-5 shadow-md transform hover:scale-105 transition-transform duration-300">
+              Financial Advice
+            </div>
           </div>
         </div>
       </div>
-    </div>
+    </section>
   );
 }

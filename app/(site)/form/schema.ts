@@ -28,6 +28,7 @@ const taxpayerSchema = z.object({
     .regex(/^\d{2}-\d{2}-\d{4}$/, "Date of birth must be in DD-MM-YYYY format"),
   spouseName: z.string().optional(),
   spouseTIN: z.string().optional(),
+  signature: z.string().min(1, "Signature is required"),
 });
 
 type TaxpayerForm = z.infer<typeof taxpayerSchema>;

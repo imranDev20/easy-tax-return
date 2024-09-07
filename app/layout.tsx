@@ -1,9 +1,22 @@
 import { ThemeProvider } from "@/providers/theme-provider";
 import type { Metadata } from "next";
-import { Outfit } from "next/font/google";
+import { Judson, Poppins } from "next/font/google";
 import "./globals.css";
 
-const outfit = Outfit({ subsets: ["latin"], display: "swap" });
+const bodyFont = Poppins({
+  subsets: ["latin"],
+  display: "swap",
+  weight: ["400", "700", "500", "600"],
+  variable: "--font-poppins",
+});
+
+// Font for titles
+const titleFont = Judson({
+  subsets: ["latin"],
+  display: "swap",
+  variable: "--font-judson",
+  weight: ["700", "400"],
+});
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -16,8 +29,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body className={outfit.className}>
+    <html lang="en" className={`${bodyFont.variable} ${titleFont.variable}`}>
+      <body className="font-sans">
         <ThemeProvider attribute="class" defaultTheme="light">
           {children}
         </ThemeProvider>
