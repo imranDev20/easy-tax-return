@@ -117,7 +117,7 @@ export const individualTaxReturnSchema = z.object({
   openingCapital: z.string().optional(),
   withdrawalsInTheIncomeYear: z.string().optional(),
   liabilities: z.string().optional(),
-  
+
   interestProfitFromBankFIAmount: z.string().optional(),
   interestProfitFromBankFIDeductions: z.string().optional(),
   interestProfitFromBankFITax: z.string().optional(),
@@ -212,6 +212,7 @@ export const individualTaxReturnSchema = z.object({
 
   total: z.string().optional(),
 
+  exemptedIncomeFromSalary: z.string().optional(),
   exemptedIncomeFromBusiness: z.string().optional(),
 
   exemptedAgriculturalIncome: z.string().optional(),
