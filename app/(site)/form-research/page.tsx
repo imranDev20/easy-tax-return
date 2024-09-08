@@ -14,7 +14,14 @@ import CustomSelect from "./_components/select";
 import "flatpickr/dist/themes/airbnb.css";
 import CustomDatePicker from "./_components/date-picker";
 import { Button } from "@/components/ui/button";
-import { ArrowRight } from "lucide-react";
+import {
+  ArrowLeft,
+  ArrowRight,
+  Download,
+  Save,
+  ZoomIn,
+  ZoomOut,
+} from "lucide-react";
 import SignatureField from "./_components/signature";
 
 // Define the possible field types
@@ -209,9 +216,26 @@ const ResponsiveFormOverlay: React.FC = () => {
       }
     };
 
+    const handleScroll = () => {
+      const scrollPosition = window.scrollY + window.innerHeight / 2;
+      imageRefs.current.forEach((ref, index) => {
+        if (
+          ref &&
+          ref.offsetTop <= scrollPosition &&
+          ref.offsetTop + ref.offsetHeight > scrollPosition
+        ) {
+          setCurrentImageIndex(index);
+        }
+      });
+    };
+
     updateScale();
     window.addEventListener("resize", updateScale);
-    return () => window.removeEventListener("resize", updateScale);
+    window.addEventListener("scroll", handleScroll);
+    return () => {
+      window.removeEventListener("resize", updateScale);
+      window.removeEventListener("scroll", handleScroll);
+    };
   }, []);
 
   const onSubmit: SubmitHandler<TaxpayerForm> = (data) => {
@@ -348,7 +372,7 @@ const ResponsiveFormOverlay: React.FC = () => {
   );
 
   return (
-    <div className="bg-secondary min-h-screen">
+    <div className="bg-secondary min-h-screen pb-20">
       <div className="container mx-auto py-12">
         <h1 className="text-4xl md:text-5xl font-bold text-primary mb-4 font-serif text-center">
           Online Tax Return Form
@@ -382,16 +406,6 @@ const ResponsiveFormOverlay: React.FC = () => {
                   </div>
                 ))}
               </div>
-
-              <div className="mt-8 flex justify-center">
-                <Button
-                  type="submit"
-                  className="px-6 py-3 bg-primary text-white rounded-lg font-semibold text-lg transition duration-300 hover:bg-primary-dark"
-                >
-                  Submit Tax Return
-                  <ArrowRight className="ml-2 w-5 h-5" />
-                </Button>
-              </div>
             </form>
           </div>
         </div>
@@ -406,6 +420,93 @@ const ResponsiveFormOverlay: React.FC = () => {
           <Button className="px-6 py-3 bg-secondary text-primary border-2 border-primary rounded-lg font-semibold text-lg transition duration-300 hover:bg-primary hover:text-white">
             Contact Support
           </Button>
+        </div>
+      </div>
+
+      {/* Scrollspy */}
+      <div className="fixed right-4 top-1/2 transform -translate-y-1/2 z-10">
+        {images.map((_, index) => (
+          <button
+            key={index}
+            onClick={() => scrollToImage(index)}
+            className={`block mb-2 w-8 h-8 rounded-full ${
+              currentImageIndex === index
+                ? "bg-primary text-white"
+                : "bg-gray-300"
+            }`}
+          >
+            {index + 1}
+          </button>
+        ))}
+      </div>
+
+      <div className="fixed bottom-0 left-0 right-0 bg-white shadow-lg border-t border-gray-200">
+        <div className="container mx-auto flex justify-between items-center py-3 px-4">
+          <div className="flex items-center space-x-4">
+            <div className="flex items-center space-x-2">
+              <Button
+                variant="outline"
+                size="icon"
+                className="h-8 w-8"
+                disabled={currentImageIndex === 0}
+                title="Previous Page"
+              >
+                <ArrowLeft className="h-4 w-4" />
+              </Button>
+              <span className="text-sm font-medium">
+                Page {currentImageIndex + 1} of {images.length}
+              </span>
+              <Button
+                variant="outline"
+                size="icon"
+                className="h-8 w-8"
+                disabled={currentImageIndex === images.length - 1}
+                title="Next Page"
+              >
+                <ArrowRight className="h-4 w-4" />
+              </Button>
+            </div>
+            <div className="flex items-center space-x-2 border-l border-gray-300 pl-4">
+              <Button
+                onClick={() => setScale((prev) => Math.max(prev - 0.1, 0.5))}
+                variant="outline"
+                size="icon"
+                className="h-8 w-8"
+                title="Zoom Out"
+              >
+                <ZoomOut className="h-4 w-4" />
+              </Button>
+              <span className="text-sm font-medium">
+                {Math.round(scale * 100)}%
+              </span>
+              <Button
+                onClick={() => setScale((prev) => Math.min(prev + 0.1, 2))}
+                variant="outline"
+                size="icon"
+                className="h-8 w-8"
+                title="Zoom In"
+              >
+                <ZoomIn className="h-4 w-4" />
+              </Button>
+            </div>
+          </div>
+          <div className="flex items-center space-x-4">
+            <Button
+              onClick={() => console.log("Save for later")}
+              variant="outline"
+              className="px-4 py-2 text-primary border-primary hover:bg-primary hover:text-white transition-colors duration-300"
+            >
+              <Save className="mr-2 h-4 w-4" />
+              Save for Later
+            </Button>
+            <Button
+              onClick={() => console.log("Save PDF")}
+              className="px-6 py-2 bg-primary text-white font-semibold transition duration-300 hover:bg-primary-dark"
+            >
+              <Download className="mr-2 h-5 w-5" />
+              Save PDF
+            </Button>
+          </div>
         </div>
       </div>
     </div>

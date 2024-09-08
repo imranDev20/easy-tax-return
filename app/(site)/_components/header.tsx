@@ -101,7 +101,7 @@ export default function Header() {
             ))}
           </ul>
           <Button
-            className={`ml-10 rounded-none uppercase p-5 flex items-center transition-colors duration-300`}
+            className={`ml-10 uppercase p-5 flex items-center transition-colors duration-300`}
           >
             <Phone className="w-5 h-5 mr-2" />
             Contact Us
