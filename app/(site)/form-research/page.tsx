@@ -14,15 +14,9 @@ import CustomSelect from "./_components/select";
 import "flatpickr/dist/themes/airbnb.css";
 import CustomDatePicker from "./_components/date-picker";
 import { Button } from "@/components/ui/button";
-import {
-  ArrowLeft,
-  ArrowRight,
-  Download,
-  Save,
-  ZoomIn,
-  ZoomOut,
-} from "lucide-react";
+import { ArrowLeft, ArrowRight, Download, Save } from "lucide-react";
 import SignatureField from "./_components/signature";
+import { Switch } from "@/components/ui/switch";
 
 // Define the possible field types
 type FieldType =
@@ -192,6 +186,7 @@ const formFields: FormField[] = [
 const ResponsiveFormOverlay: React.FC = () => {
   const [scale, setScale] = useState(1);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const [fitToScreen, setFitToScreen] = useState(false);
   const containerRef = useRef<HTMLDivElement | null>(null);
   const imageRefs = useRef<(HTMLDivElement | null)[]>([]);
   const formContainerRefs = useRef<(HTMLDivElement | null)[]>([]);
@@ -382,7 +377,9 @@ const ResponsiveFormOverlay: React.FC = () => {
           guide you through the process step by step.
         </p>
 
-        <div className="bg-white shadow-lg rounded-lg overflow-hidden">
+        <div
+          className={`bg-white shadow-lg rounded-lg overflow-hidden mx-auto`}
+        >
           <div className="p-6">
             <form onSubmit={handleSubmit(onSubmit)}>
               <div className="relative" ref={containerRef}>
@@ -427,6 +424,7 @@ const ResponsiveFormOverlay: React.FC = () => {
       <div className="fixed right-4 top-1/2 transform -translate-y-1/2 z-10">
         {images.map((_, index) => (
           <button
+            type="button"
             key={index}
             onClick={() => scrollToImage(index)}
             className={`block mb-2 w-8 h-8 rounded-full ${
@@ -448,6 +446,9 @@ const ResponsiveFormOverlay: React.FC = () => {
                 variant="outline"
                 size="icon"
                 className="h-8 w-8"
+                onClick={() =>
+                  scrollToImage(Math.max(0, currentImageIndex - 1))
+                }
                 disabled={currentImageIndex === 0}
                 title="Previous Page"
               >
@@ -460,33 +461,15 @@ const ResponsiveFormOverlay: React.FC = () => {
                 variant="outline"
                 size="icon"
                 className="h-8 w-8"
+                onClick={() =>
+                  scrollToImage(
+                    Math.min(images.length - 1, currentImageIndex + 1)
+                  )
+                }
                 disabled={currentImageIndex === images.length - 1}
                 title="Next Page"
               >
                 <ArrowRight className="h-4 w-4" />
-              </Button>
-            </div>
-            <div className="flex items-center space-x-2 border-l border-gray-300 pl-4">
-              <Button
-                onClick={() => setScale((prev) => Math.max(prev - 0.1, 0.5))}
-                variant="outline"
-                size="icon"
-                className="h-8 w-8"
-                title="Zoom Out"
-              >
-                <ZoomOut className="h-4 w-4" />
-              </Button>
-              <span className="text-sm font-medium">
-                {Math.round(scale * 100)}%
-              </span>
-              <Button
-                onClick={() => setScale((prev) => Math.min(prev + 0.1, 2))}
-                variant="outline"
-                size="icon"
-                className="h-8 w-8"
-                title="Zoom In"
-              >
-                <ZoomIn className="h-4 w-4" />
               </Button>
             </div>
           </div>
