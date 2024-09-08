@@ -409,7 +409,6 @@ const formFields: FormField[] = [
     name: "partnersMembersAssociation1",
     type: "text",
     label: "Partner Name",
-
     x: 130,
     y: 893,
     width: 807,
