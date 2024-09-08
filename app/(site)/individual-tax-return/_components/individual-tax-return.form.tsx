@@ -531,7 +531,6 @@ const formFields: FormField[] = [
     name: "environmentalSurcharge",
     type: "text",
     label: "environmentalSurcharge",
-
     x: 780,
     y: 795,
     width: 150,
