@@ -88,10 +88,10 @@ export const individualTaxReturnSchema = z.object({
   vacancyAllowance: z.string().optional(),
   repairCollection: z
     .enum([
-      "COMMERCIAL_PROPERTY",
-      "NON_-COMMERCIAL",
-      "RESIDENTIAL_PROPERTY",
-      "MIXED_PROPERTY",
+      "Commercial property",
+      "Non-commercial",
+      "Residential property",
+      "Mixed property",
     ])
     .optional(),
   municipalOrLocalTax: z.string().optional(),
