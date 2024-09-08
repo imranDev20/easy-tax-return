@@ -227,7 +227,8 @@ export const individualTaxReturnSchema = z.object({
   typeOfReceiptsAmount1: z.string().optional(),
   typeOfReceiptsAmount2: z.string().optional(),
   typeOfReceiptsAmount3: z.string().optional(),
-  netWealthLastDate: z.enum(["YES", "NO_I_AM_A_NEW_TAXPAYER"]),
+  netWealthLastDate: z.enum(["Yes", "No, I am a new Tax Payer"]),
+  netWealthLastDateAmount: z.string().optional(),
 
   giftExpense: z.string().optional(),
   institutionalLiabilities: z.string().optional(),

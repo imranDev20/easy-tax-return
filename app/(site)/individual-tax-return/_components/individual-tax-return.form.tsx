@@ -33,7 +33,7 @@ import ImageFive from "@/public/images/5.png";
 import ImageSix from "@/public/images/6.png";
 import ImageSeven from "@/public/images/7.png";
 import ImageEight from "@/public/images/8.png";
-import ImageNine from "@/public/images/8.png";
+import ImageNine from "@/public/images/9.png";
 
 // Define the possible field types
 type FieldType =
@@ -1781,6 +1781,84 @@ const formFields: FormField[] = [
     width: 157,
     height: 19,
     imageIndex: 7,
+  },
+ 
+  {
+    name: "netWealthLastDate",
+    type: "select",
+    label: "Did you file a tax return last year?",
+    placeholder: "Did you file a tax return last year?",
+    options: [     
+      {
+        label: "Yes",
+        value: "Yes",
+      },
+      {
+        label: "No, I am a new Tax Payer",
+        value: "No, I am a new Tax Payer",
+      },      
+      
+    ],
+    x: 580,
+    y: 445,
+    width: 194,
+    height: 18,
+    imageIndex: 8,
+  },
+  {
+    name: "netWealthLastDateAmount",
+    type: "text",
+    label: "netWealthLastDateAmount",
+
+    x: 772,
+    y: 445,
+    width: 168,
+    height: 18,
+    imageIndex: 8,
+  },
+  {
+    name: "giftExpense",
+    type: "text",
+    label: "giftExpense",
+
+    x: 772,
+    y: 515,
+    width: 168,
+    height: 18,
+    imageIndex: 8,
+  },
+  {
+    name: "institutionalLiabilities",
+    type: "text",
+    label: "institutionalLiabilities",
+
+    x: 772,
+    y: 585,
+    width: 168,
+    height: 18,
+    imageIndex: 8,
+  },
+  {
+    name: "nonInstitutionalLiabilities",
+    type: "text",
+    label: "nonInstitutionalLiabilities",
+
+    x: 772,
+    y: 605,
+    width: 168,
+    height: 18,
+    imageIndex: 8,
+  },
+  {
+    name: "otherLiabilities",
+    type: "text",
+    label: "otherLiabilities",
+
+    x: 772,
+    y: 620,
+    width: 168,
+    height: 18,
+    imageIndex: 8,
   },
 ];
 
