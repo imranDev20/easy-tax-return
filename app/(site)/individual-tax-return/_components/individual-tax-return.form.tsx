@@ -1285,6 +1285,151 @@ const formFields: FormField[] = [
     height: 18,
     imageIndex: 5,
   },
+  {
+    name: "lifeInsurancePremium",
+    type: "text",
+    label: "lifeInsurancePremium",
+
+    x: 795,
+    y: 195,
+    width: 145,
+    height: 18,
+    imageIndex: 6,
+  },
+  {
+    name: "contributionToDeposit",
+    type: "text",
+    label: "contributionToDeposit",
+
+    x: 795,
+    y: 215,
+    width: 145,
+    height: 18,
+    imageIndex: 6,
+  },
+  {
+    name: "investmentInGovernmentSecurities1",
+    type: "text",
+    label: "investmentInGovernmentSecurities1",
+
+    x: 490,
+    y: 248,
+    width: 305,
+    height: 18,
+    imageIndex: 6,
+  },
+  {
+    name: "investmentInGovernmentSecurities2",
+    type: "text",
+    label: "investmentInGovernmentSecurities2",
+
+    x: 795,
+    y: 232,
+    width: 145,
+    height: 35,
+    imageIndex: 6,
+  },
+  {
+    name: "investmentInSecurities",
+    type: "text",
+    label: "investmentInSecurities",
+
+    x: 795,
+    y: 265,
+    width: 145,
+    height: 20,
+    imageIndex: 6,
+  },
+  {
+    name: "contributionToProvidentFund",
+    type: "text",
+    label: "contributionToProvidentFund",
+
+    x: 795,
+    y: 284,
+    width: 145,
+    height: 20,
+    imageIndex: 6,
+  },
+  {
+    name: "SelfAndEmployersContribution",
+    type: "text",
+    label: "SelfAndEmployersContribution",
+
+    x: 795,
+    y: 306,
+    width: 145,
+    height: 20,
+    imageIndex: 6,
+  },
+  {
+    name: "contributionToSuperAnnuationFund",
+    type: "text",
+    label: "contributionToSuperAnnuationFund",
+
+    x: 795,
+    y: 324,
+    width: 145,
+    height: 20,
+    imageIndex: 6,
+  },
+  {
+    name: "contributionToBenevolentFund",
+    type: "text",
+    label: "contributionToBenevolentFund",
+
+    x: 795,
+    y: 344,
+    width: 145,
+    height: 20,
+    imageIndex: 6,
+  },
+  {
+    name: "contributionToZakatFund1",
+    type: "text",
+    label: "contributionToZakatFund1",
+
+    x: 380,
+    y: 364,
+    width: 415,
+    height: 20,
+    imageIndex: 6,
+  },
+ 
+  {
+    name: "contributionToZakatFund2",
+    type: "text",
+    label: "contributionToZakatFund2",
+
+    x: 795,
+    y: 364,
+    width: 145,
+    height: 20,
+    imageIndex: 6,
+  },
+  {
+    name: "OthersIf1",
+    type: "text",
+    label: "OthersIf1",
+
+    x: 395,
+    y: 382,
+    width: 400,
+    height: 20,
+    imageIndex: 6,
+  },
+   
+  {
+    name: "OthersIf2",
+    type: "text",
+    label: "OthersIf2",
+
+    x: 795,
+    y: 382,
+    width: 145,
+    height: 20,
+    imageIndex: 6,
+  },
 ];
 
 const IndividualTaxReturnForm: React.FC = () => {
