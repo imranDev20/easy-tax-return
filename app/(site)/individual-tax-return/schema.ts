@@ -117,6 +117,7 @@ export const individualTaxReturnSchema = z.object({
   openingCapital: z.string().optional(),
   withdrawalsInTheIncomeYear: z.string().optional(),
   liabilities: z.string().optional(),
+  
   interestProfitFromBankFIAmount: z.string().optional(),
   interestProfitFromBankFIDeductions: z.string().optional(),
   interestProfitFromBankFITax: z.string().optional(),
