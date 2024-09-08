@@ -812,6 +812,39 @@ const formFields: FormField[] = [
     height: 19,
     imageIndex: 4,
   },
+  {
+    name: "salesTurnoverReceipt",
+    type: "text",
+    label: "salesTurnoverReceipt",
+
+    x: 844,
+    y: 765,
+    width: 95,
+    height: 20,
+    imageIndex: 4,
+  },
+  {
+    name: "grossProfit",
+    type: "text",
+    label: "grossProfit",
+
+    x: 844,
+    y: 785,
+    width: 95,
+    height: 20,
+    imageIndex: 4,
+  },
+  {
+    name: "generalExpensesSellingExpenses",
+    type: "text",
+    label: "generalExpensesSellingExpenses",
+
+    x: 844,
+    y: 805,
+    width: 95,
+    height: 34,
+    imageIndex: 4,
+  },
 ];
 
 const IndividualTaxReturnForm: React.FC = () => {
