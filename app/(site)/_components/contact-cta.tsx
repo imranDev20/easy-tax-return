@@ -15,7 +15,7 @@ export default function ContactCTA() {
           planning starts by <br /> reaching out to one of our representatives.
         </p>
         <Link href="#" className="">
-          <Button className="rounded-none inline-flex items-center uppercase bg-white text-primary py-5 px-6 hover:bg-gray-200">
+          <Button className="inline-flex items-center uppercase bg-white text-primary py-5 px-6 hover:bg-gray-200">
             <LuPhone className="mr-2" />
             Contact Us
           </Button>

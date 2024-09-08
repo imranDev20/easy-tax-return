@@ -57,7 +57,7 @@ const AboutUs = () => {
             <span className="text-gray-400 mr-4 mb-4 lg:mb-0">
               Still not confident?
             </span>
-            <Button className="inline-flex items-center text-white px-4 transition duration-300 py-5 rounded-none">
+            <Button className="inline-flex items-center text-white px-4 transition duration-300 py-5">
               <Phone className="mr-2 w-5 h-5" />
               CONTACT US
             </Button>
