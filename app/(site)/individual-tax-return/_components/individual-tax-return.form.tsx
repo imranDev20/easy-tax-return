@@ -34,6 +34,7 @@ import ImageSix from "@/public/images/6.png";
 import ImageSeven from "@/public/images/7.png";
 import ImageEight from "@/public/images/8.png";
 import ImageNine from "@/public/images/9.png";
+import ImageTen from "@/public/images/10.png";
 
 // Define the possible field types
 type FieldType =
@@ -126,6 +127,7 @@ const images = [
   ImageSeven,
   ImageEight,
   ImageNine,
+  ImageTen,
 ];
 
 const formFields: FormField[] = [
@@ -1860,6 +1862,715 @@ const formFields: FormField[] = [
     height: 18,
     imageIndex: 8,
   },
+  {
+    name: "totalAssetOfBusiness",
+    type: "text",
+    label: "totalAssetOfBusiness",
+
+    x: 640,
+    y: 710,
+    width: 135,
+    height: 18,
+    imageIndex: 8,
+  },
+  {
+    name: "lessBusinessLiabilities",
+    type: "text",
+    label: "lessBusinessLiabilities",
+
+    x: 640,
+    y: 728,
+    width: 135,
+    height: 18,
+    imageIndex: 8,
+  },
+  {
+    name: "companyName1",
+    type: "text",
+    label: "companyName1",
+
+    x: 185,
+    y: 800,
+    width: 320,
+    height: 18,
+    imageIndex: 8,
+  },
+  {
+    name: "companyName2",
+    type: "text",
+    label: "companyName2",
+
+    x: 185,
+    y: 818,
+    width: 320,
+    height: 18,
+    imageIndex: 8,
+  },
+  {
+    name: "companyName3",
+    type: "text",
+    label: "companyName3",
+
+    x: 185,
+    y: 834,
+    width: 320,
+    height: 18,
+    imageIndex: 8,
+  },
+  {
+    name: "noOfShare1",
+    type: "text",
+    label: "noOfShare1",
+
+    x: 505,
+    y: 800,
+    width: 135,
+    height: 18,
+    imageIndex: 8,
+  },
+  {
+    name: "noOfShare2",
+    type: "text",
+    label: "noOfShare2",
+
+    x: 505,
+    y: 818,
+    width: 135,
+    height: 18,
+    imageIndex: 8,
+  },
+  {
+    name: "noOfShare3",
+    type: "text",
+    label: "noOfShare3",
+
+    x: 505,
+    y: 834,
+    width: 135,
+    height: 18,
+    imageIndex: 8,
+  },
+  {
+    name: "value1",
+    type: "text",
+    label: "value1",
+
+    x: 640,
+    y: 800,
+    width: 135,
+    height: 18,
+    imageIndex: 8,
+  },
+  {
+    name: "value2",
+    type: "text",
+    label: "value2",
+
+    x: 640,
+    y: 818,
+    width: 135,
+    height: 18,
+    imageIndex: 8,
+  },
+  {
+    name: "value3",
+    type: "text",
+    label: "value3",
+
+    x: 640,
+    y: 834,
+    width: 135,
+    height: 18,
+    imageIndex: 8,
+  },
+  {
+    name: "nameOfPartnershipFirm1",
+    type: "text",
+    label: "nameOfPartnershipFirm1",
+
+    x: 185,
+    y: 903,
+    width: 320,
+    height: 18,
+    imageIndex: 8,
+  },
+  {
+    name: "nameOfPartnershipFirm2",
+    type: "text",
+    label: "nameOfPartnershipFirm2",
+
+    x: 185,
+    y: 922,
+    width: 320,
+    height: 18,
+    imageIndex: 8,
+  },
+  {
+    name: "nameOfPartnershipFirm3",
+    type: "text",
+    label: "nameOfPartnershipFirm3",
+
+    x: 185,
+    y: 938,
+    width: 320,
+    height: 18,
+    imageIndex: 8,
+  },
+
+  {
+    name: "shareOfProfit1",
+    type: "text",
+    label: "shareOfProfit1",
+
+    x: 505,
+    y: 903,
+    width: 135,
+    height: 18,
+    imageIndex: 8,
+  },
+  {
+    name: "shareOfProfit2",
+    type: "text",
+    label: "shareOfProfit2",
+
+    x: 505,
+    y: 922,
+    width: 135,
+    height: 18,
+    imageIndex: 8,
+  },
+  {
+    name: "shareOfProfit3",
+    type: "text",
+    label: "shareOfProfit3",
+
+    x: 505,
+    y: 938,
+    width: 135,
+    height: 18,
+    imageIndex: 8,
+  },
+  {
+    name: "capitalContributed1",
+    type: "text",
+    label: "capitalContributed1",
+
+    x: 640,
+    y: 903,
+    width: 135,
+    height: 18,
+    imageIndex: 8,
+  },
+  {
+    name: "capitalContributed2",
+    type: "text",
+    label: "capitalContributed2",
+
+    x: 640,
+    y: 922,
+    width: 135,
+    height: 18,
+    imageIndex: 8,
+  },
+  {
+    name: "capitalContributed3",
+    type: "text",
+    label: "capitalContributed3",
+
+    x: 640,
+    y: 938,
+    width: 135,
+    height: 18,
+    imageIndex: 8,
+  },
+  {
+    name: "locationDescription1",
+    type: "text",
+    label: "locationDescription1",
+
+    x: 185,
+    y: 130,
+    width: 455,
+    height: 18,
+    imageIndex: 9,
+  },
+  {
+    name: "locationDescription2",
+    type: "text",
+    label: "locationDescription2",
+
+    x: 185,
+    y: 148,
+    width: 455,
+    height: 18,
+    imageIndex: 9,
+  },
+  {
+    name: "locationDescription3",
+    type: "text",
+    label: "locationDescription3",
+
+    x: 185,
+    y: 165,
+    width: 455,
+    height: 18,
+    imageIndex: 9,
+  },
+  {
+    name: "locationDescription4",
+    type: "text",
+    label: "locationDescription4",
+
+    x: 185,
+    y: 183,
+    width: 455,
+    height: 18,
+    imageIndex: 9,
+  },
+  {
+    name: "locationDescription5",
+    type: "text",
+    label: "locationDescription5",
+
+    x: 185,
+    y: 202,
+    width: 455,
+    height: 18,
+    imageIndex: 9,
+  },
+  {
+    name: "locationValue1",
+    type: "text",
+    label: "locationValue1",
+
+    x: 638,
+    y: 130,
+    width: 135,
+    height: 18,
+    imageIndex: 9,
+  },
+  {
+    name: "locationValue2",
+    type: "text",
+    label: "locationValue2",
+
+    x: 638,
+    y: 148,
+    width: 135,
+    height: 18,
+    imageIndex: 9,
+  },
+  {
+    name: "locationValue3",
+    type: "text",
+    label: "locationValue3",
+
+    x: 638,
+    y: 166,
+    width: 135,
+    height: 18,
+    imageIndex: 9,
+  },
+  {
+    name: "locationValue4",
+    type: "text",
+    label: "locationValue4",
+
+    x: 638,
+    y: 184,
+    width: 135,
+    height: 18,
+    imageIndex: 9,
+  },
+  {
+    name: "locationValue5",
+    type: "text",
+    label: "locationValue5",
+
+    x: 638,
+    y: 202,
+    width: 135,
+    height: 18,
+    imageIndex: 9,
+  },
+
+  {
+    name: "agriculturalLocationAndDescription1",
+    type: "text",
+    label: "agriculturalLocationAndDescription1",
+
+    x: 185,
+    y: 272,
+    width: 455,
+    height: 18,
+    imageIndex: 9,
+  },
+  {
+    name: "agriculturalLocationAndDescription2",
+    type: "text",
+    label: "agriculturalLocationAndDescription2",
+
+    x: 185,
+    y: 290,
+    width: 455,
+    height: 18,
+    imageIndex: 9,
+  },
+  {
+    name: "agriculturalLocationAndDescription3",
+    type: "text",
+    label: "agriculturalLocationAndDescription3",
+
+    x: 185,
+    y: 308,
+    width: 455,
+    height: 18,
+    imageIndex: 9,
+  },
+  {
+    name: "agriculturalLocationValue1",
+    type: "text",
+    label: "agriculturalLocationValue1",
+
+    x: 638,
+    y: 272,
+    width: 135,
+    height: 18,
+    imageIndex: 9,
+  },
+  {
+    name: "agriculturalLocationValue2",
+    type: "text",
+    label: "agriculturalLocationValue2",
+
+    x: 638,
+    y: 290,
+    width: 135,
+    height: 18,
+    imageIndex: 9,
+  },
+  {
+    name: "agriculturalLocationValue3",
+    type: "text",
+    label: "agriculturalLocationValue3",
+
+    x: 638,
+    y: 308,
+    width: 135,
+    height: 18,
+    imageIndex: 9,
+  },
+  {
+    name: "shareDebentureUnitCertificate",
+    type: "text",
+    label: "shareDebentureUnitCertificate",
+
+    x: 770,
+    y: 360,
+    width: 170,
+    height: 18,
+    imageIndex: 9,
+  },
+  {
+    name: "bondsGovernment",
+    type: "text",
+    label: "bondsGovernment",
+
+    x: 770,
+    y: 378,
+    width: 170,
+    height: 18,
+    imageIndex: 9,
+  },
+  {
+    name: "sanchayapatraSavingsCertificate",
+    type: "text",
+    label: "sanchayapatraSavingsCertificate",
+
+    x: 770,
+    y: 396,
+    width: 170,
+    height: 18,
+    imageIndex: 9,
+  },
+  {
+    name: "depositPensionScheme",
+    type: "text",
+    label: "depositPensionScheme",
+
+    x: 770,
+    y: 414,
+    width: 170,
+    height: 18,
+    imageIndex: 9,
+  },
+  {
+    name: "loansGivenToOthers",
+    type: "text",
+    label: "loansGivenToOthers",
+
+    x: 770,
+    y: 432,
+    width: 170,
+    height: 18,
+    imageIndex: 9,
+  },
+  {
+    name: "nidValue",
+    type: "text",
+    label: "nidValue",
+
+    x: 770,
+    y: 450,
+    width: 170,
+    height: 18,
+    imageIndex: 9,
+  },
+  {
+    name: "nid",
+    type: "text",
+    label: "nid",
+
+    x: 625,
+    y: 450,
+    width: 145,
+    height: 18,
+    imageIndex: 9,
+  },
+  {
+    name: "name",
+    type: "text",
+    label: "name",
+
+    x: 250,
+    y: 450,
+    width: 318,
+    height: 18,
+    imageIndex: 9,
+  },
+  
+  {
+    name: "savingDeposit",
+    type: "text",
+    label: "savingDeposit",
+
+    x: 770,
+    y: 468,
+    width: 170,
+    height: 18,
+    imageIndex: 9,
+  },
+  {
+    name: "providentFund",
+    type: "text",
+    label: "providentFund",
+
+    x: 770,
+    y: 484,
+    width: 170,
+    height: 18,
+    imageIndex: 9,
+  },
+  {
+    name: "otherInvestment1",
+    type: "text",
+    label: "otherInvestment1",
+
+    x: 370,
+    y: 502,
+    width: 402,
+    height: 18,
+    imageIndex: 9,
+  },
+  {
+    name: "otherInvestment2",
+    type: "text",
+    label: "otherInvestment2",
+
+    x: 770,
+    y: 502,
+    width: 170,
+    height: 18,
+    imageIndex: 9,
+  },
+  {
+    name: "typeOfMotorVehicle1",
+    type: "text",
+    label: "typeOfMotorVehicle1",
+
+    x: 185,
+    y: 573,
+    width: 225,
+    height: 18,
+    imageIndex: 9,
+  },
+  {
+    name: "typeOfMotorVehicle2",
+    type: "text",
+    label: "typeOfMotorVehicle2",
+
+    x: 185,
+    y: 590,
+    width: 225,
+    height: 18,
+    imageIndex: 9,
+  },
+  {
+    name: "registrationNumber1",
+    type: "text",
+    label: "registrationNumber1",
+
+    x: 410,
+    y: 573,
+    width: 215,
+    height: 18,
+    imageIndex: 9,
+  },
+  {
+    name: "registrationNumber2",
+    type: "text",
+    label: "registrationNumber2",
+
+    x: 410,
+    y: 590,
+    width: 215,
+    height: 18,
+    imageIndex: 9,
+  },
+  {
+    name: "motorValue1",
+    type: "text",
+    label: "motorValue1",
+
+    x: 625,
+    y: 573,
+    width: 150,
+    height: 18,
+    imageIndex: 9,
+  },
+  {
+    name: "motorValue2",
+    type: "text",
+    label: "motorValue2",
+
+    x: 625,
+    y: 590,
+    width: 150,
+    height: 18,
+    imageIndex: 9,
+  },
+  {
+    name: "ornaments1",
+    type: "text",
+    label: "ornaments1",
+
+    x: 420,
+    y: 610,
+    width: 355,
+    height: 18,
+    imageIndex: 9,
+  },
+  {
+    name: "ornaments2",
+    type: "text",
+    label: "ornaments2",
+
+    x: 770,
+    y: 610,
+    width: 170,
+    height: 18,
+    imageIndex: 9,
+  },
+  {
+    name: "furnitureAndElectronic",
+    type: "text",
+    label: "furnitureAndElectronic",
+
+    x: 770,
+    y: 628,
+    width: 170,
+    height: 18,
+    imageIndex: 9,
+  },
+  {
+    name: "othersAssets2",
+    type: "text",
+    label: "othersAssets2",
+
+    x: 770,
+    y: 645,
+    width: 170,
+    height: 18,
+    imageIndex: 9,
+  },
+  {
+    name: "othersAssets1",
+    type: "text",
+    label: "othersAssets1",
+
+    x: 550,
+    y: 645,
+    width: 220,
+    height: 18,
+    imageIndex: 9,
+  },
+  {
+    name: "bankBalance",
+    type: "text",
+    label: "bankBalance",
+
+    x: 620,
+    y: 680,
+    width: 155,
+    height: 18,
+    imageIndex: 9,
+  },
+  
+  {
+    name: "cashInHand",
+    type: "text",
+    label: "cashInHand",
+
+    x: 620,
+    y: 698,
+    width: 155,
+    height: 18,
+    imageIndex: 9,
+  },
+  {
+    name: "others2",
+    type: "text",
+    label: "others2",
+
+    x: 620,
+    y: 715,
+    width: 155,
+    height: 18,
+    imageIndex: 9,
+  },
+  {
+    name: "others1",
+    type: "text",
+    label: "others1",
+
+    x: 300,
+    y: 715,
+    width: 320,
+    height: 18,
+    imageIndex: 9,
+  },
+  {
+    name: "assetOutsideBangladesh",
+    type: "text",
+    label: "assetOutsideBangladesh",
+
+    x: 770,
+    y: 768,
+    width: 170,
+    height: 18,
+    imageIndex: 9,
+  },
+  
 ];
 
 const IndividualTaxReturnForm: React.FC = () => {
