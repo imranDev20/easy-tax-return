@@ -35,6 +35,8 @@ import ImageSeven from "@/public/images/7.png";
 import ImageEight from "@/public/images/8.png";
 import ImageNine from "@/public/images/9.png";
 import ImageTen from "@/public/images/10.png";
+import ImageEleven from "@/public/images/11.png";
+import ImageTwelve from "@/public/images/12.png";
 
 // Define the possible field types
 type FieldType =
@@ -128,6 +130,8 @@ const images = [
   ImageEight,
   ImageNine,
   ImageTen,
+  ImageEleven,
+  ImageTwelve
 ];
 
 const formFields: FormField[] = [
