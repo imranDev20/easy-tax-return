@@ -88,10 +88,10 @@ export const individualTaxReturnSchema = z.object({
   vacancyAllowance: z.string().optional(),
   repairCollection: z
     .enum([
-      "COMMERCIAL_PROPERTY",
-      "NON_-COMMERCIAL",
-      "RESIDENTIAL_PROPERTY",
-      "MIXED_PROPERTY",
+      "Commercial property",
+      "Non-commercial",
+      "Residential property",
+      "Mixed property",
     ])
     .optional(),
   municipalOrLocalTax: z.string().optional(),
@@ -117,6 +117,7 @@ export const individualTaxReturnSchema = z.object({
   openingCapital: z.string().optional(),
   withdrawalsInTheIncomeYear: z.string().optional(),
   liabilities: z.string().optional(),
+
   interestProfitFromBankFIAmount: z.string().optional(),
   interestProfitFromBankFIDeductions: z.string().optional(),
   interestProfitFromBankFITax: z.string().optional(),
@@ -211,6 +212,7 @@ export const individualTaxReturnSchema = z.object({
 
   total: z.string().optional(),
 
+  exemptedIncomeFromSalary: z.string().optional(),
   exemptedIncomeFromBusiness: z.string().optional(),
 
   exemptedAgriculturalIncome: z.string().optional(),
@@ -225,7 +227,8 @@ export const individualTaxReturnSchema = z.object({
   typeOfReceiptsAmount1: z.string().optional(),
   typeOfReceiptsAmount2: z.string().optional(),
   typeOfReceiptsAmount3: z.string().optional(),
-  netWealthLastDate: z.enum(["YES", "NO_I_AM_A_NEW_TAXPAYER"]),
+  netWealthLastDate: z.enum(["Yes", "No, I am a new Tax Payer"]),
+  netWealthLastDateAmount: z.string().optional(),
 
   giftExpense: z.string().optional(),
   institutionalLiabilities: z.string().optional(),
