@@ -1,0 +1,266 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("POSTGRES_PRISMA_URL")
+}
+
+enum ResidentialStatus {
+  RESIDENT
+  NON_RESIDENT
+}
+
+enum SpecialBenefits {
+  NONE
+  GAZETTED_WAR_WOUNDED_FREEDOM_FIGHTER
+  FEMALE
+  THIRD_GENDER
+  DISABLED_PERSON
+  AGED_65_OR_MORE
+}
+
+enum MinimumTax {
+  DHAKA_CHATTOGRAM_CITY_CORPORATION_AREA
+  OTHER_CITY_CORPORATION_AREA
+  OTHER_AREA
+}
+
+enum RepairCollection {
+  COMMERCIAL_PROPERTY
+  NON_COMMERCIAL
+  RESIDENTIAL_PROPERTY
+  MIXED_PROPERTY
+}
+
+enum NetWealthLastDate {
+  YES
+  NO_I_AM_A_NEW_TAXPAYER
+}
+
+model IndividualTaxes {
+  id                                               String            @id @default(cuid())
+  userId                                           String // user id from firebsae
+  taxpayerName                                     String
+  nationalId                                       String
+  tin                                              String
+  circle                                           String
+  zone                                             String
+  residentialStatus                                ResidentialStatus
+  specialBenefits                                  SpecialBenefits?
+  isParentOfDisabledPerson                         Boolean?
+  dateOfBirth                                      DateTime
+  spouseName                                       String?
+  spouseTin                                        String?
+  addressLine1                                     String
+  addressLine2                                     String?
+  telephone                                        String?
+  mobile                                           String
+  email                                            String
+  employerName                                     String?
+  businessName                                     String?
+  bin                                              String?
+  partnerName                                      String?
+  partnerTin                                       String?
+  specialFarmingIncome                             Boolean
+  incomeOfMinor                                    String?
+  partnersMembersAssociation1                      String?
+  partnersMembersAssociation2                      String?
+  incomeYearEndedOn                                DateTime?
+  incomeFishFarming                                Boolean?
+  incomeFishFarmingAmount                          String?
+  shareOfIncomeFromAOP                             String?
+  taxableIncomeFromAbroad                          String?
+  minimumTax                                       MinimumTax
+  netWealthSurcharge                               Boolean
+  environmentalSurcharge                           String?
+  delayInterest                                    String?
+  advanceTaxPaidAmount                             String?
+  adjustmentOfTaxRefund                            String?
+  taxPaidWithThisReturn                            String
+  listOfDocumentsFurnishedWithThisReturn1          String?
+  listOfDocumentsFurnishedWithThisReturn2          String?
+  fatherOrHusband                                  String
+  placeOfSignature                                 String?
+  signature                                        String?
+  dateOfSignature                                  DateTime
+  incomeFromEmployment                             Boolean
+  privateOrganization                              String
+  government                                       String
+  taxDeductedSourceIncomeFromEmployment            String
+  locationDescriptionOwnershipProportionOfProperty String?
+  rentReceivedOrAnnualValue                        String?
+  advanceRentReceived                              String?
+  valueOfAnyBenefit                                String?
+  adjustedAdvanceRent                              String?
+  vacancyAllowance                                 String?
+  repairCollection                                 RepairCollection?
+  municipalOrLocalTax                              String?
+  landRevenue                                      String?
+  interestMortgageCapitalCharge                    String?
+  insurancePremiumPaid                             String?
+  others                                           String?
+  TaxpayersShare                                   String
+  taxDeductedSourceFromIncomeRent                  String?
+  salesTurnoverReceipt                             String?
+  grossProfit                                      String?
+  generalExpensesSellingExpenses                   String?
+  nameOfBusiness                                   String?
+  natureOfBusiness                                 String?
+  addressOfBusiness                                String?
+  salesTurnoverReceipts                            String?
+  grossProfitAmount                                String?
+  generalAdministrativeSellingExpenses             String?
+  badDebtExpense                                   String?
+  inventories                                      String?
+  fixedAssets                                      String?
+  otherAssets                                      String?
+  openingCapital                                   String?
+  withdrawalsInTheIncomeYear                       String?
+  liabilities                                      String?
+  interestProfitFromBankFIAmount                   String?
+  interestProfitFromBankFIDeductions               String?
+  interestProfitFromBankFITax                      String?
+  incomeFromSavingCertificatesAmount               String?
+  incomeFromSavingCertificatesDeductions           String?
+  incomeFromSavingCertificatesTax                  String?
+  incomeFromSecuritiesDebenturesAmount             String?
+  incomeFromSecuritiesDebenturesDeductions         String?
+  incomeFromSecuritiesDebenturesTax                String?
+  incomeFromFinancialProductSchemeAmount           String?
+  incomeFromFinancialProductSchemeDeductions       String?
+  incomeFromFinancialProductSchemeTax              String?
+  dividendIncomeAmount                             String?
+  dividendIncomeDeductions                         String?
+  dividendIncomeTax                                String?
+  capitalGainFromTransferOfPropertyAmount          String?
+  capitalGainFromTransferOfPropertyDeductions      String?
+  capitalGainFromTransferOfPropertyTax             String?
+  incomeFromBusinessAmount                         String?
+  incomeFromBusinessDeductions                     String?
+  incomeFromBusinessTax                            String?
+  workersParticipationFundAmount                   String?
+  workersParticipationFundDeductions               String?
+  workersParticipationFundTax                      String?
+  incomeFromOtherSourcesAmount                     String?
+  incomeFromOtherSourcesDeductions                 String?
+  incomeFromOtherSourcesTax                        String?
+  lifeInsurancePremium                             String?
+  contributionToDeposit                            String?
+  investmentInGovernmentSecurities1                String?
+  investmentInGovernmentSecurities2                String?
+  investmentInSecurities                           String?
+  contributionToProvidentFund                      String?
+  SelfAndEmployersContribution                     String?
+  contributionToSuperAnnuationFund                 String?
+  contributionToBenevolentFund                     String?
+  contributionToZakatFund1                         String?
+  contributionToZakatFund2                         String?
+  OthersIf1                                        String?
+  OthersIf2                                        String?
+  expensesForFoodAmount                            String?
+  expensesForFoodComment                           String?
+  housingExpenseAmount                             String?
+  housingExpenseComment                            String?
+  personalTransportationExpensesAmount             String?
+  personalTransportationExpensesAmountComment      String?
+  utilityExpenseAmount                             String?
+  utilityExpenseComment                            String?
+  educationExpensesAmount                          String?
+  educationExpensesComment                         String?
+  personalExpenseAmount                            String?
+  personalExpenseComment                           String?
+  festivalExpenseAmount                            String?
+  festivalExpenseComment                           String?
+  taxDeductedAmount                                String?
+  taxDeductedComment                               String?
+  advanceTaxPaid2Amount                            String?
+  advanceTaxPaidComment                            String?
+  taxSurchargePaidAmount                           String?
+  taxSurchargePaidComment                          String?
+  interestPaidAmount                               String?
+  interestPaidComment                              String?
+  total                                            String?
+  exemptedIncomeFromBusiness                       String?
+  exemptedAgriculturalIncome                       String?
+  incomeFromProvidentFund                          String?
+  foreignRemittance                                String?
+  typeOfReceipts1                                  String?
+  typeOfReceipts2                                  String?
+  typeOfReceipts3                                  String?
+  typeOfReceiptsAmount1                            String?
+  typeOfReceiptsAmount2                            String?
+  typeOfReceiptsAmount3                            String?
+  netWealthLastDate                                NetWealthLastDate
+  giftExpense                                      String?
+  institutionalLiabilities                         String?
+  nonInstitutionalLiabilities                      String?
+  otherLiabilities                                 String?
+  totalAssetOfBusiness                             String?
+  lessBusinessLiabilities                          String?
+  companyName1                                     String?
+  companyName2                                     String?
+  companyName3                                     String?
+  noOfShare1                                       String?
+  noOfShare2                                       String?
+  noOfShare3                                       String?
+  value1                                           String?
+  value2                                           String?
+  value3                                           String?
+  nameOfPartnershipFirm1                           String?
+  nameOfPartnershipFirm2                           String?
+  nameOfPartnershipFirm3                           String?
+  shareOfProfit1                                   String?
+  shareOfProfit2                                   String?
+  shareOfProfit3                                   String?
+  capitalContributed1                              String?
+  capitalContributed2                              String?
+  capitalContributed3                              String?
+  locationDescription1                             String?
+  locationDescription2                             String?
+  locationDescription3                             String?
+  locationDescription4                             String?
+  locationDescription5                             String?
+  locationValue1                                   String?
+  locationValue2                                   String?
+  locationValue3                                   String?
+  locationValue4                                   String?
+  locationValue5                                   String?
+  agriculturalLocationAndDescription1              String?
+  agriculturalLocationAndDescription2              String?
+  agriculturalLocationAndDescription3              String?
+  agriculturalLocationValue1                       String?
+  agriculturalLocationValue2                       String?
+  agriculturalLocationValue3                       String?
+  shareDebentureUnitCertificate                    String?
+  bondsGovernment                                  String?
+  sanchayapatraSavingsCertificate                  String?
+  depositPensionScheme                             String?
+  loansGivenToOthers                               String?
+  name                                             String?
+  nid                                              String?
+  nidValue                                         String?
+  savingDeposit                                    String?
+  providentFund                                    String?
+  otherInvestment1                                 String?
+  otherInvestment2                                 String?
+  typeOfMotorVehicle1                              String?
+  typeOfMotorVehicle2                              String?
+  registrationNumber1                              String?
+  registrationNumber2                              String?
+  motorValue1                                      String?
+  motorValue2                                      String?
+  ornaments1                                       String?
+  ornaments2                                       String?
+  furnitureAndElectronic                           String?
+  othersAssets1                                    String?
+  othersAssets2                                    String?
+  bankBalance                                      String?
+  cashInHand                                       String?
+  others1                                          String?
+  others2                                          String?
+  assetOutsideBangladesh                           String?
+  createdAt                                        DateTime          @default(now())
+  updatedAt                                        DateTime          @updatedAt
+}

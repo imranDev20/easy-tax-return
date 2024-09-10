@@ -1,11 +1,13 @@
 "use client";
 import React, { useState, useEffect, useMemo } from "react";
 import { Button } from "@/components/ui/button";
-import { Phone } from "lucide-react";
+import { LogIn, Phone } from "lucide-react";
+import LoginForm from "../login/_components/login-form";
 
 export default function Header() {
   const [activeSection, setActiveSection] = useState("home");
   const [isScrolled, setIsScrolled] = useState(false);
+  const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
 
   const NAV_OPTIONS = useMemo(
     () => [
@@ -92,7 +94,6 @@ export default function Header() {
                   href={`#${item.link}`}
                   onClick={(e) => handleSmoothScroll(e, item.link)}
                   className={`transition-colors duration-300
-                  
                     ${activeSection === item.link ? "text-primary" : ""}`}
                 >
                   {item.label}
@@ -101,13 +102,18 @@ export default function Header() {
             ))}
           </ul>
           <Button
-            className={`ml-10 uppercase p-5 flex items-center transition-colors duration-300`}
+            className="ml-10 uppercase p-5 flex items-center transition-colors duration-300"
+            onClick={() => setIsLoginModalOpen(true)}
           >
-            <Phone className="w-5 h-5 mr-2" />
-            Contact Us
+            <LogIn className="w-5 h-5 mr-2" />
+            Login
           </Button>
         </div>
       </div>
+      <LoginForm
+        isOpen={isLoginModalOpen}
+        onClose={() => setIsLoginModalOpen(false)}
+      />
     </header>
   );
 }
