@@ -1,19 +1,9 @@
 "use client";
 
-import Link from "next/link";
 import { Ellipsis, LogOut } from "lucide-react";
+import Link from "next/link";
 import { usePathname } from "next/navigation";
 
-import { cn } from "@/lib/utils";
-import { getMenuList } from "@/lib/menu-list";
-import { Button } from "@/components/ui/button";
-import { ScrollArea } from "@/components/ui/scroll-area";
-import {
-  Tooltip,
-  TooltipTrigger,
-  TooltipContent,
-  TooltipProvider,
-} from "@/components/ui/tooltip";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -22,12 +12,21 @@ import {
   AlertDialogDescription,
   AlertDialogFooter,
   AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
+  AlertDialogTitle
 } from "@/components/ui/alert-dialog";
+import { Button } from "@/components/ui/button";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+import { getMenuList } from "@/lib/menu-list";
+import { cn } from "@/lib/utils";
 
-import { CollapseMenuButton } from "./collapse-menu-button";
 import { useState } from "react";
+import { CollapseMenuButton } from "./collapse-menu-button";
 
 interface MenuProps {
   isOpen: boolean | undefined;

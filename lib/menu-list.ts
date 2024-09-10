@@ -43,34 +43,15 @@ export function getMenuList(pathname: string): Group[] {
       groupLabel: "Management",
       menus: [
         {
-          href: "/tax-return",
-          label: "Tax Return",
-          active: pathname.includes("/tax-return"),
+          href: "/tax-returns",
+          label: "Tax Returns",
+          active: pathname.includes("/tax-returns"),
           icon: ShoppingCart,
           submenus: [],
-        },
-        {
-          href: "/users",
-          label: "Users",
-          active: pathname.includes("/users"),
-          icon: Users,
-          submenus: [],
-        },
-       
+        },              
       ],
     },
 
-    {
-      groupLabel: "Configuration",
-      menus: [
-        {
-          href: "/settings",
-          label: "Settings",
-          active: pathname.includes("/settings"),
-          icon: Cog,
-          submenus: [],
-        },
-      ],
-    },
+    
   ];
 }
