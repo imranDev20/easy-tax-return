@@ -1,15 +1,17 @@
 "use client";
 
-import Image from "next/image";
-import React, { useState, useRef, useEffect, useCallback } from "react";
-import { useForm, SubmitHandler, Controller } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
 import { RadioGroup } from "@/components/custom/radio";
 import CustomSelect from "@/components/custom/select";
+import { zodResolver } from "@hookform/resolvers/zod";
+import Image from "next/image";
+import React, { useCallback, useEffect, useRef, useState, useTransition } from "react";
+import { Controller, SubmitHandler, useForm } from "react-hook-form";
 
-import "flatpickr/dist/themes/airbnb.css";
 import CustomDatePicker from "@/components/custom/date-picker";
+import SignatureField from "@/components/custom/signature";
 import { Button } from "@/components/ui/button";
+import { isFieldRequired, snakeToNormalText } from "@/lib/utils";
+import "flatpickr/dist/themes/airbnb.css";
 import {
   ArrowLeft,
   ArrowRight,
@@ -18,14 +20,16 @@ import {
   ZoomIn,
   ZoomOut,
 } from "lucide-react";
-import SignatureField from "@/components/custom/signature";
 import {
   IndividualTaxReturnFormInput,
   individualTaxReturnSchema,
 } from "../schema";
-import { isFieldRequired } from "@/lib/utils";
 
+import { CALCULATE_OPTION, MINIMUM_TAX_OPTIONS, NET_WEALTH_LAST_DATE, NET_WEALTH_SURCHARGE_OPTIONS, REPAIR_COLLECTION_OPTIONS } from "@/lib/constants";
 import ImageOne from "@/public/images/1.png";
+import ImageTen from "@/public/images/10.png";
+import ImageEleven from "@/public/images/11.png";
+import ImageTwelve from "@/public/images/12.png";
 import ImageTwo from "@/public/images/2.png";
 import ImageThree from "@/public/images/3.png";
 import ImageFour from "@/public/images/4.png";
@@ -34,9 +38,9 @@ import ImageSix from "@/public/images/6.png";
 import ImageSeven from "@/public/images/7.png";
 import ImageEight from "@/public/images/8.png";
 import ImageNine from "@/public/images/9.png";
-import ImageTen from "@/public/images/10.png";
-import ImageEleven from "@/public/images/11.png";
-import ImageTwelve from "@/public/images/12.png";
+import { createIndividualTaxReturn } from "../actions";
+import { useToast } from "@/hooks/use-toast";
+import { useRouter } from "next/navigation";
 
 // Define the possible field types
 type FieldType =
@@ -107,7 +111,10 @@ interface SignatureFormField extends BaseFormField {
 }
 
 type OtherFormField = Omit<BaseFormField, "type"> & {
-  type: Exclude<FieldType, "radio" | "select" | "date" | "signature" | "textarea">;
+  type: Exclude<
+    FieldType,
+    "radio" | "select" | "date" | "signature" | "textarea"
+  >;
 };
 
 type FormField =
@@ -116,8 +123,7 @@ type FormField =
   | DateFormField
   | SignatureFormField
   | OtherFormField
-  |TextAreaFormField;
-  
+  | TextAreaFormField;
 
 const images = [
   ImageOne,
@@ -131,7 +137,7 @@ const images = [
   ImageNine,
   ImageTen,
   ImageEleven,
-  ImageTwelve
+  ImageTwelve,
 ];
 
 const formFields: FormField[] = [
@@ -195,7 +201,7 @@ const formFields: FormField[] = [
     options: [
       {
         label: "Option 1",
-        value: "Resident",
+        value: "RESIDENT",
         x: 712,
         y: 416,
         width: 45,
@@ -203,7 +209,7 @@ const formFields: FormField[] = [
       },
       {
         label: "Option 2",
-        value: "Non-resident",
+        value: "NON_RESIDENT",
         x: 890,
         y: 416,
         width: 45,
@@ -223,7 +229,7 @@ const formFields: FormField[] = [
     options: [
       {
         label: "Option 1",
-        value: "GazettedWarWoundedFreedomFighter",
+        value: "GAZETTED_WAR_WOUNDED_FREEDOM_FIGHTER",
         x: 490,
         y: 470,
         width: 49,
@@ -231,7 +237,7 @@ const formFields: FormField[] = [
       },
       {
         label: "Option 2",
-        value: "Female",
+        value: "FEMALE",
         x: 888,
         y: 470,
         width: 49,
@@ -239,7 +245,7 @@ const formFields: FormField[] = [
       },
       {
         label: "Option 3",
-        value: "ThirdGender",
+        value: "THIRD_GENDER",
         x: 490,
         y: 505,
         width: 49,
@@ -247,7 +253,7 @@ const formFields: FormField[] = [
       },
       {
         label: "Option 4",
-        value: "DisabledPerson",
+        value: "DISABLED_PERSON",
         x: 888,
         y: 505,
         width: 49,
@@ -256,7 +262,7 @@ const formFields: FormField[] = [
 
       {
         label: "Option 5",
-        value: "Aged65OrMore",
+        value: "AGED_65_OR_MORE",
         x: 490,
         y: 540,
         width: 49,
@@ -499,17 +505,11 @@ const formFields: FormField[] = [
     type: "select",
     label: "Choose One",
     placeholder: "Minimum Tax Area",
-    options: [
-      {
-        label: "Dhaka / Chattogram City Corporation Area",
-        value: "Dhaka/ChattogramCityCorporationArea",
-      },
-      {
-        label: "Other City Corporation Area",
-        value: "OtherCityCorporationArea",
-      },
-      { label: "Other Area", value: "OtherArea" },
-    ],
+    options: MINIMUM_TAX_OPTIONS.map((minimumTax) => ({
+      label: snakeToNormalText(minimumTax),
+      value: minimumTax,
+    })),
+
     x: 270,
     y: 708,
     width: 350,
@@ -522,10 +522,10 @@ const formFields: FormField[] = [
     label: "Choose One",
     placeholder:
       "Do you have more than one motor vehicle or more than 8000 sqft house property/properties (in city corporation area)?",
-    options: [
-      { label: "Yes", value: "Yes" },
-      { label: "No", value: "No" },
-    ],
+      options: NET_WEALTH_SURCHARGE_OPTIONS.map((netWealth) => ({
+        label: snakeToNormalText(netWealth),
+        value: netWealth,
+      })),
     x: 170,
     y: 780,
     width: 599,
@@ -554,14 +554,14 @@ const formFields: FormField[] = [
     imageIndex: 1,
   },
   {
-    name: "netWealthSurcharge",
+    name: "calculate",
     type: "select",
     label: "Choose One",
     placeholder: "placeholder",
-    options: [
-      { label: "Calculate", value: "Calculate" },
-      { label: "Re-Calculate", value: "Re-Calculate" },
-    ],
+    options: CALCULATE_OPTION.map((calculate) => ({
+      label: snakeToNormalText(calculate),
+      value: calculate,
+    })),
     x: 780,
     y: 885,
     width: 160,
@@ -644,6 +644,21 @@ const formFields: FormField[] = [
     width: 250,
     height: 29,
     imageIndex: 2,
+
+  },
+  {
+    name: "dateOfSignature",
+    type: "date",
+    label: "Date of Signature",
+
+    x: 538,
+    y: 910,
+    width: 397,
+    height: 29,
+    imageIndex: 2,
+    dayPosition: { x: 150, y: 920, width: 60, height: 29 },
+    monthPosition: { x: 220, y: 920, width: 60, height: 29 },
+    yearPosition: { x: 290, y: 920, width: 100, height: 29 },
   },
   {
     name: "locationDescriptionOwnershipProportionOfProperty",
@@ -716,25 +731,10 @@ const formFields: FormField[] = [
     type: "select",
     label: "Choose One",
     placeholder: "Choose One",
-    options: [     
-      {
-        label: "Commercial property",
-        value: "Commercial property",
-      },
-      {
-        label: "Non-commercial",
-        value: "Non-commercial",
-      },
-      {
-        label: "Residential property",
-        value: "Residential property",
-      },
-      {
-        label: "Mixed property",
-        value: "Mixed property",
-      },
-      
-    ],
+    options: REPAIR_COLLECTION_OPTIONS.map((repairCollection) => ({
+      label: snakeToNormalText(repairCollection),
+      value: repairCollection,
+    })),
     x: 640,
     y: 376,
     width: 110,
@@ -797,9 +797,9 @@ const formFields: FormField[] = [
     imageIndex: 4,
   },
   {
-    name: "TaxpayersShare",
+    name: "taxpayersShare",
     type: "text",
-    label: "TaxpayersShare",
+    label: "taxpayersShare",
 
     x: 655,
     y: 546,
@@ -1358,9 +1358,9 @@ const formFields: FormField[] = [
     imageIndex: 6,
   },
   {
-    name: "SelfAndEmployersContribution",
+    name: "selfAndEmployersContribution",
     type: "text",
-    label: "SelfAndEmployersContribution",
+    label: "selfAndEmployersContribution",
 
     x: 795,
     y: 306,
@@ -1401,7 +1401,7 @@ const formFields: FormField[] = [
     height: 20,
     imageIndex: 6,
   },
- 
+
   {
     name: "contributionToZakatFund2",
     type: "text",
@@ -1414,9 +1414,9 @@ const formFields: FormField[] = [
     imageIndex: 6,
   },
   {
-    name: "OthersIf1",
+    name: "othersIf1",
     type: "text",
-    label: "OthersIf1",
+    label: "othersIf1",
 
     x: 395,
     y: 382,
@@ -1424,11 +1424,11 @@ const formFields: FormField[] = [
     height: 20,
     imageIndex: 6,
   },
-   
+
   {
-    name: "OthersIf2",
+    name: "othersIf2",
     type: "text",
-    label: "OthersIf2",
+    label: "othersIf2",
 
     x: 795,
     y: 382,
@@ -1437,9 +1437,9 @@ const formFields: FormField[] = [
     imageIndex: 6,
   },
   {
-    name: "ExpensesForFoodAmount",
+    name: "expensesForFoodAmount",
     type: "text",
-    label: "ExpensesForFoodAmount",
+    label: "expensesForFoodAmount",
 
     x: 598,
     y: 205,
@@ -1448,9 +1448,9 @@ const formFields: FormField[] = [
     imageIndex: 7,
   },
   {
-    name: "ExpensesForFoodComment",
+    name: "expensesForFoodComment",
     type: "text",
-    label: "ExpensesForFoodComment",
+    label: "expensesForFoodComment",
 
     x: 732,
     y: 205,
@@ -1788,23 +1788,16 @@ const formFields: FormField[] = [
     height: 19,
     imageIndex: 7,
   },
- 
+
   {
     name: "netWealthLastDate",
     type: "select",
     label: "Did you file a tax return last year?",
     placeholder: "Did you file a tax return last year?",
-    options: [     
-      {
-        label: "Yes",
-        value: "Yes",
-      },
-      {
-        label: "No, I am a new Tax Payer",
-        value: "No, I am a new Tax Payer",
-      },      
-      
-    ],
+    options: NET_WEALTH_LAST_DATE.map((netWealthLastDate) => ({
+      label: snakeToNormalText(netWealthLastDate),
+      value: netWealthLastDate,
+    })),
     x: 580,
     y: 445,
     width: 194,
@@ -2352,7 +2345,7 @@ const formFields: FormField[] = [
     height: 18,
     imageIndex: 9,
   },
-  
+
   {
     name: "savingDeposit",
     type: "text",
@@ -2529,7 +2522,7 @@ const formFields: FormField[] = [
     height: 18,
     imageIndex: 9,
   },
-  
+
   {
     name: "cashInHand",
     type: "text",
@@ -2574,7 +2567,6 @@ const formFields: FormField[] = [
     height: 18,
     imageIndex: 9,
   },
-  
 ];
 
 const IndividualTaxReturnForm: React.FC = () => {
@@ -2593,7 +2585,7 @@ const IndividualTaxReturnForm: React.FC = () => {
     resolver: zodResolver(individualTaxReturnSchema),
     defaultValues: {},
   });
-
+console.log(`errors`, errors);
   useEffect(() => {
     const updateScale = () => {
       if (containerRef.current && imageRefs.current[0]) {
@@ -2625,10 +2617,43 @@ const IndividualTaxReturnForm: React.FC = () => {
       window.removeEventListener("scroll", handleScroll);
     };
   }, []);
+  const [isPending,startTransition] = useTransition();
+  const {toast} = useToast();
+  const router = useRouter();
 
   const onSubmit: SubmitHandler<IndividualTaxReturnFormInput> = (data) => {
     console.log(data);
     // Handle form submission
+    startTransition(async () => {
+      try {
+        const createData= {
+          ...data,
+          userId: "xyz123456",
+        }
+        const result = await createIndividualTaxReturn(createData);
+
+        if (result.success) {
+          toast({
+            title: "Success",
+            description: result.message,
+            variant: "success",
+          });
+          router.push("/admin");
+        } else {
+          toast({
+            title: "Error",
+            description: result.message,
+            variant: "destructive",
+          });
+        }
+      } catch (error) {
+        toast({
+          title: "Error",
+          description: "An unknown error occurred",
+          variant: "destructive",
+        });
+      }
+    });
   };
 
   const renderField = (field: FormField, imageIndex: number) => {
@@ -2736,23 +2761,23 @@ const IndividualTaxReturnForm: React.FC = () => {
             />
           </div>
         );
-        case "textarea":
-          return (
-            <div style={fieldStyle} className="relative overflow-hidden">
-              <textarea
-                {...register(field.name)}
-                className="w-full h-full absolute border px-2 border-sky-300 rounded-none bg-sky-300/10 focus:border-sky-500 focus:ring-0 focus:outline-0 focus:bg-transparent hover:border-sky-500"
-                style={{ fontSize: `${14 * scale}px` }}
-              />
-              {isRequired && (
-                <span className="absolute top-0 right-0 -translate-y-1/2 translate-x-1/2 h-10 w-10 bg-sky-300/70 rotate-45 transform origin-center transition-colors">
-                  <span className="absolute text-white top-[23px] left-[17px] text-lg">
-                    *
-                  </span>
+      case "textarea":
+        return (
+          <div style={fieldStyle} className="relative overflow-hidden">
+            <textarea
+              {...register(field.name)}
+              className="w-full h-full absolute border px-2 border-sky-300 rounded-none bg-sky-300/10 focus:border-sky-500 focus:ring-0 focus:outline-0 focus:bg-transparent hover:border-sky-500"
+              style={{ fontSize: `${14 * scale}px` }}
+            />
+            {isRequired && (
+              <span className="absolute top-0 right-0 -translate-y-1/2 translate-x-1/2 h-10 w-10 bg-sky-300/70 rotate-45 transform origin-center transition-colors">
+                <span className="absolute text-white top-[23px] left-[17px] text-lg">
+                  *
                 </span>
-              )}
-            </div>
-          );
+              </span>
+            )}
+          </div>
+        );
       default:
         return null;
     }

@@ -33,3 +33,11 @@ export function isFieldRequired(
 
   return true;
 }
+
+export function snakeToNormalText(snakeStr:string) {
+  return snakeStr
+    .toLowerCase() // Convert the entire string to lowercase
+    .split('_') // Split by underscores
+    .map(word => word.charAt(0).toUpperCase() + word.slice(1)) // Capitalize the first letter of each word
+    .join(' '); // Join the words with a space
+}

@@ -27,6 +27,11 @@ enum MinimumTax {
   OTHER_AREA
 }
 
+enum NetWealthSurcharge {
+  YES
+  NO
+}
+
 enum RepairCollection {
   COMMERCIAL_PROPERTY
   NON_COMMERCIAL
@@ -39,9 +44,18 @@ enum NetWealthLastDate {
   NO_I_AM_A_NEW_TAXPAYER
 }
 
+enum CalculationType {
+  Calculate
+  ReCalculate
+}
+enum IncomeFromEmployment {
+  YES
+  NO
+}
+
 model IndividualTaxes {
-  id                                               String            @id @default(cuid())
-  userId                                           String // user id from firebsae
+  id                                               String             @id @default(cuid())
+  userId                                           String // user id from firebase
   taxpayerName                                     String
   nationalId                                       String
   tin                                              String
@@ -50,7 +64,7 @@ model IndividualTaxes {
   residentialStatus                                ResidentialStatus
   specialBenefits                                  SpecialBenefits?
   isParentOfDisabledPerson                         Boolean?
-  dateOfBirth                                      DateTime
+  dateOfBirth                                      String
   spouseName                                       String?
   spouseTin                                        String?
   addressLine1                                     String
@@ -61,21 +75,21 @@ model IndividualTaxes {
   employerName                                     String?
   businessName                                     String?
   bin                                              String?
-  partnerName                                      String?
-  partnerTin                                       String?
-  specialFarmingIncome                             Boolean
-  incomeOfMinor                                    String?
+  partnersInfo                                     String?
+  
   partnersMembersAssociation1                      String?
   partnersMembersAssociation2                      String?
-  incomeYearEndedOn                                DateTime?
+  incomeYearEndedOn                                String?
   incomeFishFarming                                Boolean?
   incomeFishFarmingAmount                          String?
   shareOfIncomeFromAOP                             String?
+  incomeOfMinor                                    String?
   taxableIncomeFromAbroad                          String?
   minimumTax                                       MinimumTax
-  netWealthSurcharge                               Boolean
+  netWealthSurcharge                               NetWealthSurcharge
   environmentalSurcharge                           String?
   delayInterest                                    String?
+  calculate                                        CalculationType
   advanceTaxPaidAmount                             String?
   adjustmentOfTaxRefund                            String?
   taxPaidWithThisReturn                            String
@@ -84,11 +98,7 @@ model IndividualTaxes {
   fatherOrHusband                                  String
   placeOfSignature                                 String?
   signature                                        String?
-  dateOfSignature                                  DateTime
-  incomeFromEmployment                             Boolean
-  privateOrganization                              String
-  government                                       String
-  taxDeductedSourceIncomeFromEmployment            String
+  dateOfSignature                                  String  
   locationDescriptionOwnershipProportionOfProperty String?
   rentReceivedOrAnnualValue                        String?
   advanceRentReceived                              String?
@@ -101,7 +111,7 @@ model IndividualTaxes {
   interestMortgageCapitalCharge                    String?
   insurancePremiumPaid                             String?
   others                                           String?
-  TaxpayersShare                                   String
+  taxpayersShare                                   String
   taxDeductedSourceFromIncomeRent                  String?
   salesTurnoverReceipt                             String?
   grossProfit                                      String?
@@ -152,13 +162,13 @@ model IndividualTaxes {
   investmentInGovernmentSecurities2                String?
   investmentInSecurities                           String?
   contributionToProvidentFund                      String?
-  SelfAndEmployersContribution                     String?
+  selfAndEmployersContribution                     String?
   contributionToSuperAnnuationFund                 String?
   contributionToBenevolentFund                     String?
   contributionToZakatFund1                         String?
   contributionToZakatFund2                         String?
-  OthersIf1                                        String?
-  OthersIf2                                        String?
+  othersIf1                                        String?
+  othersIf2                                        String?
   expensesForFoodAmount                            String?
   expensesForFoodComment                           String?
   housingExpenseAmount                             String?
@@ -182,6 +192,7 @@ model IndividualTaxes {
   interestPaidAmount                               String?
   interestPaidComment                              String?
   total                                            String?
+  exemptedIncomeFromSalary                         String?
   exemptedIncomeFromBusiness                       String?
   exemptedAgriculturalIncome                       String?
   incomeFromProvidentFund                          String?
@@ -193,6 +204,7 @@ model IndividualTaxes {
   typeOfReceiptsAmount2                            String?
   typeOfReceiptsAmount3                            String?
   netWealthLastDate                                NetWealthLastDate
+  netWealthLastDateAmount                          String?
   giftExpense                                      String?
   institutionalLiabilities                         String?
   nonInstitutionalLiabilities                      String?
@@ -261,6 +273,6 @@ model IndividualTaxes {
   others1                                          String?
   others2                                          String?
   assetOutsideBangladesh                           String?
-  createdAt                                        DateTime          @default(now())
-  updatedAt                                        DateTime          @updatedAt
+  createdAt                                        DateTime           @default(now())
+  updatedAt                                        DateTime           @updatedAt
 }
