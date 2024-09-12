@@ -1,10 +1,11 @@
 "use client";
 
+import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Mail, Lock, User } from "lucide-react";
-import { useState, useTransition } from "react";
+import { useTransition } from "react";
 import { useForm } from "react-hook-form";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
@@ -78,7 +79,7 @@ export default function RegisterForm(): JSX.Element {
   };
 
   const handleGoogleSignUp = () => {
-    signIn("google", { callbackUrl: "/dashboard" });
+    signIn("google", { callbackUrl: "/" });
   };
 
   return (
@@ -86,7 +87,7 @@ export default function RegisterForm(): JSX.Element {
       <div className="max-w-md w-full space-y-8 bg-white p-10 rounded-lg shadow-md">
         <div>
           <h2 className="mt-6 text-center text-3xl font-bold text-primary">
-            Create your account
+            Create Your Account
           </h2>
         </div>
         <Form {...form}>
@@ -232,6 +233,18 @@ export default function RegisterForm(): JSX.Element {
               Sign up with Google
             </Button>
           </div>
+        </div>
+
+        <div className="mt-6 text-center">
+          <p className="text-sm text-gray-600">
+            Already have an account?{" "}
+            <Link
+              href="/login"
+              className="font-medium text-primary hover:text-primary-dark"
+            >
+              Sign in here
+            </Link>
+          </p>
         </div>
       </div>
     </div>
