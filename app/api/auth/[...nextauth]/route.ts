@@ -1,57 +1,64 @@
-// app/api/auth/[...nextauth]/route.ts
-
 import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
+import GoogleProvider from "next-auth/providers/google";
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
 import prisma from "@/lib/prisma";
-import { verifyOTP } from "@/lib/otp";
+import bcrypt from "bcrypt";
 
 const handler = NextAuth({
   adapter: PrismaAdapter(prisma),
   providers: [
     CredentialsProvider({
-      name: "Phone OTP",
+      name: "Credentials",
       credentials: {
-        phone: { label: "Phone", type: "tel" },
-        otp: { label: "OTP", type: "text" },
+        email: { label: "Email", type: "email" },
+        password: { label: "Password", type: "password" },
       },
       async authorize(credentials) {
-        if (!credentials?.phone || !credentials?.otp) return null;
+        if (!credentials?.email || !credentials?.password) return null;
 
-        const isValid = await verifyOTP(credentials.phone, credentials.otp);
-        if (!isValid) return null;
-
-        let user = await prisma.user.findUnique({
-          where: { phone: credentials.phone },
+        const user = await prisma.user.findUnique({
+          where: { email: credentials.email },
         });
-        if (!user) {
-          user = await prisma.user.create({
-            data: { phone: credentials.phone },
-          });
-        }
 
+        if (!user || !user.password) return null;
+
+        const isPasswordValid = await bcrypt.compare(
+          credentials.password,
+          user.password
+        );
+
+        if (!isPasswordValid) return null;
         return user;
       },
+    }),
+    GoogleProvider({
+      clientId: process.env.GOOGLE_CLIENT_ID!,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
     }),
   ],
   callbacks: {
     async jwt({ token, user }) {
       if (user) {
         token.userId = user.id;
-        token.phone = user.phone;
+        token.email = user.email;
       }
       return token;
     },
     async session({ session, token }) {
       if (token && session.user) {
         session.user.id = token.userId as string;
-        session.user.phone = token.phone as string;
+        session.user.email = token.email as string;
       }
       return session;
     },
   },
   pages: {
-    signIn: "/auth/signin",
+    signIn: "/login",
+    error: "/login",
+  },
+  session: {
+    strategy: "jwt",
   },
 });
 

@@ -9,7 +9,7 @@ import React, {
 } from "react";
 import { Button } from "@/components/ui/button";
 import { LogIn } from "lucide-react";
-import LoginForm from "./login-form";
+
 import {
   Sheet,
   SheetContent,
@@ -18,6 +18,7 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 import { motion, AnimatePresence } from "framer-motion";
+import Link from "next/link";
 
 const Path = (props: any) => (
   <motion.path
@@ -66,7 +67,6 @@ const MenuToggle = ({ isOpen }: { isOpen: boolean }) => (
 export default function Header() {
   const [activeSection, setActiveSection] = useState("home");
   const [isScrolled, setIsScrolled] = useState(false);
-  const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const NAV_OPTIONS = useMemo(
@@ -211,7 +211,7 @@ export default function Header() {
       <div className="container mx-auto flex items-center justify-between px-4 md:px-8">
         <div
           className={`flex items-center transition-all duration-300 ${
-            isScrolled ? "h-[60px] md:h-[80px]" : "h-[72px] md:h-[108px]"
+            isScrolled ? "h-[60px] md:h-[65px]" : "h-[72px] md:h-[108px]"
           }`}
         >
           <span
@@ -225,14 +225,15 @@ export default function Header() {
         </div>
         <nav className="hidden md:flex justify-between items-center">
           <NavLinks />
-          <Button
-            className="ml-10 uppercase flex items-center transition-colors duration-300"
-            onClick={() => setIsLoginModalOpen(true)}
-            aria-label="Login"
-          >
-            <LogIn className="w-5 h-5 mr-2" />
-            Login
-          </Button>
+          <Link href="/login">
+            <Button
+              className="ml-10 uppercase flex items-center transition-colors duration-300"
+              aria-label="Login"
+            >
+              <LogIn className="w-5 h-5 mr-2" />
+              Login
+            </Button>
+          </Link>
         </nav>
         <div className="md:hidden">
           <Sheet open={isMobileMenuOpen} onOpenChange={setIsMobileMenuOpen}>
@@ -259,14 +260,6 @@ export default function Header() {
           </Sheet>
         </div>
       </div>
-      <AnimatePresence>
-        {isLoginModalOpen && (
-          <LoginForm
-            isOpen={isLoginModalOpen}
-            onClose={() => setIsLoginModalOpen(false)}
-          />
-        )}
-      </AnimatePresence>
     </header>
   );
 }

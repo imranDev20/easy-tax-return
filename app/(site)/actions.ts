@@ -1,26 +1,58 @@
-// app/actions/auth.ts
+"use server";
 
-import { generateOTP, verifyOTP } from "@/lib/otp";
+import prisma from "@/lib/prisma";
+import { RegisterFormData, registerSchema } from "./register/schema";
+import { hash } from "bcrypt";
+import { z } from "zod";
 
-export async function sendOTP(phone: string) {
+export async function registerUser(input: RegisterFormData) {
   try {
-    const otp = await generateOTP(phone);
-    // Here you would typically send the OTP via SMS
-    // For development, we'll just log it
-    console.log(`OTP for ${phone}: ${otp}`);
-    return { success: true };
-  } catch (error) {
-    console.error("Error sending OTP:", error);
-    return { success: false, error: "Failed to send OTP" };
-  }
-}
+    const validatedFields = registerSchema.parse(input);
 
-export async function verifyOTPAction(phone: string, otp: string) {
-  try {
-    const isValid = await verifyOTP(phone, otp);
-    return { success: isValid };
+    const existingUser = await prisma.user.findUnique({
+      where: { email: validatedFields.email },
+    });
+
+    if (existingUser) {
+      return { success: false, error: "User with this email already exists" };
+    }
+
+    const hashedPassword = await hash(validatedFields.password, 12);
+
+    const newUser = await prisma.user.create({
+      data: {
+        name: validatedFields.name,
+        email: validatedFields.email,
+        password: hashedPassword,
+      },
+    });
+
+    const { password: _, ...userWithoutPassword } = newUser;
+
+    return {
+      success: true,
+      user: userWithoutPassword,
+      message: "User registered successfully",
+    };
   } catch (error) {
-    console.error("Error verifying OTP:", error);
-    return { success: false, error: "Failed to verify OTP" };
+    if (error instanceof z.ZodError) {
+      return {
+        success: false,
+        error: "Validation error",
+        details: error.errors.map((err) => err.message),
+      };
+    }
+    if (error instanceof Error) {
+      return {
+        success: false,
+        error: "Registration failed",
+        details: error.message,
+      };
+    }
+    return {
+      success: false,
+      error: "An unexpected error occurred",
+      details: "Please try again later",
+    };
   }
 }

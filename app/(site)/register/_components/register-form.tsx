@@ -3,8 +3,8 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Mail, Lock } from "lucide-react";
-import { useState } from "react";
+import { Mail, Lock, User } from "lucide-react";
+import { useState, useTransition } from "react";
 import { useForm } from "react-hook-form";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
@@ -16,56 +16,101 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { LoginFormData, loginSchema } from "../login/schema";
+import { RegisterFormData, registerSchema } from "../schema";
+import { useToast } from "@/hooks/use-toast";
+import { Loader2 } from "lucide-react";
+import { registerUser } from "../../actions";
 
-export default function LoginForm({
-  callbackUrl,
-}: {
-  callbackUrl: string;
-}): JSX.Element {
-  const [isLoading, setIsLoading] = useState(false);
+export default function RegisterForm(): JSX.Element {
+  const [isPending, startTransition] = useTransition();
   const router = useRouter();
+  const { toast } = useToast();
 
-  const form = useForm<LoginFormData>({
-    resolver: zodResolver(loginSchema),
+  const form = useForm<RegisterFormData>({
+    resolver: zodResolver(registerSchema),
     defaultValues: {
+      name: "",
       email: "",
       password: "",
+      confirmPassword: "",
     },
   });
 
-  const onSubmit = async (data: LoginFormData) => {
-    setIsLoading(true);
-    const result = await signIn("credentials", {
-      email: data.email,
-      password: data.password,
-      redirect: false,
-    });
+  const onSubmit = (data: RegisterFormData) => {
+    startTransition(async () => {
+      try {
+        const result = await registerUser(data);
 
-    if (result?.error) {
-      form.setError("root", { message: "Invalid email or password" });
-      setIsLoading(false);
-    } else {
-      router.push("/");
-    }
+        if (result.success) {
+          toast({
+            title: "Registration Successful",
+            description: result.message,
+            duration: 5000,
+            variant: "success",
+          });
+          router.push("/login");
+        } else {
+          let errorMessage = result.error;
+          if (result.details) {
+            errorMessage +=
+              ": " +
+              (Array.isArray(result.details)
+                ? result.details.join(", ")
+                : result.details);
+          }
+          toast({
+            title: "Registration Failed",
+            description: errorMessage,
+            variant: "destructive",
+            duration: 5000,
+          });
+        }
+      } catch (error) {
+        console.error("Unexpected error during registration:", error);
+        toast({
+          title: "Registration Failed",
+          description: "An unexpected error occurred. Please try again later.",
+          variant: "destructive",
+          duration: 5000,
+        });
+      }
+    });
   };
 
-  const handleGoogleSignIn = async () => {
-    const response = await signIn("google", { callbackUrl: "/" });
-
-    console.log(response);
+  const handleGoogleSignUp = () => {
+    signIn("google", { callbackUrl: "/dashboard" });
   };
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-secondary py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-md w-full space-y-8 bg-white p-10 rounded-lg shadow-md">
         <div>
-          <h2 className="mt-6 text-center text-3xl font-bold text-primary font-sans">
-            LOGIN
+          <h2 className="mt-6 text-center text-3xl font-bold text-primary">
+            Create your account
           </h2>
         </div>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+            <FormField
+              control={form.control}
+              name="name"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Name</FormLabel>
+                  <FormControl>
+                    <div className="relative">
+                      <User className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+                      <Input
+                        {...field}
+                        placeholder="Full name"
+                        className="pl-10 py-2"
+                      />
+                    </div>
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
             <FormField
               control={form.control}
               name="email"
@@ -108,41 +153,37 @@ export default function LoginForm({
                 </FormItem>
               )}
             />
+            <FormField
+              control={form.control}
+              name="confirmPassword"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Confirm Password</FormLabel>
+                  <FormControl>
+                    <div className="relative">
+                      <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+                      <Input
+                        {...field}
+                        type="password"
+                        placeholder="Confirm password"
+                        className="pl-10 py-2"
+                      />
+                    </div>
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
-            {form.formState.errors.root && (
-              <p className="text-red-500 text-sm">
-                {form.formState.errors.root.message}
-              </p>
-            )}
-
-            <div className="flex items-center justify-between">
-              <div className="flex items-center">
-                <input
-                  id="remember-me"
-                  name="remember-me"
-                  type="checkbox"
-                  className="h-4 w-4 text-primary focus:ring-primary border-gray-300 rounded"
-                />
-                <label
-                  htmlFor="remember-me"
-                  className="ml-2 block text-sm text-gray-900"
-                >
-                  Remember me
-                </label>
-              </div>
-
-              <div className="text-sm">
-                <a
-                  href="#"
-                  className="font-medium text-primary hover:text-primary-dark"
-                >
-                  Forgot your password?
-                </a>
-              </div>
-            </div>
-
-            <Button type="submit" className="w-full" disabled={isLoading}>
-              Sign in
+            <Button type="submit" className="w-full" disabled={isPending}>
+              {isPending ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  Registering...
+                </>
+              ) : (
+                "Register"
+              )}
             </Button>
           </form>
         </Form>
@@ -154,14 +195,14 @@ export default function LoginForm({
             </div>
             <div className="relative flex justify-center text-sm">
               <span className="px-2 bg-white text-gray-500">
-                Or continue with
+                Or sign up with
               </span>
             </div>
           </div>
 
           <div className="mt-6">
             <Button
-              onClick={handleGoogleSignIn}
+              onClick={handleGoogleSignUp}
               variant="outline"
               className="w-full"
             >
@@ -188,7 +229,7 @@ export default function LoginForm({
                 />
                 <path d="M1 1h22v22H1z" fill="none" />
               </svg>
-              Login with Google
+              Sign up with Google
             </Button>
           </div>
         </div>
