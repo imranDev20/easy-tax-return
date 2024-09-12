@@ -3,30 +3,27 @@ import z from "zod";
 
 // Define the Zod schema
 export const individualTaxReturnSchema = z.object({
+  userId: z.string().optional(),
   taxpayerName: z.string().min(1, "Name is required"),
   nationalId: z.string().min(1, "National ID or Passport number is required"),
   tin: z.string().min(1, "TIN is required"),
   circle: z.string().min(1, "Circle is required"),
   zone: z.string().min(1, "Zone is required"),
-  residentialStatus: z.enum(["Resident", "Non-resident"]),
+  residentialStatus: z.enum(["RESIDENT", "NON_RESIDENT"]),
 
   specialBenefits: z
     .enum([
-      "None",
-      "GazettedWarWoundedFreedomFighter",
-      "Female",
-      "ThirdGender",
-      "DisabledPerson",
-      "Aged65OrMore",
+      "NONE",
+      "GAZETTED_WAR_WOUNDED_FREEDOM_FIGHTER",
+      "FEMALE",
+      "THIRD_GENDER",
+      "DISABLED_PERSON",
+      "AGED_65_OR_MORE",
     ])
     .optional(),
 
   isParentOfDisabledPerson: z.boolean().optional(),
-  dateOfBirth: z
-    .string()
-    .refine((date) => dayjs(date, "DD-MM-YYYY", true).isValid(), {
-      message: "Invalid date format. Use DD-MM-YYYY",
-    }),
+  dateOfBirth: z.date(),
 
   spouseName: z.string().optional(),
   spouseTin: z.string().optional(),
@@ -42,9 +39,6 @@ export const individualTaxReturnSchema = z.object({
   businessName: z.string().optional(),
   bin: z.string().optional(),
   partnersInfo: z.string().optional(),
-
-  specialFarmingIncome: z.boolean(),
-
   partnersMembersAssociation1: z.string().optional(),
   partnersMembersAssociation2: z.string().optional(),
   incomeYearEndedOn: z.string().date().optional(),
@@ -54,14 +48,14 @@ export const individualTaxReturnSchema = z.object({
   incomeOfMinor: z.string().optional(),
   taxableIncomeFromAbroad: z.string().optional(),
   minimumTax: z.enum([
-    "Dhaka/ChattogramCityCorporationArea",
-    "OtherCityCorporationArea",
-    "OtherArea",
+    "DHAKA_CHATTOGRAM_CITY_CORPORATION_AREA",
+    "OTHER_CITY_CORPORATION_AREA",
+    "OTHER_AREA",
   ]),
-  netWealthSurcharge: z.enum(["Yes", "No"]),
+  netWealthSurcharge: z.enum(["YES", "NO"]),
   environmentalSurcharge: z.string().optional(),
   delayInterest: z.string().optional(),
-  calculate: z.enum(["Calculate", "Re-Calculate"]),
+  calculate: z.enum(["Calculate", "ReCalculate"]),
   advanceTaxPaidAmount: z.string().optional(),
   adjustmentOfTaxRefund: z.string().optional(),
   taxPaidWithThisReturn: z.string(),
@@ -70,16 +64,7 @@ export const individualTaxReturnSchema = z.object({
   fatherOrHusband: z.string(),
   placeOfSignature: z.string().optional(),
   signature: z.string().optional(),
-  dateOfSignature: z
-    .string()
-    .refine((date) => dayjs(date, "DD-MM-YYYY", true).isValid(), {
-      message: "Invalid date format. Use DD-MM-YYYY",
-    }),
-  incomeFromEmployment: z.enum(["YES", "NO"]),
-  privateOrganization: z.string(),
-  government: z.string(),
-  taxDeductedSourceIncomeFromEmployment: z.string(),
-
+  dateOfSignature: z.date(),
   locationDescriptionOwnershipProportionOfProperty: z.string().optional(),
   rentReceivedOrAnnualValue: z.string().optional(),
   advanceRentReceived: z.string().optional(),
@@ -88,10 +73,10 @@ export const individualTaxReturnSchema = z.object({
   vacancyAllowance: z.string().optional(),
   repairCollection: z
     .enum([
-      "Commercial property",
-      "Non-commercial",
-      "Residential property",
-      "Mixed property",
+      "COMMERCIAL_PROPERTY",
+      "NON_COMMERCIAL",
+      "RESIDENTIAL_PROPERTY",
+      "MIXED_PROPERTY",
     ])
     .optional(),
   municipalOrLocalTax: z.string().optional(),
@@ -99,7 +84,7 @@ export const individualTaxReturnSchema = z.object({
   interestMortgageCapitalCharge: z.string().optional(),
   insurancePremiumPaid: z.string().optional(),
   others: z.string().optional(),
-  TaxpayersShare: z.string(),
+  taxpayersShare: z.string(),
   taxDeductedSourceFromIncomeRent: z.string().optional(),
   salesTurnoverReceipt: z.string().optional(),
   grossProfit: z.string().optional(),
@@ -165,7 +150,7 @@ export const individualTaxReturnSchema = z.object({
 
   contributionToProvidentFund: z.string().optional(),
 
-  SelfAndEmployersContribution: z.string().optional(),
+  selfAndEmployersContribution: z.string().optional(),
 
   contributionToSuperAnnuationFund: z.string().optional(),
 
@@ -174,11 +159,11 @@ export const individualTaxReturnSchema = z.object({
   contributionToZakatFund1: z.string().optional(),
   contributionToZakatFund2: z.string().optional(),
 
-  OthersIf1: z.string().optional(),
-  OthersIf2: z.string().optional(),
+  othersIf1: z.string().optional(),
+  othersIf2: z.string().optional(),
 
-  ExpensesForFoodAmount: z.string().optional(),
-  ExpensesForFoodComment: z.string().optional(),
+  expensesForFoodAmount: z.string().optional(),
+  expensesForFoodComment: z.string().optional(),
 
   housingExpenseAmount: z.string().optional(),
   housingExpenseComment: z.string().optional(),
@@ -227,7 +212,7 @@ export const individualTaxReturnSchema = z.object({
   typeOfReceiptsAmount1: z.string().optional(),
   typeOfReceiptsAmount2: z.string().optional(),
   typeOfReceiptsAmount3: z.string().optional(),
-  netWealthLastDate: z.enum(["Yes", "No, I am a new Tax Payer"]),
+  netWealthLastDate: z.enum(["YES", "NO_I_AM_A_NEW_TAXPAYER"]),
   netWealthLastDateAmount: z.string().optional(),
 
   giftExpense: z.string().optional(),
