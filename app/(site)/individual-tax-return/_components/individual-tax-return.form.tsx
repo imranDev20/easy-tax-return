@@ -4,7 +4,13 @@ import { RadioGroup } from "@/components/custom/radio";
 import CustomSelect from "@/components/custom/select";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Image from "next/image";
-import React, { useCallback, useEffect, useRef, useState, useTransition } from "react";
+import React, {
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+  useTransition,
+} from "react";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
 
 import CustomDatePicker from "@/components/custom/date-picker";
@@ -25,7 +31,13 @@ import {
   individualTaxReturnSchema,
 } from "../schema";
 
-import { CALCULATE_OPTION, MINIMUM_TAX_OPTIONS, NET_WEALTH_LAST_DATE, NET_WEALTH_SURCHARGE_OPTIONS, REPAIR_COLLECTION_OPTIONS } from "@/lib/constants";
+import {
+  CALCULATE_OPTION,
+  MINIMUM_TAX_OPTIONS,
+  NET_WEALTH_LAST_DATE,
+  NET_WEALTH_SURCHARGE_OPTIONS,
+  REPAIR_COLLECTION_OPTIONS,
+} from "@/lib/constants";
 import ImageOne from "@/public/images/1.png";
 import ImageTen from "@/public/images/10.png";
 import ImageEleven from "@/public/images/11.png";
@@ -67,6 +79,8 @@ interface BaseFormField {
   label: string;
   x: number;
   y: number;
+  value?: string;
+  disabled?: boolean;
   width: number;
   height: number;
   imageIndex: number;
@@ -152,6 +166,28 @@ const formFields: FormField[] = [
     imageIndex: 0,
   },
   {
+    name: "taxpayerName",
+    type: "text",
+    label: "Tax payer name",
+    x: 92,
+    y: 112,
+    disabled:true,
+    width: 570,
+    height: 22,
+    imageIndex: 1,
+  },
+  {
+    name: "taxpayerName",
+    type: "text",
+    label: "Tax payer name",
+    x: 92,
+    y: 130,
+    disabled:true,
+    width: 570,
+    height: 22,
+    imageIndex: 5,
+  },
+  {
     name: "nationalId",
     type: "text",
     label: "National ID No / Passport No.",
@@ -171,6 +207,28 @@ const formFields: FormField[] = [
     width: 397,
     height: 30,
     imageIndex: 0,
+  },
+  {
+    name: "tin",
+    type: "text",
+    label: "TIN",
+    disabled:true,
+    x: 668,
+    y: 113,
+    width: 265,
+    height: 20,
+    imageIndex: 1,
+  },
+  {
+    name: "tin",
+    type: "text",
+    label: "TIN",
+    disabled:true,
+    x: 668,
+    y: 132,
+    width: 265,
+    height: 20,
+    imageIndex: 5,
   },
   {
     name: "circle",
@@ -436,6 +494,21 @@ const formFields: FormField[] = [
     height: 30,
     imageIndex: 0,
   },
+
+  {
+    name: "statementOfIncomeYearEndedOn",
+    type: "date",
+    label: "statementOfIncomeYearEndedOn",
+    value: "",
+    x: 100,
+    y: 100,
+    width: 397,
+    height: 29,
+    imageIndex: 1,
+    dayPosition: { x: 720, y: 40, width: 60, height: 29 },
+    monthPosition: { x: 785, y: 40, width: 60, height: 29 },
+    yearPosition: { x: 850, y: 40, width: 100, height: 29 },
+  },
   {
     name: "incomeFishFarming",
     type: "radio",
@@ -490,6 +563,114 @@ const formFields: FormField[] = [
     imageIndex: 1,
   },
   {
+    name: "incomeFromRent",
+    type: "text",
+    label: "incomeFromRent",
+    value:"0.00",
+    disabled:true,
+    x: 774,
+    y: 210,
+    width: 160,
+    height: 25,
+    imageIndex: 1,
+  },
+  {
+    name: "incomeFromAgriculture",
+    type: "text",
+    label: "incomeFromAgriculture",
+    value:"0.00",
+    disabled:true,
+    x: 774,
+    y: 238,
+    width: 160,
+    height: 25,
+    imageIndex: 1,
+  },
+  {
+    name: "incomeFromBusiness",
+    type: "text",
+    label: "incomeFromBusiness",
+    value:"0.00",
+    disabled:true,
+    x: 774,
+    y: 300,
+    width: 160,
+    height: 25,
+    imageIndex: 1,
+  },
+  {
+    name: "incomeFromBusinessMinimum",
+    type: "text",
+    label: "incomeFromBusinessMinimum",
+    value:"0.00",
+    disabled:true,
+    x: 774,
+    y: 328,
+    width: 160,
+    height: 25,
+    imageIndex: 1,
+  },
+  {
+    name: "incomeFromCapitalGains",
+    type: "text",
+    label: "incomeFromCapitalGains",
+    value:"0.00",
+    disabled:true,
+    x: 774,
+    y: 357,
+    width: 160,
+    height: 25,
+    imageIndex: 1,
+  },
+  {
+    name: "incomeFromFinancialAssets",
+    type: "text",
+    label: "incomeFromFinancialAssets",
+    value:"0.00",
+    disabled:true,
+    x: 774,
+    y: 388,
+    width: 160,
+    height: 25,
+    imageIndex: 1,
+  },
+  {
+    name: "incomeFromOtherSources",
+    type: "text",
+    label: "incomeFromOtherSources",
+    value:"0.00",
+    disabled:true,
+    x: 774,
+    y: 418,
+    width: 160,
+    height: 30,
+    imageIndex: 1,
+  },
+  {
+    name: "totalIncome",
+    type: "text",
+    label: "totalIncome",
+    value:"0.00",
+    disabled:true,
+    x: 774,
+    y: 538,
+    width: 160,
+    height: 25,
+    imageIndex: 1,
+  },
+  {
+    name: "totalAmountPayable",
+    type: "text",
+    label: "totalAmountPayable",
+    value:"0.00",
+    disabled:true,
+    x: 774,
+    y: 855,
+    width: 160,
+    height: 25,
+    imageIndex: 1,
+  },
+  {
     name: "taxableIncomeFromAbroad",
     type: "text",
     label: "incomeOfMinor",
@@ -522,10 +703,10 @@ const formFields: FormField[] = [
     label: "Choose One",
     placeholder:
       "Do you have more than one motor vehicle or more than 8000 sqft house property/properties (in city corporation area)?",
-      options: NET_WEALTH_SURCHARGE_OPTIONS.map((netWealth) => ({
-        label: snakeToNormalText(netWealth),
-        value: netWealth,
-      })),
+    options: NET_WEALTH_SURCHARGE_OPTIONS.map((netWealth) => ({
+      label: snakeToNormalText(netWealth),
+      value: netWealth,
+    })),
     x: 170,
     y: 780,
     width: 599,
@@ -567,6 +748,55 @@ const formFields: FormField[] = [
     width: 160,
     height: 29,
     imageIndex: 1,
+  },
+
+  {
+    name: "taxDeductedOrCollected",
+    type: "text",
+    label: "taxDeductedOrCollected",
+    value: "0.00",
+    disabled:true,
+    x: 775,
+    y: 111,
+    width: 160,
+    height: 25,
+    imageIndex: 2,
+  },
+  {
+    name: "totalTaxPaidAndAdjusted",
+    type: "text",
+    label: "totalTaxPaidAndAdjusted",
+    value: "0.00",
+    disabled:true,
+    x: 775,
+    y: 225,
+    width: 160,
+    height: 25,
+    imageIndex: 2,
+  },
+  {
+    name: "excessPayment",
+    type: "text",
+    label: "excessPayment",
+    value: "0.00",
+    disabled:true,
+    x: 775,
+    y: 255,
+    width: 160,
+    height: 25,
+    imageIndex: 2,
+  },
+  {
+    name: "taxExemptedTaxFreeIncome",
+    type: "text",
+    label: "taxExemptedTaxFreeIncome",
+    value: "0.00",
+    disabled:true,
+    x: 775,
+    y: 312,
+    width: 160,
+    height: 25,
+    imageIndex: 2,
   },
 
   {
@@ -644,7 +874,6 @@ const formFields: FormField[] = [
     width: 250,
     height: 29,
     imageIndex: 2,
-
   },
   {
     name: "dateOfSignature",
@@ -659,6 +888,54 @@ const formFields: FormField[] = [
     dayPosition: { x: 150, y: 920, width: 60, height: 29 },
     monthPosition: { x: 220, y: 920, width: 60, height: 29 },
     yearPosition: { x: 290, y: 920, width: 100, height: 29 },
+  },
+  {
+    name: "totalRentValue",
+    type: "text",
+    label: "totalRentValue",
+    value: "0.00",
+    disabled:true,
+    x: 845,
+    y: 338,
+    width: 90,
+    height: 20,
+    imageIndex: 4,
+  },
+  {
+    name: "totalAdmissibleDeduction",
+    type: "text",
+    label: "totalAdmissibleDeduction",
+    value: "0.00",
+    disabled:true,
+    x: 845,
+    y: 508,
+    width: 90,
+    height: 18,
+    imageIndex: 4,
+  },
+  {
+    name: "netIncome",
+    type: "text",
+    label: "netIncome",
+    value: "0.00",
+    disabled:true,
+    x: 845,
+    y: 528,
+    width: 90,
+    height: 18,
+    imageIndex: 4,
+  },
+  {
+    name: "netProfit",
+    type: "text",
+    label: "netProfit",
+    value: "0.00",
+    disabled:true,
+    x: 845,
+    y: 840,
+    width: 90,
+    height: 15,
+    imageIndex: 4,
   },
   {
     name: "locationDescriptionOwnershipProportionOfProperty",
@@ -948,6 +1225,186 @@ const formFields: FormField[] = [
     y: 460,
     width: 205,
     height: 18,
+    imageIndex: 5,
+  },
+  {
+    name: "netProfit2",
+    type: "text",
+    label: "netProfit2",
+    value:"0.00",
+    disabled:true,
+    x: 702,
+    y: 358,
+    width: 205,
+    height: 15,
+    imageIndex: 5,
+  },
+  {
+    name: "cashInHandAtBank",
+    type: "text",
+    label: "cashInHandAtBank",
+    value:"0.00",
+    disabled:true,
+    x: 702,
+    y: 425,
+    width: 200,
+    height: 15,
+    imageIndex: 5,
+  },
+  {
+    name: "totalAssets",
+    type: "text",
+    label: "totalAssets",
+    value:"0.00",
+    disabled:true,
+    x: 702,
+    y: 495,
+    width: 200,
+    height: 15,
+    imageIndex: 5,
+  },
+  {
+    name: "netProfit3",
+    type: "text",
+    label: "netProfit3",
+    value:"0.00",
+    disabled:true,
+    x: 702,
+    y: 530,
+    width: 200,
+    height: 15,
+    imageIndex: 5,
+  },
+  {
+    name: "closingCpital",
+    type: "text",
+    label: "closingCpital",
+    value:"0.00",
+    disabled:true,
+    x: 702,
+    y: 565,
+    width: 200,
+    height: 15,
+    imageIndex: 5,
+  },
+  {
+    name: "totalCapitalsAndLiabilities",
+    type: "text",
+    label: "totalCapitalsAndLiabilities",
+    value:"0.00",
+    disabled:true,
+    x: 702,
+    y: 602,
+    width: 200,
+    height: 15,
+    imageIndex: 5,
+  },
+  {
+    name: "interestProfitFromBankFINetTaxableIncome",
+    type: "text",
+    label: "interestProfitFromBankFINetTaxableIncome",
+    value:"0.00",
+    disabled:true,
+    x: 720,
+    y: 732,
+    width: 105,
+    height: 15,
+    imageIndex: 5,
+  },
+  {
+    name: "incomeFromSavingCertificatesNetTaxableIncome",
+    type: "text",
+    label: "incomeFromSavingCertificatesNetTaxableIncome",
+    value:"0.00",
+    disabled:true,
+    x: 720,
+    y: 750,
+    width: 105,
+    height: 15,
+    imageIndex: 5,
+  },
+  {
+    name: "incomeFromSavingCertificatesNetTaxableIncome",
+    type: "text",
+    label: "incomeFromSavingCertificatesNetTaxableIncome",
+    value:"0.00",
+    disabled:true,
+    x: 720,
+    y: 768,
+    width: 105,
+    height: 15,
+    imageIndex: 5,
+  },
+  {
+    name:"incomeFromFinancialProductSchemeNetTaxableIncome",
+    type: "text",
+    label:"incomeFromFinancialProductSchemeNetTaxableIncome",
+    value:"0.00",
+    disabled:true,
+    x: 720,
+    y: 785,
+    width: 105,
+    height: 15,
+    imageIndex: 5,
+  },
+  {
+    name:"dividendIncomeNetTaxableIncome",
+    type: "text",
+    label:"dividendIncomeNetTaxableIncome",
+    value:"0.00",
+    disabled:true,
+    x: 720,
+    y: 803,
+    width: 105,
+    height: 15,
+    imageIndex: 5,
+  },
+  {
+    name:"capitalGainFromTransferofPropertyNetTaxableIncome",
+    type: "text",
+    label:"capitalGainFromTransferofPropertyNetTaxableIncome",
+    value:"0.00",
+    disabled:true,
+    x: 720,
+    y: 820,
+    width: 105,
+    height: 15,
+    imageIndex: 5,
+  },
+  {
+    name:"incomeFromBusinessNetTaxableIncome",
+    type: "text",
+    label:"incomeFromBusinessNetTaxableIncome",
+    value:"0.00",
+    disabled:true,
+    x: 720,
+    y: 840,
+    width: 105,
+    height: 15,
+    imageIndex: 5,
+  },
+  {
+    name:"workersParticinationFundNetTaxableIncome",
+    type: "text",
+    label:"workersParticinationFundNetTaxableIncome",
+    value:"0.00",
+    disabled:true,
+    x: 720,
+    y: 856,
+    width: 105,
+    height: 15,
+    imageIndex: 5,
+  },
+  {
+    name:"incomeFromOtherSourcesNetTaxableIncome",
+    type: "text",
+    label:"incomeFromOtherSourcesNetTaxableIncome",
+    value:"0.00",
+    disabled:true,
+    x: 720,
+    y: 875,
+    width: 105,
+    height: 15,
     imageIndex: 5,
   },
   {
@@ -1292,6 +1749,29 @@ const formFields: FormField[] = [
     imageIndex: 5,
   },
   {
+    name:"taxpayerName",
+    type: "text",
+    label:"taxpayerName",
+    disabled:true,
+    x: 95,
+    y: 125,
+    width: 570,
+    height: 18,
+    imageIndex: 6,
+  },
+  {
+    name:"totalAllowableInvestmentContribution",
+    type: "text",
+    label:"totalAllowableInvestmentContribution",
+    value:"0.00",
+    disabled:true,
+    x: 795,
+    y: 405,
+    width: 140,
+    height: 15,
+    imageIndex: 6,
+  },
+  {
     name: "lifeInsurancePremium",
     type: "text",
     label: "lifeInsurancePremium",
@@ -1445,6 +1925,66 @@ const formFields: FormField[] = [
     y: 205,
     width: 135,
     height: 20,
+    imageIndex: 7,
+  },
+  {
+    name: "taxDeductedCollectedAtSourceAmount",
+    type: "text",
+    label: "taxDeductedCollectedAtSourceAmount",
+    value: "0.00",
+    disabled:true,
+    x: 598,
+    y: 360,
+    width: 135,
+    height: 30,
+    imageIndex: 7,
+  },
+  {
+    name: "advanceTaxPaidAmountTaka",
+    type: "text",
+    label: "advanceTaxPaidAmountTaka",
+    value: "0.00",
+    disabled:true,
+    x: 598,
+    y: 395,
+    width: 135,
+    height: 18,
+    imageIndex: 7,
+  },
+  {
+    name: "totalAmount",
+    type: "text",
+    label: "totalAmount",
+    value: "0.00",
+    disabled:true,
+    x: 598,
+    y: 478,
+    width: 135,
+    height: 18,
+    imageIndex: 7,
+  },
+  {
+    name: "totalAmount2",
+    type: "text",
+    label: "totalAmount2",
+    value: "0.00",
+    disabled:true,
+    x: 785,
+    y: 798,
+    width: 150,
+    height: 16,
+    imageIndex: 7,
+  },
+  {
+    name: "totalAmount3",
+    type: "text",
+    label: "totalAmount3",
+    value: "0.00",
+    disabled:true,
+    x: 785,
+    y: 928,
+    width: 150,
+    height: 16,
     imageIndex: 7,
   },
   {
@@ -2585,7 +3125,7 @@ const IndividualTaxReturnForm: React.FC = () => {
     resolver: zodResolver(individualTaxReturnSchema),
     defaultValues: {},
   });
-console.log(`errors`, errors);
+  console.log(`errors`, errors);
   useEffect(() => {
     const updateScale = () => {
       if (containerRef.current && imageRefs.current[0]) {
@@ -2617,8 +3157,8 @@ console.log(`errors`, errors);
       window.removeEventListener("scroll", handleScroll);
     };
   }, []);
-  const [isPending,startTransition] = useTransition();
-  const {toast} = useToast();
+  const [isPending, startTransition] = useTransition();
+  const { toast } = useToast();
   const router = useRouter();
 
   const onSubmit: SubmitHandler<IndividualTaxReturnFormInput> = (data) => {
@@ -2626,10 +3166,10 @@ console.log(`errors`, errors);
     // Handle form submission
     startTransition(async () => {
       try {
-        const createData= {
+        const createData = {
           ...data,
           userId: "xyz123456",
-        }
+        };
         const result = await createIndividualTaxReturn(createData);
 
         if (result.success) {
@@ -2678,11 +3218,13 @@ console.log(`errors`, errors);
             <input
               {...register(field.name)}
               type={field.type}
-              className="w-full h-full absolute border px-2 border-sky-300 rounded-none bg-sky-300/10 focus:border-sky-500 focus:ring-0 focus:outline-0 focus:bg-transparent hover:border-sky-500"
+              className={`w-full h-full absolute border px-2 ${!field.disabled ? "border-sky-300 rounded-none bg-sky-300/10 focus:border-sky-500 focus:ring-0 focus:outline-0 focus:bg-transparent hover:border-sky-500" : " bg-[#F5F5F5] font-bold text-[#948C91]"}  `}
               style={{ fontSize: `${14 * scale}px` }}
+              disabled={field.disabled}
+              value={field.value ?? ""}
             />
 
-            {isRequired && (
+            {(isRequired && !field.disabled )&& (
               <span className="absolute top-0 right-0 -translate-y-1/2 translate-x-1/2 h-10 w-10 bg-sky-300/70 rotate-45 transform origin-center transition-colors">
                 <span className="absolute text-white top-[23px] left-[17px] text-lg">
                   *
@@ -2736,6 +3278,7 @@ console.log(`errors`, errors);
             control={control}
             render={({ field: { onChange, value } }) => (
               <CustomDatePicker
+
                 onChange={(date) => {
                   onChange(date);
                 }}
@@ -2744,6 +3287,7 @@ console.log(`errors`, errors);
                 monthPosition={field.monthPosition}
                 yearPosition={field.yearPosition}
                 scale={scale}
+                
               />
             )}
           />
