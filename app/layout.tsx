@@ -2,6 +2,7 @@ import { ThemeProvider } from "@/providers/theme-provider";
 import type { Metadata } from "next";
 import { Judson, Poppins } from "next/font/google";
 import "./globals.css";
+import NextAuthSessionProvider from "@/providers/session-provider";
 
 export const metadata: Metadata = {
   title: "Easy Tax Return | Online Tax Preparation and Filing",
@@ -91,9 +92,11 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${bodyFont.variable} ${titleFont.variable}`}>
       <body className="font-sans">
-        <ThemeProvider attribute="class" defaultTheme="light">
-          {children}
-        </ThemeProvider>
+        <NextAuthSessionProvider>
+          <ThemeProvider attribute="class" defaultTheme="light">
+            {children}
+          </ThemeProvider>
+        </NextAuthSessionProvider>
       </body>
     </html>
   );

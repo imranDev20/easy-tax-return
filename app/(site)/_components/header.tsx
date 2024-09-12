@@ -9,7 +9,7 @@ import React, {
 } from "react";
 import { Button } from "@/components/ui/button";
 import { LogIn } from "lucide-react";
-import LoginForm from "../login/_components/login-form";
+import LoginForm from "./login-form";
 import {
   Sheet,
   SheetContent,

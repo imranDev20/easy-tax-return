@@ -48,35 +48,51 @@ enum CalculationType {
   Calculate
   ReCalculate
 }
+
 enum IncomeFromEmployment {
   YES
   NO
 }
 
+model User {
+  id        String   @id @default(cuid())
+  phone     String   @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Otp {
+  id        String   @id @default(cuid())
+  phone     String
+  otp       String
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+}
+
 model IndividualTaxes {
-  id                                               String             @id @default(cuid())
-  userId                                           String // user id from firebase
-  taxpayerName                                     String
-  nationalId                                       String
-  tin                                              String
-  circle                                           String
-  zone                                             String
-  residentialStatus                                ResidentialStatus
-  specialBenefits                                  SpecialBenefits?
-  isParentOfDisabledPerson                         Boolean?
-  dateOfBirth                                      String
-  spouseName                                       String?
-  spouseTin                                        String?
-  addressLine1                                     String
-  addressLine2                                     String?
-  telephone                                        String?
-  mobile                                           String
-  email                                            String
-  employerName                                     String?
-  businessName                                     String?
-  bin                                              String?
-  partnersInfo                                     String?
-  
+  id                       String            @id @default(cuid())
+  userId                   String // user id from firebase
+  taxpayerName             String
+  nationalId               String
+  tin                      String
+  circle                   String
+  zone                     String
+  residentialStatus        ResidentialStatus
+  specialBenefits          SpecialBenefits?
+  isParentOfDisabledPerson Boolean?
+  dateOfBirth              String
+  spouseName               String?
+  spouseTin                String?
+  addressLine1             String
+  addressLine2             String?
+  telephone                String?
+  mobile                   String
+  email                    String
+  employerName             String?
+  businessName             String?
+  bin                      String?
+  partnersInfo             String?
+
   partnersMembersAssociation1                      String?
   partnersMembersAssociation2                      String?
   incomeYearEndedOn                                String?
@@ -98,7 +114,7 @@ model IndividualTaxes {
   fatherOrHusband                                  String
   placeOfSignature                                 String?
   signature                                        String?
-  dateOfSignature                                  String  
+  dateOfSignature                                  String
   locationDescriptionOwnershipProportionOfProperty String?
   rentReceivedOrAnnualValue                        String?
   advanceRentReceived                              String?
