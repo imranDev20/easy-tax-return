@@ -5,6 +5,26 @@ export default withAuth(
   function middleware(req) {
     const token = req.nextauth.token;
     const path = req.nextUrl.pathname;
+    const searchParams = req.nextUrl.searchParams;
+
+    // Only redirect logged-in users from auth pages
+    if (token && (path === "/login" || path === "/register")) {
+      // Check if there's a callbackUrl and it's safe to redirect to
+      const callbackUrl = searchParams.get("callbackUrl");
+      const safeCallbackUrl =
+        callbackUrl &&
+        new URL(callbackUrl, req.url).hostname === req.nextUrl.hostname
+          ? callbackUrl
+          : null;
+
+      if (token.role === "ADMIN") {
+        return NextResponse.redirect(
+          new URL(safeCallbackUrl || "/admin", req.url)
+        );
+      } else {
+        return NextResponse.redirect(new URL(safeCallbackUrl || "/", req.url));
+      }
+    }
 
     // Protect admin routes
     if (path.startsWith("/admin")) {
@@ -20,7 +40,9 @@ export default withAuth(
       path.startsWith("/transactions")
     ) {
       if (!token || token.role !== "USER") {
-        return NextResponse.redirect(new URL("/login", req.url));
+        return NextResponse.redirect(
+          new URL(`/login?callbackUrl=${encodeURIComponent(req.url)}`, req.url)
+        );
       }
     }
 
@@ -28,11 +50,28 @@ export default withAuth(
   },
   {
     callbacks: {
-      authorized: ({ token }) => !!token,
+      authorized: ({ token, req }) => {
+        // Allow access to login and register pages when there's no token
+        if (
+          !token &&
+          (req.nextUrl.pathname === "/login" ||
+            req.nextUrl.pathname === "/register")
+        ) {
+          return true;
+        }
+        return !!token;
+      },
     },
   }
 );
 
 export const config = {
-  matcher: ["/admin/:path*", "/profile", "/history", "/transactions"],
+  matcher: [
+    "/admin/:path*",
+    "/profile",
+    "/history",
+    "/transactions",
+    "/login",
+    "/register",
+  ],
 };
