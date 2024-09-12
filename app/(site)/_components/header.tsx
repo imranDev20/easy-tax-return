@@ -8,8 +8,16 @@ import React, {
   useLayoutEffect,
 } from "react";
 import { Button } from "@/components/ui/button";
-import { LogIn } from "lucide-react";
-
+import {
+  ChevronDown,
+  CreditCard,
+  History,
+  LayoutDashboard,
+  LogIn,
+  LogOut,
+  User,
+} from "lucide-react";
+import { useSession, signOut } from "next-auth/react";
 import {
   Sheet,
   SheetContent,
@@ -17,7 +25,15 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
-import { motion, AnimatePresence } from "framer-motion";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { motion } from "framer-motion";
 import Link from "next/link";
 
 const Path = (props: any) => (
@@ -68,6 +84,7 @@ export default function Header() {
   const [activeSection, setActiveSection] = useState("home");
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const { data: session } = useSession();
 
   const NAV_OPTIONS = useMemo(
     () => [
@@ -102,7 +119,7 @@ export default function Header() {
   }, [NAV_OPTIONS]);
 
   useLayoutEffect(() => {
-    handleScroll(); // Check scroll position immediately on mount
+    handleScroll();
   }, [handleScroll]);
 
   useEffect(() => {
@@ -202,6 +219,90 @@ export default function Header() {
     );
   };
 
+  const UserMenu = () => {
+    const { data: session } = useSession();
+    const isAdmin = session?.user?.role === "ADMIN";
+
+    return (
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <Button
+            variant="outline"
+            className="flex items-center space-x-3 px-3 py-6 rounded-full transition-colors duration-200 md:ml-10 focus-visible:ring-0 bg-white"
+          >
+            <Avatar className="h-8 w-8">
+              <AvatarImage
+                src={session?.user?.image || ""}
+                alt={session?.user?.name || ""}
+              />
+              <AvatarFallback className="bg-primary text-primary-foreground">
+                {session?.user?.name?.charAt(0).toUpperCase()}
+              </AvatarFallback>
+            </Avatar>
+            <div className="flex flex-col items-start">
+              <p className="text-sm font-semibold leading-tight">
+                {session?.user?.name}
+              </p>
+            </div>
+            <ChevronDown className="h-4 w-4 text-gray-500 ml-1" />
+          </Button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent className="w-56" align="end" forceMount>
+          <DropdownMenuItem className="font-normal">
+            <div className="flex flex-col space-y-1">
+              <p className="text-sm font-medium leading-none">
+                {session?.user?.name}
+              </p>
+              <p className="text-xs leading-none text-muted-foreground">
+                {session?.user?.email}
+              </p>
+            </div>
+          </DropdownMenuItem>
+          <DropdownMenuSeparator className="bg-slate-200" />
+          {isAdmin ? (
+            <>
+              <DropdownMenuItem>
+                <Link href="/dashboard" className="flex items-center w-full">
+                  <LayoutDashboard className="mr-2 h-4 w-4" />
+                  Dashboard
+                </Link>
+              </DropdownMenuItem>
+            </>
+          ) : (
+            <>
+              <DropdownMenuItem>
+                <Link href="/profile" className="flex items-center w-full">
+                  <User className="mr-2 h-4 w-4" />
+                  Profile
+                </Link>
+              </DropdownMenuItem>
+              <DropdownMenuItem>
+                <Link href="/history" className="flex items-center w-full">
+                  <History className="mr-2 h-4 w-4" />
+                  History
+                </Link>
+              </DropdownMenuItem>
+              <DropdownMenuItem>
+                <Link href="/transactions" className="flex items-center w-full">
+                  <CreditCard className="mr-2 h-4 w-4" />
+                  Transactions
+                </Link>
+              </DropdownMenuItem>
+            </>
+          )}
+          <DropdownMenuSeparator className="bg-slate-200" />
+          <DropdownMenuItem
+            onClick={async () => await signOut()}
+            className="flex items-center cursor-pointer"
+          >
+            <LogOut className="mr-2 h-4 w-4" />
+            Log out
+          </DropdownMenuItem>
+        </DropdownMenuContent>
+      </DropdownMenu>
+    );
+  };
+
   return (
     <header
       className={`sticky top-0 z-50 transition-all duration-300 ease-in-out
@@ -223,18 +324,21 @@ export default function Header() {
             e-taxreturn
           </span>
         </div>
-        <nav className="hidden md:flex justify-between items-center">
+        <nav className="hidden md:flex items-center">
           <NavLinks />
-          <Link href="/login">
-            <Button
-              className="ml-10 uppercase flex items-center transition-colors duration-300"
-              aria-label="Login"
-            >
-              <LogIn className="w-5 h-5 mr-2" />
-              Login
-            </Button>
-          </Link>
+
+          {session ? (
+            <UserMenu />
+          ) : (
+            <Link href="/login" className="block md:ml-10">
+              <Button className="w-full uppercase flex items-center justify-center">
+                <LogIn className="w-5 h-5 mr-2" />
+                Login
+              </Button>
+            </Link>
+          )}
         </nav>
+
         <div className="md:hidden">
           <Sheet open={isMobileMenuOpen} onOpenChange={setIsMobileMenuOpen}>
             <SheetTrigger asChild>
@@ -256,6 +360,18 @@ export default function Header() {
                 <SheetTitle className="text-primary">E-taxreturn</SheetTitle>
               </SheetHeader>
               <MobileNavLinks />
+              {session ? (
+                <div className="mt-4">
+                  <UserMenu />
+                </div>
+              ) : (
+                <Link href="/login" className="mt-4 block">
+                  <Button className="w-full uppercase flex items-center justify-center">
+                    <LogIn className="w-5 h-5 mr-2" />
+                    Login
+                  </Button>
+                </Link>
+              )}
             </SheetContent>
           </Sheet>
         </div>

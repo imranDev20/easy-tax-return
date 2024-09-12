@@ -42,13 +42,15 @@ const handler = NextAuth({
       if (user) {
         token.userId = user.id;
         token.email = user.email;
+        token.role = user.role; // Include the role in the JWT
       }
       return token;
     },
     async session({ session, token }) {
       if (token && session.user) {
-        session.user.id = token.userId as string;
-        session.user.email = token.email as string;
+        session.user.id = token.userId;
+        session.user.email = token.email;
+        session.user.role = token.role;
       }
       return session;
     },
