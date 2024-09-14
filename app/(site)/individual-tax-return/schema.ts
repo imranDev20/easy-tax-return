@@ -54,6 +54,8 @@ export const individualTaxReturnSchema = z.object({
     "OTHER_AREA",
   ]),
   netWealthSurcharge: z.enum(["YES", "NO"]),
+  taxPayable: z.string().optional(),
+  netWealthSurchargeAmount: z.string().optional(),
   environmentalSurcharge: z.string().optional(),
   delayInterest: z.string().optional(),
   calculate: z.enum(["Calculate", "ReCalculate"]),
