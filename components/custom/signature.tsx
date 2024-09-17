@@ -52,7 +52,7 @@ const SignatureField: React.FC<SignatureFieldProps> = ({ onChange }) => {
   };
 
   return (
-    <div className="border p-4 rounded-md">
+    <div className="border p-4 rounded-md bg-white">
       <div className="mb-4">
         <Button
           type="button"
@@ -84,7 +84,7 @@ const SignatureField: React.FC<SignatureFieldProps> = ({ onChange }) => {
           ref={signatureCanvasRef}
           canvasProps={{
             width: 500,
-            height: 200,
+            height: 80,
             className: "border rounded-md",
           }}
         />

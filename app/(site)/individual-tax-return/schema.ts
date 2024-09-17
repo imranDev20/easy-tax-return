@@ -83,6 +83,7 @@ export const individualTaxReturnSchema = z.object({
       "MIXED_PROPERTY",
     ])
     .optional(),
+    repairCollectionAmount: z.string().optional(),
   municipalOrLocalTax: z.string().optional(),
   landRevenue: z.string().optional(),
   interestMortgageCapitalCharge: z.string().optional(),
@@ -372,6 +373,7 @@ export const individualTaxReturnSchema = z.object({
   totalFinancialAssets: z.string().optional(),
   motorVehiclesAmount: z.string().optional(),
   totalAssetslocatedInBangladesh: z.string().optional(),
+  totalCashInHandsAndFundOutsideBusiness: z.string().optional(),
   totalAssetsInBangladeshAndOutsideBangladesh: z.string().optional(),
   totalIncomeShown: z.string().optional(),
   totalTaxPaid: z.string().optional(),

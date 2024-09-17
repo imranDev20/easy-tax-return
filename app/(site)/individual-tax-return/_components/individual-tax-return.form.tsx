@@ -127,7 +127,7 @@ interface SignatureFormField extends BaseFormField {
 type OtherFormField = Omit<BaseFormField, "type"> & {
   type: Exclude<
     FieldType,
-    "radio" | "select" | "date" | "signature" | "textarea" 
+    "radio" | "select" | "date" | "signature" | "textarea"
   >;
 };
 
@@ -154,8 +154,6 @@ const images = [
   ImageTwelve,
 ];
 
-
-
 const IndividualTaxReturnForm: React.FC = () => {
   const [scale, setScale] = useState(1);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
@@ -166,12 +164,331 @@ const IndividualTaxReturnForm: React.FC = () => {
   const {
     register,
     handleSubmit,
-    control, watch,
-    formState: { errors },
+    control,
+    watch,
+    setValue,
+    
+    formState: { errors, isDirty },
   } = useForm<IndividualTaxReturnFormInput>({
     resolver: zodResolver(individualTaxReturnSchema),
-    defaultValues: {},
+    defaultValues: {
+      taxpayerName: "",
+      nationalId: "",
+      tin: "",
+      circle: "",
+      zone: "",
+      residentialStatus: "RESIDENT",
+      specialBenefits: "NONE",
+      isParentOfDisabledPerson: undefined,
+      dateOfBirth: undefined,
+      statementOfIncomeYearEndedOn: undefined,
+      spouseName: "",
+      spouseTin: "",
+      addressLine1: "",
+      addressLine2: "",
+      telephone: "",
+      mobile: "",
+      email: "",
+      employerName: "",
+      businessName: "",
+      bin: "",
+      partnersInfo: "",
+      partnersMembersAssociation1: "",
+      partnersMembersAssociation2: "",
+      incomeYearEndedOn: "",
+      incomeFishFarming: false,
+      incomeFishFarmingAmount: "",
+      shareOfIncomeFromAOP: "",
+      shareOfIncomeFromAOPAmount: "",
+      incomeOfMinor: "",
+      taxableIncomeFromAbroad: "",
+      minimumTax: undefined,
+      netWealthSurcharge: undefined,
+      taxPayable: "0.00",
+      netWealthSurchargeAmount: "",
+      environmentalSurcharge: "",
+      delayInterest: "",
+      calculate: undefined,
+      advanceTaxPaidAmount: "",
+      adjustmentOfTaxRefund: "",
+      taxPaidWithThisReturn: "",
+      listOfDocumentsFurnishedWithThisReturn1: "",
+      listOfDocumentsFurnishedWithThisReturn2: "",
+      fatherOrHusband: "",
+      placeOfSignature: "",
+      signature: "",
+      dateOfSignature: undefined,
+      locationDescriptionOwnershipProportionOfProperty: "",
+      rentReceivedOrAnnualValue: "",
+      advanceRentReceived: "",
+      valueOfAnyBenefit: "",
+      adjustedAdvanceRent: "",
+      vacancyAllowance: "",
+      repairCollection: undefined,
+      repairCollectionAmount: "",
+      municipalOrLocalTax: "",
+      landRevenue: "",
+      interestMortgageCapitalCharge: "",
+      insurancePremiumPaid: "",
+      others: "",
+      taxpayersShare: "100",
+      taxDeductedSourceFromIncomeRent: "",
+      salesTurnoverReceipt: "",
+      grossProfit: "",
+      generalExpensesSellingExpenses: "",
+      nameOfBusiness: "",
+      natureOfBusiness: "",
+      addressOfBusiness: "",
+      salesTurnoverReceipts: "",
+      grossProfitAmount: "",
+      generalAdministrativeSellingExpenses: "",
+      badDebtExpense: "",
+      inventories: "",
+      fixedAssets: "",
+      otherAssets: "",
+      openingCapital: "",
+      withdrawalsInTheIncomeYear: "",
+      liabilities: "",
+      interestProfitFromBankFIAmount: "",
+      interestProfitFromBankFIDeductions: "",
+      interestProfitFromBankFITax: "",
+      incomeFromSavingCertificatesAmount: "",
+      incomeFromSavingCertificatesDeductions: "",
+      incomeFromSavingCertificatesTax: "",
+      incomeFromSecuritiesDebenturesAmount: "",
+      incomeFromSecuritiesDebenturesDeductions: "",
+      incomeFromSecuritiesDebenturesTax: "",
+      incomeFromFinancialProductSchemeAmount: "",
+      incomeFromFinancialProductSchemeDeductions: "",
+      incomeFromFinancialProductSchemeTax: "",
+      dividendIncomeAmount: "",
+      dividendIncomeDeductions: "",
+      dividendIncomeTax: "",
+      capitalGainFromTransferOfPropertyAmount: "",
+      capitalGainFromTransferOfPropertyDeductions: "",
+      capitalGainFromTransferOfPropertyTax: "",
+      incomeFromBusinessAmount: "",
+      incomeFromBusinessDeductions: "",
+      incomeFromBusinessTax: "",
+      workersParticipationFundAmount: "",
+      workersParticipationFundDeductions: "",
+      workersParticipationFundTax: "",
+      incomeFromOtherSourcesAmount: "",
+      incomeFromOtherSourcesDeductions: "",
+      incomeFromOtherSourcesTax: "",
+      lifeInsurancePremium: "",
+      contributionToDeposit: "",
+      investmentInGovernmentSecurities1: "",
+      investmentInGovernmentSecurities2: "",
+      investmentInSecurities: "",
+      contributionToProvidentFund: "",
+      selfAndEmployersContribution: "",
+      contributionToSuperAnnuationFund: "",
+      contributionToBenevolentFund: "",
+      contributionToZakatFund1: "",
+      contributionToZakatFund2: "",
+      othersIf1: "",
+      othersIf2: "",
+      expensesForFoodAmount: "",
+      expensesForFoodComment: "",
+      housingExpenseAmount: "",
+      housingExpenseComment: "",
+      personalTransportationExpensesAmount: "",
+      personalTransportationExpensesAmountComment: "",
+      utilityExpenseAmount: "",
+      utilityExpenseComment: "",
+      educationExpensesAmount: "",
+      educationExpensesComment: "",
+      personalExpenseAmount: "",
+      personalExpenseComment: "",
+      festivalExpenseAmount: "",
+      festivalExpenseComment: "",
+      taxDeductedAmount: "",
+      taxDeductedComment: "",
+      advanceTaxPaid2Amount: "",
+      advanceTaxPaidComment: "",
+      taxSurchargePaidAmount: "",
+      taxSurchargePaidComment: "",
+      interestPaidAmount: "",
+      interestPaidComment: "",
+      total: "",
+      exemptedIncomeFromSalary: "",
+      exemptedIncomeFromBusiness: "",
+      exemptedAgriculturalIncome: "",
+      incomeFromProvidentFund: "",
+      foreignRemittance: "",
+      typeOfReceipts1: "",
+      typeOfReceipts2: "",
+      typeOfReceipts3: "",
+      typeOfReceiptsAmount1: "",
+      typeOfReceiptsAmount2: "",
+      typeOfReceiptsAmount3: "",
+      netWealthLastDate: undefined,
+      netWealthLastDateAmount: "",
+      giftExpense: "",
+      institutionalLiabilities: "",
+      nonInstitutionalLiabilities: "",
+      otherLiabilities: "",
+      totalAssetOfBusiness: "",
+      lessBusinessLiabilities: "",
+      companyName1: "",
+      companyName2: "",
+      companyName3: "",
+      noOfShare1: "",
+      noOfShare2: "",
+      noOfShare3: "",
+      value1: "",
+      value2: "",
+      value3: "",
+      nameOfPartnershipFirm1: "",
+      nameOfPartnershipFirm2: "",
+      nameOfPartnershipFirm3: "",
+      shareOfProfit1: "",
+      shareOfProfit2: "",
+      shareOfProfit3: "",
+      capitalContributed1: "",
+      capitalContributed2: "",
+      capitalContributed3: "",
+      locationDescription1: "",
+      locationDescription2: "",
+      locationDescription3: "",
+      locationDescription4: "",
+      locationDescription5: "",
+      locationValue1: "",
+      locationValue2: "",
+      locationValue3: "",
+      locationValue4: "",
+      locationValue5: "",
+      agriculturalLocationAndDescription1: "",
+      agriculturalLocationAndDescription2: "",
+      agriculturalLocationAndDescription3: "",
+      agriculturalLocationValue1: "",
+      agriculturalLocationValue2: "",
+      agriculturalLocationValue3: "",
+      shareDebentureUnitCertificate: "",
+      bondsGovernment: "",
+      sanchayapatraSavingsCertificate: "",
+      depositPensionScheme: "",
+      loansGivenToOthers: "",
+      name: "",
+      nid: "",
+      nidValue: "",
+      savingDeposit: "",
+      providentFund: "",
+      otherInvestment1: "",
+      otherInvestment2: "",
+      typeOfMotorVehicle1: "",
+      typeOfMotorVehicle2: "",
+      registrationNumber1: "",
+      registrationNumber2: "",
+      motorValue1: "",
+      motorValue2: "",
+      ornaments1: "",
+      ornaments2: "",
+      furnitureAndElectronic: "",
+      othersAssets1: "",
+      othersAssets2: "",
+      bankBalance: "",
+      cashInHand: "",
+      others1: "",
+      others2: "",
+      assetOutsideBangladesh: "",
+      incomeFromRent: "0.00",
+      incomeFromAgriculture: "0.00",
+      incomeFromBusiness: "0.00",
+      incomeFromBusinessMinimum: "0.00",
+      incomeFromCapitalGains: "0.00",
+      incomeFromFinancialAssets: "0.00",
+      incomeFromOtherSources: "0.00",
+      totalIncome: "0.00",
+      totalAmountPayable: "0.00",
+      taxDeductedOrCollected: "0.00",
+      totalTaxPaidAndAdjusted: "0.00",
+      excessPayment: "0.00",
+      taxExemptedTaxFreeIncome: "0.00",
+      totalRentValue: "0.00",
+      totalAdmissibleDeduction: "0.00",
+      netIncome: "0.00",
+      netProfit: "0.00",
+      netProfit2: "0.00",
+      cashInHandAtBank: "0.00",
+      totalAssets: "0.00",
+      netProfit3: "0.00",
+      closingCpital: "0.00",
+      totalCapitalsAndLiabilities: "0.00",
+      interestProfitFromBankFINetTaxableIncome: "0.00",
+      incomeFromSavingCertificatesNetTaxableIncome: "0.00",
+      incomeFromSecuritiesDebenturesNetTaxableIncome: "0.00",
+      incomeFromFinancialProductSchemeNetTaxableIncome: "0.00",
+      dividendIncomeNetTaxableIncome: "0.00",
+      capitalGainFromTransferofPropertyNetTaxableIncome: "0.00",
+      incomeFromBusinessNetTaxableIncome: "0.00",
+      workersParticinationFundNetTaxableIncome: "0.00",
+      incomeFromOtherSourcesNetTaxableIncome: "0.00",
+      totalAllowableInvestmentContribution: "0.00",
+      taxDeductedCollectedAtSourceAmount: "0.00",
+      advanceTaxPaidAmountTaka: "0.00",
+      totalAmount: "0.00",
+      totalAmount2: "0.00",
+      totalAmount3: "0.00",
+      taxOnIncomeFromPoultryHatcheriesFishFarming: "",
+      typeOfTaxExemptedTaxFreeIncome6: "",
+      typeOfTaxExemptedTaxFreeIncome7: "",
+      typeOfTaxExemptedTaxFreeIncomeAmount6: "",
+      typeOfTaxExemptedTaxFreeIncomeAmount7: "",
+      totalIncomeShownInTheReturn: "0.00",
+      taxExemptedIncomeAndAllowance: "0.00",
+      receiptOfGiftOtherReceipts: "0.00",
+      totalSourceOfFund: "0.00",
+      sumOfSourceOfFundAndPreviousYearsNetWealth: "0.00",
+      expenseRelatingToLifestyle: "0.00",
+      totalExpensesAndLoss: "0.00",
+      netWealthAtTheLastDateOfThisFinancialYear: "0.00",
+      totalLiabilitiesOutsideBusiness: "0.00",
+      grossWealth: "0.00",
+      businessCapitalAmount1: "0.00",
+      businessCapitalAmount2: "0.00",
+      directorsShareholdingsInTheCompanies: "0.00",
+      businessCapitalOfPartnershipFirm: "0.00",
+      nonAgriculturalPropertyLandHouseProperty: "0.00",
+      agriculturalProperty: "0.00",
+      totalFinancialAssets: "0.00",
+      motorVehiclesAmount: "0.00",
+      totalAssetslocatedInBangladesh: "0.00",
+      totalCashInHandsAndFundOutsideBusiness:"0.00",
+      totalAssetsInBangladeshAndOutsideBangladesh: "0.00",
+      totalIncomeShown: "",
+      totalTaxPaid: "",
+    },
   });
+
+  useEffect(() => {
+    const subscription = watch((value, { name }) => {
+      if (name === "netWealthSurcharge") {
+        if (value.netWealthSurcharge === "YES") {
+          setValue("netWealthSurchargeAmount", "0.00")
+        } else {
+          setValue("netWealthSurchargeAmount", undefined)
+        }
+      }
+      if(name === "repairCollection") {
+        if(value.repairCollection) {
+          setValue("repairCollectionAmount", "0.00")
+        } else {
+          setValue("repairCollectionAmount", undefined)
+        }
+      }
+      if(name === "netWealthLastDate") {
+        if(value.netWealthLastDate === "NO_I_AM_A_NEW_TAXPAYER") {
+          setValue("netWealthLastDateAmount", "0.00")
+        } else {
+          setValue("netWealthLastDateAmount", "")
+        }
+      }
+    });
+    
+    return () => subscription.unsubscribe();
+  }, [watch, setValue])
   const formFields: FormField[] = [
     {
       name: "taxpayerName",
@@ -189,7 +506,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       label: "Tax payer name",
       x: 92,
       y: 112,
-      disabled:true,
+      disabled: true,
       width: 570,
       height: 22,
       imageIndex: 1,
@@ -200,7 +517,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       label: "Tax payer name",
       x: 92,
       y: 130,
-      disabled:true,
+      disabled: true,
       width: 570,
       height: 22,
       imageIndex: 5,
@@ -219,7 +536,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "tin",
       type: "text",
       label: "TIN",
-  
+
       x: 538,
       y: 337,
       width: 397,
@@ -230,7 +547,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "tin",
       type: "text",
       label: "TIN",
-      disabled:true,
+      disabled: true,
       x: 668,
       y: 113,
       width: 265,
@@ -241,7 +558,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "tin",
       type: "text",
       label: "TIN",
-      disabled:true,
+      disabled: true,
       x: 668,
       y: 132,
       width: 265,
@@ -252,7 +569,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "circle",
       type: "text",
       label: "Circle",
-  
+
       x: 252,
       y: 367,
       width: 285,
@@ -263,7 +580,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "zone",
       type: "text",
       label: "Zone",
-  
+
       x: 685,
       y: 367,
       width: 250,
@@ -335,7 +652,7 @@ const IndividualTaxReturnForm: React.FC = () => {
           width: 49,
           height: 35,
         },
-  
+
         {
           label: "Option 5",
           value: "AGED_65_OR_MORE",
@@ -375,7 +692,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "dateOfBirth",
       type: "date",
       label: "Date of Birth",
-  
+
       x: 538,
       y: 475,
       width: 397,
@@ -389,7 +706,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "spouseName",
       type: "text",
       label: "spouse name",
-  
+
       x: 650,
       y: 577,
       width: 287,
@@ -400,7 +717,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "spouseTin",
       type: "text",
       label: "Spouse Tin",
-  
+
       x: 650,
       y: 612,
       width: 287,
@@ -411,7 +728,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "addressLine1",
       type: "text",
       label: "addressLine1",
-  
+
       x: 223,
       y: 651,
       width: 712,
@@ -422,7 +739,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "addressLine2",
       type: "text",
       label: "addressLine2",
-  
+
       x: 223,
       y: 682,
       width: 712,
@@ -453,7 +770,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "email",
       type: "email",
       label: "Email",
-  
+
       x: 678,
       y: 731,
       width: 259,
@@ -464,7 +781,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "employerName",
       type: "text",
       label: "Employer Name",
-  
+
       x: 130,
       y: 782,
       width: 805,
@@ -475,7 +792,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "businessName",
       type: "text",
       label: "Business Name",
-  
+
       x: 488,
       y: 812,
       width: 449,
@@ -512,12 +829,12 @@ const IndividualTaxReturnForm: React.FC = () => {
       height: 30,
       imageIndex: 0,
     },
-  
+
     {
       name: "statementOfIncomeYearEndedOn",
       type: "date",
       label: "statementOfIncomeYearEndedOn",
-      value: "",
+
       x: 100,
       y: 100,
       width: 397,
@@ -552,7 +869,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "shareOfIncomeFromAOP",
       type: "text",
       label: "shareOfIncomeFromAOP",
-  
+
       x: 600,
       y: 450,
       width: 100,
@@ -563,7 +880,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "shareOfIncomeFromAOPAmount",
       type: "text",
       label: "shareOfIncomeFromAOPAmount",
-  
+
       x: 770,
       y: 450,
       width: 168,
@@ -574,7 +891,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "incomeOfMinor",
       type: "text",
       label: "incomeOfMinor",
-  
+
       x: 770,
       y: 479,
       width: 168,
@@ -585,8 +902,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "incomeFromRent",
       type: "text",
       label: "incomeFromRent",
-      value:"0.00",
-      disabled:true,
+      disabled: true,
       x: 774,
       y: 210,
       width: 160,
@@ -597,8 +913,8 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "incomeFromAgriculture",
       type: "text",
       label: "incomeFromAgriculture",
-      value:"0.00",
-      disabled:true,
+
+      disabled: true,
       x: 774,
       y: 238,
       width: 160,
@@ -609,8 +925,8 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "incomeFromBusiness",
       type: "text",
       label: "incomeFromBusiness",
-      value:"0.00",
-      disabled:true,
+
+      disabled: true,
       x: 774,
       y: 300,
       width: 160,
@@ -621,8 +937,8 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "incomeFromBusinessMinimum",
       type: "text",
       label: "incomeFromBusinessMinimum",
-      value:"0.00",
-      disabled:true,
+
+      disabled: true,
       x: 774,
       y: 328,
       width: 160,
@@ -633,8 +949,8 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "incomeFromCapitalGains",
       type: "text",
       label: "incomeFromCapitalGains",
-      value:"0.00",
-      disabled:true,
+
+      disabled: true,
       x: 774,
       y: 357,
       width: 160,
@@ -645,8 +961,8 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "incomeFromFinancialAssets",
       type: "text",
       label: "incomeFromFinancialAssets",
-      value:"0.00",
-      disabled:true,
+
+      disabled: true,
       x: 774,
       y: 388,
       width: 160,
@@ -657,8 +973,8 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "incomeFromOtherSources",
       type: "text",
       label: "incomeFromOtherSources",
-      value:"0.00",
-      disabled:true,
+
+      disabled: true,
       x: 774,
       y: 418,
       width: 160,
@@ -669,8 +985,8 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "totalIncome",
       type: "text",
       label: "totalIncome",
-      value:"0.00",
-      disabled:true,
+
+      disabled: true,
       x: 774,
       y: 538,
       width: 160,
@@ -681,8 +997,8 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "totalAmountPayable",
       type: "text",
       label: "totalAmountPayable",
-      value:"0.00",
-      disabled:true,
+
+      disabled: true,
       x: 774,
       y: 855,
       width: 160,
@@ -693,7 +1009,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "taxableIncomeFromAbroad",
       type: "text",
       label: "incomeOfMinor",
-  
+
       x: 770,
       y: 508,
       width: 168,
@@ -709,7 +1025,7 @@ const IndividualTaxReturnForm: React.FC = () => {
         label: snakeToNormalText(minimumTax),
         value: minimumTax,
       })),
-  
+
       x: 270,
       y: 708,
       width: 350,
@@ -720,8 +1036,8 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "taxPayable",
       type: "text",
       label: "taxPayable",
-      value:"0.00",
-      disabled:true,
+
+      disabled: true,
       x: 774,
       y: 740,
       width: 160,
@@ -732,8 +1048,8 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "netWealthSurchargeAmount",
       type: "text",
       label: "netWealthSurchargeAmount",
-      value: watch("netWealthSurcharge") == "YES" ? "0.00" : "",
-      disabled:true,
+
+      disabled: true,
       x: 774,
       y: 768,
       width: 160,
@@ -770,7 +1086,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "delayInterest",
       type: "text",
       label: "delay Interest",
-  
+
       x: 770,
       y: 823,
       width: 170,
@@ -792,13 +1108,13 @@ const IndividualTaxReturnForm: React.FC = () => {
       height: 29,
       imageIndex: 1,
     },
-  
+
     {
       name: "taxDeductedOrCollected",
       type: "text",
       label: "taxDeductedOrCollected",
-      value: "0.00",
-      disabled:true,
+
+      disabled: true,
       x: 775,
       y: 111,
       width: 160,
@@ -809,8 +1125,8 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "totalTaxPaidAndAdjusted",
       type: "text",
       label: "totalTaxPaidAndAdjusted",
-      value: "0.00",
-      disabled:true,
+
+      disabled: true,
       x: 775,
       y: 225,
       width: 160,
@@ -821,8 +1137,8 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "excessPayment",
       type: "text",
       label: "excessPayment",
-      value: "0.00",
-      disabled:true,
+
+      disabled: true,
       x: 775,
       y: 255,
       width: 160,
@@ -833,20 +1149,20 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "taxExemptedTaxFreeIncome",
       type: "text",
       label: "taxExemptedTaxFreeIncome",
-      value: "0.00",
-      disabled:true,
+
+      disabled: true,
       x: 775,
       y: 312,
       width: 160,
       height: 25,
       imageIndex: 2,
     },
-  
+
     {
       name: "advanceTaxPaidAmount",
       type: "text",
       label: "Advance Tax PaidAmount",
-  
+
       x: 770,
       y: 137,
       width: 170,
@@ -857,7 +1173,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "adjustmentOfTaxRefund",
       type: "text",
       label: "adjustmentOfTaxRefund",
-  
+
       x: 770,
       y: 167,
       width: 170,
@@ -868,7 +1184,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "taxPaidWithThisReturn",
       type: "text",
       label: "taxPaidWithThisReturn",
-  
+
       x: 770,
       y: 195,
       width: 170,
@@ -879,7 +1195,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "listOfDocumentsFurnishedWithThisReturn1",
       type: "textarea",
       label: "listOfDocumentsFurnishedWithThisReturn1",
-  
+
       x: 91,
       y: 384,
       width: 425,
@@ -890,7 +1206,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "listOfDocumentsFurnishedWithThisReturn2",
       type: "textarea",
       label: "listOfDocumentsFurnishedWithThisReturn2",
-  
+
       x: 516,
       y: 384,
       width: 424,
@@ -901,7 +1217,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "fatherOrHusband",
       type: "text",
       label: "fatherOrHusband",
-  
+
       x: 632,
       y: 730,
       width: 300,
@@ -922,7 +1238,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "dateOfSignature",
       type: "date",
       label: "Date of Signature",
-  
+
       x: 538,
       y: 910,
       width: 397,
@@ -936,8 +1252,8 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "totalRentValue",
       type: "text",
       label: "totalRentValue",
-      value: "0.00",
-      disabled:true,
+
+      disabled: true,
       x: 845,
       y: 338,
       width: 90,
@@ -948,8 +1264,8 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "totalAdmissibleDeduction",
       type: "text",
       label: "totalAdmissibleDeduction",
-      value: "0.00",
-      disabled:true,
+
+      disabled: true,
       x: 845,
       y: 508,
       width: 90,
@@ -960,8 +1276,8 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "netIncome",
       type: "text",
       label: "netIncome",
-      value: "0.00",
-      disabled:true,
+
+      disabled: true,
       x: 845,
       y: 528,
       width: 90,
@@ -972,8 +1288,8 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "netProfit",
       type: "text",
       label: "netProfit",
-      value: "0.00",
-      disabled:true,
+
+      disabled: true,
       x: 845,
       y: 840,
       width: 90,
@@ -984,7 +1300,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "locationDescriptionOwnershipProportionOfProperty",
       type: "textarea",
       label: "locationDescriptionOwnershipProportionOfProperty",
-  
+
       x: 90,
       y: 227,
       width: 260,
@@ -995,7 +1311,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "rentReceivedOrAnnualValue",
       type: "text",
       label: "rentReceivedOrAnnualValue",
-  
+
       x: 750,
       y: 227,
       width: 95,
@@ -1006,7 +1322,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "advanceRentReceived",
       type: "text",
       label: "advanceRentReceived",
-  
+
       x: 750,
       y: 260,
       width: 95,
@@ -1017,7 +1333,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "valueOfAnyBenefit",
       type: "text",
       label: "valueOfAnyBenefit",
-  
+
       x: 750,
       y: 280,
       width: 95,
@@ -1028,7 +1344,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "adjustedAdvanceRent",
       type: "text",
       label: "adjustedAdvanceRent",
-  
+
       x: 750,
       y: 300,
       width: 95,
@@ -1039,7 +1355,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "vacancyAllowance",
       type: "text",
       label: "vacancyAllowance",
-  
+
       x: 750,
       y: 320,
       width: 95,
@@ -1062,10 +1378,21 @@ const IndividualTaxReturnForm: React.FC = () => {
       imageIndex: 4,
     },
     {
+      name: "repairCollectionAmount",
+      label: "repairCollectionAmount",
+      type: "text",
+      disabled:true,
+      x: 751,
+      y: 376,
+      width: 95,
+      height: 20,
+      imageIndex: 4,
+    },
+    {
       name: "municipalOrLocalTax",
       type: "text",
       label: "municipalOrLocalTax",
-  
+
       x: 751,
       y: 397,
       width: 95,
@@ -1076,7 +1403,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "landRevenue",
       type: "text",
       label: "landRevenue",
-  
+
       x: 751,
       y: 417,
       width: 95,
@@ -1087,7 +1414,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "interestMortgageCapitalCharge",
       type: "text",
       label: "interestMortgageCapitalCharge",
-  
+
       x: 751,
       y: 435,
       width: 95,
@@ -1098,7 +1425,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "insurancePremiumPaid",
       type: "text",
       label: "insurancePremiumPaid",
-  
+
       x: 751,
       y: 470,
       width: 95,
@@ -1109,7 +1436,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "others",
       type: "text",
       label: "others",
-  
+
       x: 751,
       y: 490,
       width: 95,
@@ -1120,7 +1447,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "taxpayersShare",
       type: "text",
       label: "taxpayersShare",
-  
+
       x: 655,
       y: 546,
       width: 60,
@@ -1131,7 +1458,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "taxDeductedSourceFromIncomeRent",
       type: "text",
       label: "taxDeductedSourceFromIncomeRent",
-  
+
       x: 845,
       y: 570,
       width: 95,
@@ -1142,7 +1469,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "salesTurnoverReceipt",
       type: "text",
       label: "salesTurnoverReceipt",
-  
+
       x: 844,
       y: 765,
       width: 95,
@@ -1153,7 +1480,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "grossProfit",
       type: "text",
       label: "grossProfit",
-  
+
       x: 844,
       y: 785,
       width: 95,
@@ -1164,7 +1491,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "generalExpensesSellingExpenses",
       type: "text",
       label: "generalExpensesSellingExpenses",
-  
+
       x: 844,
       y: 805,
       width: 95,
@@ -1175,7 +1502,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "nameOfBusiness",
       type: "text",
       label: "nameOfBusiness",
-  
+
       x: 318,
       y: 169,
       width: 590,
@@ -1186,7 +1513,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "natureOfBusiness",
       type: "text",
       label: "natureOfBusiness",
-  
+
       x: 318,
       y: 192,
       width: 590,
@@ -1197,7 +1524,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "addressOfBusiness",
       type: "text",
       label: "addressOfBusiness",
-  
+
       x: 318,
       y: 213,
       width: 590,
@@ -1208,7 +1535,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "salesTurnoverReceipts",
       type: "text",
       label: "salesTurnoverReceipts",
-  
+
       x: 703,
       y: 285,
       width: 205,
@@ -1219,7 +1546,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "grossProfitAmount",
       type: "text",
       label: "grossProfitAmount",
-  
+
       x: 703,
       y: 303,
       width: 205,
@@ -1230,7 +1557,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "generalAdministrativeSellingExpenses",
       type: "text",
       label: "generalAdministrativeSellingExpenses",
-  
+
       x: 703,
       y: 320,
       width: 205,
@@ -1241,7 +1568,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "badDebtExpense",
       type: "text",
       label: "badDebtExpense",
-  
+
       x: 703,
       y: 338,
       width: 205,
@@ -1252,7 +1579,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "inventories",
       type: "text",
       label: "inventories",
-  
+
       x: 700,
       y: 442,
       width: 205,
@@ -1263,7 +1590,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "fixedAssets",
       type: "text",
       label: "fixedAssets",
-  
+
       x: 700,
       y: 460,
       width: 205,
@@ -1274,8 +1601,8 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "netProfit2",
       type: "text",
       label: "netProfit2",
-      value:"0.00",
-      disabled:true,
+
+      disabled: true,
       x: 702,
       y: 358,
       width: 205,
@@ -1286,8 +1613,8 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "cashInHandAtBank",
       type: "text",
       label: "cashInHandAtBank",
-      value:"0.00",
-      disabled:true,
+
+      disabled: true,
       x: 702,
       y: 425,
       width: 200,
@@ -1298,8 +1625,8 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "totalAssets",
       type: "text",
       label: "totalAssets",
-      value:"0.00",
-      disabled:true,
+
+      disabled: true,
       x: 702,
       y: 495,
       width: 200,
@@ -1310,8 +1637,8 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "netProfit3",
       type: "text",
       label: "netProfit3",
-      value:"0.00",
-      disabled:true,
+
+      disabled: true,
       x: 702,
       y: 530,
       width: 200,
@@ -1322,8 +1649,8 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "closingCpital",
       type: "text",
       label: "closingCpital",
-      value:"0.00",
-      disabled:true,
+
+      disabled: true,
       x: 702,
       y: 565,
       width: 200,
@@ -1334,8 +1661,8 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "totalCapitalsAndLiabilities",
       type: "text",
       label: "totalCapitalsAndLiabilities",
-      value:"0.00",
-      disabled:true,
+
+      disabled: true,
       x: 702,
       y: 602,
       width: 200,
@@ -1346,8 +1673,8 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "interestProfitFromBankFINetTaxableIncome",
       type: "text",
       label: "interestProfitFromBankFINetTaxableIncome",
-      value:"0.00",
-      disabled:true,
+
+      disabled: true,
       x: 720,
       y: 732,
       width: 105,
@@ -1358,8 +1685,8 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "incomeFromSavingCertificatesNetTaxableIncome",
       type: "text",
       label: "incomeFromSavingCertificatesNetTaxableIncome",
-      value:"0.00",
-      disabled:true,
+
+      disabled: true,
       x: 720,
       y: 750,
       width: 105,
@@ -1370,8 +1697,8 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "incomeFromSavingCertificatesNetTaxableIncome",
       type: "text",
       label: "incomeFromSavingCertificatesNetTaxableIncome",
-      value:"0.00",
-      disabled:true,
+
+      disabled: true,
       x: 720,
       y: 768,
       width: 105,
@@ -1379,11 +1706,11 @@ const IndividualTaxReturnForm: React.FC = () => {
       imageIndex: 5,
     },
     {
-      name:"incomeFromFinancialProductSchemeNetTaxableIncome",
+      name: "incomeFromFinancialProductSchemeNetTaxableIncome",
       type: "text",
-      label:"incomeFromFinancialProductSchemeNetTaxableIncome",
-      value:"0.00",
-      disabled:true,
+      label: "incomeFromFinancialProductSchemeNetTaxableIncome",
+
+      disabled: true,
       x: 720,
       y: 785,
       width: 105,
@@ -1391,11 +1718,11 @@ const IndividualTaxReturnForm: React.FC = () => {
       imageIndex: 5,
     },
     {
-      name:"dividendIncomeNetTaxableIncome",
+      name: "dividendIncomeNetTaxableIncome",
       type: "text",
-      label:"dividendIncomeNetTaxableIncome",
-      value:"0.00",
-      disabled:true,
+      label: "dividendIncomeNetTaxableIncome",
+
+      disabled: true,
       x: 720,
       y: 803,
       width: 105,
@@ -1403,11 +1730,11 @@ const IndividualTaxReturnForm: React.FC = () => {
       imageIndex: 5,
     },
     {
-      name:"capitalGainFromTransferofPropertyNetTaxableIncome",
+      name: "capitalGainFromTransferofPropertyNetTaxableIncome",
       type: "text",
-      label:"capitalGainFromTransferofPropertyNetTaxableIncome",
-      value:"0.00",
-      disabled:true,
+      label: "capitalGainFromTransferofPropertyNetTaxableIncome",
+
+      disabled: true,
       x: 720,
       y: 820,
       width: 105,
@@ -1415,11 +1742,11 @@ const IndividualTaxReturnForm: React.FC = () => {
       imageIndex: 5,
     },
     {
-      name:"incomeFromBusinessNetTaxableIncome",
+      name: "incomeFromBusinessNetTaxableIncome",
       type: "text",
-      label:"incomeFromBusinessNetTaxableIncome",
-      value:"0.00",
-      disabled:true,
+      label: "incomeFromBusinessNetTaxableIncome",
+
+      disabled: true,
       x: 720,
       y: 840,
       width: 105,
@@ -1427,11 +1754,11 @@ const IndividualTaxReturnForm: React.FC = () => {
       imageIndex: 5,
     },
     {
-      name:"workersParticinationFundNetTaxableIncome",
+      name: "workersParticinationFundNetTaxableIncome",
       type: "text",
-      label:"workersParticinationFundNetTaxableIncome",
-      value:"0.00",
-      disabled:true,
+      label: "workersParticinationFundNetTaxableIncome",
+
+      disabled: true,
       x: 720,
       y: 856,
       width: 105,
@@ -1439,11 +1766,11 @@ const IndividualTaxReturnForm: React.FC = () => {
       imageIndex: 5,
     },
     {
-      name:"incomeFromOtherSourcesNetTaxableIncome",
+      name: "incomeFromOtherSourcesNetTaxableIncome",
       type: "text",
-      label:"incomeFromOtherSourcesNetTaxableIncome",
-      value:"0.00",
-      disabled:true,
+      label: "incomeFromOtherSourcesNetTaxableIncome",
+
+      disabled: true,
       x: 720,
       y: 875,
       width: 105,
@@ -1454,7 +1781,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "otherAssets",
       type: "text",
       label: "otherAssets",
-  
+
       x: 700,
       y: 477,
       width: 205,
@@ -1465,7 +1792,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "openingCapital",
       type: "text",
       label: "openingCapital",
-  
+
       x: 700,
       y: 512,
       width: 205,
@@ -1476,7 +1803,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "withdrawalsInTheIncomeYear",
       type: "text",
       label: "withdrawalsInTheIncomeYear",
-  
+
       x: 700,
       y: 548,
       width: 205,
@@ -1487,7 +1814,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "liabilities",
       type: "text",
       label: "liabilities",
-  
+
       x: 700,
       y: 583,
       width: 205,
@@ -1498,7 +1825,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "interestProfitFromBankFIAmount",
       type: "text",
       label: "interestProfitFromBankFIAmount",
-  
+
       x: 490,
       y: 730,
       width: 115,
@@ -1509,7 +1836,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "incomeFromSavingCertificatesAmount",
       type: "text",
       label: "incomeFromSavingCertificatesAmount",
-  
+
       x: 490,
       y: 750,
       width: 115,
@@ -1520,7 +1847,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "incomeFromSecuritiesDebenturesAmount",
       type: "text",
       label: "incomeFromSecuritiesDebenturesAmount",
-  
+
       x: 490,
       y: 765,
       width: 115,
@@ -1531,7 +1858,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "incomeFromFinancialProductSchemeAmount",
       type: "text",
       label: "incomeFromFinancialProductSchemeAmount",
-  
+
       x: 490,
       y: 785,
       width: 115,
@@ -1542,7 +1869,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "dividendIncomeAmount",
       type: "text",
       label: "dividendIncomeAmount",
-  
+
       x: 490,
       y: 800,
       width: 115,
@@ -1553,7 +1880,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "capitalGainFromTransferOfPropertyAmount",
       type: "text",
       label: "capitalGainFromTransferOfPropertyAmount",
-  
+
       x: 490,
       y: 820,
       width: 115,
@@ -1564,7 +1891,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "incomeFromBusinessAmount",
       type: "text",
       label: "incomeFromBusinessAmount",
-  
+
       x: 490,
       y: 838,
       width: 115,
@@ -1575,7 +1902,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "workersParticipationFundAmount",
       type: "text",
       label: "workersParticipationFundAmount",
-  
+
       x: 490,
       y: 856,
       width: 115,
@@ -1586,7 +1913,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "incomeFromOtherSourcesAmount",
       type: "text",
       label: "incomeFromOtherSourcesAmount",
-  
+
       x: 490,
       y: 873,
       width: 115,
@@ -1597,7 +1924,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "interestProfitFromBankFIDeductions",
       type: "text",
       label: "interestProfitFromBankFIDeductions",
-  
+
       x: 605,
       y: 730,
       width: 115,
@@ -1608,7 +1935,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "incomeFromSavingCertificatesDeductions",
       type: "text",
       label: "incomeFromSavingCertificatesDeductions",
-  
+
       x: 605,
       y: 748,
       width: 115,
@@ -1619,7 +1946,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "incomeFromSecuritiesDebenturesDeductions",
       type: "text",
       label: "incomeFromSecuritiesDebenturesDeductions",
-  
+
       x: 605,
       y: 766,
       width: 115,
@@ -1630,7 +1957,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "incomeFromFinancialProductSchemeDeductions",
       type: "text",
       label: "incomeFromFinancialProductSchemeDeductions",
-  
+
       x: 605,
       y: 784,
       width: 115,
@@ -1641,7 +1968,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "dividendIncomeDeductions",
       type: "text",
       label: "dividendIncomeDeductions",
-  
+
       x: 605,
       y: 802,
       width: 115,
@@ -1652,7 +1979,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "capitalGainFromTransferOfPropertyDeductions",
       type: "text",
       label: "capitalGainFromTransferOfPropertyDeductions",
-  
+
       x: 605,
       y: 820,
       width: 115,
@@ -1663,7 +1990,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "incomeFromBusinessDeductions",
       type: "text",
       label: "incomeFromBusinessDeductions",
-  
+
       x: 605,
       y: 838,
       width: 115,
@@ -1674,7 +2001,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "workersParticipationFundDeductions",
       type: "text",
       label: "workersParticipationFundDeductions",
-  
+
       x: 605,
       y: 856,
       width: 115,
@@ -1685,7 +2012,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "incomeFromOtherSourcesDeductions",
       type: "text",
       label: "incomeFromOtherSourcesDeductions",
-  
+
       x: 605,
       y: 872,
       width: 115,
@@ -1696,7 +2023,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "interestProfitFromBankFITax",
       type: "text",
       label: "interestProfitFromBankFITax",
-  
+
       x: 828,
       y: 730,
       width: 112,
@@ -1707,7 +2034,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "incomeFromSavingCertificatesTax",
       type: "text",
       label: "incomeFromSavingCertificatesTax",
-  
+
       x: 828,
       y: 748,
       width: 112,
@@ -1718,7 +2045,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "incomeFromSecuritiesDebenturesTax",
       type: "text",
       label: "incomeFromSecuritiesDebenturesTax",
-  
+
       x: 828,
       y: 766,
       width: 112,
@@ -1729,7 +2056,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "incomeFromFinancialProductSchemeTax",
       type: "text",
       label: "incomeFromFinancialProductSchemeTax",
-  
+
       x: 828,
       y: 784,
       width: 112,
@@ -1740,7 +2067,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "dividendIncomeTax",
       type: "text",
       label: "dividendIncomeTax",
-  
+
       x: 828,
       y: 800,
       width: 112,
@@ -1751,7 +2078,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "capitalGainFromTransferOfPropertyTax",
       type: "text",
       label: "capitalGainFromTransferOfPropertyTax",
-  
+
       x: 828,
       y: 820,
       width: 112,
@@ -1762,7 +2089,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "incomeFromBusinessTax",
       type: "text",
       label: "incomeFromBusinessTax",
-  
+
       x: 828,
       y: 838,
       width: 112,
@@ -1773,7 +2100,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "workersParticipationFundTax",
       type: "text",
       label: "workersParticipationFundTax",
-  
+
       x: 828,
       y: 856,
       width: 112,
@@ -1784,7 +2111,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "incomeFromOtherSourcesTax",
       type: "text",
       label: "incomeFromOtherSourcesTax",
-  
+
       x: 828,
       y: 874,
       width: 112,
@@ -1792,10 +2119,10 @@ const IndividualTaxReturnForm: React.FC = () => {
       imageIndex: 5,
     },
     {
-      name:"taxpayerName",
+      name: "taxpayerName",
       type: "text",
-      label:"taxpayerName",
-      disabled:true,
+      label: "taxpayerName",
+      disabled: true,
       x: 95,
       y: 125,
       width: 570,
@@ -1803,11 +2130,11 @@ const IndividualTaxReturnForm: React.FC = () => {
       imageIndex: 6,
     },
     {
-      name:"totalAllowableInvestmentContribution",
+      name: "totalAllowableInvestmentContribution",
       type: "text",
-      label:"totalAllowableInvestmentContribution",
-      value:"0.00",
-      disabled:true,
+      label: "totalAllowableInvestmentContribution",
+
+      disabled: true,
       x: 795,
       y: 405,
       width: 140,
@@ -1818,7 +2145,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "lifeInsurancePremium",
       type: "text",
       label: "lifeInsurancePremium",
-  
+
       x: 795,
       y: 195,
       width: 145,
@@ -1829,7 +2156,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "contributionToDeposit",
       type: "text",
       label: "contributionToDeposit",
-  
+
       x: 795,
       y: 215,
       width: 145,
@@ -1840,7 +2167,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "investmentInGovernmentSecurities1",
       type: "text",
       label: "investmentInGovernmentSecurities1",
-  
+
       x: 490,
       y: 248,
       width: 305,
@@ -1851,7 +2178,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "investmentInGovernmentSecurities2",
       type: "text",
       label: "investmentInGovernmentSecurities2",
-  
+
       x: 795,
       y: 232,
       width: 145,
@@ -1862,7 +2189,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "investmentInSecurities",
       type: "text",
       label: "investmentInSecurities",
-  
+
       x: 795,
       y: 265,
       width: 145,
@@ -1873,7 +2200,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "contributionToProvidentFund",
       type: "text",
       label: "contributionToProvidentFund",
-  
+
       x: 795,
       y: 284,
       width: 145,
@@ -1884,7 +2211,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "selfAndEmployersContribution",
       type: "text",
       label: "selfAndEmployersContribution",
-  
+
       x: 795,
       y: 306,
       width: 145,
@@ -1895,7 +2222,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "contributionToSuperAnnuationFund",
       type: "text",
       label: "contributionToSuperAnnuationFund",
-  
+
       x: 795,
       y: 324,
       width: 145,
@@ -1906,7 +2233,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "contributionToBenevolentFund",
       type: "text",
       label: "contributionToBenevolentFund",
-  
+
       x: 795,
       y: 344,
       width: 145,
@@ -1917,19 +2244,19 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "contributionToZakatFund1",
       type: "text",
       label: "contributionToZakatFund1",
-  
+
       x: 380,
       y: 364,
       width: 415,
       height: 20,
       imageIndex: 6,
     },
-  
+
     {
       name: "contributionToZakatFund2",
       type: "text",
       label: "contributionToZakatFund2",
-  
+
       x: 795,
       y: 364,
       width: 145,
@@ -1940,31 +2267,30 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "othersIf1",
       type: "text",
       label: "othersIf1",
-  
+
       x: 395,
       y: 382,
       width: 400,
       height: 20,
       imageIndex: 6,
     },
-  
+
     {
       name: "othersIf2",
       type: "text",
       label: "othersIf2",
-  
+
       x: 795,
       y: 382,
       width: 145,
       height: 20,
       imageIndex: 6,
-  
     },
     {
       name: "tin",
       type: "text",
       label: "TIN",
-      disabled:true,
+      disabled: true,
       x: 668,
       y: 125,
       width: 265,
@@ -1975,7 +2301,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "taxOnIncomeFromPoultryHatcheriesFishFarming",
       type: "text",
       label: "taxOnIncomeFromPoultryHatcheriesFishFarming",
-      disabled:true,
+      disabled: true,
       x: 735,
       y: 915,
       width: 200,
@@ -1986,7 +2312,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "tin",
       type: "text",
       label: "TIN",
-      disabled:true,
+      disabled: true,
       x: 668,
       y: 135,
       width: 265,
@@ -1997,7 +2323,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "taxpayerName",
       type: "text",
       label: "Tax payer name",
-      disabled:true,
+      disabled: true,
       x: 95,
       y: 135,
       width: 570,
@@ -2008,7 +2334,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "expensesForFoodAmount",
       type: "text",
       label: "expensesForFoodAmount",
-  
+
       x: 598,
       y: 205,
       width: 135,
@@ -2019,8 +2345,8 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "taxDeductedCollectedAtSourceAmount",
       type: "text",
       label: "taxDeductedCollectedAtSourceAmount",
-      value: "0.00",
-      disabled:true,
+
+      disabled: true,
       x: 598,
       y: 360,
       width: 135,
@@ -2031,8 +2357,8 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "advanceTaxPaidAmountTaka",
       type: "text",
       label: "advanceTaxPaidAmountTaka",
-      value: "0.00",
-      disabled:true,
+
+      disabled: true,
       x: 598,
       y: 395,
       width: 135,
@@ -2043,8 +2369,8 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "totalAmount",
       type: "text",
       label: "totalAmount",
-      value: "0.00",
-      disabled:true,
+
+      disabled: true,
       x: 598,
       y: 478,
       width: 135,
@@ -2055,8 +2381,8 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "totalAmount2",
       type: "text",
       label: "totalAmount2",
-      value: "0.00",
-      disabled:true,
+
+      disabled: true,
       x: 785,
       y: 798,
       width: 150,
@@ -2067,8 +2393,8 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "totalAmount3",
       type: "text",
       label: "totalAmount3",
-      value: "0.00",
-      disabled:true,
+
+      disabled: true,
       x: 785,
       y: 928,
       width: 150,
@@ -2079,7 +2405,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "expensesForFoodComment",
       type: "text",
       label: "expensesForFoodComment",
-  
+
       x: 732,
       y: 205,
       width: 208,
@@ -2090,7 +2416,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "housingExpenseAmount",
       type: "text",
       label: "housingExpenseAmount",
-  
+
       x: 598,
       y: 225,
       width: 135,
@@ -2101,7 +2427,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "housingExpenseComment",
       type: "text",
       label: "housingExpenseComment",
-  
+
       x: 732,
       y: 225,
       width: 208,
@@ -2112,7 +2438,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "personalTransportationExpensesAmount",
       type: "text",
       label: "personalTransportationExpensesAmount",
-  
+
       x: 598,
       y: 242,
       width: 135,
@@ -2123,7 +2449,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "personalTransportationExpensesAmountComment",
       type: "text",
       label: "personalTransportationExpensesAmountComment",
-  
+
       x: 732,
       y: 242,
       width: 208,
@@ -2134,7 +2460,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "utilityExpenseAmount",
       type: "text",
       label: "utilityExpenseAmount",
-  
+
       x: 598,
       y: 260,
       width: 135,
@@ -2142,10 +2468,20 @@ const IndividualTaxReturnForm: React.FC = () => {
       imageIndex: 7,
     },
     {
+      name: "signature",
+      type: "signature",
+      label: "Signature",
+      x: 650,
+      y: 550,
+      width: 500,
+      height: 200,
+      imageIndex: 7,
+    },
+    {
       name: "utilityExpenseComment",
       type: "text",
       label: "utilityExpenseComment",
-  
+
       x: 732,
       y: 260,
       width: 208,
@@ -2156,7 +2492,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "educationExpensesAmount",
       type: "text",
       label: "educationExpensesAmount",
-  
+
       x: 598,
       y: 292,
       width: 135,
@@ -2167,7 +2503,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "educationExpensesComment",
       type: "text",
       label: "educationExpensesComment",
-  
+
       x: 732,
       y: 292,
       width: 208,
@@ -2178,7 +2514,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "personalExpenseAmount",
       type: "text",
       label: "personalExpenseAmount",
-  
+
       x: 598,
       y: 311,
       width: 135,
@@ -2189,7 +2525,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "personalExpenseComment",
       type: "text",
       label: "personalExpenseComment",
-  
+
       x: 732,
       y: 311,
       width: 208,
@@ -2200,7 +2536,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "festivalExpenseAmount",
       type: "text",
       label: "festivalExpenseAmount",
-  
+
       x: 598,
       y: 345,
       width: 135,
@@ -2211,7 +2547,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "festivalExpenseComment",
       type: "text",
       label: "festivalExpenseComment",
-  
+
       x: 732,
       y: 345,
       width: 208,
@@ -2222,7 +2558,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "taxDeductedComment",
       type: "text",
       label: "taxDeductedComment",
-  
+
       x: 732,
       y: 360,
       width: 208,
@@ -2233,7 +2569,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "advanceTaxPaidComment",
       type: "text",
       label: "advanceTaxPaidComment",
-  
+
       x: 732,
       y: 395,
       width: 208,
@@ -2244,7 +2580,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "taxSurchargePaidAmount",
       type: "text",
       label: "taxSurchargePaidAmount",
-  
+
       x: 596,
       y: 412,
       width: 138,
@@ -2255,7 +2591,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "taxSurchargePaidComment",
       type: "text",
       label: "taxSurchargePaidComment",
-  
+
       x: 732,
       y: 412,
       width: 208,
@@ -2266,7 +2602,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "interestPaidAmount",
       type: "text",
       label: "interestPaidAmount",
-  
+
       x: 596,
       y: 445,
       width: 138,
@@ -2277,7 +2613,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "interestPaidComment",
       type: "text",
       label: "interestPaidComment",
-  
+
       x: 732,
       y: 445,
       width: 208,
@@ -2288,7 +2624,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "total",
       type: "text",
       label: "total",
-  
+
       x: 732,
       y: 480,
       width: 208,
@@ -2299,7 +2635,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "exemptedIncomeFromSalary",
       type: "text",
       label: "exemptedIncomeFromSalary",
-  
+
       x: 782,
       y: 672,
       width: 157,
@@ -2310,7 +2646,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "exemptedIncomeFromBusiness",
       type: "text",
       label: "exemptedIncomeFromBusiness",
-  
+
       x: 782,
       y: 690,
       width: 157,
@@ -2321,7 +2657,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "exemptedAgriculturalIncome",
       type: "text",
       label: "exemptedAgriculturalIncome",
-  
+
       x: 782,
       y: 705,
       width: 157,
@@ -2332,7 +2668,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "incomeFromProvidentFund",
       type: "text",
       label: "incomeFromProvidentFund",
-  
+
       x: 782,
       y: 725,
       width: 157,
@@ -2343,7 +2679,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "foreignRemittance",
       type: "text",
       label: "foreignRemittance",
-  
+
       x: 782,
       y: 742,
       width: 157,
@@ -2354,7 +2690,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "typeOfReceipts1",
       type: "text",
       label: "typeOfReceipts1",
-  
+
       x: 138,
       y: 872,
       width: 642,
@@ -2365,7 +2701,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "typeOfReceiptsAmount1",
       type: "text",
       label: "typeOfReceiptsAmount1",
-  
+
       x: 782,
       y: 872,
       width: 157,
@@ -2376,7 +2712,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "typeOfReceipts2",
       type: "text",
       label: "typeOfReceipts2",
-  
+
       x: 138,
       y: 890,
       width: 642,
@@ -2387,7 +2723,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "typeOfReceiptsAmount2",
       type: "text",
       label: "typeOfReceiptsAmount2",
-  
+
       x: 782,
       y: 890,
       width: 157,
@@ -2398,7 +2734,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "typeOfReceipts3",
       type: "text",
       label: "typeOfReceipts3",
-  
+
       x: 138,
       y: 908,
       width: 642,
@@ -2409,7 +2745,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "typeOfReceiptsAmount3",
       type: "text",
       label: "typeOfReceiptsAmount3",
-  
+
       x: 782,
       y: 908,
       width: 157,
@@ -2420,7 +2756,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "typeOfTaxExemptedTaxFreeIncome6",
       type: "text",
       label: "typeOfTaxExemptedTaxFreeIncome6",
-  
+
       x: 138,
       y: 760,
       width: 645,
@@ -2431,7 +2767,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "typeOfTaxExemptedTaxFreeIncomeAmount6",
       type: "text",
       label: "typeOfTaxExemptedTaxFreeIncomeAmount6",
-  
+
       x: 782,
       y: 760,
       width: 158,
@@ -2442,7 +2778,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "typeOfTaxExemptedTaxFreeIncome7",
       type: "text",
       label: "typeOfTaxExemptedTaxFreeIncome7",
-  
+
       x: 138,
       y: 778,
       width: 645,
@@ -2453,7 +2789,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "typeOfTaxExemptedTaxFreeIncomeAmount7",
       type: "text",
       label: "typeOfTaxExemptedTaxFreeIncomeAmount7",
-  
+
       x: 782,
       y: 778,
       width: 158,
@@ -2466,7 +2802,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       label: "Tax payer name",
       x: 92,
       y: 300,
-      disabled:true,
+      disabled: true,
       width: 570,
       height: 20,
       imageIndex: 8,
@@ -2475,7 +2811,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "tin",
       type: "text",
       label: "TIN",
-      disabled:true,
+      disabled: true,
       x: 668,
       y: 300,
       width: 265,
@@ -2486,8 +2822,8 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "totalIncomeShownInTheReturn",
       type: "text",
       label: "totalIncomeShownInTheReturn",
-      value:"0.00",
-      disabled:true,
+
+      disabled: true,
       x: 775,
       y: 375,
       width: 160,
@@ -2498,8 +2834,8 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "taxExemptedIncomeAndAllowance",
       type: "text",
       label: "taxExemptedIncomeAndAllowance",
-      value:"0.00",
-      disabled:true,
+
+      disabled: true,
       x: 775,
       y: 393,
       width: 160,
@@ -2510,8 +2846,8 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "receiptOfGiftOtherReceipts",
       type: "text",
       label: "receiptOfGiftOtherReceipts",
-      value:"0.00",
-      disabled:true,
+
+      disabled: true,
       x: 775,
       y: 410,
       width: 160,
@@ -2522,8 +2858,8 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "totalSourceOfFund",
       type: "text",
       label: "totalSourceOfFund",
-      value:"0.00",
-      disabled:true,
+
+      disabled: true,
       x: 775,
       y: 428,
       width: 160,
@@ -2534,8 +2870,8 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "sumOfSourceOfFundAndPreviousYearsNetWealth",
       type: "text",
       label: "sumOfSourceOfFundAndPreviousYearsNetWealth",
-      value:"0.00",
-      disabled:true,
+
+      disabled: true,
       x: 775,
       y: 463,
       width: 160,
@@ -2546,8 +2882,8 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "expenseRelatingToLifestyle",
       type: "text",
       label: "expenseRelatingToLifestyle",
-      value:"0.00",
-      disabled:true,
+
+      disabled: true,
       x: 775,
       y: 498,
       width: 160,
@@ -2558,8 +2894,8 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "totalExpensesAndLoss",
       type: "text",
       label: "totalExpensesAndLoss",
-      value:"0.00",
-      disabled:true,
+
+      disabled: true,
       x: 775,
       y: 535,
       width: 160,
@@ -2570,8 +2906,8 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "netWealthAtTheLastDateOfThisFinancialYear",
       type: "text",
       label: "netWealthAtTheLastDateOfThisFinancialYear",
-      value:"0.00",
-      disabled:true,
+
+      disabled: true,
       x: 775,
       y: 552,
       width: 160,
@@ -2582,8 +2918,8 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "totalLiabilitiesOutsideBusiness",
       type: "text",
       label: "totalLiabilitiesOutsideBusiness",
-      value:"0.00",
-      disabled:true,
+
+      disabled: true,
       x: 775,
       y: 640,
       width: 160,
@@ -2594,8 +2930,8 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "grossWealth",
       type: "text",
       label: "grossWealth",
-      value:"0.00",
-      disabled:true,
+
+      disabled: true,
       x: 775,
       y: 658,
       width: 160,
@@ -2606,8 +2942,8 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "businessCapitalAmount1",
       type: "text",
       label: "businessCapitalAmount1",
-      value:"0.00",
-      disabled:true,
+
+      disabled: true,
       x: 640,
       y: 747,
       width: 130,
@@ -2618,8 +2954,8 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "businessCapitalAmount2",
       type: "text",
       label: "businessCapitalAmount2",
-      value:"0.00",
-      disabled:true,
+
+      disabled: true,
       x: 775,
       y: 747,
       width: 160,
@@ -2630,8 +2966,8 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "directorsShareholdingsInTheCompanies",
       type: "text",
       label: "directorsShareholdingsInTheCompanies",
-      value:"0.00",
-      disabled:true,
+
+      disabled: true,
       x: 775,
       y: 765,
       width: 160,
@@ -2642,8 +2978,8 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "businessCapitalOfPartnershipFirm",
       type: "text",
       label: "businessCapitalOfPartnershipFirm",
-      value:"0.00",
-      disabled:true,
+
+      disabled: true,
       x: 775,
       y: 852,
       width: 160,
@@ -2669,9 +3005,10 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "netWealthLastDateAmount",
       type: "text",
       label: "netWealthLastDateAmount",
-      value: watch("netWealthLastDate") === "NO_I_AM_A_NEW_TAXPAYER" ? "0.00" : "",
-      disabled: watch("netWealthLastDate") === "NO_I_AM_A_NEW_TAXPAYER" ? true: false,
-  
+
+      disabled:
+        watch("netWealthLastDate") === "NO_I_AM_A_NEW_TAXPAYER" ? true : false,
+
       x: 772,
       y: 445,
       width: 168,
@@ -2682,7 +3019,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "giftExpense",
       type: "text",
       label: "giftExpense",
-  
+
       x: 772,
       y: 515,
       width: 168,
@@ -2693,7 +3030,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "institutionalLiabilities",
       type: "text",
       label: "institutionalLiabilities",
-  
+
       x: 772,
       y: 585,
       width: 168,
@@ -2704,7 +3041,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "nonInstitutionalLiabilities",
       type: "text",
       label: "nonInstitutionalLiabilities",
-  
+
       x: 772,
       y: 605,
       width: 168,
@@ -2715,7 +3052,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "otherLiabilities",
       type: "text",
       label: "otherLiabilities",
-  
+
       x: 772,
       y: 620,
       width: 168,
@@ -2726,7 +3063,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "totalAssetOfBusiness",
       type: "text",
       label: "totalAssetOfBusiness",
-  
+
       x: 640,
       y: 710,
       width: 135,
@@ -2737,7 +3074,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "lessBusinessLiabilities",
       type: "text",
       label: "lessBusinessLiabilities",
-  
+
       x: 640,
       y: 728,
       width: 135,
@@ -2748,7 +3085,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "companyName1",
       type: "text",
       label: "companyName1",
-  
+
       x: 185,
       y: 800,
       width: 320,
@@ -2759,7 +3096,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "companyName2",
       type: "text",
       label: "companyName2",
-  
+
       x: 185,
       y: 818,
       width: 320,
@@ -2770,7 +3107,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "companyName3",
       type: "text",
       label: "companyName3",
-  
+
       x: 185,
       y: 834,
       width: 320,
@@ -2781,7 +3118,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "noOfShare1",
       type: "text",
       label: "noOfShare1",
-  
+
       x: 505,
       y: 800,
       width: 135,
@@ -2792,7 +3129,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "noOfShare2",
       type: "text",
       label: "noOfShare2",
-  
+
       x: 505,
       y: 818,
       width: 135,
@@ -2803,7 +3140,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "noOfShare3",
       type: "text",
       label: "noOfShare3",
-  
+
       x: 505,
       y: 834,
       width: 135,
@@ -2814,7 +3151,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "value1",
       type: "text",
       label: "value1",
-  
+
       x: 640,
       y: 800,
       width: 135,
@@ -2825,7 +3162,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "value2",
       type: "text",
       label: "value2",
-  
+
       x: 640,
       y: 818,
       width: 135,
@@ -2836,7 +3173,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "value3",
       type: "text",
       label: "value3",
-  
+
       x: 640,
       y: 834,
       width: 135,
@@ -2847,7 +3184,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "nameOfPartnershipFirm1",
       type: "text",
       label: "nameOfPartnershipFirm1",
-  
+
       x: 185,
       y: 903,
       width: 320,
@@ -2858,7 +3195,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "nameOfPartnershipFirm2",
       type: "text",
       label: "nameOfPartnershipFirm2",
-  
+
       x: 185,
       y: 922,
       width: 320,
@@ -2869,19 +3206,19 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "nameOfPartnershipFirm3",
       type: "text",
       label: "nameOfPartnershipFirm3",
-  
+
       x: 185,
       y: 938,
       width: 320,
       height: 18,
       imageIndex: 8,
     },
-  
+
     {
       name: "shareOfProfit1",
       type: "text",
       label: "shareOfProfit1",
-  
+
       x: 505,
       y: 903,
       width: 135,
@@ -2892,7 +3229,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "shareOfProfit2",
       type: "text",
       label: "shareOfProfit2",
-  
+
       x: 505,
       y: 922,
       width: 135,
@@ -2903,7 +3240,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "shareOfProfit3",
       type: "text",
       label: "shareOfProfit3",
-  
+
       x: 505,
       y: 938,
       width: 135,
@@ -2914,7 +3251,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "capitalContributed1",
       type: "text",
       label: "capitalContributed1",
-  
+
       x: 640,
       y: 903,
       width: 135,
@@ -2925,7 +3262,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "capitalContributed2",
       type: "text",
       label: "capitalContributed2",
-  
+
       x: 640,
       y: 922,
       width: 135,
@@ -2936,7 +3273,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "capitalContributed3",
       type: "text",
       label: "capitalContributed3",
-  
+
       x: 640,
       y: 938,
       width: 135,
@@ -2947,8 +3284,8 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "nonAgriculturalPropertyLandHouseProperty",
       type: "text",
       label: "nonAgriculturalPropertyLandHouseProperty",
-      value:"0.00",
-      disabled:true,
+
+      disabled: true,
       x: 775,
       y: 85,
       width: 160,
@@ -2959,8 +3296,8 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "agriculturalProperty",
       type: "text",
       label: "agriculturalProperty",
-      value:"0.00",
-      disabled:true,
+
+      disabled: true,
       x: 775,
       y: 237,
       width: 160,
@@ -2971,8 +3308,8 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "totalFinancialAssets",
       type: "text",
       label: "totalFinancialAssets",
-      value:"0.00",
-      disabled:true,
+
+      disabled: true,
       x: 775,
       y: 521,
       width: 160,
@@ -2983,10 +3320,22 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "motorVehiclesAmount",
       type: "text",
       label: "motorVehiclesAmount",
-      value:"0.00",
-      disabled:true,
+
+      disabled: true,
       x: 775,
       y: 538,
+      width: 160,
+      height: 16,
+      imageIndex: 9,
+    },
+    {
+      name: "totalCashInHandsAndFundOutsideBusiness",
+      type: "text",
+      label: "totalCashInHandsAndFundOutsideBusiness",
+
+      disabled: true,
+      x: 775,
+      y: 733,
       width: 160,
       height: 16,
       imageIndex: 9,
@@ -2995,8 +3344,8 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "totalAssetslocatedInBangladesh",
       type: "text",
       label: "totalAssetslocatedInBangladesh",
-      value:"0.00",
-      disabled:true,
+
+      disabled: true,
       x: 775,
       y: 750,
       width: 160,
@@ -3007,8 +3356,8 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "totalAssetsInBangladeshAndOutsideBangladesh",
       type: "text",
       label: "totalAssetsInBangladeshAndOutsideBangladesh",
-      value:"0.00",
-      disabled:true,
+
+      disabled: true,
       x: 775,
       y: 785,
       width: 160,
@@ -3019,11 +3368,11 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "taxpayerName",
       type: "text",
       label: "taxpayerName",
-      
-      disabled:true,
+
+      disabled: true,
       x: 150,
       y: 905,
-      width:340,
+      width: 340,
       height: 16,
       imageIndex: 9,
     },
@@ -3031,7 +3380,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "locationDescription1",
       type: "text",
       label: "locationDescription1",
-  
+
       x: 185,
       y: 130,
       width: 455,
@@ -3042,7 +3391,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "locationDescription2",
       type: "text",
       label: "locationDescription2",
-  
+
       x: 185,
       y: 148,
       width: 455,
@@ -3053,7 +3402,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "locationDescription3",
       type: "text",
       label: "locationDescription3",
-  
+
       x: 185,
       y: 165,
       width: 455,
@@ -3064,7 +3413,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "locationDescription4",
       type: "text",
       label: "locationDescription4",
-  
+
       x: 185,
       y: 183,
       width: 455,
@@ -3075,7 +3424,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "locationDescription5",
       type: "text",
       label: "locationDescription5",
-  
+
       x: 185,
       y: 202,
       width: 455,
@@ -3086,7 +3435,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "locationValue1",
       type: "text",
       label: "locationValue1",
-  
+
       x: 638,
       y: 130,
       width: 135,
@@ -3097,7 +3446,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "locationValue2",
       type: "text",
       label: "locationValue2",
-  
+
       x: 638,
       y: 148,
       width: 135,
@@ -3108,7 +3457,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "locationValue3",
       type: "text",
       label: "locationValue3",
-  
+
       x: 638,
       y: 166,
       width: 135,
@@ -3119,7 +3468,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "locationValue4",
       type: "text",
       label: "locationValue4",
-  
+
       x: 638,
       y: 184,
       width: 135,
@@ -3130,19 +3479,19 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "locationValue5",
       type: "text",
       label: "locationValue5",
-  
+
       x: 638,
       y: 202,
       width: 135,
       height: 18,
       imageIndex: 9,
     },
-  
+
     {
       name: "agriculturalLocationAndDescription1",
       type: "text",
       label: "agriculturalLocationAndDescription1",
-  
+
       x: 185,
       y: 272,
       width: 455,
@@ -3153,7 +3502,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "agriculturalLocationAndDescription2",
       type: "text",
       label: "agriculturalLocationAndDescription2",
-  
+
       x: 185,
       y: 290,
       width: 455,
@@ -3164,7 +3513,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "agriculturalLocationAndDescription3",
       type: "text",
       label: "agriculturalLocationAndDescription3",
-  
+
       x: 185,
       y: 308,
       width: 455,
@@ -3175,7 +3524,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "agriculturalLocationValue1",
       type: "text",
       label: "agriculturalLocationValue1",
-  
+
       x: 638,
       y: 272,
       width: 135,
@@ -3186,7 +3535,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "agriculturalLocationValue2",
       type: "text",
       label: "agriculturalLocationValue2",
-  
+
       x: 638,
       y: 290,
       width: 135,
@@ -3197,7 +3546,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "agriculturalLocationValue3",
       type: "text",
       label: "agriculturalLocationValue3",
-  
+
       x: 638,
       y: 308,
       width: 135,
@@ -3208,7 +3557,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "shareDebentureUnitCertificate",
       type: "text",
       label: "shareDebentureUnitCertificate",
-  
+
       x: 770,
       y: 360,
       width: 170,
@@ -3219,7 +3568,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "bondsGovernment",
       type: "text",
       label: "bondsGovernment",
-  
+
       x: 770,
       y: 378,
       width: 170,
@@ -3230,7 +3579,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "sanchayapatraSavingsCertificate",
       type: "text",
       label: "sanchayapatraSavingsCertificate",
-  
+
       x: 770,
       y: 396,
       width: 170,
@@ -3241,7 +3590,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "depositPensionScheme",
       type: "text",
       label: "depositPensionScheme",
-  
+
       x: 770,
       y: 414,
       width: 170,
@@ -3252,7 +3601,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "loansGivenToOthers",
       type: "text",
       label: "loansGivenToOthers",
-  
+
       x: 770,
       y: 432,
       width: 170,
@@ -3263,7 +3612,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "nidValue",
       type: "text",
       label: "nidValue",
-  
+
       x: 770,
       y: 450,
       width: 170,
@@ -3274,7 +3623,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "nid",
       type: "text",
       label: "nid",
-  
+
       x: 625,
       y: 450,
       width: 145,
@@ -3285,19 +3634,19 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "name",
       type: "text",
       label: "name",
-  
+
       x: 250,
       y: 450,
       width: 318,
       height: 18,
       imageIndex: 9,
     },
-  
+
     {
       name: "savingDeposit",
       type: "text",
       label: "savingDeposit",
-  
+
       x: 770,
       y: 468,
       width: 170,
@@ -3308,7 +3657,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "providentFund",
       type: "text",
       label: "providentFund",
-  
+
       x: 770,
       y: 484,
       width: 170,
@@ -3319,7 +3668,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "otherInvestment1",
       type: "text",
       label: "otherInvestment1",
-  
+
       x: 370,
       y: 502,
       width: 402,
@@ -3330,7 +3679,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "otherInvestment2",
       type: "text",
       label: "otherInvestment2",
-  
+
       x: 770,
       y: 502,
       width: 170,
@@ -3341,7 +3690,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "typeOfMotorVehicle1",
       type: "text",
       label: "typeOfMotorVehicle1",
-  
+
       x: 185,
       y: 573,
       width: 225,
@@ -3352,7 +3701,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "typeOfMotorVehicle2",
       type: "text",
       label: "typeOfMotorVehicle2",
-  
+
       x: 185,
       y: 590,
       width: 225,
@@ -3363,7 +3712,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "registrationNumber1",
       type: "text",
       label: "registrationNumber1",
-  
+
       x: 410,
       y: 573,
       width: 215,
@@ -3374,7 +3723,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "registrationNumber2",
       type: "text",
       label: "registrationNumber2",
-  
+
       x: 410,
       y: 590,
       width: 215,
@@ -3385,7 +3734,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "motorValue1",
       type: "text",
       label: "motorValue1",
-  
+
       x: 625,
       y: 573,
       width: 150,
@@ -3396,7 +3745,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "motorValue2",
       type: "text",
       label: "motorValue2",
-  
+
       x: 625,
       y: 590,
       width: 150,
@@ -3407,7 +3756,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "ornaments1",
       type: "text",
       label: "ornaments1",
-  
+
       x: 420,
       y: 610,
       width: 355,
@@ -3418,7 +3767,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "ornaments2",
       type: "text",
       label: "ornaments2",
-  
+
       x: 770,
       y: 610,
       width: 170,
@@ -3429,7 +3778,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "furnitureAndElectronic",
       type: "text",
       label: "furnitureAndElectronic",
-  
+
       x: 770,
       y: 628,
       width: 170,
@@ -3440,7 +3789,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "othersAssets2",
       type: "text",
       label: "othersAssets2",
-  
+
       x: 770,
       y: 645,
       width: 170,
@@ -3451,7 +3800,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "othersAssets1",
       type: "text",
       label: "othersAssets1",
-  
+
       x: 550,
       y: 645,
       width: 220,
@@ -3462,19 +3811,19 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "bankBalance",
       type: "text",
       label: "bankBalance",
-  
+
       x: 620,
       y: 680,
       width: 155,
       height: 18,
       imageIndex: 9,
     },
-  
+
     {
       name: "cashInHand",
       type: "text",
       label: "cashInHand",
-  
+
       x: 620,
       y: 698,
       width: 155,
@@ -3485,7 +3834,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "others2",
       type: "text",
       label: "others2",
-  
+
       x: 620,
       y: 715,
       width: 155,
@@ -3496,7 +3845,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "others1",
       type: "text",
       label: "others1",
-  
+
       x: 300,
       y: 715,
       width: 320,
@@ -3507,7 +3856,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "assetOutsideBangladesh",
       type: "text",
       label: "assetOutsideBangladesh",
-  
+
       x: 770,
       y: 768,
       width: 170,
@@ -3518,11 +3867,11 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "taxpayerName",
       type: "text",
       label: "taxpayerName",
-      
-      disabled:true,
+
+      disabled: true,
       x: 355,
       y: 390,
-      width:530,
+      width: 530,
       height: 16,
       imageIndex: 10,
     },
@@ -3530,11 +3879,11 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "nid",
       type: "text",
       label: "nid",
-      
-      disabled:true,
+
+      disabled: true,
       x: 555,
       y: 430,
-      width:335,
+      width: 335,
       height: 16,
       imageIndex: 10,
     },
@@ -3542,11 +3891,11 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "tin",
       type: "text",
       label: "tin",
-      
-      disabled:true,
+
+      disabled: true,
       x: 555,
       y: 475,
-      width:335,
+      width: 335,
       height: 16,
       imageIndex: 10,
     },
@@ -3554,11 +3903,11 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "circle",
       type: "text",
       label: "circle",
-      
-      disabled:true,
+
+      disabled: true,
       x: 170,
       y: 520,
-      width:225,
+      width: 225,
       height: 16,
       imageIndex: 10,
     },
@@ -3566,11 +3915,11 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "zone",
       type: "text",
       label: "zone",
-      
-      disabled:true,
+
+      disabled: true,
       x: 555,
       y: 520,
-      width:330,
+      width: 330,
       height: 16,
       imageIndex: 10,
     },
@@ -3578,11 +3927,11 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "totalIncomeShown",
       type: "text",
       label: "totalIncomeShown",
-      value: "0.00",
-      disabled:true,
+
+      disabled: true,
       x: 410,
       y: 565,
-      width:300,
+      width: 300,
       height: 16,
       imageIndex: 10,
     },
@@ -3590,11 +3939,11 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "totalTaxPaid",
       type: "text",
       label: "totalTaxPaid",
-      value: "0.00",
-      disabled:true,
+
+      disabled: true,
       x: 410,
       y: 610,
-      width:300,
+      width: 300,
       height: 16,
       imageIndex: 10,
     },
@@ -3692,13 +4041,17 @@ const IndividualTaxReturnForm: React.FC = () => {
             <input
               {...register(field.name)}
               type={field.type}
-              className={`w-full h-full absolute border px-2 ${!field.disabled ? "border-sky-300 rounded-none bg-sky-300/10 focus:border-sky-500 focus:ring-0 focus:outline-0 focus:bg-transparent hover:border-sky-500" : " bg-[#F5F5F5] font-bold text-[#948C91]"}  `}
+              className={`w-full h-full absolute border px-2 ${
+                !field.disabled
+                  ? "border-sky-300 rounded-none bg-sky-300/10 focus:border-sky-500 focus:ring-0 focus:outline-0 focus:bg-transparent hover:border-sky-500"
+                  : " bg-[#F5F5F5] font-bold text-[#948C91]"
+              }  `}
               style={{ fontSize: `${14 * scale}px` }}
               disabled={field.disabled}
-              value={field.value ?? ""}
+            
             />
 
-            {(isRequired && !field.disabled )&& (
+            {isRequired && !field.disabled && (
               <span className="absolute top-0 right-0 -translate-y-1/2 translate-x-1/2 h-10 w-10 bg-sky-300/70 rotate-45 transform origin-center transition-colors">
                 <span className="absolute text-white top-[23px] left-[17px] text-lg">
                   *
@@ -3709,8 +4062,8 @@ const IndividualTaxReturnForm: React.FC = () => {
         );
       case "checkbox":
         return (
-          <div  style={fieldStyle} className="relative overflow-hidden">
-            <input {...register(field.name)}  type="checkbox" className="mr-2" />
+          <div style={fieldStyle} className="relative overflow-hidden">
+            <input {...register(field.name)} type="checkbox" className="mr-2" />
             <label>{field.label}</label>
           </div>
         );
@@ -3752,7 +4105,6 @@ const IndividualTaxReturnForm: React.FC = () => {
             control={control}
             render={({ field: { onChange, value } }) => (
               <CustomDatePicker
-
                 onChange={(date) => {
                   onChange(date);
                 }}
@@ -3761,7 +4113,6 @@ const IndividualTaxReturnForm: React.FC = () => {
                 monthPosition={field.monthPosition}
                 yearPosition={field.yearPosition}
                 scale={scale}
-                
               />
             )}
           />
