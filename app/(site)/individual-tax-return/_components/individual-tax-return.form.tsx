@@ -553,6 +553,17 @@ const IndividualTaxReturnForm: React.FC = () => {
       type: "text",
       label: "shareOfIncomeFromAOP",
   
+      x: 600,
+      y: 450,
+      width: 100,
+      height: 29,
+      imageIndex: 1,
+    },
+    {
+      name: "shareOfIncomeFromAOPAmount",
+      type: "text",
+      label: "shareOfIncomeFromAOPAmount",
+  
       x: 770,
       y: 450,
       width: 168,

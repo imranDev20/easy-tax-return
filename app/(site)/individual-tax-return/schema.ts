@@ -45,7 +45,8 @@ export const individualTaxReturnSchema = z.object({
   incomeYearEndedOn: z.string().date().optional(),
   incomeFishFarming: z.boolean().optional(),
   incomeFishFarmingAmount: z.string().optional(),
-  shareOfIncomeFromAOP: z.string().optional(),
+  shareOfIncomeFromAOP: z.string(),
+  shareOfIncomeFromAOPAmount: z.string().optional(),
   incomeOfMinor: z.string().optional(),
   taxableIncomeFromAbroad: z.string().optional(),
   minimumTax: z.enum([
