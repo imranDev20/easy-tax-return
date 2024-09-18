@@ -50,7 +50,7 @@ import ImageSix from "@/public/images/6.png";
 import ImageSeven from "@/public/images/7.png";
 import ImageEight from "@/public/images/8.png";
 import ImageNine from "@/public/images/9.png";
-import { createIndividualTaxReturn } from "../actions";
+import { createIndividualTaxReturn, createPayment } from "../actions";
 import { useToast } from "@/hooks/use-toast";
 import { useRouter } from "next/navigation";
 
@@ -79,8 +79,8 @@ interface BaseFormField {
   label: string;
   x: number;
   y: number;
-  value?: string;
   disabled?: boolean;
+  value?: string;
   width: number;
   height: number;
   imageIndex: number;
@@ -167,6 +167,7 @@ const IndividualTaxReturnForm: React.FC = () => {
     control,
     watch,
     setValue,
+    getValues,
     
     formState: { errors, isDirty },
   } = useForm<IndividualTaxReturnFormInput>({
@@ -195,7 +196,6 @@ const IndividualTaxReturnForm: React.FC = () => {
       partnersInfo: "",
       partnersMembersAssociation1: "",
       partnersMembersAssociation2: "",
-      incomeYearEndedOn: "",
       incomeFishFarming: false,
       incomeFishFarmingAmount: "",
       shareOfIncomeFromAOP: "",
@@ -461,6 +461,8 @@ const IndividualTaxReturnForm: React.FC = () => {
       totalTaxPaid: "",
     },
   });
+  console.log(getValues().incomeFromRent);
+  // console.log(watch("taxpayerName"));
 
   useEffect(() => {
     const subscription = watch((value, { name }) => {
@@ -3994,7 +3996,18 @@ const IndividualTaxReturnForm: React.FC = () => {
           userId: "xyz123456",
         };
         const result = await createIndividualTaxReturn(createData);
-
+        const response = await createPayment(createData.total ?? "50", createData.userId);
+  
+        // Check if the response is an error before accessing bkashURL
+        if (response instanceof Error) {
+          throw response; // Handle the error case
+        }
+  
+        // Navigate to the response URL if available
+        if (response.bkashURL) {
+          window.location.href = response.bkashURL; // Fixed: Assigning URL to window.location.href
+        }
+  
         if (result.success) {
           toast({
             title: "Success",
@@ -4018,7 +4031,8 @@ const IndividualTaxReturnForm: React.FC = () => {
       }
     });
   };
-
+  
+  
   const renderField = (field: FormField, imageIndex: number) => {
     if (field.imageIndex !== imageIndex) return null;
 
@@ -4037,28 +4051,32 @@ const IndividualTaxReturnForm: React.FC = () => {
       case "email":
       case "number":
         return (
-          <div style={fieldStyle} className="relative overflow-hidden">
-            <input
-              {...register(field.name)}
-              type={field.type}
-              className={`w-full h-full absolute border px-2 ${
-                !field.disabled
-                  ? "border-sky-300 rounded-none bg-sky-300/10 focus:border-sky-500 focus:ring-0 focus:outline-0 focus:bg-transparent hover:border-sky-500"
-                  : " bg-[#F5F5F5] font-bold text-[#948C91]"
-              }  `}
-              style={{ fontSize: `${14 * scale}px` }}
-              disabled={field.disabled}
-            
-            />
-
-            {isRequired && !field.disabled && (
-              <span className="absolute top-0 right-0 -translate-y-1/2 translate-x-1/2 h-10 w-10 bg-sky-300/70 rotate-45 transform origin-center transition-colors">
-                <span className="absolute text-white top-[23px] left-[17px] text-lg">
-                  *
-                </span>
-              </span>
+          <Controller
+            name={field.name}
+            control={control}           
+            render={({ field: { onChange, value } }) => (
+              <div style={fieldStyle} className="relative overflow-hidden">
+                <input
+                  // bind the value to the form state
+                  onChange={onChange}  
+                  value= {value as string}// bind the onChange handler
+                  type={field.type}
+                  className={`w-full h-full absolute border px-2 ${!field.disabled ? "border-sky-300 rounded-none bg-sky-300/10 focus:border-sky-500 focus:ring-0 focus:outline-0 focus:bg-transparent hover:border-sky-500" : " bg-[#F5F5F5] font-bold text-[#948C91]"}  `}
+                  style={{ fontSize: `${14 * scale}px` }}
+                  disabled={field.disabled}
+                />
+        
+                {/* Conditional rendering for the required indicator */}
+                {isRequired && !field.disabled && (
+                  <span className="absolute top-0 right-0 -translate-y-1/2 translate-x-1/2 h-10 w-10 bg-sky-300/70 rotate-45 transform origin-center transition-colors">
+                    <span className="absolute text-white top-[23px] left-[17px] text-lg">
+                      *
+                    </span>
+                  </span>
+                )}
+              </div>
             )}
-          </div>
+          />
         );
       case "checkbox":
         return (

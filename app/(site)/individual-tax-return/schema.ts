@@ -42,7 +42,6 @@ export const individualTaxReturnSchema = z.object({
   partnersInfo: z.string().optional(),
   partnersMembersAssociation1: z.string().optional(),
   partnersMembersAssociation2: z.string().optional(),
-  incomeYearEndedOn: z.string().date().optional(),
   incomeFishFarming: z.boolean().optional(),
   incomeFishFarmingAmount: z.string().optional(),
   shareOfIncomeFromAOP: z.string(),
