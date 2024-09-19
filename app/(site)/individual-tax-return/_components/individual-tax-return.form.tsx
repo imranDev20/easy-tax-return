@@ -461,7 +461,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       totalTaxPaid: "",
     },
   });
-  console.log(getValues().incomeFromRent);
+  console.log('signature upload link:',getValues().signature);
   // console.log(watch("taxpayerName"));
 
   useEffect(() => {
@@ -2474,10 +2474,10 @@ const IndividualTaxReturnForm: React.FC = () => {
       type: "signature",
       label: "Signature",
       x: 650,
-      y: 550,
+      y: 800,
       width: 500,
       height: 200,
-      imageIndex: 7,
+      imageIndex: 2,
     },
     {
       name: "utilityExpenseComment",
@@ -4139,14 +4139,20 @@ const IndividualTaxReturnForm: React.FC = () => {
       case "signature":
         return (
           <div style={fieldStyle}>
-            <Controller
-              name={field.name}
-              control={control}
-              render={({ field: { onChange, value } }) => (
-                <SignatureField onChange={onChange} />
-              )}
+        <Controller
+          name="signature"
+          control={control}
+          render={({ field: { onChange, value } }) => (
+            <SignatureField 
+              onChange={(signatureData) => {
+                onChange(signatureData);
+                console.log('Signature updated:', signatureData);
+              }} 
+              value={value as string}
             />
-          </div>
+          )}
+        />
+      </div>
         );
       case "textarea":
         return (
