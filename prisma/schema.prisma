@@ -93,7 +93,7 @@ model Account {
 
 model IndividualTaxes {
   id                       String            @id @default(cuid())
-  userId                   String // user id from firebase
+  userId                   String            // user id from firebase
   taxpayerName             String
   nationalId               String
   tin                      String
@@ -114,10 +114,8 @@ model IndividualTaxes {
   businessName             String?
   bin                      String?
   partnersInfo             String?
-
   partnersMembersAssociation1                      String?
   partnersMembersAssociation2                      String?
-  incomeYearEndedOn                                String?
   incomeFishFarming                                Boolean?
   incomeFishFarmingAmount                          String?
   shareOfIncomeFromAOP                             String?
@@ -313,4 +311,14 @@ model IndividualTaxes {
   assetOutsideBangladesh                           String?
   createdAt                                        DateTime           @default(now())
   updatedAt                                        DateTime           @updatedAt
+}
+model Payment {
+  id        String   @id @default(cuid())
+  userId    String // user id from firebase
+  amount    Float?
+  trxID     String?
+  paymentID String?
+  date      String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
