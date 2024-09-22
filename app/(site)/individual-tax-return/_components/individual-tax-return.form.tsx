@@ -152,6 +152,7 @@ const images = [
   ImageNine,
   ImageTen,
   ImageEleven,
+  ImageTwelve,
 ];
 
 const IndividualTaxReturnForm: React.FC = () => {
@@ -392,70 +393,71 @@ const IndividualTaxReturnForm: React.FC = () => {
       others1: "",
       others2: "",
       assetOutsideBangladesh: "",
-      incomeFromRent: "0.00",
-      incomeFromAgriculture: "0.00",
-      incomeFromBusiness: "0.00",
-      incomeFromBusinessMinimum: "0.00",
-      incomeFromCapitalGains: "0.00",
-      incomeFromFinancialAssets: "0.00",
-      incomeFromOtherSources: "0.00",
-      totalIncome: "0.00",
-      totalAmountPayable: "0.00",
-      taxDeductedOrCollected: "0.00",
-      totalTaxPaidAndAdjusted: "0.00",
-      excessPayment: "0.00",
-      taxExemptedTaxFreeIncome: "0.00",
-      totalRentValue: "0.00",
-      totalAdmissibleDeduction: "0.00",
-      netIncome: "0.00",
-      netProfit: "0.00",
-      netProfit2: "0.00",
-      cashInHandAtBank: "0.00",
-      totalAssets: "0.00",
-      netProfit3: "0.00",
-      closingCpital: "0.00",
-      totalCapitalsAndLiabilities: "0.00",
-      interestProfitFromBankFINetTaxableIncome: "0.00",
-      incomeFromSavingCertificatesNetTaxableIncome: "0.00",
-      incomeFromSecuritiesDebenturesNetTaxableIncome: "0.00",
-      incomeFromFinancialProductSchemeNetTaxableIncome: "0.00",
-      dividendIncomeNetTaxableIncome: "0.00",
-      capitalGainFromTransferofPropertyNetTaxableIncome: "0.00",
-      incomeFromBusinessNetTaxableIncome: "0.00",
-      workersParticinationFundNetTaxableIncome: "0.00",
-      incomeFromOtherSourcesNetTaxableIncome: "0.00",
-      totalAllowableInvestmentContribution: "0.00",
-      taxDeductedCollectedAtSourceAmount: "0.00",
-      advanceTaxPaidAmountTaka: "0.00",
-      totalAmount: "0.00",
-      totalAmount2: "0.00",
-      totalAmount3: "0.00",
+      incomeFromEmployment: 0.0,
+      incomeFromRent: 0.0,
+      incomeFromAgriculture: 0.0,
+      incomeFromBusiness: 0.0,
+      incomeFromBusinessMinimum: 0.0,
+      incomeFromCapitalGains: 0.0,
+      incomeFromFinancialAssets: 0.0,
+      incomeFromOtherSources: 0.0,
+      totalIncome: 0.0,
+      totalAmountPayable: 0.0,
+      taxDeductedOrCollected: 0.0,
+      totalTaxPaidAndAdjusted: 0.0,
+      excessPayment: 0.0,
+      taxExemptedTaxFreeIncome: 0.0,
+      totalRentValue: 0.0,
+      totalAdmissibleDeduction: 0.0,
+      netIncome: 0.0,
+      netProfit: 0.0,
+      netProfit2: 0.0,
+      cashInHandAtBank: 0.0,
+      totalAssets: 0.0,
+      netProfit3: 0.0,
+      closingCpital: 0.0,
+      totalCapitalsAndLiabilities: 0.0,
+      interestProfitFromBankFINetTaxableIncome: 0.0,
+      incomeFromSavingCertificatesNetTaxableIncome: 0.0,
+      incomeFromSecuritiesDebenturesNetTaxableIncome: 0.0,
+      incomeFromFinancialProductSchemeNetTaxableIncome: 0.0,
+      dividendIncomeNetTaxableIncome: 0.0,
+      capitalGainFromTransferofPropertyNetTaxableIncome: 0.0,
+      incomeFromBusinessNetTaxableIncome: 0.0,
+      workersParticinationFundNetTaxableIncome: 0.0,
+      incomeFromOtherSourcesNetTaxableIncome: 0.0,
+      totalAllowableInvestmentContribution: 0.0,
+      taxDeductedCollectedAtSourceAmount: 0.0,
+      advanceTaxPaidAmountTaka: 0.0,
+      totalAmount: 0.0,
+      totalAmount2: 0.0,
+      totalAmount3: 0.0,
       taxOnIncomeFromPoultryHatcheriesFishFarming: "",
       typeOfTaxExemptedTaxFreeIncome6: "",
       typeOfTaxExemptedTaxFreeIncome7: "",
       typeOfTaxExemptedTaxFreeIncomeAmount6: "",
       typeOfTaxExemptedTaxFreeIncomeAmount7: "",
-      totalIncomeShownInTheReturn: "0.00",
-      taxExemptedIncomeAndAllowance: "0.00",
-      receiptOfGiftOtherReceipts: "0.00",
-      totalSourceOfFund: "0.00",
-      sumOfSourceOfFundAndPreviousYearsNetWealth: "0.00",
-      expenseRelatingToLifestyle: "0.00",
-      totalExpensesAndLoss: "0.00",
-      netWealthAtTheLastDateOfThisFinancialYear: "0.00",
-      totalLiabilitiesOutsideBusiness: "0.00",
-      grossWealth: "0.00",
-      businessCapitalAmount1: "0.00",
-      businessCapitalAmount2: "0.00",
-      directorsShareholdingsInTheCompanies: "0.00",
-      businessCapitalOfPartnershipFirm: "0.00",
-      nonAgriculturalPropertyLandHouseProperty: "0.00",
-      agriculturalProperty: "0.00",
-      totalFinancialAssets: "0.00",
-      motorVehiclesAmount: "0.00",
-      totalAssetslocatedInBangladesh: "0.00",
-      totalCashInHandsAndFundOutsideBusiness: "0.00",
-      totalAssetsInBangladeshAndOutsideBangladesh: "0.00",
+      totalIncomeShownInTheReturn: 0.0,
+      taxExemptedIncomeAndAllowance: 0.0,
+      receiptOfGiftOtherReceipts: 0.0,
+      totalSourceOfFund: 0.0,
+      sumOfSourceOfFundAndPreviousYearsNetWealth: 0.0,
+      expenseRelatingToLifestyle: 0.0,
+      totalExpensesAndLoss: 0.0,
+      netWealthAtTheLastDateOfThisFinancialYear: 0.0,
+      totalLiabilitiesOutsideBusiness: 0.0,
+      grossWealth: 0.0,
+      businessCapitalAmount1: 0.0,
+      businessCapitalAmount2: 0.0,
+      directorsShareholdingsInTheCompanies: 0.0,
+      businessCapitalOfPartnershipFirm: 0.0,
+      nonAgriculturalPropertyLandHouseProperty: 0.0,
+      agriculturalProperty: 0.0,
+      totalFinancialAssets: 0.0,
+      motorVehiclesAmount: 0.0,
+      totalAssetslocatedInBangladesh: 0.0,
+      totalCashInHandsAndFundOutsideBusiness: 0.0,
+      totalAssetsInBangladeshAndOutsideBangladesh: 0.0,
       totalIncomeShown: "",
       totalTaxPaid: "",
     },
@@ -591,10 +593,10 @@ const IndividualTaxReturnForm: React.FC = () => {
     {
       name: "residentialStatus",
       type: "radio",
-      label: "Choose an option",
+      label: "",
       options: [
         {
-          label: "Option 1",
+          label: "",
           value: "RESIDENT",
           x: 712,
           y: 416,
@@ -602,7 +604,7 @@ const IndividualTaxReturnForm: React.FC = () => {
           height: 32,
         },
         {
-          label: "Option 2",
+          label: "",
           value: "NON_RESIDENT",
           x: 890,
           y: 416,
@@ -619,10 +621,10 @@ const IndividualTaxReturnForm: React.FC = () => {
     {
       name: "specialBenefits",
       type: "radio",
-      label: "Choose an option",
+      label: "",
       options: [
         {
-          label: "Option 1",
+          label: "",
           value: "GAZETTED_WAR_WOUNDED_FREEDOM_FIGHTER",
           x: 490,
           y: 470,
@@ -630,7 +632,7 @@ const IndividualTaxReturnForm: React.FC = () => {
           height: 35,
         },
         {
-          label: "Option 2",
+          label: "",
           value: "FEMALE",
           x: 888,
           y: 470,
@@ -638,7 +640,7 @@ const IndividualTaxReturnForm: React.FC = () => {
           height: 35,
         },
         {
-          label: "Option 3",
+          label: "",
           value: "THIRD_GENDER",
           x: 490,
           y: 505,
@@ -646,7 +648,7 @@ const IndividualTaxReturnForm: React.FC = () => {
           height: 35,
         },
         {
-          label: "Option 4",
+          label: "",
           value: "DISABLED_PERSON",
           x: 888,
           y: 505,
@@ -655,7 +657,7 @@ const IndividualTaxReturnForm: React.FC = () => {
         },
 
         {
-          label: "Option 5",
+          label: "",
           value: "AGED_65_OR_MORE",
           x: 490,
           y: 540,
@@ -672,7 +674,7 @@ const IndividualTaxReturnForm: React.FC = () => {
     {
       name: "isParentOfDisabledPerson",
       type: "radio",
-      label: "Choose an option",
+      label: "",
       options: [
         {
           label: "",
@@ -861,9 +863,9 @@ const IndividualTaxReturnForm: React.FC = () => {
       label: "Fish farming amount",
       disabled: watch("incomeFishFarming") ? false : true,
       x: 772,
-      y: 263,
+      y: 265,
       width: 166,
-      height: 33,
+      height: 30,
       imageIndex: 1,
     },
     {
@@ -900,12 +902,23 @@ const IndividualTaxReturnForm: React.FC = () => {
       imageIndex: 1,
     },
     {
+      name: "incomeFromEmployment",
+      type: "text",
+      label: "incomeFromEmployment",
+      disabled: true,
+      x: 774,
+      y: 180,
+      width: 160,
+      height: 25,
+      imageIndex: 1,
+    },
+    {
       name: "incomeFromRent",
       type: "text",
       label: "incomeFromRent",
       disabled: true,
       x: 774,
-      y: 210,
+      y: 208,
       width: 160,
       height: 25,
       imageIndex: 1,
@@ -914,10 +927,9 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "incomeFromAgriculture",
       type: "text",
       label: "incomeFromAgriculture",
-
       disabled: true,
       x: 774,
-      y: 238,
+      y: 236,
       width: 160,
       height: 25,
       imageIndex: 1,
@@ -1249,6 +1261,89 @@ const IndividualTaxReturnForm: React.FC = () => {
       monthPosition: { x: 220, y: 920, width: 60, height: 29 },
       yearPosition: { x: 290, y: 920, width: 100, height: 29 },
     },
+
+    {
+      name: "isIncomeFromEmployment",
+      type: "radio",
+      label: "Do you have any income from employment?",
+      disabled: false,
+      x: 308,
+      y: 6,
+      width: 265,
+      height: 18,
+      imageIndex: 3,
+      options: [
+        {
+          label: "Yes",
+          height: 20,
+          x: 640,
+          y: 25,
+          value: "YES",
+          width: 33,
+        },
+        {
+          label: "No",
+          height: 20,
+          x: 640,
+          y: 48,
+          value: "NO",
+          width: 33,
+        },
+      ],
+    },
+
+    {
+      name: "typeOfEmployment",
+      type: "radio",
+      label: "",
+      disabled: watch("isIncomeFromEmployment"),
+      x: 308,
+      y: 6,
+      width: 265,
+      height: 18,
+      imageIndex: 3,
+      options: [
+        {
+          label: "Private Organization",
+          height: 20,
+          x: 930,
+          y: 25,
+          value: "YES",
+          width: 33,
+        },
+        {
+          label: "Government",
+          height: 20,
+          x: 930,
+          y: 48,
+          value: "NO",
+          width: 33,
+        },
+      ],
+    },
+    {
+      name: "taxpayerName",
+      type: "text",
+      label: "taxpayerName",
+      disabled: true,
+      x: 95,
+      y: 147,
+      width: 570,
+      height: 18,
+      imageIndex: 3,
+    },
+    {
+      name: "tin",
+      type: "text",
+      label: "TIN",
+      disabled: true,
+      x: 668,
+      y: 147,
+      width: 265,
+      height: 18,
+      imageIndex: 3,
+    },
+
     {
       name: "totalRentValue",
       type: "text",
@@ -3950,6 +4045,9 @@ const IndividualTaxReturnForm: React.FC = () => {
     },
   ];
   console.log(`errors`, errors);
+
+  console.log(watch("isIncomeFromEmployment"));
+
   useEffect(() => {
     const updateScale = () => {
       if (containerRef.current && imageRefs.current[0]) {
@@ -4058,14 +4156,23 @@ const IndividualTaxReturnForm: React.FC = () => {
             render={({ field: { onChange, value } }) => (
               <div style={fieldStyle} className="relative overflow-hidden">
                 <input
-                  // bind the value to the form state
-                  onChange={onChange}
-                  value={value as string} // bind the onChange handler
+                  onChange={(e) => {
+                    let newValue = e.target.value;
+                    if (field.type === "number" && newValue !== "") {
+                      newValue = parseFloat(newValue).toFixed(2);
+                    }
+                    onChange(newValue);
+                  }}
+                  value={
+                    field.type === "number" && value !== ""
+                      ? parseFloat(value as string).toFixed(2)
+                      : (value as string)
+                  }
                   type={field.type}
-                  className={`w-full h-full absolute border px-2 ${
+                  className={`w-full h-full absolute border px-2 font-medium ${
                     !field.disabled
                       ? "border-sky-300 rounded-none bg-sky-300/10 focus:border-sky-500 focus:ring-0 focus:outline-0 focus:bg-transparent hover:border-sky-500"
-                      : " bg-[#F5F5F5] font-bold text-[#948C91]"
+                      : " bg-[#F5F5F5] font-semibold text-[#948C91]"
                   }  `}
                   style={{ fontSize: `${14 * scale}px` }}
                   disabled={field.disabled}
@@ -4107,7 +4214,11 @@ const IndividualTaxReturnForm: React.FC = () => {
             name={field.name}
             options={field.options}
             scale={scale}
+            disabled={field.disabled}
             required={isRequired}
+            label={field.label}
+            x={field.x}
+            y={field.y}
           />
         );
       case "select":

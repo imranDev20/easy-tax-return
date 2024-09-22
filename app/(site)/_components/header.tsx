@@ -86,6 +86,8 @@ export default function Header() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const { data: session } = useSession();
 
+  console.log(session);
+
   const NAV_OPTIONS = useMemo(
     () => [
       { label: "Home", link: "home" },

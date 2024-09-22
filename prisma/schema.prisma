@@ -59,6 +59,11 @@ enum Role {
   USER
 }
 
+enum EmploymentType {
+  GOVERNMENT
+  PRIVATE
+}
+
 model User {
   id            String    @id @default(cuid())
   name          String?
@@ -92,32 +97,40 @@ model Account {
 }
 
 model IndividualTaxes {
-  id                       String            @id @default(cuid())
-  userId                   String            // user id from firebase
-  taxpayerName             String
-  nationalId               String
-  tin                      String
-  circle                   String
-  zone                     String
-  residentialStatus        ResidentialStatus
-  specialBenefits          SpecialBenefits?
-  isParentOfDisabledPerson Boolean?
-  dateOfBirth              String
-  spouseName               String?
-  spouseTin                String?
-  addressLine1             String
-  addressLine2             String?
-  telephone                String?
-  mobile                   String
-  email                    String
-  employerName             String?
-  businessName             String?
-  bin                      String?
-  partnersInfo             String?
+  id                                               String             @id @default(cuid())
+  userId                                           String
+  // Image 1
+  taxpayerName                                     String
+  nationalId                                       String
+  tin                                              String
+  circle                                           String
+  zone                                             String
+  residentialStatus                                ResidentialStatus
+  specialBenefits                                  SpecialBenefits?
+  isParentOfDisabledPerson                         Boolean?
+  dateOfBirth                                      String
+  spouseName                                       String?
+  spouseTin                                        String?
+  addressLine1                                     String
+  addressLine2                                     String?
+  telephone                                        String?
+  mobile                                           String
+  email                                            String
+  employerName                                     String?
+  businessName                                     String?
+  bin                                              String?
+  partnersInfo                                     String?
   partnersMembersAssociation1                      String?
   partnersMembersAssociation2                      String?
+  // Image 2
+  incomeFromEmployment                             String?
+  incomeFromRent                                   String?
+  incomeFromAgriculture                            String?
   incomeFishFarming                                Boolean?
   incomeFishFarmingAmount                          String?
+  incomeFromBusiness                               String?
+  incomeFromBusinessMinimum                        String?
+  incomeFromCapitalGains                           String?
   shareOfIncomeFromAOP                             String?
   incomeOfMinor                                    String?
   taxableIncomeFromAbroad                          String?
@@ -135,6 +148,10 @@ model IndividualTaxes {
   placeOfSignature                                 String?
   signature                                        String?
   dateOfSignature                                  String
+  // Image 4
+  isIncomeFromEmployment                           Boolean
+  typeOfEmployment                                 EmploymentType
+  // Image 5
   locationDescriptionOwnershipProportionOfProperty String?
   rentReceivedOrAnnualValue                        String?
   advanceRentReceived                              String?
@@ -312,6 +329,7 @@ model IndividualTaxes {
   createdAt                                        DateTime           @default(now())
   updatedAt                                        DateTime           @updatedAt
 }
+
 model Payment {
   id        String   @id @default(cuid())
   userId    String // user id from firebase
