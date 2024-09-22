@@ -1,5 +1,14 @@
+"use client";
+
+import { IndividualTaxReturnFormInput } from "@/app/(site)/individual-tax-return/schema";
 import React from "react";
-import { Controller, Control, FieldValues, Path } from "react-hook-form";
+import {
+  Controller,
+  Control,
+  FieldValues,
+  Path,
+  useFormContext,
+} from "react-hook-form";
 
 interface CustomRadioProps {
   label: string;
@@ -106,6 +115,7 @@ interface RadioGroupProps<TFieldValues extends FieldValues> {
   required: boolean;
   label: string;
   disabled?: boolean;
+  resetFields?: (keyof IndividualTaxReturnFormInput)[];
 }
 
 function RadioGroup<TFieldValues extends FieldValues>({
@@ -118,7 +128,10 @@ function RadioGroup<TFieldValues extends FieldValues>({
   x,
   y,
   disabled = false,
+  resetFields,
 }: RadioGroupProps<TFieldValues>) {
+  const { resetField } = useFormContext<IndividualTaxReturnFormInput>();
+
   return (
     <Controller
       name={name}
@@ -144,7 +157,12 @@ function RadioGroup<TFieldValues extends FieldValues>({
               key={option.value}
               label={option.label}
               checked={value === option.value}
-              onChange={(newValue) => onChange(newValue)}
+              onChange={(newValue) => {
+                onChange(newValue);
+
+                resetFields &&
+                  resetFields.forEach((fieldName) => resetField(fieldName));
+              }}
               name={name}
               value={option.value}
               style={{

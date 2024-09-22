@@ -4,6 +4,7 @@ import {
   NetWealthLastDate,
   RepairCollection,
   EmploymentType,
+  IncomeFromEmployment,
 } from "@prisma/client";
 
 import z from "zod";
@@ -86,10 +87,49 @@ export const individualTaxReturnSchema = z.object({
   signature: z.string().optional(),
   dateOfSignature: z.date(),
 
-  // Image 4
-
-  isIncomeFromEmployment: z.boolean(),
+  // Image 4 - govt
+  isIncomeFromEmployment: z.nativeEnum(IncomeFromEmployment),
   typeOfEmployment: z.nativeEnum(EmploymentType),
+  basicPayGovtEmployment: z.number().nullable(),
+  arrearPayGovtEmployment: z.number().nullable(),
+  specialAllowanceGovtEmployment: z.number().nullable(),
+  houseRentAllowanceGovtEmployment: z.number().nullable(),
+  medicalAllowanceGovtEmployment: z.number().nullable(),
+  conveyanceAllowanceGovtEmployment: z.number().nullable(),
+  festivalAllowanceGovtEmployment: z.number().nullable(),
+  allowanceForSupportStaffGovtEmployment: z.number().nullable(),
+  leaveAllowanceGovtEmployment: z.number().nullable(),
+  honorariumRewardGovtEmployment: z.number().nullable(),
+  overtimeAllowanceGovtEmployment: z.number().nullable(),
+  banglaNoboborshoAllowancesGovtEmployment: z.number().nullable(),
+  interestAccruedProvidentFundGovtEmployment: z.number().nullable(),
+  lumpGrantGovtEmployment: z.number().nullable(),
+  gratuityGovtEmployment: z.number().nullable(),
+  otherAllowanceGovtEmployment: z.number().nullable(),
+  otherAllowanceExemptedGovtEmployment: z.number().nullable(),
+  totalGovtEmployment: z.number().nullable(),
+  // image 4 - private
+  basicPayPrivateEmployment: z.number().nullable(),
+  allowancesPrivateEmployment: z.number().nullable(),
+  advanceArrearSalaryPrivateEmployment: z.number().nullable(),
+  gratuityAnnuityPensionOrSimilarBenefitPrivateEmployment: z
+    .number()
+    .nullable(),
+  perquisitesPrivateEmployment: z.number().nullable(),
+  receiptInLieuOfOrInAdditionToSalaryOrWagesPrivateEmployment: z
+    .number()
+    .nullable(),
+  incomeFromEmployeeShareSchemePrivateEmployment: z.number().nullable(),
+  accommodationFacilityPrivateEmployment: z.number().nullable(),
+  transportFacilityPrivateEmployment: z.number().nullable(),
+  anyOtherFacilityProvidedByEmployerPrivateEmployment: z.number().nullable(),
+  employerContributionToRecognizedProvidentFundPrivateEmployment: z
+    .number()
+    .nullable(),
+  otherIfAnyPrivateEmployment: z.number().nullable(),
+  totalSalaryReceivedPrivateEmployment: z.number().nullable(),
+  exemptedAmountPrivateEmployment: z.number().nullable(),
+  totalIncomeFromSalaryPrivateEmployment: z.number().nullable(),
 
   // image 5
   locationDescriptionOwnershipProportionOfProperty: z.string().optional(),

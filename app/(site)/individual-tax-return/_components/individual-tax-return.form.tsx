@@ -11,7 +11,12 @@ import React, {
   useState,
   useTransition,
 } from "react";
-import { Controller, SubmitHandler, useForm } from "react-hook-form";
+import {
+  Controller,
+  FormProvider,
+  SubmitHandler,
+  useForm,
+} from "react-hook-form";
 
 import CustomDatePicker from "@/components/custom/date-picker";
 import SignatureField from "@/components/custom/signature";
@@ -97,7 +102,9 @@ interface RadioFormField extends BaseFormField {
     width: number;
     height: number;
   }>;
+  resetFields?: (keyof IndividualTaxReturnFormInput)[];
 }
+
 interface TextAreaFormField extends BaseFormField {
   type: "textarea";
   rows?: number;
@@ -162,15 +169,7 @@ const IndividualTaxReturnForm: React.FC = () => {
   const imageRefs = useRef<(HTMLDivElement | null)[]>([]);
   const formContainerRefs = useRef<(HTMLDivElement | null)[]>([]);
 
-  const {
-    register,
-    handleSubmit,
-    control,
-    watch,
-    setValue,
-    getValues,
-    formState: { errors, isDirty },
-  } = useForm<IndividualTaxReturnFormInput>({
+  const form = useForm<IndividualTaxReturnFormInput>({
     resolver: zodResolver(individualTaxReturnSchema),
     defaultValues: {
       taxpayerName: "",
@@ -462,6 +461,17 @@ const IndividualTaxReturnForm: React.FC = () => {
       totalTaxPaid: "",
     },
   });
+
+  const {
+    register,
+    handleSubmit,
+    control,
+    watch,
+    setValue,
+    getValues,
+    formState: { errors, isDirty },
+  } = form;
+
   console.log("signature upload link:", getValues().signature);
   // console.log(watch("taxpayerName"));
 
@@ -1230,7 +1240,6 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "fatherOrHusband",
       type: "text",
       label: "fatherOrHusband",
-
       x: 632,
       y: 730,
       width: 300,
@@ -1262,6 +1271,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       yearPosition: { x: 290, y: 920, width: 100, height: 29 },
     },
 
+    // Image 4
     {
       name: "isIncomeFromEmployment",
       type: "radio",
@@ -1272,6 +1282,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       width: 265,
       height: 18,
       imageIndex: 3,
+      resetFields: ["typeOfEmployment"],
       options: [
         {
           label: "Yes",
@@ -1296,7 +1307,9 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "typeOfEmployment",
       type: "radio",
       label: "",
-      disabled: watch("isIncomeFromEmployment"),
+      disabled:
+        !watch("isIncomeFromEmployment") ||
+        watch("isIncomeFromEmployment") === "NO",
       x: 308,
       y: 6,
       width: 265,
@@ -1344,6 +1357,19 @@ const IndividualTaxReturnForm: React.FC = () => {
       imageIndex: 3,
     },
 
+    {
+      name: "tin",
+      type: "text",
+      label: "TIN",
+      disabled: true,
+      x: 475,
+      y: 215,
+      width: 151,
+      height: 18,
+      imageIndex: 3,
+    },
+
+    // Other images
     {
       name: "totalRentValue",
       type: "text",
@@ -4334,134 +4360,136 @@ const IndividualTaxReturnForm: React.FC = () => {
 
         <div className="bg-white shadow-lg rounded-lg overflow-hidden">
           <div className="p-6">
-            <form onSubmit={handleSubmit(onSubmit)}>
-              <div className="relative" ref={containerRef}>
-                {images.map((image, index) => (
-                  <div
-                    key={index}
-                    ref={setImageRef(index)}
-                    className="relative border-2 border-gray-200 rounded-lg mb-8"
-                  >
-                    <Image
-                      src={image}
-                      loading="lazy"
-                      placeholder="blur"
-                      alt={`Form Background ${index + 1}`}
-                      layout="responsive"
-                    />
+            <FormProvider {...form}>
+              <form onSubmit={handleSubmit(onSubmit)}>
+                <div className="relative" ref={containerRef}>
+                  {images.map((image, index) => (
                     <div
-                      ref={setFormContainerRef(index)}
-                      className="absolute top-0 left-0 w-full h-full"
+                      key={index}
+                      ref={setImageRef(index)}
+                      className="relative border-2 border-gray-200 rounded-lg mb-8"
                     >
-                      {formFields.map((field) => renderField(field, index))}
+                      <Image
+                        src={image}
+                        loading="lazy"
+                        placeholder="blur"
+                        alt={`Form Background ${index + 1}`}
+                        layout="responsive"
+                      />
+                      <div
+                        ref={setFormContainerRef(index)}
+                        className="absolute top-0 left-0 w-full h-full"
+                      >
+                        {formFields.map((field) => renderField(field, index))}
+                      </div>
                     </div>
-                  </div>
-                ))}
-              </div>
+                  ))}
+                </div>
 
-              {/* Scrollspy */}
-              <div className="fixed right-4 top-1/2 transform -translate-y-1/2 z-10">
-                {images.map((_, index) => (
-                  <button
-                    key={index}
-                    onClick={() => scrollToImage(index)}
-                    className={`block mb-2 w-8 h-8 rounded-full ${
-                      currentImageIndex === index
-                        ? "bg-primary text-white"
-                        : "bg-gray-300"
-                    }`}
-                  >
-                    {index + 1}
-                  </button>
-                ))}
-              </div>
+                {/* Scrollspy */}
+                <div className="fixed right-4 top-1/2 transform -translate-y-1/2 z-10">
+                  {images.map((_, index) => (
+                    <button
+                      key={index}
+                      onClick={() => scrollToImage(index)}
+                      className={`block mb-2 w-8 h-8 rounded-full ${
+                        currentImageIndex === index
+                          ? "bg-primary text-white"
+                          : "bg-gray-300"
+                      }`}
+                    >
+                      {index + 1}
+                    </button>
+                  ))}
+                </div>
 
-              <div className="fixed bottom-0 left-0 right-0 bg-white shadow-lg border-t border-gray-200">
-                <div className="container mx-auto flex justify-between items-center py-3 px-4">
-                  <div className="flex items-center space-x-4">
-                    <div className="flex items-center space-x-2">
-                      <Button
-                        variant="outline"
-                        size="icon"
-                        className="h-8 w-8"
-                        disabled={currentImageIndex === 0}
-                        title="Previous Page"
-                        onClick={() => {
-                          if (currentImageIndex > 0) {
-                            setCurrentImageIndex(currentImageIndex - 1);
-                            scrollToImage(currentImageIndex - 1);
+                <div className="fixed bottom-0 left-0 right-0 bg-white shadow-lg border-t border-gray-200">
+                  <div className="container mx-auto flex justify-between items-center py-3 px-4">
+                    <div className="flex items-center space-x-4">
+                      <div className="flex items-center space-x-2">
+                        <Button
+                          variant="outline"
+                          size="icon"
+                          className="h-8 w-8"
+                          disabled={currentImageIndex === 0}
+                          title="Previous Page"
+                          onClick={() => {
+                            if (currentImageIndex > 0) {
+                              setCurrentImageIndex(currentImageIndex - 1);
+                              scrollToImage(currentImageIndex - 1);
+                            }
+                          }}
+                        >
+                          <ArrowLeft className="h-4 w-4" />
+                        </Button>
+                        <span className="text-sm font-medium">
+                          Page {currentImageIndex + 1} of {images.length}
+                        </span>
+                        <Button
+                          variant="outline"
+                          size="icon"
+                          className="h-8 w-8"
+                          disabled={currentImageIndex === images.length - 1}
+                          title="Next Page"
+                          onClick={() => {
+                            if (currentImageIndex < images.length - 1) {
+                              setCurrentImageIndex(currentImageIndex + 1);
+                              scrollToImage(currentImageIndex + 1);
+                            }
+                          }}
+                        >
+                          <ArrowRight className="h-4 w-4" />
+                        </Button>
+                      </div>
+                      <div className="flex items-center space-x-2 border-l border-gray-300 pl-4">
+                        <Button
+                          onClick={() =>
+                            setScale((prev) => Math.max(prev - 0.1, 0.5))
                           }
-                        }}
+                          variant="outline"
+                          size="icon"
+                          className="h-8 w-8"
+                          title="Zoom Out"
+                        >
+                          <ZoomOut className="h-4 w-4" />
+                        </Button>
+                        <span className="text-sm font-medium">
+                          {Math.round(scale * 100)}%
+                        </span>
+                        <Button
+                          onClick={() =>
+                            setScale((prev) => Math.min(prev + 0.1, 2))
+                          }
+                          variant="outline"
+                          size="icon"
+                          className="h-8 w-8"
+                          title="Zoom In"
+                        >
+                          <ZoomIn className="h-4 w-4" />
+                        </Button>
+                      </div>
+                    </div>
+                    <div className="flex items-center space-x-4">
+                      <Button
+                        onClick={() => console.log("Save for later")}
+                        variant="outline"
+                        className="px-4 py-2 text-primary border-primary hover:bg-primary hover:text-white transition-colors duration-300 font-medium"
                       >
-                        <ArrowLeft className="h-4 w-4" />
+                        <Save className="mr-2 h-4 w-4" />
+                        Save for Later
                       </Button>
-                      <span className="text-sm font-medium">
-                        Page {currentImageIndex + 1} of {images.length}
-                      </span>
                       <Button
-                        variant="outline"
-                        size="icon"
-                        className="h-8 w-8"
-                        disabled={currentImageIndex === images.length - 1}
-                        title="Next Page"
-                        onClick={() => {
-                          if (currentImageIndex < images.length - 1) {
-                            setCurrentImageIndex(currentImageIndex + 1);
-                            scrollToImage(currentImageIndex + 1);
-                          }
-                        }}
+                        onClick={() => console.log("Save PDF")}
+                        className="px-6 py-2 bg-primary text-white font-medium transition duration-300 hover:bg-primary-dark"
                       >
-                        <ArrowRight className="h-4 w-4" />
+                        <Download className="mr-2 h-5 w-5" />
+                        Save PDF
                       </Button>
                     </div>
-                    <div className="flex items-center space-x-2 border-l border-gray-300 pl-4">
-                      <Button
-                        onClick={() =>
-                          setScale((prev) => Math.max(prev - 0.1, 0.5))
-                        }
-                        variant="outline"
-                        size="icon"
-                        className="h-8 w-8"
-                        title="Zoom Out"
-                      >
-                        <ZoomOut className="h-4 w-4" />
-                      </Button>
-                      <span className="text-sm font-medium">
-                        {Math.round(scale * 100)}%
-                      </span>
-                      <Button
-                        onClick={() =>
-                          setScale((prev) => Math.min(prev + 0.1, 2))
-                        }
-                        variant="outline"
-                        size="icon"
-                        className="h-8 w-8"
-                        title="Zoom In"
-                      >
-                        <ZoomIn className="h-4 w-4" />
-                      </Button>
-                    </div>
-                  </div>
-                  <div className="flex items-center space-x-4">
-                    <Button
-                      onClick={() => console.log("Save for later")}
-                      variant="outline"
-                      className="px-4 py-2 text-primary border-primary hover:bg-primary hover:text-white transition-colors duration-300 font-medium"
-                    >
-                      <Save className="mr-2 h-4 w-4" />
-                      Save for Later
-                    </Button>
-                    <Button
-                      onClick={() => console.log("Save PDF")}
-                      className="px-6 py-2 bg-primary text-white font-medium transition duration-300 hover:bg-primary-dark"
-                    >
-                      <Download className="mr-2 h-5 w-5" />
-                      Save PDF
-                    </Button>
                   </div>
                 </div>
-              </div>
-            </form>
+              </form>
+            </FormProvider>
           </div>
         </div>
 

@@ -86,14 +86,13 @@ export default function Header() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const { data: session } = useSession();
 
-  console.log(session);
-
   const NAV_OPTIONS = useMemo(
     () => [
       { label: "Home", link: "home" },
       { label: "Process", link: "process" },
       { label: "About Us", link: "about-us" },
       { label: "Testimonials", link: "testimonials" },
+      { label: "Contact", link: "contact" },
     ],
     []
   );
@@ -132,17 +131,23 @@ export default function Header() {
   const handleSmoothScroll = useCallback(
     (e: React.MouseEvent<HTMLAnchorElement>, targetId: string) => {
       e.preventDefault();
-      const targetElement = document.getElementById(targetId);
-      if (targetElement) {
-        targetElement.scrollIntoView({
-          behavior: "smooth",
-          block: "start",
-        });
-      } else if (targetId === "home") {
+      if (targetId === "home") {
         window.scrollTo({
           top: 0,
           behavior: "smooth",
         });
+      } else {
+        const targetElement = document.getElementById(targetId);
+        if (targetElement) {
+          const offset = 80; // Adjust this value to increase or decrease the space
+          const elementPosition = targetElement.getBoundingClientRect().top;
+          const offsetPosition = elementPosition + window.pageYOffset - offset;
+
+          window.scrollTo({
+            top: offsetPosition,
+            behavior: "smooth",
+          });
+        }
       }
       setActiveSection(targetId);
       setIsMobileMenuOpen(false);
