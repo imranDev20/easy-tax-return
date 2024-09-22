@@ -4,7 +4,6 @@ export const MINIMUM_TAX_OPTIONS = [
   "OTHER_AREA",
 ];
 
-
 export const NET_WEALTH_SURCHARGE_OPTIONS = ["YES", "NO"];
 
 export const REPAIR_COLLECTION_OPTIONS = [
@@ -14,10 +13,9 @@ export const REPAIR_COLLECTION_OPTIONS = [
   "MIXED_PROPERTY",
 ];
 
-export const NET_WEALTH_LAST_DATE = [
-  "YES",
-  "NO_I_AM_A_NEW_TAXPAYER"
-];
-export const CALCULATE_OPTION = ["Calculate", "ReCalculate"] ;
+export const NET_WEALTH_LAST_DATE = ["YES", "NO_I_AM_A_NEW_TAXPAYER"];
+export const CALCULATE_OPTION = ["Calculate", "ReCalculate"];
 
-
+export const CONTACT_EMAIL = "info.easytax2024@gmail.com";
+export const PHONE_NO = "+880 1773-870749";
+export const PHONE_NO_LINK = PHONE_NO.replace(" ", "").replace("-", "");

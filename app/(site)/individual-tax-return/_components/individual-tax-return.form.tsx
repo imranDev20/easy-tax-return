@@ -11,7 +11,12 @@ import React, {
   useState,
   useTransition,
 } from "react";
-import { Controller, SubmitHandler, useForm } from "react-hook-form";
+import {
+  Controller,
+  FormProvider,
+  SubmitHandler,
+  useForm,
+} from "react-hook-form";
 
 import CustomDatePicker from "@/components/custom/date-picker";
 import SignatureField from "@/components/custom/signature";
@@ -53,6 +58,7 @@ import ImageNine from "@/public/images/9.png";
 import { createIndividualTaxReturn, createPayment } from "../actions";
 import { useToast } from "@/hooks/use-toast";
 import { useRouter } from "next/navigation";
+import CustomCheckbox from "@/components/custom/checkbox";
 
 // Define the possible field types
 type FieldType =
@@ -96,7 +102,9 @@ interface RadioFormField extends BaseFormField {
     width: number;
     height: number;
   }>;
+  resetFields?: (keyof IndividualTaxReturnFormInput)[];
 }
+
 interface TextAreaFormField extends BaseFormField {
   type: "textarea";
   rows?: number;
@@ -161,16 +169,7 @@ const IndividualTaxReturnForm: React.FC = () => {
   const imageRefs = useRef<(HTMLDivElement | null)[]>([]);
   const formContainerRefs = useRef<(HTMLDivElement | null)[]>([]);
 
-  const {
-    register,
-    handleSubmit,
-    control,
-    watch,
-    setValue,
-    getValues,
-    
-    formState: { errors, isDirty },
-  } = useForm<IndividualTaxReturnFormInput>({
+  const form = useForm<IndividualTaxReturnFormInput>({
     resolver: zodResolver(individualTaxReturnSchema),
     defaultValues: {
       taxpayerName: "",
@@ -393,104 +392,116 @@ const IndividualTaxReturnForm: React.FC = () => {
       others1: "",
       others2: "",
       assetOutsideBangladesh: "",
-      incomeFromRent: "0.00",
-      incomeFromAgriculture: "0.00",
-      incomeFromBusiness: "0.00",
-      incomeFromBusinessMinimum: "0.00",
-      incomeFromCapitalGains: "0.00",
-      incomeFromFinancialAssets: "0.00",
-      incomeFromOtherSources: "0.00",
-      totalIncome: "0.00",
-      totalAmountPayable: "0.00",
-      taxDeductedOrCollected: "0.00",
-      totalTaxPaidAndAdjusted: "0.00",
-      excessPayment: "0.00",
-      taxExemptedTaxFreeIncome: "0.00",
-      totalRentValue: "0.00",
-      totalAdmissibleDeduction: "0.00",
-      netIncome: "0.00",
-      netProfit: "0.00",
-      netProfit2: "0.00",
-      cashInHandAtBank: "0.00",
-      totalAssets: "0.00",
-      netProfit3: "0.00",
-      closingCpital: "0.00",
-      totalCapitalsAndLiabilities: "0.00",
-      interestProfitFromBankFINetTaxableIncome: "0.00",
-      incomeFromSavingCertificatesNetTaxableIncome: "0.00",
-      incomeFromSecuritiesDebenturesNetTaxableIncome: "0.00",
-      incomeFromFinancialProductSchemeNetTaxableIncome: "0.00",
-      dividendIncomeNetTaxableIncome: "0.00",
-      capitalGainFromTransferofPropertyNetTaxableIncome: "0.00",
-      incomeFromBusinessNetTaxableIncome: "0.00",
-      workersParticinationFundNetTaxableIncome: "0.00",
-      incomeFromOtherSourcesNetTaxableIncome: "0.00",
-      totalAllowableInvestmentContribution: "0.00",
-      taxDeductedCollectedAtSourceAmount: "0.00",
-      advanceTaxPaidAmountTaka: "0.00",
-      totalAmount: "0.00",
-      totalAmount2: "0.00",
-      totalAmount3: "0.00",
+      incomeFromEmployment: 0.0,
+      incomeFromRent: 0.0,
+      incomeFromAgriculture: 0.0,
+      incomeFromBusiness: 0.0,
+      incomeFromBusinessMinimum: 0.0,
+      incomeFromCapitalGains: 0.0,
+      incomeFromFinancialAssets: 0.0,
+      incomeFromOtherSources: 0.0,
+      totalIncome: 0.0,
+      totalAmountPayable: 0.0,
+      taxDeductedOrCollected: 0.0,
+      totalTaxPaidAndAdjusted: 0.0,
+      excessPayment: 0.0,
+      taxExemptedTaxFreeIncome: 0.0,
+      totalRentValue: 0.0,
+      totalAdmissibleDeduction: 0.0,
+      netIncome: 0.0,
+      netProfit: 0.0,
+      netProfit2: 0.0,
+      cashInHandAtBank: 0.0,
+      totalAssets: 0.0,
+      netProfit3: 0.0,
+      closingCpital: 0.0,
+      totalCapitalsAndLiabilities: 0.0,
+      interestProfitFromBankFINetTaxableIncome: 0.0,
+      incomeFromSavingCertificatesNetTaxableIncome: 0.0,
+      incomeFromSecuritiesDebenturesNetTaxableIncome: 0.0,
+      incomeFromFinancialProductSchemeNetTaxableIncome: 0.0,
+      dividendIncomeNetTaxableIncome: 0.0,
+      capitalGainFromTransferofPropertyNetTaxableIncome: 0.0,
+      incomeFromBusinessNetTaxableIncome: 0.0,
+      workersParticinationFundNetTaxableIncome: 0.0,
+      incomeFromOtherSourcesNetTaxableIncome: 0.0,
+      totalAllowableInvestmentContribution: 0.0,
+      taxDeductedCollectedAtSourceAmount: 0.0,
+      advanceTaxPaidAmountTaka: 0.0,
+      totalAmount: 0.0,
+      totalAmount2: 0.0,
+      totalAmount3: 0.0,
       taxOnIncomeFromPoultryHatcheriesFishFarming: "",
       typeOfTaxExemptedTaxFreeIncome6: "",
       typeOfTaxExemptedTaxFreeIncome7: "",
       typeOfTaxExemptedTaxFreeIncomeAmount6: "",
       typeOfTaxExemptedTaxFreeIncomeAmount7: "",
-      totalIncomeShownInTheReturn: "0.00",
-      taxExemptedIncomeAndAllowance: "0.00",
-      receiptOfGiftOtherReceipts: "0.00",
-      totalSourceOfFund: "0.00",
-      sumOfSourceOfFundAndPreviousYearsNetWealth: "0.00",
-      expenseRelatingToLifestyle: "0.00",
-      totalExpensesAndLoss: "0.00",
-      netWealthAtTheLastDateOfThisFinancialYear: "0.00",
-      totalLiabilitiesOutsideBusiness: "0.00",
-      grossWealth: "0.00",
-      businessCapitalAmount1: "0.00",
-      businessCapitalAmount2: "0.00",
-      directorsShareholdingsInTheCompanies: "0.00",
-      businessCapitalOfPartnershipFirm: "0.00",
-      nonAgriculturalPropertyLandHouseProperty: "0.00",
-      agriculturalProperty: "0.00",
-      totalFinancialAssets: "0.00",
-      motorVehiclesAmount: "0.00",
-      totalAssetslocatedInBangladesh: "0.00",
-      totalCashInHandsAndFundOutsideBusiness:"0.00",
-      totalAssetsInBangladeshAndOutsideBangladesh: "0.00",
+      totalIncomeShownInTheReturn: 0.0,
+      taxExemptedIncomeAndAllowance: 0.0,
+      receiptOfGiftOtherReceipts: 0.0,
+      totalSourceOfFund: 0.0,
+      sumOfSourceOfFundAndPreviousYearsNetWealth: 0.0,
+      expenseRelatingToLifestyle: 0.0,
+      totalExpensesAndLoss: 0.0,
+      netWealthAtTheLastDateOfThisFinancialYear: 0.0,
+      totalLiabilitiesOutsideBusiness: 0.0,
+      grossWealth: 0.0,
+      businessCapitalAmount1: 0.0,
+      businessCapitalAmount2: 0.0,
+      directorsShareholdingsInTheCompanies: 0.0,
+      businessCapitalOfPartnershipFirm: 0.0,
+      nonAgriculturalPropertyLandHouseProperty: 0.0,
+      agriculturalProperty: 0.0,
+      totalFinancialAssets: 0.0,
+      motorVehiclesAmount: 0.0,
+      totalAssetslocatedInBangladesh: 0.0,
+      totalCashInHandsAndFundOutsideBusiness: 0.0,
+      totalAssetsInBangladeshAndOutsideBangladesh: 0.0,
       totalIncomeShown: "",
       totalTaxPaid: "",
     },
   });
-  console.log('signature upload link:',getValues().signature);
+
+  const {
+    register,
+    handleSubmit,
+    control,
+    watch,
+    setValue,
+    getValues,
+    formState: { errors, isDirty },
+  } = form;
+
+  console.log("signature upload link:", getValues().signature);
   // console.log(watch("taxpayerName"));
 
   useEffect(() => {
     const subscription = watch((value, { name }) => {
       if (name === "netWealthSurcharge") {
         if (value.netWealthSurcharge === "YES") {
-          setValue("netWealthSurchargeAmount", "0.00")
+          setValue("netWealthSurchargeAmount", "0.00");
         } else {
-          setValue("netWealthSurchargeAmount", undefined)
+          setValue("netWealthSurchargeAmount", undefined);
         }
       }
-      if(name === "repairCollection") {
-        if(value.repairCollection) {
-          setValue("repairCollectionAmount", "0.00")
+      if (name === "repairCollection") {
+        if (value.repairCollection) {
+          setValue("repairCollectionAmount", "0.00");
         } else {
-          setValue("repairCollectionAmount", undefined)
+          setValue("repairCollectionAmount", undefined);
         }
       }
-      if(name === "netWealthLastDate") {
-        if(value.netWealthLastDate === "NO_I_AM_A_NEW_TAXPAYER") {
-          setValue("netWealthLastDateAmount", "0.00")
+      if (name === "netWealthLastDate") {
+        if (value.netWealthLastDate === "NO_I_AM_A_NEW_TAXPAYER") {
+          setValue("netWealthLastDateAmount", "0.00");
         } else {
-          setValue("netWealthLastDateAmount", "")
+          setValue("netWealthLastDateAmount", "");
         }
       }
     });
-    
+
     return () => subscription.unsubscribe();
-  }, [watch, setValue])
+  }, [watch, setValue]);
   const formFields: FormField[] = [
     {
       name: "taxpayerName",
@@ -592,10 +603,10 @@ const IndividualTaxReturnForm: React.FC = () => {
     {
       name: "residentialStatus",
       type: "radio",
-      label: "Choose an option",
+      label: "",
       options: [
         {
-          label: "Option 1",
+          label: "",
           value: "RESIDENT",
           x: 712,
           y: 416,
@@ -603,7 +614,7 @@ const IndividualTaxReturnForm: React.FC = () => {
           height: 32,
         },
         {
-          label: "Option 2",
+          label: "",
           value: "NON_RESIDENT",
           x: 890,
           y: 416,
@@ -620,10 +631,10 @@ const IndividualTaxReturnForm: React.FC = () => {
     {
       name: "specialBenefits",
       type: "radio",
-      label: "Choose an option",
+      label: "",
       options: [
         {
-          label: "Option 1",
+          label: "",
           value: "GAZETTED_WAR_WOUNDED_FREEDOM_FIGHTER",
           x: 490,
           y: 470,
@@ -631,7 +642,7 @@ const IndividualTaxReturnForm: React.FC = () => {
           height: 35,
         },
         {
-          label: "Option 2",
+          label: "",
           value: "FEMALE",
           x: 888,
           y: 470,
@@ -639,7 +650,7 @@ const IndividualTaxReturnForm: React.FC = () => {
           height: 35,
         },
         {
-          label: "Option 3",
+          label: "",
           value: "THIRD_GENDER",
           x: 490,
           y: 505,
@@ -647,7 +658,7 @@ const IndividualTaxReturnForm: React.FC = () => {
           height: 35,
         },
         {
-          label: "Option 4",
+          label: "",
           value: "DISABLED_PERSON",
           x: 888,
           y: 505,
@@ -656,7 +667,7 @@ const IndividualTaxReturnForm: React.FC = () => {
         },
 
         {
-          label: "Option 5",
+          label: "",
           value: "AGED_65_OR_MORE",
           x: 490,
           y: 540,
@@ -673,7 +684,7 @@ const IndividualTaxReturnForm: React.FC = () => {
     {
       name: "isParentOfDisabledPerson",
       type: "radio",
-      label: "Choose an option",
+      label: "",
       options: [
         {
           label: "",
@@ -850,10 +861,10 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "incomeFishFarming",
       type: "checkbox",
       label: "",
-      x: 720,
-      y: 280,
-      width: 1000,
-      height: 1000,
+      x: 712,
+      y: 266,
+      width: 50,
+      height: 29,
       imageIndex: 1,
     },
     {
@@ -862,9 +873,9 @@ const IndividualTaxReturnForm: React.FC = () => {
       label: "Fish farming amount",
       disabled: watch("incomeFishFarming") ? false : true,
       x: 772,
-      y: 263,
+      y: 265,
       width: 166,
-      height: 33,
+      height: 30,
       imageIndex: 1,
     },
     {
@@ -901,12 +912,23 @@ const IndividualTaxReturnForm: React.FC = () => {
       imageIndex: 1,
     },
     {
+      name: "incomeFromEmployment",
+      type: "text",
+      label: "incomeFromEmployment",
+      disabled: true,
+      x: 774,
+      y: 180,
+      width: 160,
+      height: 25,
+      imageIndex: 1,
+    },
+    {
       name: "incomeFromRent",
       type: "text",
       label: "incomeFromRent",
       disabled: true,
       x: 774,
-      y: 210,
+      y: 208,
       width: 160,
       height: 25,
       imageIndex: 1,
@@ -915,10 +937,9 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "incomeFromAgriculture",
       type: "text",
       label: "incomeFromAgriculture",
-
       disabled: true,
       x: 774,
-      y: 238,
+      y: 236,
       width: 160,
       height: 25,
       imageIndex: 1,
@@ -1219,7 +1240,6 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "fatherOrHusband",
       type: "text",
       label: "fatherOrHusband",
-
       x: 632,
       y: 730,
       width: 300,
@@ -1250,6 +1270,106 @@ const IndividualTaxReturnForm: React.FC = () => {
       monthPosition: { x: 220, y: 920, width: 60, height: 29 },
       yearPosition: { x: 290, y: 920, width: 100, height: 29 },
     },
+
+    // Image 4
+    {
+      name: "isIncomeFromEmployment",
+      type: "radio",
+      label: "Do you have any income from employment?",
+      disabled: false,
+      x: 308,
+      y: 6,
+      width: 265,
+      height: 18,
+      imageIndex: 3,
+      resetFields: ["typeOfEmployment"],
+      options: [
+        {
+          label: "Yes",
+          height: 20,
+          x: 640,
+          y: 25,
+          value: "YES",
+          width: 33,
+        },
+        {
+          label: "No",
+          height: 20,
+          x: 640,
+          y: 48,
+          value: "NO",
+          width: 33,
+        },
+      ],
+    },
+
+    {
+      name: "typeOfEmployment",
+      type: "radio",
+      label: "",
+      disabled:
+        !watch("isIncomeFromEmployment") ||
+        watch("isIncomeFromEmployment") === "NO",
+      x: 308,
+      y: 6,
+      width: 265,
+      height: 18,
+      imageIndex: 3,
+      options: [
+        {
+          label: "Private Organization",
+          height: 20,
+          x: 930,
+          y: 25,
+          value: "YES",
+          width: 33,
+        },
+        {
+          label: "Government",
+          height: 20,
+          x: 930,
+          y: 48,
+          value: "NO",
+          width: 33,
+        },
+      ],
+    },
+    {
+      name: "taxpayerName",
+      type: "text",
+      label: "taxpayerName",
+      disabled: true,
+      x: 95,
+      y: 147,
+      width: 570,
+      height: 18,
+      imageIndex: 3,
+    },
+    {
+      name: "tin",
+      type: "text",
+      label: "TIN",
+      disabled: true,
+      x: 668,
+      y: 147,
+      width: 265,
+      height: 18,
+      imageIndex: 3,
+    },
+
+    {
+      name: "tin",
+      type: "text",
+      label: "TIN",
+      disabled: true,
+      x: 475,
+      y: 215,
+      width: 151,
+      height: 18,
+      imageIndex: 3,
+    },
+
+    // Other images
     {
       name: "totalRentValue",
       type: "text",
@@ -1383,7 +1503,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "repairCollectionAmount",
       label: "repairCollectionAmount",
       type: "text",
-      disabled:true,
+      disabled: true,
       x: 751,
       y: 376,
       width: 95,
@@ -3951,6 +4071,9 @@ const IndividualTaxReturnForm: React.FC = () => {
     },
   ];
   console.log(`errors`, errors);
+
+  console.log(watch("isIncomeFromEmployment"));
+
   useEffect(() => {
     const updateScale = () => {
       if (containerRef.current && imageRefs.current[0]) {
@@ -3996,18 +4119,21 @@ const IndividualTaxReturnForm: React.FC = () => {
           userId: "xyz123456",
         };
         const result = await createIndividualTaxReturn(createData);
-        const response = await createPayment(createData.total ?? "50", createData.userId);
-  
+        const response = await createPayment(
+          createData.total ?? "50",
+          createData.userId
+        );
+
         // Check if the response is an error before accessing bkashURL
         if (response instanceof Error) {
           throw response; // Handle the error case
         }
-  
+
         // Navigate to the response URL if available
         if (response.bkashURL) {
           window.location.href = response.bkashURL; // Fixed: Assigning URL to window.location.href
         }
-  
+
         if (result.success) {
           toast({
             title: "Success",
@@ -4031,8 +4157,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       }
     });
   };
-  
-  
+
   const renderField = (field: FormField, imageIndex: number) => {
     if (field.imageIndex !== imageIndex) return null;
 
@@ -4053,19 +4178,32 @@ const IndividualTaxReturnForm: React.FC = () => {
         return (
           <Controller
             name={field.name}
-            control={control}           
+            control={control}
             render={({ field: { onChange, value } }) => (
               <div style={fieldStyle} className="relative overflow-hidden">
                 <input
-                  // bind the value to the form state
-                  onChange={onChange}  
-                  value= {value as string}// bind the onChange handler
+                  onChange={(e) => {
+                    let newValue = e.target.value;
+                    if (field.type === "number" && newValue !== "") {
+                      newValue = parseFloat(newValue).toFixed(2);
+                    }
+                    onChange(newValue);
+                  }}
+                  value={
+                    field.type === "number" && value !== ""
+                      ? parseFloat(value as string).toFixed(2)
+                      : (value as string)
+                  }
                   type={field.type}
-                  className={`w-full h-full absolute border px-2 ${!field.disabled ? "border-sky-300 rounded-none bg-sky-300/10 focus:border-sky-500 focus:ring-0 focus:outline-0 focus:bg-transparent hover:border-sky-500" : " bg-[#F5F5F5] font-bold text-[#948C91]"}  `}
+                  className={`w-full h-full absolute border px-2 font-medium ${
+                    !field.disabled
+                      ? "border-sky-300 rounded-none bg-sky-300/10 focus:border-sky-500 focus:ring-0 focus:outline-0 focus:bg-transparent hover:border-sky-500"
+                      : " bg-[#F5F5F5] font-semibold text-[#948C91]"
+                  }  `}
                   style={{ fontSize: `${14 * scale}px` }}
                   disabled={field.disabled}
                 />
-        
+
                 {/* Conditional rendering for the required indicator */}
                 {isRequired && !field.disabled && (
                   <span className="absolute top-0 right-0 -translate-y-1/2 translate-x-1/2 h-10 w-10 bg-sky-300/70 rotate-45 transform origin-center transition-colors">
@@ -4080,10 +4218,20 @@ const IndividualTaxReturnForm: React.FC = () => {
         );
       case "checkbox":
         return (
-          <div style={fieldStyle} className="relative overflow-hidden">
-            <input {...register(field.name)} type="checkbox" className="mr-2" />
-            <label>{field.label}</label>
-          </div>
+          <CustomCheckbox
+            label={field.label}
+            name={field.name}
+            register={register as any}
+            style={{
+              position: "absolute",
+              left: `${field.x / 10}%`,
+              top: `${field.y / 10}%`,
+            }}
+            scale={scale}
+            width={field.width}
+            height={field.height}
+            required={isFieldRequired(individualTaxReturnSchema, field.name)}
+          />
         );
       case "radio":
         return (
@@ -4092,7 +4240,11 @@ const IndividualTaxReturnForm: React.FC = () => {
             name={field.name}
             options={field.options}
             scale={scale}
+            disabled={field.disabled}
             required={isRequired}
+            label={field.label}
+            x={field.x}
+            y={field.y}
           />
         );
       case "select":
@@ -4139,20 +4291,20 @@ const IndividualTaxReturnForm: React.FC = () => {
       case "signature":
         return (
           <div style={fieldStyle}>
-        <Controller
-          name="signature"
-          control={control}
-          render={({ field: { onChange, value } }) => (
-            <SignatureField 
-              onChange={(signatureData) => {
-                onChange(signatureData);
-                console.log('Signature updated:', signatureData);
-              }} 
-              value={value as string}
+            <Controller
+              name="signature"
+              control={control}
+              render={({ field: { onChange, value } }) => (
+                <SignatureField
+                  onChange={(signatureData) => {
+                    onChange(signatureData);
+                    console.log("Signature updated:", signatureData);
+                  }}
+                  value={value as string}
+                />
+              )}
             />
-          )}
-        />
-      </div>
+          </div>
         );
       case "textarea":
         return (
@@ -4208,120 +4360,136 @@ const IndividualTaxReturnForm: React.FC = () => {
 
         <div className="bg-white shadow-lg rounded-lg overflow-hidden">
           <div className="p-6">
-            <form onSubmit={handleSubmit(onSubmit)}>
-              <div className="relative" ref={containerRef}>
-                {images.map((image, index) => (
-                  <div
-                    key={index}
-                    ref={setImageRef(index)}
-                    className="relative border-2 border-gray-200 rounded-lg mb-8"
-                  >
-                    <Image
-                      src={image}
-                      alt={`Form Background ${index + 1}`}
-                      layout="responsive"
-                    />
+            <FormProvider {...form}>
+              <form onSubmit={handleSubmit(onSubmit)}>
+                <div className="relative" ref={containerRef}>
+                  {images.map((image, index) => (
                     <div
-                      ref={setFormContainerRef(index)}
-                      className="absolute top-0 left-0 w-full h-full"
+                      key={index}
+                      ref={setImageRef(index)}
+                      className="relative border-2 border-gray-200 rounded-lg mb-8"
                     >
-                      {formFields.map((field) => renderField(field, index))}
+                      <Image
+                        src={image}
+                        loading="lazy"
+                        placeholder="blur"
+                        alt={`Form Background ${index + 1}`}
+                        layout="responsive"
+                      />
+                      <div
+                        ref={setFormContainerRef(index)}
+                        className="absolute top-0 left-0 w-full h-full"
+                      >
+                        {formFields.map((field) => renderField(field, index))}
+                      </div>
                     </div>
-                  </div>
-                ))}
-              </div>
+                  ))}
+                </div>
 
-              {/* Scrollspy */}
-              <div className="fixed right-4 top-1/2 transform -translate-y-1/2 z-10">
-                {images.map((_, index) => (
-                  <button
-                    key={index}
-                    onClick={() => scrollToImage(index)}
-                    className={`block mb-2 w-8 h-8 rounded-full ${
-                      currentImageIndex === index
-                        ? "bg-primary text-white"
-                        : "bg-gray-300"
-                    }`}
-                  >
-                    {index + 1}
-                  </button>
-                ))}
-              </div>
+                {/* Scrollspy */}
+                <div className="fixed right-4 top-1/2 transform -translate-y-1/2 z-10">
+                  {images.map((_, index) => (
+                    <button
+                      key={index}
+                      onClick={() => scrollToImage(index)}
+                      className={`block mb-2 w-8 h-8 rounded-full ${
+                        currentImageIndex === index
+                          ? "bg-primary text-white"
+                          : "bg-gray-300"
+                      }`}
+                    >
+                      {index + 1}
+                    </button>
+                  ))}
+                </div>
 
-              <div className="fixed bottom-0 left-0 right-0 bg-white shadow-lg border-t border-gray-200">
-                <div className="container mx-auto flex justify-between items-center py-3 px-4">
-                  <div className="flex items-center space-x-4">
-                    <div className="flex items-center space-x-2">
+                <div className="fixed bottom-0 left-0 right-0 bg-white shadow-lg border-t border-gray-200">
+                  <div className="container mx-auto flex justify-between items-center py-3 px-4">
+                    <div className="flex items-center space-x-4">
+                      <div className="flex items-center space-x-2">
+                        <Button
+                          variant="outline"
+                          size="icon"
+                          className="h-8 w-8"
+                          disabled={currentImageIndex === 0}
+                          title="Previous Page"
+                          onClick={() => {
+                            if (currentImageIndex > 0) {
+                              setCurrentImageIndex(currentImageIndex - 1);
+                              scrollToImage(currentImageIndex - 1);
+                            }
+                          }}
+                        >
+                          <ArrowLeft className="h-4 w-4" />
+                        </Button>
+                        <span className="text-sm font-medium">
+                          Page {currentImageIndex + 1} of {images.length}
+                        </span>
+                        <Button
+                          variant="outline"
+                          size="icon"
+                          className="h-8 w-8"
+                          disabled={currentImageIndex === images.length - 1}
+                          title="Next Page"
+                          onClick={() => {
+                            if (currentImageIndex < images.length - 1) {
+                              setCurrentImageIndex(currentImageIndex + 1);
+                              scrollToImage(currentImageIndex + 1);
+                            }
+                          }}
+                        >
+                          <ArrowRight className="h-4 w-4" />
+                        </Button>
+                      </div>
+                      <div className="flex items-center space-x-2 border-l border-gray-300 pl-4">
+                        <Button
+                          onClick={() =>
+                            setScale((prev) => Math.max(prev - 0.1, 0.5))
+                          }
+                          variant="outline"
+                          size="icon"
+                          className="h-8 w-8"
+                          title="Zoom Out"
+                        >
+                          <ZoomOut className="h-4 w-4" />
+                        </Button>
+                        <span className="text-sm font-medium">
+                          {Math.round(scale * 100)}%
+                        </span>
+                        <Button
+                          onClick={() =>
+                            setScale((prev) => Math.min(prev + 0.1, 2))
+                          }
+                          variant="outline"
+                          size="icon"
+                          className="h-8 w-8"
+                          title="Zoom In"
+                        >
+                          <ZoomIn className="h-4 w-4" />
+                        </Button>
+                      </div>
+                    </div>
+                    <div className="flex items-center space-x-4">
                       <Button
+                        onClick={() => console.log("Save for later")}
                         variant="outline"
-                        size="icon"
-                        className="h-8 w-8"
-                        disabled={currentImageIndex === 0}
-                        title="Previous Page"
+                        className="px-4 py-2 text-primary border-primary hover:bg-primary hover:text-white transition-colors duration-300 font-medium"
                       >
-                        <ArrowLeft className="h-4 w-4" />
+                        <Save className="mr-2 h-4 w-4" />
+                        Save for Later
                       </Button>
-                      <span className="text-sm font-medium">
-                        Page {currentImageIndex + 1} of {images.length}
-                      </span>
                       <Button
-                        variant="outline"
-                        size="icon"
-                        className="h-8 w-8"
-                        disabled={currentImageIndex === images.length - 1}
-                        title="Next Page"
+                        onClick={() => console.log("Save PDF")}
+                        className="px-6 py-2 bg-primary text-white font-medium transition duration-300 hover:bg-primary-dark"
                       >
-                        <ArrowRight className="h-4 w-4" />
+                        <Download className="mr-2 h-5 w-5" />
+                        Save PDF
                       </Button>
                     </div>
-                    <div className="flex items-center space-x-2 border-l border-gray-300 pl-4">
-                      <Button
-                        onClick={() =>
-                          setScale((prev) => Math.max(prev - 0.1, 0.5))
-                        }
-                        variant="outline"
-                        size="icon"
-                        className="h-8 w-8"
-                        title="Zoom Out"
-                      >
-                        <ZoomOut className="h-4 w-4" />
-                      </Button>
-                      <span className="text-sm font-medium">
-                        {Math.round(scale * 100)}%
-                      </span>
-                      <Button
-                        onClick={() =>
-                          setScale((prev) => Math.min(prev + 0.1, 2))
-                        }
-                        variant="outline"
-                        size="icon"
-                        className="h-8 w-8"
-                        title="Zoom In"
-                      >
-                        <ZoomIn className="h-4 w-4" />
-                      </Button>
-                    </div>
-                  </div>
-                  <div className="flex items-center space-x-4">
-                    <Button
-                      onClick={() => console.log("Save for later")}
-                      variant="outline"
-                      className="px-4 py-2 text-primary border-primary hover:bg-primary hover:text-white transition-colors duration-300 font-medium"
-                    >
-                      <Save className="mr-2 h-4 w-4" />
-                      Save for Later
-                    </Button>
-                    <Button
-                      onClick={() => console.log("Save PDF")}
-                      className="px-6 py-2 bg-primary text-white font-medium transition duration-300 hover:bg-primary-dark"
-                    >
-                      <Download className="mr-2 h-5 w-5" />
-                      Save PDF
-                    </Button>
                   </div>
                 </div>
-              </div>
-            </form>
+              </form>
+            </FormProvider>
           </div>
         </div>
 
