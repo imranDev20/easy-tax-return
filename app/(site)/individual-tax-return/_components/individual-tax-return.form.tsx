@@ -86,7 +86,7 @@ interface BaseFormField {
   x: number;
   y: number;
   disabled?: boolean;
-  value?: string;
+  value?: string | number;
   width: number;
   height: number;
   imageIndex: number;
@@ -159,7 +159,6 @@ const images = [
   ImageNine,
   ImageTen,
   ImageEleven,
-  ImageTwelve,
 ];
 
 const IndividualTaxReturnForm: React.FC = () => {
@@ -168,6 +167,10 @@ const IndividualTaxReturnForm: React.FC = () => {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const imageRefs = useRef<(HTMLDivElement | null)[]>([]);
   const formContainerRefs = useRef<(HTMLDivElement | null)[]>([]);
+
+  const [isPending, startTransition] = useTransition();
+  const { toast } = useToast();
+  const router = useRouter();
 
   const form = useForm<IndividualTaxReturnFormInput>({
     resolver: zodResolver(individualTaxReturnSchema),
@@ -469,6 +472,7 @@ const IndividualTaxReturnForm: React.FC = () => {
     watch,
     setValue,
     getValues,
+    reset,
     formState: { errors, isDirty },
   } = form;
 
@@ -502,6 +506,7 @@ const IndividualTaxReturnForm: React.FC = () => {
 
     return () => subscription.unsubscribe();
   }, [watch, setValue]);
+
   const formFields: FormField[] = [
     {
       name: "taxpayerName",
@@ -904,7 +909,6 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "incomeOfMinor",
       type: "text",
       label: "incomeOfMinor",
-
       x: 770,
       y: 479,
       width: 168,
@@ -1302,7 +1306,6 @@ const IndividualTaxReturnForm: React.FC = () => {
         },
       ],
     },
-
     {
       name: "typeOfEmployment",
       type: "radio",
@@ -1321,7 +1324,7 @@ const IndividualTaxReturnForm: React.FC = () => {
           height: 20,
           x: 930,
           y: 25,
-          value: "YES",
+          value: "PRIVATE",
           width: 33,
         },
         {
@@ -1329,7 +1332,7 @@ const IndividualTaxReturnForm: React.FC = () => {
           height: 20,
           x: 930,
           y: 48,
-          value: "NO",
+          value: "GOVERTMENT",
           width: 33,
         },
       ],
@@ -1371,11 +1374,83 @@ const IndividualTaxReturnForm: React.FC = () => {
 
     // Other images
     {
-      name: "totalRentValue",
+      name: "taxpayerName",
       type: "text",
-      label: "totalRentValue",
-
+      label: "taxpayerName",
       disabled: true,
+      x: 93,
+      y: 130,
+      width: 570,
+      height: 19,
+      imageIndex: 4,
+    },
+
+    {
+      name: "tin",
+      type: "text",
+      label: "TIN",
+      disabled: true,
+      x: 666,
+      y: 130,
+      width: 271,
+      height: 19,
+      imageIndex: 4,
+    },
+    {
+      name: "rentReceivedOrAnnualValue",
+      type: "text",
+      label: "rentReceivedOrAnnualValue",
+      x: 750,
+      y: 227,
+      width: 95,
+      height: 34,
+      imageIndex: 4,
+    },
+    {
+      name: "advanceRentReceived",
+      type: "text",
+      label: "advanceRentReceived",
+      x: 750,
+      y: 260,
+      width: 95,
+      height: 20,
+      imageIndex: 4,
+    },
+    {
+      name: "valueOfAnyBenefit",
+      type: "text",
+      label: "valueOfAnyBenefit",
+      x: 750,
+      y: 280,
+      width: 95,
+      height: 20,
+      imageIndex: 4,
+    },
+    {
+      name: "vacancyAllowance",
+      type: "text",
+      label: "vacancyAllowance",
+      x: 750,
+      y: 320,
+      width: 95,
+      height: 18,
+      imageIndex: 4,
+    },
+    {
+      name: "adjustedAdvanceRent",
+      type: "text",
+      label: "adjustedAdvanceRent",
+      x: 750,
+      y: 300,
+      width: 95,
+      height: 20,
+      imageIndex: 4,
+    },
+    {
+      name: "totalRentValue",
+      type: "number",
+      label: "totalRentValue",
+      disabled: false,
       x: 845,
       y: 338,
       width: 90,
@@ -1386,7 +1461,6 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "totalAdmissibleDeduction",
       type: "text",
       label: "totalAdmissibleDeduction",
-
       disabled: true,
       x: 845,
       y: 508,
@@ -1398,7 +1472,6 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "netIncome",
       type: "text",
       label: "netIncome",
-
       disabled: true,
       x: 845,
       y: 528,
@@ -1429,61 +1502,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       height: 340,
       imageIndex: 4,
     },
-    {
-      name: "rentReceivedOrAnnualValue",
-      type: "text",
-      label: "rentReceivedOrAnnualValue",
 
-      x: 750,
-      y: 227,
-      width: 95,
-      height: 34,
-      imageIndex: 4,
-    },
-    {
-      name: "advanceRentReceived",
-      type: "text",
-      label: "advanceRentReceived",
-
-      x: 750,
-      y: 260,
-      width: 95,
-      height: 20,
-      imageIndex: 4,
-    },
-    {
-      name: "valueOfAnyBenefit",
-      type: "text",
-      label: "valueOfAnyBenefit",
-
-      x: 750,
-      y: 280,
-      width: 95,
-      height: 20,
-      imageIndex: 4,
-    },
-    {
-      name: "adjustedAdvanceRent",
-      type: "text",
-      label: "adjustedAdvanceRent",
-
-      x: 750,
-      y: 300,
-      width: 95,
-      height: 20,
-      imageIndex: 4,
-    },
-    {
-      name: "vacancyAllowance",
-      type: "text",
-      label: "vacancyAllowance",
-
-      x: 750,
-      y: 320,
-      width: 95,
-      height: 18,
-      imageIndex: 4,
-    },
     {
       name: "repairCollection",
       type: "select",
@@ -1536,7 +1555,6 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "interestMortgageCapitalCharge",
       type: "text",
       label: "interestMortgageCapitalCharge",
-
       x: 751,
       y: 435,
       width: 95,
@@ -3956,7 +3974,6 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "others2",
       type: "text",
       label: "others2",
-
       x: 620,
       y: 715,
       width: 155,
@@ -3978,7 +3995,6 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "assetOutsideBangladesh",
       type: "text",
       label: "assetOutsideBangladesh",
-
       x: 770,
       y: 768,
       width: 170,
@@ -4070,9 +4086,6 @@ const IndividualTaxReturnForm: React.FC = () => {
       imageIndex: 10,
     },
   ];
-  console.log(`errors`, errors);
-
-  console.log(watch("isIncomeFromEmployment"));
 
   useEffect(() => {
     const updateScale = () => {
@@ -4105,12 +4118,8 @@ const IndividualTaxReturnForm: React.FC = () => {
       window.removeEventListener("scroll", handleScroll);
     };
   }, []);
-  const [isPending, startTransition] = useTransition();
-  const { toast } = useToast();
-  const router = useRouter();
 
   const onSubmit: SubmitHandler<IndividualTaxReturnFormInput> = (data) => {
-    console.log(data);
     // Handle form submission
     startTransition(async () => {
       try {
@@ -4179,41 +4188,36 @@ const IndividualTaxReturnForm: React.FC = () => {
           <Controller
             name={field.name}
             control={control}
-            render={({ field: { onChange, value } }) => (
-              <div style={fieldStyle} className="relative overflow-hidden">
-                <input
-                  onChange={(e) => {
-                    let newValue = e.target.value;
-                    if (field.type === "number" && newValue !== "") {
-                      newValue = parseFloat(newValue).toFixed(2);
-                    }
-                    onChange(newValue);
-                  }}
-                  value={
-                    field.type === "number" && value !== ""
-                      ? parseFloat(value as string).toFixed(2)
-                      : (value as string)
-                  }
-                  type={field.type}
-                  className={`w-full h-full absolute border px-2 font-medium ${
-                    !field.disabled
-                      ? "border-sky-300 rounded-none bg-sky-300/10 focus:border-sky-500 focus:ring-0 focus:outline-0 focus:bg-transparent hover:border-sky-500"
-                      : " bg-[#F5F5F5] font-semibold text-[#948C91]"
-                  }  `}
-                  style={{ fontSize: `${14 * scale}px` }}
-                  disabled={field.disabled}
-                />
+            render={({ field: { onChange, value } }) => {
+              return (
+                <div style={fieldStyle} className="relative overflow-hidden">
+                  <input
+                    onChange={(e) => {
+                      let newValue = e.target.value;
+                      onChange(newValue);
+                    }}
+                    value={value as string}
+                    type={field.type}
+                    className={`w-full h-full absolute border px-2 font-medium ${
+                      !field.disabled
+                        ? "border-sky-300 rounded-none bg-sky-300/10 focus:border-sky-500 focus:ring-0 focus:outline-0 focus:bg-transparent hover:border-sky-500"
+                        : " bg-[#F5F5F5] font-semibold text-[#948C91]"
+                    }  `}
+                    style={{ fontSize: `${14 * scale}px` }}
+                    disabled={field.disabled}
+                  />
 
-                {/* Conditional rendering for the required indicator */}
-                {isRequired && !field.disabled && (
-                  <span className="absolute top-0 right-0 -translate-y-1/2 translate-x-1/2 h-10 w-10 bg-sky-300/70 rotate-45 transform origin-center transition-colors">
-                    <span className="absolute text-white top-[23px] left-[17px] text-lg">
-                      *
+                  {/* Conditional rendering for the required indicator */}
+                  {isRequired && !field.disabled && (
+                    <span className="absolute top-0 right-0 -translate-y-1/2 translate-x-1/2 h-10 w-10 bg-sky-300/70 rotate-45 transform origin-center transition-colors">
+                      <span className="absolute text-white top-[23px] left-[17px] text-lg">
+                        *
+                      </span>
                     </span>
-                  </span>
-                )}
-              </div>
-            )}
+                  )}
+                </div>
+              );
+            }}
           />
         );
       case "checkbox":
@@ -4346,6 +4350,10 @@ const IndividualTaxReturnForm: React.FC = () => {
     },
     []
   );
+
+  useEffect(() => {
+    console.log(watch("totalRentValue"));
+  }, [watch]);
 
   return (
     <div className="bg-secondary min-h-screen">

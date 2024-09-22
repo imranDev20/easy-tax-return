@@ -37,9 +37,10 @@ export default withAuth(
     if (
       path.startsWith("/profile") ||
       path.startsWith("/history") ||
-      path.startsWith("/transactions")
+      path.startsWith("/transactions") ||
+      path.startsWith("/individual-tax-return")
     ) {
-      if (!token || token.role !== "USER") {
+      if (!token) {
         return NextResponse.redirect(
           new URL(`/login?callbackUrl=${encodeURIComponent(req.url)}`, req.url)
         );
@@ -71,6 +72,7 @@ export const config = {
     "/profile",
     "/history",
     "/transactions",
+    "/individual-tax-return",
     "/login",
     "/register",
   ],

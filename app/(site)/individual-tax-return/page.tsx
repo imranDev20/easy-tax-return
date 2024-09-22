@@ -1,5 +1,4 @@
 import IndividualTaxReturnForm from "./_components/individual-tax-return.form";
-
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
