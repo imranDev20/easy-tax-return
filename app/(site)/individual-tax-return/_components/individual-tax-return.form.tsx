@@ -53,6 +53,7 @@ import ImageNine from "@/public/images/9.png";
 import { createIndividualTaxReturn, createPayment } from "../actions";
 import { useToast } from "@/hooks/use-toast";
 import { useRouter } from "next/navigation";
+import CustomCheckbox from "@/components/custom/checkbox";
 
 // Define the possible field types
 type FieldType =
@@ -151,7 +152,6 @@ const images = [
   ImageNine,
   ImageTen,
   ImageEleven,
-  ImageTwelve,
 ];
 
 const IndividualTaxReturnForm: React.FC = () => {
@@ -168,7 +168,6 @@ const IndividualTaxReturnForm: React.FC = () => {
     watch,
     setValue,
     getValues,
-    
     formState: { errors, isDirty },
   } = useForm<IndividualTaxReturnFormInput>({
     resolver: zodResolver(individualTaxReturnSchema),
@@ -455,42 +454,42 @@ const IndividualTaxReturnForm: React.FC = () => {
       totalFinancialAssets: "0.00",
       motorVehiclesAmount: "0.00",
       totalAssetslocatedInBangladesh: "0.00",
-      totalCashInHandsAndFundOutsideBusiness:"0.00",
+      totalCashInHandsAndFundOutsideBusiness: "0.00",
       totalAssetsInBangladeshAndOutsideBangladesh: "0.00",
       totalIncomeShown: "",
       totalTaxPaid: "",
     },
   });
-  console.log('signature upload link:',getValues().signature);
+  console.log("signature upload link:", getValues().signature);
   // console.log(watch("taxpayerName"));
 
   useEffect(() => {
     const subscription = watch((value, { name }) => {
       if (name === "netWealthSurcharge") {
         if (value.netWealthSurcharge === "YES") {
-          setValue("netWealthSurchargeAmount", "0.00")
+          setValue("netWealthSurchargeAmount", "0.00");
         } else {
-          setValue("netWealthSurchargeAmount", undefined)
+          setValue("netWealthSurchargeAmount", undefined);
         }
       }
-      if(name === "repairCollection") {
-        if(value.repairCollection) {
-          setValue("repairCollectionAmount", "0.00")
+      if (name === "repairCollection") {
+        if (value.repairCollection) {
+          setValue("repairCollectionAmount", "0.00");
         } else {
-          setValue("repairCollectionAmount", undefined)
+          setValue("repairCollectionAmount", undefined);
         }
       }
-      if(name === "netWealthLastDate") {
-        if(value.netWealthLastDate === "NO_I_AM_A_NEW_TAXPAYER") {
-          setValue("netWealthLastDateAmount", "0.00")
+      if (name === "netWealthLastDate") {
+        if (value.netWealthLastDate === "NO_I_AM_A_NEW_TAXPAYER") {
+          setValue("netWealthLastDateAmount", "0.00");
         } else {
-          setValue("netWealthLastDateAmount", "")
+          setValue("netWealthLastDateAmount", "");
         }
       }
     });
-    
+
     return () => subscription.unsubscribe();
-  }, [watch, setValue])
+  }, [watch, setValue]);
   const formFields: FormField[] = [
     {
       name: "taxpayerName",
@@ -850,10 +849,10 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "incomeFishFarming",
       type: "checkbox",
       label: "",
-      x: 720,
-      y: 280,
-      width: 1000,
-      height: 1000,
+      x: 712,
+      y: 266,
+      width: 50,
+      height: 29,
       imageIndex: 1,
     },
     {
@@ -1383,7 +1382,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "repairCollectionAmount",
       label: "repairCollectionAmount",
       type: "text",
-      disabled:true,
+      disabled: true,
       x: 751,
       y: 376,
       width: 95,
@@ -3996,18 +3995,21 @@ const IndividualTaxReturnForm: React.FC = () => {
           userId: "xyz123456",
         };
         const result = await createIndividualTaxReturn(createData);
-        const response = await createPayment(createData.total ?? "50", createData.userId);
-  
+        const response = await createPayment(
+          createData.total ?? "50",
+          createData.userId
+        );
+
         // Check if the response is an error before accessing bkashURL
         if (response instanceof Error) {
           throw response; // Handle the error case
         }
-  
+
         // Navigate to the response URL if available
         if (response.bkashURL) {
           window.location.href = response.bkashURL; // Fixed: Assigning URL to window.location.href
         }
-  
+
         if (result.success) {
           toast({
             title: "Success",
@@ -4031,8 +4033,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       }
     });
   };
-  
-  
+
   const renderField = (field: FormField, imageIndex: number) => {
     if (field.imageIndex !== imageIndex) return null;
 
@@ -4053,19 +4054,23 @@ const IndividualTaxReturnForm: React.FC = () => {
         return (
           <Controller
             name={field.name}
-            control={control}           
+            control={control}
             render={({ field: { onChange, value } }) => (
               <div style={fieldStyle} className="relative overflow-hidden">
                 <input
                   // bind the value to the form state
-                  onChange={onChange}  
-                  value= {value as string}// bind the onChange handler
+                  onChange={onChange}
+                  value={value as string} // bind the onChange handler
                   type={field.type}
-                  className={`w-full h-full absolute border px-2 ${!field.disabled ? "border-sky-300 rounded-none bg-sky-300/10 focus:border-sky-500 focus:ring-0 focus:outline-0 focus:bg-transparent hover:border-sky-500" : " bg-[#F5F5F5] font-bold text-[#948C91]"}  `}
+                  className={`w-full h-full absolute border px-2 ${
+                    !field.disabled
+                      ? "border-sky-300 rounded-none bg-sky-300/10 focus:border-sky-500 focus:ring-0 focus:outline-0 focus:bg-transparent hover:border-sky-500"
+                      : " bg-[#F5F5F5] font-bold text-[#948C91]"
+                  }  `}
                   style={{ fontSize: `${14 * scale}px` }}
                   disabled={field.disabled}
                 />
-        
+
                 {/* Conditional rendering for the required indicator */}
                 {isRequired && !field.disabled && (
                   <span className="absolute top-0 right-0 -translate-y-1/2 translate-x-1/2 h-10 w-10 bg-sky-300/70 rotate-45 transform origin-center transition-colors">
@@ -4080,10 +4085,20 @@ const IndividualTaxReturnForm: React.FC = () => {
         );
       case "checkbox":
         return (
-          <div style={fieldStyle} className="relative overflow-hidden">
-            <input {...register(field.name)} type="checkbox" className="mr-2" />
-            <label>{field.label}</label>
-          </div>
+          <CustomCheckbox
+            label={field.label}
+            name={field.name}
+            register={register as any}
+            style={{
+              position: "absolute",
+              left: `${field.x / 10}%`,
+              top: `${field.y / 10}%`,
+            }}
+            scale={scale}
+            width={field.width}
+            height={field.height}
+            required={isFieldRequired(individualTaxReturnSchema, field.name)}
+          />
         );
       case "radio":
         return (
@@ -4139,20 +4154,20 @@ const IndividualTaxReturnForm: React.FC = () => {
       case "signature":
         return (
           <div style={fieldStyle}>
-        <Controller
-          name="signature"
-          control={control}
-          render={({ field: { onChange, value } }) => (
-            <SignatureField 
-              onChange={(signatureData) => {
-                onChange(signatureData);
-                console.log('Signature updated:', signatureData);
-              }} 
-              value={value as string}
+            <Controller
+              name="signature"
+              control={control}
+              render={({ field: { onChange, value } }) => (
+                <SignatureField
+                  onChange={(signatureData) => {
+                    onChange(signatureData);
+                    console.log("Signature updated:", signatureData);
+                  }}
+                  value={value as string}
+                />
+              )}
             />
-          )}
-        />
-      </div>
+          </div>
         );
       case "textarea":
         return (
@@ -4218,6 +4233,8 @@ const IndividualTaxReturnForm: React.FC = () => {
                   >
                     <Image
                       src={image}
+                      loading="lazy"
+                      placeholder="blur"
                       alt={`Form Background ${index + 1}`}
                       layout="responsive"
                     />
@@ -4258,6 +4275,12 @@ const IndividualTaxReturnForm: React.FC = () => {
                         className="h-8 w-8"
                         disabled={currentImageIndex === 0}
                         title="Previous Page"
+                        onClick={() => {
+                          if (currentImageIndex > 0) {
+                            setCurrentImageIndex(currentImageIndex - 1);
+                            scrollToImage(currentImageIndex - 1);
+                          }
+                        }}
                       >
                         <ArrowLeft className="h-4 w-4" />
                       </Button>
@@ -4270,6 +4293,12 @@ const IndividualTaxReturnForm: React.FC = () => {
                         className="h-8 w-8"
                         disabled={currentImageIndex === images.length - 1}
                         title="Next Page"
+                        onClick={() => {
+                          if (currentImageIndex < images.length - 1) {
+                            setCurrentImageIndex(currentImageIndex + 1);
+                            scrollToImage(currentImageIndex + 1);
+                          }
+                        }}
                       >
                         <ArrowRight className="h-4 w-4" />
                       </Button>

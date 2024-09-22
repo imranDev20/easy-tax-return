@@ -16,7 +16,6 @@ import CustomDatePicker from "./_components/date-picker";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft, ArrowRight, Download, Save } from "lucide-react";
 import SignatureField from "./_components/signature";
-import { Switch } from "@/components/ui/switch";
 
 // Define the possible field types
 type FieldType =
