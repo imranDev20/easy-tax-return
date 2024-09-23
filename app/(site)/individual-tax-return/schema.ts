@@ -88,48 +88,58 @@ export const individualTaxReturnSchema = z.object({
   dateOfSignature: z.date(),
 
   // Image 4 - govt
-  isIncomeFromEmployment: z.nativeEnum(IncomeFromEmployment),
-  typeOfEmployment: z.nativeEnum(EmploymentType),
-  basicPayGovtEmployment: z.number().nullable(),
-  arrearPayGovtEmployment: z.number().nullable(),
-  specialAllowanceGovtEmployment: z.number().nullable(),
-  houseRentAllowanceGovtEmployment: z.number().nullable(),
-  medicalAllowanceGovtEmployment: z.number().nullable(),
-  conveyanceAllowanceGovtEmployment: z.number().nullable(),
-  festivalAllowanceGovtEmployment: z.number().nullable(),
-  allowanceForSupportStaffGovtEmployment: z.number().nullable(),
-  leaveAllowanceGovtEmployment: z.number().nullable(),
-  honorariumRewardGovtEmployment: z.number().nullable(),
-  overtimeAllowanceGovtEmployment: z.number().nullable(),
-  banglaNoboborshoAllowancesGovtEmployment: z.number().nullable(),
-  interestAccruedProvidentFundGovtEmployment: z.number().nullable(),
-  lumpGrantGovtEmployment: z.number().nullable(),
-  gratuityGovtEmployment: z.number().nullable(),
-  otherAllowanceGovtEmployment: z.number().nullable(),
-  otherAllowanceExemptedGovtEmployment: z.number().nullable(),
-  totalGovtEmployment: z.number().nullable(),
+  isIncomeFromEmployment: z.nativeEnum(IncomeFromEmployment).optional(),
+  typeOfEmployment: z.nativeEnum(EmploymentType).optional(),
+  basicPayGovtEmployment: z.number().nullable().optional(),
+  arrearPayGovtEmployment: z.number().nullable().optional(),
+  specialAllowanceGovtEmployment: z.number().nullable().optional(),
+  houseRentAllowanceGovtEmployment: z.number().nullable().optional(),
+  medicalAllowanceGovtEmployment: z.number().nullable().optional(),
+  conveyanceAllowanceGovtEmployment: z.number().nullable().optional(),
+  festivalAllowanceGovtEmployment: z.number().nullable().optional(),
+  allowanceForSupportStaffGovtEmployment: z.number().nullable().optional(),
+  leaveAllowanceGovtEmployment: z.number().nullable().optional(),
+  honorariumRewardGovtEmployment: z.number().nullable().optional(),
+  overtimeAllowanceGovtEmployment: z.number().nullable().optional(),
+  banglaNoboborshoAllowancesGovtEmployment: z.number().nullable().optional(),
+  interestAccruedProvidentFundGovtEmployment: z.number().nullable().optional(),
+  lumpGrantGovtEmployment: z.number().nullable().optional(),
+  gratuityGovtEmployment: z.number().nullable().optional(),
+  otherAllowanceGovtEmployment: z.number().nullable().optional(),
+  otherAllowanceExemptedGovtEmployment: z.number().nullable().optional(),
+  totalGovtEmployment: z.number().nullable().optional(),
+
   // image 4 - private
-  basicPayPrivateEmployment: z.number().nullable(),
-  allowancesPrivateEmployment: z.number().nullable(),
-  advanceArrearSalaryPrivateEmployment: z.number().nullable(),
+  basicPayPrivateEmployment: z.number().nullable().optional(),
+  allowancesPrivateEmployment: z.number().nullable().optional(),
+  advanceArrearSalaryPrivateEmployment: z.number().nullable().optional(),
   gratuityAnnuityPensionOrSimilarBenefitPrivateEmployment: z
     .number()
-    .nullable(),
-  perquisitesPrivateEmployment: z.number().nullable(),
+    .nullable()
+    .optional(),
+  perquisitesPrivateEmployment: z.number().nullable().optional(),
   receiptInLieuOfOrInAdditionToSalaryOrWagesPrivateEmployment: z
     .number()
-    .nullable(),
-  incomeFromEmployeeShareSchemePrivateEmployment: z.number().nullable(),
-  accommodationFacilityPrivateEmployment: z.number().nullable(),
-  transportFacilityPrivateEmployment: z.number().nullable(),
-  anyOtherFacilityProvidedByEmployerPrivateEmployment: z.number().nullable(),
+    .nullable()
+    .optional(),
+  incomeFromEmployeeShareSchemePrivateEmployment: z
+    .number()
+    .nullable()
+    .optional(),
+  accommodationFacilityPrivateEmployment: z.number().nullable().optional(),
+  transportFacilityPrivateEmployment: z.number().nullable().optional(),
+  anyOtherFacilityProvidedByEmployerPrivateEmployment: z
+    .number()
+    .nullable()
+    .optional(),
   employerContributionToRecognizedProvidentFundPrivateEmployment: z
     .number()
-    .nullable(),
-  otherIfAnyPrivateEmployment: z.number().nullable(),
-  totalSalaryReceivedPrivateEmployment: z.number().nullable(),
-  exemptedAmountPrivateEmployment: z.number().nullable(),
-  totalIncomeFromSalaryPrivateEmployment: z.number().nullable(),
+    .nullable()
+    .optional(),
+  otherIfAnyPrivateEmployment: z.number().nullable().optional(),
+  totalSalaryReceivedPrivateEmployment: z.number().nullable().optional(),
+  exemptedAmountPrivateEmployment: z.number().nullable().optional(),
+  totalIncomeFromSalaryPrivateEmployment: z.number().nullable().optional(),
 
   // image 5
   locationDescriptionOwnershipProportionOfProperty: z.string().optional(),
