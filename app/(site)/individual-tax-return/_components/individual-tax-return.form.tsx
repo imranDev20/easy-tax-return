@@ -86,6 +86,7 @@ interface BaseFormField {
   x: number;
   y: number;
   disabled?: boolean;
+  isVisible?: boolean;
   value?: string;
   width: number;
   height: number;
@@ -1046,7 +1047,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       disabled: true,
       x: 774,
       y: 740,
-      width: 260,
+      width: 165,
       height: 25,
       imageIndex: 1,
     },
@@ -1256,7 +1257,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       yearPosition: { x: 290, y: 920, width: 100, height: 29 },
     },
 
-    // Image 4
+    // Image 3
     {
       name: "isIncomeFromEmployment",
       type: "radio",
@@ -1287,8 +1288,6 @@ const IndividualTaxReturnForm: React.FC = () => {
         },
       ],
     },
-
-    // Image 3
 
     {
       name: "typeOfEmployment",
@@ -1370,7 +1369,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "tin",
       type: "text",
       label: "TIN",
-      disabled: true,
+      disabled: true,     
       x: 475,
       y: 268,
       width: 151,
@@ -4402,7 +4401,7 @@ const IndividualTaxReturnForm: React.FC = () => {
                       : (value as string)
                   }
                   type={field.type}
-                  className={`w-full h-full absolute border px-2 font-medium ${
+                  className={`w-full h-full absolute border ${!field.isVisible ? "hidden": "block"} px-2 font-medium ${
                     !field.disabled
                       ? "border-sky-300 rounded-none bg-sky-300/10 focus:border-sky-500 focus:ring-0 focus:outline-0 focus:bg-transparent hover:border-sky-500"
                       : " bg-[#F5F5F5] font-semibold text-[#948C91]"
