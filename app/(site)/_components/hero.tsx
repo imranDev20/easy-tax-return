@@ -6,6 +6,7 @@ import DocumentIcon from "@/public/icons/document-icon";
 import BankIcon from "@/public/icons/bank-icon";
 import CompanyIcon from "@/public/icons/company-icon";
 import AvatarOne from "@/public/avatar-1.jpg";
+import VatIcon from "@/public/icons/vat-icon";
 
 const HERO_CARD_OPTIONS = [
   {
@@ -16,16 +17,16 @@ const HERO_CARD_OPTIONS = [
     hoverColor: "bg-[rgba(168,241,229,0.4)]",
   },
   {
-    label: "Firm Tax Return",
-    Icon: BankIcon,
-    href: "tax-return-form",
+    label: "Company Income Tax",
+    Icon: CompanyIcon,
+    href: "company-income-tax",
     color: "bg-[rgba(235,189,189,0.2)]",
     hoverColor: "bg-[rgba(235,189,189,0.4)]",
   },
   {
-    label: "Company Tax Return",
-    Icon: CompanyIcon,
-    href: "tax-return-form",
+    label: "VAT Related Services",
+    Icon: VatIcon,
+    href: "vat-related-services",
     color: "bg-[rgba(241,239,168,0.2)]",
     hoverColor: "bg-[rgba(241,239,168,0.4)]",
   },

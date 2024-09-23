@@ -11,7 +11,7 @@ export default function Footer() {
             <p className="text-sm max-w-xs md:max-w-sm">
               Tax services that are customized to enhance your financial
               strategy and minimize tax liabilities. Trust us for tax
-              preparation, planning, and filing needs to thrive in today&apos;s
+              preparation, planning, and filing needs to thrive in today&lsquo;s
               competitive market.
             </p>
             <div className="flex space-x-4 text-blue-600">
@@ -31,9 +31,9 @@ export default function Footer() {
             <div>
               <h4 className="font-semibold text-lg mb-2">Office</h4>
               <p className="text-sm">
-                House # 276, Lane # 04
+                1206, Madani Avenue, 100 Feet Road,
                 <br />
-                DOHS Baridhara, Dhaka-1206
+                Vatara, Dhaka-1217
                 <br />
                 Bangladesh
               </p>
@@ -53,9 +53,19 @@ export default function Footer() {
             <div>
               <h4 className="font-semibold text-lg mb-2">Contact</h4>
               <p className="text-sm">
-                support@etaxreturn.com.bd
+                <Link
+                  href="mailto:info.easytax2024@gmail.com"
+                  className="hover:underline hover:text-primary"
+                >
+                  info.easytax2024@gmail.com
+                </Link>
                 <br />
-                +8801788994070
+                <Link
+                  href="tel:+8801773870749"
+                  className="hover:underline hover:text-primary"
+                >
+                  +880 1773-870749
+                </Link>
               </p>
             </div>
 
