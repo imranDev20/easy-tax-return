@@ -168,6 +168,8 @@ const IndividualTaxReturnForm: React.FC = () => {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const imageRefs = useRef<(HTMLDivElement | null)[]>([]);
   const formContainerRefs = useRef<(HTMLDivElement | null)[]>([]);
+  
+  //  use form and default values  
 
   const form = useForm<IndividualTaxReturnFormInput>({
     resolver: zodResolver(individualTaxReturnSchema),
@@ -192,7 +194,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       employerName: "",
       businessName: "",
       bin: "",
-      partnersInfo: "",
+      
       partnersMembersAssociation1: "",
       partnersMembersAssociation2: "",
       incomeFishFarming: false,
@@ -301,10 +303,8 @@ const IndividualTaxReturnForm: React.FC = () => {
       personalExpenseAmount: "",
       personalExpenseComment: "",
       festivalExpenseAmount: "",
-      festivalExpenseComment: "",
-      taxDeductedAmount: "",
-      taxDeductedComment: "",
-      advanceTaxPaid2Amount: "",
+      festivalExpenseComment: "",      
+      taxDeductedComment: "",      
       advanceTaxPaidComment: "",
       taxSurchargePaidAmount: "",
       taxSurchargePaidComment: "",
@@ -417,8 +417,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       closingCpital: 0.0,
       totalCapitalsAndLiabilities: 0.0,
       interestProfitFromBankFINetTaxableIncome: 0.0,
-      incomeFromSavingCertificatesNetTaxableIncome: 0.0,
-      incomeFromSecuritiesDebenturesNetTaxableIncome: 0.0,
+      incomeFromSavingCertificatesNetTaxableIncome: 0.0,      
       incomeFromFinancialProductSchemeNetTaxableIncome: 0.0,
       dividendIncomeNetTaxableIncome: 0.0,
       capitalGainFromTransferofPropertyNetTaxableIncome: 0.0,
@@ -476,7 +475,7 @@ const IndividualTaxReturnForm: React.FC = () => {
   // console.log(watch("taxpayerName"));
 
   useEffect(() => {
-    const subscription = watch((value, { name }) => {
+    const subscription = watch((value:any, { name }:any) => {
       if (name === "netWealthSurcharge") {
         if (value.netWealthSurcharge === "YES") {
           setValue("netWealthSurchargeAmount", "0.00");
@@ -503,6 +502,8 @@ const IndividualTaxReturnForm: React.FC = () => {
     return () => subscription.unsubscribe();
   }, [watch, setValue]);
   const formFields: FormField[] = [
+    // Image 0
+
     {
       name: "taxpayerName",
       type: "text",
@@ -513,28 +514,8 @@ const IndividualTaxReturnForm: React.FC = () => {
       height: 30,
       imageIndex: 0,
     },
-    {
-      name: "taxpayerName",
-      type: "text",
-      label: "Tax payer name",
-      x: 92,
-      y: 112,
-      disabled: true,
-      width: 570,
-      height: 22,
-      imageIndex: 1,
-    },
-    {
-      name: "taxpayerName",
-      type: "text",
-      label: "Tax payer name",
-      x: 92,
-      y: 130,
-      disabled: true,
-      width: 570,
-      height: 22,
-      imageIndex: 5,
-    },
+   
+    
     {
       name: "nationalId",
       type: "text",
@@ -555,28 +536,6 @@ const IndividualTaxReturnForm: React.FC = () => {
       width: 397,
       height: 30,
       imageIndex: 0,
-    },
-    {
-      name: "tin",
-      type: "text",
-      label: "TIN",
-      disabled: true,
-      x: 668,
-      y: 113,
-      width: 265,
-      height: 20,
-      imageIndex: 1,
-    },
-    {
-      name: "tin",
-      type: "text",
-      label: "TIN",
-      disabled: true,
-      x: 668,
-      y: 132,
-      width: 265,
-      height: 20,
-      imageIndex: 5,
     },
     {
       name: "circle",
@@ -843,6 +802,30 @@ const IndividualTaxReturnForm: React.FC = () => {
       imageIndex: 0,
     },
 
+    // Image 1
+    
+    {
+      name: "taxpayerName",
+      type: "text",
+      label: "Tax payer name",
+      x: 92,
+      y: 112,
+      disabled: true,
+      width: 570,
+      height: 22,
+      imageIndex: 1,
+    },
+    {
+      name: "tin",
+      type: "text",
+      label: "TIN",
+      disabled: true,
+      x: 668,
+      y: 113,
+      width: 265,
+      height: 20,
+      imageIndex: 1,
+    },
     {
       name: "statementOfIncomeYearEndedOn",
       type: "date",
@@ -1132,6 +1115,8 @@ const IndividualTaxReturnForm: React.FC = () => {
       imageIndex: 1,
     },
 
+    // Image 2
+
     {
       name: "taxDeductedOrCollected",
       type: "text",
@@ -1303,6 +1288,8 @@ const IndividualTaxReturnForm: React.FC = () => {
       ],
     },
 
+    // Image 3
+
     {
       name: "typeOfEmployment",
       type: "radio",
@@ -1434,6 +1421,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       height: 16,
       imageIndex: 3,
     },
+
     {
       name: "tin",
       type: "text",
@@ -1545,7 +1533,8 @@ const IndividualTaxReturnForm: React.FC = () => {
       imageIndex: 3,
     },
 
-    // Other images
+    // Image 4
+
     {
       name: "totalRentValue",
       type: "text",
@@ -1660,6 +1649,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       height: 18,
       imageIndex: 4,
     },
+
     {
       name: "repairCollection",
       type: "select",
@@ -1675,6 +1665,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       height: 20,
       imageIndex: 4,
     },
+
     {
       name: "repairCollectionAmount",
       label: "repairCollectionAmount",
@@ -1795,6 +1786,30 @@ const IndividualTaxReturnForm: React.FC = () => {
       width: 95,
       height: 34,
       imageIndex: 4,
+    },
+
+    //  Image 5
+    {
+      name: "taxpayerName",
+      type: "text",
+      label: "Tax payer name",
+      x: 92,
+      y: 130,
+      disabled: true,
+      width: 570,
+      height: 22,
+      imageIndex: 5,
+    },
+    {
+      name: "tin",
+      type: "text",
+      label: "TIN",
+      disabled: true,
+      x: 668,
+      y: 132,
+      width: 265,
+      height: 20,
+      imageIndex: 5,
     },
     {
       name: "nameOfBusiness",
@@ -2416,6 +2431,9 @@ const IndividualTaxReturnForm: React.FC = () => {
       height: 18,
       imageIndex: 5,
     },
+
+    // Image 6
+
     {
       name: "taxpayerName",
       type: "text",
@@ -2606,6 +2624,9 @@ const IndividualTaxReturnForm: React.FC = () => {
       height: 18,
       imageIndex: 6,
     },
+
+    // Image 7
+
     {
       name: "tin",
       type: "text",
@@ -2863,6 +2884,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       height: 35,
       imageIndex: 7,
     },
+
     {
       name: "advanceTaxPaidComment",
       type: "text",
@@ -3094,6 +3116,9 @@ const IndividualTaxReturnForm: React.FC = () => {
       height: 19,
       imageIndex: 7,
     },
+
+    // Image 8
+
     {
       name: "taxpayerName",
       type: "text",
@@ -3578,6 +3603,9 @@ const IndividualTaxReturnForm: React.FC = () => {
       height: 18,
       imageIndex: 8,
     },
+
+    // Image 9
+
     {
       name: "nonAgriculturalPropertyLandHouseProperty",
       type: "text",
@@ -4161,6 +4189,9 @@ const IndividualTaxReturnForm: React.FC = () => {
       height: 18,
       imageIndex: 9,
     },
+
+    // Image 10
+
     {
       name: "taxpayerName",
       type: "text",
@@ -4248,7 +4279,7 @@ const IndividualTaxReturnForm: React.FC = () => {
   ];
   console.log(`errors`, errors);
 
-  console.log(watch("isIncomeFromEmployment"));
+
 
   useEffect(() => {
     const updateScale = () => {
@@ -4295,20 +4326,20 @@ const IndividualTaxReturnForm: React.FC = () => {
           userId: "xyz123456",
         };
         const result = await createIndividualTaxReturn(createData);
-        const response = await createPayment(
-          createData.total ?? "50",
-          createData.userId
-        );
+        // const response = await createPayment(
+        //   createData.total ?? "50",
+        //   createData.userId
+        // );
 
-        // Check if the response is an error before accessing bkashURL
-        if (response instanceof Error) {
-          throw response; // Handle the error case
-        }
+        // // Check if the response is an error before accessing bkashURL
+        // if (response instanceof Error) {
+        //   throw response; // Handle the error case
+        // }
 
-        // Navigate to the response URL if available
-        if (response.bkashURL) {
-          window.location.href = response.bkashURL; // Fixed: Assigning URL to window.location.href
-        }
+        // // Navigate to the response URL if available
+        // if (response.bkashURL) {
+        //   window.location.href = response.bkashURL; // Fixed: Assigning URL to window.location.href
+        // }
 
         if (result.success) {
           toast({
