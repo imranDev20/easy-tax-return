@@ -9,6 +9,9 @@ import {
 
 import z from "zod";
 
+
+
+
 // Define the Zod schema
 export const individualTaxReturnSchema = z.object({
   userId: z.string().optional(),
@@ -163,6 +166,7 @@ export const individualTaxReturnSchema = z.object({
   insurancePremiumPaid: z.string().optional(),
   others: z.string().optional(),
   taxpayersShare: z.string(),
+  taxpayersShareAmount: z.number().nullable().optional(),
   taxDeductedSourceFromIncomeRent: z.string().optional(),
   salesTurnoverReceipt: z.string().optional(),
   grossProfit: z.string().optional(),
@@ -173,6 +177,7 @@ export const individualTaxReturnSchema = z.object({
   netProfit: z.number().optional(),
 
   // image 5
+  // 62 inputs
   nameOfBusiness: z.string().optional(),
   natureOfBusiness: z.string().optional(),
   addressOfBusiness: z.string().optional(),
@@ -227,6 +232,12 @@ export const individualTaxReturnSchema = z.object({
   incomeFromBusinessNetTaxableIncome: z.number().optional(),
   workersParticinationFundNetTaxableIncome: z.number().optional(),
   incomeFromOtherSourcesNetTaxableIncome: z.number().optional(),
+  otherIncomeSubjectToMinTax: z.string().optional(),
+  otherAmountOfIncomeMinTax: z.number().nullable().optional(),
+  otherDeductionsExpensesMinTax: z.number().nullable().optional(),
+  otherNetTaxableIncomeMinTax: z.number().nullable().optional(),
+  otherTaxDeductedSourceMinTax: z.number().nullable().optional(),
+
 
   // Image 6
   lifeInsurancePremium: z.string().optional(),

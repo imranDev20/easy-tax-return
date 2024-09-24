@@ -159,6 +159,7 @@ const images = [
   ImageNine,
   ImageTen,
   ImageEleven,
+  ImageTwelve,
 ];
 
 const IndividualTaxReturnForm: React.FC = () => {
@@ -511,7 +512,7 @@ const IndividualTaxReturnForm: React.FC = () => {
     {
       name: "taxpayerName",
       type: "text",
-      label: "Tax payer name",
+      label: "",
       x: 341,
       y: 275,
       width: 594,
@@ -522,7 +523,7 @@ const IndividualTaxReturnForm: React.FC = () => {
     {
       name: "nationalId",
       type: "text",
-      label: "National ID No / Passport No.",
+      label: "",
       x: 538,
       y: 306,
       width: 397,
@@ -532,7 +533,7 @@ const IndividualTaxReturnForm: React.FC = () => {
     {
       name: "tin",
       type: "text",
-      label: "TIN",
+      label: "",
 
       x: 538,
       y: 337,
@@ -543,7 +544,7 @@ const IndividualTaxReturnForm: React.FC = () => {
     {
       name: "circle",
       type: "text",
-      label: "Circle",
+      label: "",
       x: 252,
       y: 367,
       width: 285,
@@ -553,7 +554,7 @@ const IndividualTaxReturnForm: React.FC = () => {
     {
       name: "zone",
       type: "text",
-      label: "Zone",
+      label: "",
 
       x: 685,
       y: 367,
@@ -665,7 +666,7 @@ const IndividualTaxReturnForm: React.FC = () => {
     {
       name: "dateOfBirth",
       type: "date",
-      label: "Date of Birth",
+      label: "",
 
       x: 538,
       y: 475,
@@ -679,7 +680,7 @@ const IndividualTaxReturnForm: React.FC = () => {
     {
       name: "spouseName",
       type: "text",
-      label: "spouse name",
+      label: "",
 
       x: 650,
       y: 577,
@@ -690,7 +691,7 @@ const IndividualTaxReturnForm: React.FC = () => {
     {
       name: "spouseTin",
       type: "text",
-      label: "Spouse Tin",
+      label: "",
 
       x: 650,
       y: 612,
@@ -701,7 +702,7 @@ const IndividualTaxReturnForm: React.FC = () => {
     {
       name: "addressLine1",
       type: "text",
-      label: "addressLine1",
+      label: "",
 
       x: 223,
       y: 651,
@@ -712,7 +713,7 @@ const IndividualTaxReturnForm: React.FC = () => {
     {
       name: "addressLine2",
       type: "text",
-      label: "addressLine2",
+      label: "",
 
       x: 223,
       y: 682,
@@ -723,7 +724,7 @@ const IndividualTaxReturnForm: React.FC = () => {
     {
       name: "telephone",
       type: "text",
-      label: "Telephone",
+      label: "",
       x: 130,
       y: 732,
       width: 267,
@@ -733,7 +734,7 @@ const IndividualTaxReturnForm: React.FC = () => {
     {
       name: "mobile",
       type: "text",
-      label: "Mobile",
+      label: "",
       x: 396,
       y: 732,
       width: 281,
@@ -743,7 +744,7 @@ const IndividualTaxReturnForm: React.FC = () => {
     {
       name: "email",
       type: "email",
-      label: "Email",
+      label: "",
 
       x: 678,
       y: 731,
@@ -754,7 +755,7 @@ const IndividualTaxReturnForm: React.FC = () => {
     {
       name: "employerName",
       type: "text",
-      label: "Employer Name",
+      label: "",
 
       x: 130,
       y: 782,
@@ -765,7 +766,7 @@ const IndividualTaxReturnForm: React.FC = () => {
     {
       name: "businessName",
       type: "text",
-      label: "Business Name",
+      label: "",
 
       x: 488,
       y: 812,
@@ -776,7 +777,7 @@ const IndividualTaxReturnForm: React.FC = () => {
     {
       name: "bin",
       type: "text",
-      label: "BIN",
+      label: "",
       x: 488,
       y: 843,
       width: 449,
@@ -786,7 +787,7 @@ const IndividualTaxReturnForm: React.FC = () => {
     {
       name: "partnersMembersAssociation1",
       type: "text",
-      label: "Partner Name",
+      label: "",
       x: 130,
       y: 893,
       width: 807,
@@ -796,7 +797,7 @@ const IndividualTaxReturnForm: React.FC = () => {
     {
       name: "partnersMembersAssociation2",
       type: "text",
-      label: "Partner Name",
+      label: "",
       x: 130,
       y: 923,
       width: 807,
@@ -805,33 +806,10 @@ const IndividualTaxReturnForm: React.FC = () => {
     },
 
     // Image 1
-
-    {
-      name: "taxpayerName",
-      type: "text",
-      label: "Tax payer name",
-      x: 92,
-      y: 112,
-      disabled: true,
-      width: 570,
-      height: 22,
-      imageIndex: 1,
-    },
-    {
-      name: "tin",
-      type: "text",
-      label: "TIN",
-      disabled: true,
-      x: 668,
-      y: 113,
-      width: 265,
-      height: 20,
-      imageIndex: 1,
-    },
     {
       name: "statementOfIncomeYearEndedOn",
       type: "date",
-      label: "statementOfIncomeYearEndedOn",
+      label: "",
 
       x: 100,
       y: 100,
@@ -843,58 +821,28 @@ const IndividualTaxReturnForm: React.FC = () => {
       yearPosition: { x: 850, y: 40, width: 100, height: 29 },
     },
     {
-      name: "incomeFishFarming",
-      type: "checkbox",
+      name: "taxpayerName",
+      type: "text",
       label: "",
-      x: 712,
-      y: 266,
-      width: 50,
-      height: 29,
+      x: 92,
+      y: 112,
+      disabled: true,
+      width: 570,
+      height: 22,
       imageIndex: 1,
     },
     {
-      name: "incomeFishFarmingAmount",
+      name: "tin",
       type: "text",
-      label: "Fish farming amount",
-      disabled: watch("incomeFishFarming") ? false : true,
-      x: 772,
-      y: 265,
-      width: 166,
-      height: 30,
+      label: "",
+      disabled: true,
+      x: 668,
+      y: 113,
+      width: 265,
+      height: 20,
       imageIndex: 1,
     },
-    {
-      name: "shareOfIncomeFromAOP",
-      type: "text",
-      label: "shareOfIncomeFromAOP",
 
-      x: 600,
-      y: 450,
-      width: 100,
-      height: 29,
-      imageIndex: 1,
-    },
-    {
-      name: "shareOfIncomeFromAOPAmount",
-      type: "text",
-      label: "shareOfIncomeFromAOPAmount",
-
-      x: 770,
-      y: 450,
-      width: 168,
-      height: 29,
-      imageIndex: 1,
-    },
-    {
-      name: "incomeOfMinor",
-      type: "text",
-      label: "incomeOfMinor",
-      x: 770,
-      y: 479,
-      width: 168,
-      height: 29,
-      imageIndex: 1,
-    },
     {
       name: "incomeFromEmployment",
       type: "text",
@@ -929,6 +877,27 @@ const IndividualTaxReturnForm: React.FC = () => {
       imageIndex: 1,
     },
     {
+      name: "incomeFishFarming",
+      type: "checkbox",
+      label: "",
+      x: 712,
+      y: 266,
+      width: 50,
+      height: 29,
+      imageIndex: 1,
+    },
+    {
+      name: "incomeFishFarmingAmount",
+      type: "text",
+      label: "Fish farming amount",
+      disabled: watch("incomeFishFarming") ? false : true,
+      x: 772,
+      y: 265,
+      width: 166,
+      height: 30,
+      imageIndex: 1,
+    },
+    {
       name: "incomeFromBusiness",
       type: "text",
       label: "incomeFromBusiness",
@@ -952,6 +921,40 @@ const IndividualTaxReturnForm: React.FC = () => {
       height: 25,
       imageIndex: 1,
     },
+    {
+      name: "shareOfIncomeFromAOP",
+      type: "text",
+      label: "shareOfIncomeFromAOP",
+
+      x: 600,
+      y: 450,
+      width: 100,
+      height: 29,
+      imageIndex: 1,
+    },
+    {
+      name: "shareOfIncomeFromAOPAmount",
+      type: "text",
+      label: "shareOfIncomeFromAOPAmount",
+
+      x: 770,
+      y: 450,
+      width: 168,
+      height: 29,
+      imageIndex: 1,
+    },
+    {
+      name: "incomeOfMinor",
+      type: "text",
+      label: "incomeOfMinor",
+      x: 770,
+      y: 479,
+      width: 168,
+      height: 29,
+      imageIndex: 1,
+    },
+   
+  
     {
       name: "incomeFromCapitalGains",
       type: "text",
@@ -1256,6 +1259,38 @@ const IndividualTaxReturnForm: React.FC = () => {
       monthPosition: { x: 220, y: 920, width: 60, height: 29 },
       yearPosition: { x: 290, y: 920, width: 100, height: 29 },
     },
+    {
+      name: "taxpayerName",
+      type: "text",
+      label: "",
+      x: 160,
+      y: 740,
+      disabled: true,
+      width: 300,
+      height: 22,
+      imageIndex: 2,
+    },
+    {
+      name: "tin",
+      type: "text",
+      label: "",
+      x: 190,
+      y: 765,
+      disabled: true,
+      width: 275,
+      height: 22,
+      imageIndex: 2,
+    },
+    {
+      name: "signature",
+      type: "signature",
+      label: "Signature",
+      x: 650,
+      y: 800,
+      width: 500,
+      height: 200,
+      imageIndex: 2,
+    },
 
     // Image 3
     {
@@ -1555,6 +1590,28 @@ const IndividualTaxReturnForm: React.FC = () => {
       height: 19,
       imageIndex: 4,
     },
+    {
+      name: "taxpayerName",
+      type: "text",
+      label: "taxpayerName",
+      disabled: true,
+      x: 93,
+      y: 683,
+      width: 570,
+      height: 19,
+      imageIndex: 4,
+    },
+    {
+      name: "tin",
+      type: "text",
+      label: "TIN",
+      disabled: true,
+      x: 666,
+      y: 683,
+      width: 271,
+      height: 19,
+      imageIndex: 4,
+    },
 
     {
       name: "tin",
@@ -1577,16 +1634,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       height: 34,
       imageIndex: 4,
     },
-    {
-      name: "advanceRentReceived",
-      type: "text",
-      label: "advanceRentReceived",
-      x: 750,
-      y: 260,
-      width: 95,
-      height: 20,
-      imageIndex: 4,
-    },
+  
     {
       name: "valueOfAnyBenefit",
       type: "text",
@@ -1597,26 +1645,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       height: 20,
       imageIndex: 4,
     },
-    {
-      name: "vacancyAllowance",
-      type: "text",
-      label: "vacancyAllowance",
-      x: 750,
-      y: 320,
-      width: 95,
-      height: 18,
-      imageIndex: 4,
-    },
-    {
-      name: "adjustedAdvanceRent",
-      type: "text",
-      label: "adjustedAdvanceRent",
-      x: 750,
-      y: 300,
-      width: 95,
-      height: 20,
-      imageIndex: 4,
-    },
+    
     {
       name: "totalRentValue",
       type: "number",
@@ -1673,7 +1702,6 @@ const IndividualTaxReturnForm: React.FC = () => {
       height: 340,
       imageIndex: 4,
     },
-
     {
       name: "advanceRentReceived",
       type: "text",
@@ -1684,17 +1712,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       height: 20,
       imageIndex: 4,
     },
-    {
-      name: "valueOfAnyBenefit",
-      type: "text",
-      label: "valueOfAnyBenefit",
-
-      x: 750,
-      y: 280,
-      width: 95,
-      height: 20,
-      imageIndex: 4,
-    },
+    
     {
       name: "adjustedAdvanceRent",
       type: "text",
@@ -1807,6 +1825,17 @@ const IndividualTaxReturnForm: React.FC = () => {
       x: 655,
       y: 546,
       width: 60,
+      height: 19,
+      imageIndex: 4,
+    },
+    {
+      name: "taxpayersShareAmount",
+      type: "text",
+      label: "taxpayersShareAmount",
+      disabled: true,
+      x: 845,
+      y: 546,
+      width: 90,
       height: 19,
       imageIndex: 4,
     },
@@ -2853,16 +2882,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       height: 32,
       imageIndex: 7,
     },
-    {
-      name: "signature",
-      type: "signature",
-      label: "Signature",
-      x: 650,
-      y: 800,
-      width: 500,
-      height: 200,
-      imageIndex: 2,
-    },
+   
     {
       name: "utilityExpenseComment",
       type: "text",
