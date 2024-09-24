@@ -14,7 +14,6 @@ export const individualTaxReturnSchema = z.object({
   userId: z.string().optional(),
 
   // Image 0
-
   taxpayerName: z.string().min(1, "Name is required"),
   nationalId: z.string().min(1, "National ID or Passport number is required"),
   tin: z.string().min(1, "TIN is required"),
@@ -47,8 +46,7 @@ export const individualTaxReturnSchema = z.object({
   partnersMembersAssociation2: z.string().optional(),
 
   // Image 1
-
-  statementOfIncomeYearEndedOn: z.date(),   
+  statementOfIncomeYearEndedOn: z.date(),
   incomeFromEmployment: z.number().optional(),
   incomeFromRent: z.number().optional(),
   incomeFromAgriculture: z.number().optional(),
@@ -74,7 +72,6 @@ export const individualTaxReturnSchema = z.object({
   calculate: z.nativeEnum(CalculationType),
 
   // Image 2
-
   taxDeductedOrCollected: z.number().optional(),
   totalTaxPaidAndAdjusted: z.number().optional(),
   excessPayment: z.number().optional(),
@@ -89,14 +86,69 @@ export const individualTaxReturnSchema = z.object({
   signature: z.string().optional(),
   dateOfSignature: z.date(),
 
-  // Image 3
+  // Image 3 - // govt
+
   isIncomeFromEmployment: z.nativeEnum(IncomeFromEmployment),
   typeOfEmployment: z.nativeEnum(EmploymentType),
+
+  basicPayGovtEmployment: z.number().nullable().optional(),
+  arrearPayGovtEmployment: z.number().nullable().optional(),
+  specialAllowanceGovtEmployment: z.number().nullable().optional(),
+  houseRentAllowanceGovtEmployment: z.number().nullable().optional(),
+  basicPayGovtEmploymentAmount: z.number().nullable().optional(),
+  arrearPayGovtEmploymentAmount: z.number().nullable().optional(),
+  specialAllowanceGovtEmploymentAmount: z.number().nullable().optional(),
+  houseRentAllowanceGovtEmploymentAmount: z.number().nullable().optional(),
+  medicalAllowanceGovtEmployment: z.number().nullable(),
+  conveyanceAllowanceGovtEmployment: z.number().nullable(),
+  festivalAllowanceGovtEmployment: z.number().nullable(),
+  allowanceForSupportStaffGovtEmployment: z.number().nullable(),
+  leaveAllowanceGovtEmployment: z.number().nullable(),
+  honorariumRewardGovtEmployment: z.number().nullable(),
+  overtimeAllowanceGovtEmployment: z.number().nullable(),
+  banglaNoboborshoAllowancesGovtEmployment: z.number().nullable(),
+  interestAccruedProvidentFundGovtEmployment: z.number().nullable(),
+  lumpGrantGovtEmployment: z.number().nullable(),
+  gratuityGovtEmployment: z.number().nullable(),
+  otherAllowanceGovtEmployment: z.number().nullable(),
+  otherAllowanceExemptedGovtEmployment: z.number().nullable(),
+  totalGovtEmployment: z.number().nullable(),
+
+  // image 3 // private
+  basicPayPrivateEmployment: z.number().nullable().optional(),
+  allowancesPrivateEmployment: z.number().nullable().optional(),
+  advanceArrearSalaryPrivateEmployment: z.number().nullable().optional(),
+  gratuityAnnuityPensionOrSimilarBenefitPrivateEmployment: z
+    .number()
+    .nullable()
+    .optional(),
+  perquisitesPrivateEmployment: z.number().nullable().optional(),
+  receiptInLieuOfOrInAdditionToSalaryOrWagesPrivateEmployment: z
+    .number()
+    .nullable()
+    .optional(),
+  incomeFromEmployeeShareSchemePrivateEmployment: z
+    .number()
+    .nullable()
+    .optional(),
+  accommodationFacilityPrivateEmployment: z.number().nullable().optional(),
+  transportFacilityPrivateEmployment: z.number().nullable().optional(),
+  anyOtherFacilityProvidedByEmployerPrivateEmployment: z
+    .number()
+    .nullable()
+    .optional(),
+  employerContributionToRecognizedProvidentFundPrivateEmployment: z
+    .number()
+    .nullable(),
+  otherIfAnyPrivateEmployment: z.number().nullable(),
+  totalSalaryReceivedPrivateEmployment: z.number().nullable(),
+  exemptedAmountPrivateEmployment: z.number().nullable(),
+  totalIncomeFromSalaryPrivateEmployment: z.number().nullable(),
+
   total: z.string().optional(),
   totalAmount: z.number().optional(),
 
   // Image 4
-
   locationDescriptionOwnershipProportionOfProperty: z.string().optional(),
   rentReceivedOrAnnualValue: z.string().optional(),
   advanceRentReceived: z.string().optional(),
@@ -120,8 +172,6 @@ export const individualTaxReturnSchema = z.object({
   netIncome: z.number().optional(),
   netProfit: z.number().optional(),
 
-
-
   // image 5
   nameOfBusiness: z.string().optional(),
   natureOfBusiness: z.string().optional(),
@@ -134,7 +184,7 @@ export const individualTaxReturnSchema = z.object({
   fixedAssets: z.string().optional(),
   otherAssets: z.string().optional(),
   openingCapital: z.string().optional(),
-  withdrawalsInTheIncomeYear: z.string().optional(),  
+  withdrawalsInTheIncomeYear: z.string().optional(),
   liabilities: z.string().optional(),
   interestProfitFromBankFIAmount: z.string().optional(),
   interestProfitFromBankFIDeductions: z.string().optional(),
@@ -178,9 +228,7 @@ export const individualTaxReturnSchema = z.object({
   workersParticinationFundNetTaxableIncome: z.number().optional(),
   incomeFromOtherSourcesNetTaxableIncome: z.number().optional(),
 
-
   // Image 6
-
   lifeInsurancePremium: z.string().optional(),
   contributionToDeposit: z.string().optional(),
   investmentInGovernmentSecurities1: z.string().optional(),
@@ -198,27 +246,26 @@ export const individualTaxReturnSchema = z.object({
   advanceTaxPaidAmountTaka: z.number().optional(),
   taxOnIncomeFromPoultryHatcheriesFishFarming: z.string().optional(),
 
-
   // Image 7
-  expensesForFoodAmount: z.string().optional(),  
+  expensesForFoodAmount: z.string().optional(),
   expensesForFoodComment: z.string().optional(),
-  housingExpenseAmount: z.string().optional(),  
+  housingExpenseAmount: z.string().optional(),
   housingExpenseComment: z.string().optional(),
-  personalTransportationExpensesAmount: z.string().optional(),  
+  personalTransportationExpensesAmount: z.string().optional(),
   personalTransportationExpensesAmountComment: z.string().optional(),
   utilityExpenseAmount: z.string().optional(),
   utilityExpenseComment: z.string().optional(),
-  educationExpensesAmount: z.string().optional(),  
+  educationExpensesAmount: z.string().optional(),
   educationExpensesComment: z.string().optional(),
-  personalExpenseAmount: z.string().optional(),  
+  personalExpenseAmount: z.string().optional(),
   personalExpenseComment: z.string().optional(),
-  festivalExpenseAmount: z.string().optional(),  
-  festivalExpenseComment: z.string().optional(),  
-  taxDeductedComment: z.string().optional(),  
+  festivalExpenseAmount: z.string().optional(),
+  festivalExpenseComment: z.string().optional(),
+  taxDeductedComment: z.string().optional(),
   advanceTaxPaidComment: z.string().optional(),
-  taxSurchargePaidAmount: z.string().optional(),  
+  taxSurchargePaidAmount: z.string().optional(),
   taxSurchargePaidComment: z.string().optional(),
-  interestPaidAmount: z.string().optional(),  
+  interestPaidAmount: z.string().optional(),
   interestPaidComment: z.string().optional(),
   exemptedIncomeFromSalary: z.string().optional(),
   exemptedIncomeFromBusiness: z.string().optional(),
@@ -239,171 +286,104 @@ export const individualTaxReturnSchema = z.object({
   typeOfTaxExemptedTaxFreeIncomeAmount6: z.string().optional(),
   typeOfTaxExemptedTaxFreeIncomeAmount7: z.string().optional(),
 
+  // Image 8
+  netWealthLastDate: z.nativeEnum(NetWealthLastDate),
+  netWealthLastDateAmount: z.string().optional(),
+  giftExpense: z.string().optional(),
+  institutionalLiabilities: z.string().optional(),
+  nonInstitutionalLiabilities: z.string().optional(),
+  otherLiabilities: z.string().optional(),
+  totalAssetOfBusiness: z.string().optional(),
+  lessBusinessLiabilities: z.string().optional(),
+  companyName1: z.string().optional(),
+  companyName2: z.string().optional(),
+  companyName3: z.string().optional(),
+  noOfShare1: z.string().optional(),
+  noOfShare2: z.string().optional(),
+  noOfShare3: z.string().optional(),
+  value1: z.string().optional(),
+  value2: z.string().optional(),
+  value3: z.string().optional(),
+  nameOfPartnershipFirm1: z.string().optional(),
+  nameOfPartnershipFirm2: z.string().optional(),
+  nameOfPartnershipFirm3: z.string().optional(),
+  shareOfProfit1: z.string().optional(),
+  shareOfProfit2: z.string().optional(),
+  shareOfProfit3: z.string().optional(),
+  capitalContributed1: z.string().optional(),
+  capitalContributed2: z.string().optional(),
+  capitalContributed3: z.string().optional(),
+  totalIncomeShownInTheReturn: z.number().optional(),
+  taxExemptedIncomeAndAllowance: z.number().optional(),
+  receiptOfGiftOtherReceipts: z.number().optional(),
+  totalSourceOfFund: z.number().optional(),
+  sumOfSourceOfFundAndPreviousYearsNetWealth: z.number().optional(),
+  expenseRelatingToLifestyle: z.number().optional(),
+  totalExpensesAndLoss: z.number().optional(),
+  netWealthAtTheLastDateOfThisFinancialYear: z.number().optional(),
+  totalLiabilitiesOutsideBusiness: z.number().optional(),
+  grossWealth: z.number().optional(),
+  businessCapitalAmount1: z.number().optional(),
+  businessCapitalAmount2: z.number().optional(),
+  directorsShareholdingsInTheCompanies: z.number().optional(),
+  businessCapitalOfPartnershipFirm: z.number().optional(),
 
+  // Image 9
+  locationDescription1: z.string().optional(),
+  locationDescription2: z.string().optional(),
+  locationDescription3: z.string().optional(),
+  locationDescription4: z.string().optional(),
+  locationDescription5: z.string().optional(),
+  locationValue1: z.string().optional(),
+  locationValue2: z.string().optional(),
+  locationValue3: z.string().optional(),
+  locationValue4: z.string().optional(),
+  locationValue5: z.string().optional(),
+  agriculturalLocationAndDescription1: z.string().optional(),
+  agriculturalLocationAndDescription2: z.string().optional(),
+  agriculturalLocationAndDescription3: z.string().optional(),
+  agriculturalLocationValue1: z.string().optional(),
+  agriculturalLocationValue2: z.string().optional(),
+  agriculturalLocationValue3: z.string().optional(),
+  shareDebentureUnitCertificate: z.string().optional(),
+  bondsGovernment: z.string().optional(),
+  sanchayapatraSavingsCertificate: z.string().optional(),
+  depositPensionScheme: z.string().optional(),
+  loansGivenToOthers: z.string().optional(),
+  name: z.string().optional(),
+  nid: z.string().optional(),
+  nidValue: z.string().optional(),
+  savingDeposit: z.string().optional(),
+  providentFund: z.string().optional(),
+  otherInvestment1: z.string().optional(),
+  otherInvestment2: z.string().optional(),
+  typeOfMotorVehicle1: z.string().optional(),
+  typeOfMotorVehicle2: z.string().optional(),
+  registrationNumber1: z.string().optional(),
+  registrationNumber2: z.string().optional(),
+  motorValue1: z.string().optional(),
+  motorValue2: z.string().optional(),
+  ornaments1: z.string().optional(),
+  ornaments2: z.string().optional(),
+  furnitureAndElectronic: z.string().optional(),
+  othersAssets1: z.string().optional(),
+  othersAssets2: z.string().optional(),
+  bankBalance: z.string().optional(),
+  cashInHand: z.string().optional(),
+  others1: z.string().optional(),
+  others2: z.string().optional(),
+  assetOutsideBangladesh: z.string().optional(),
+  nonAgriculturalPropertyLandHouseProperty: z.number().optional(),
+  agriculturalProperty: z.number().optional(),
+  totalFinancialAssets: z.number().optional(),
+  motorVehiclesAmount: z.number().optional(),
+  totalAssetslocatedInBangladesh: z.number().optional(),
+  totalCashInHandsAndFundOutsideBusiness: z.number().optional(),
+  totalAssetsInBangladeshAndOutsideBangladesh: z.number().optional(),
 
-// Image 8
-netWealthLastDate: z.nativeEnum(NetWealthLastDate),
-netWealthLastDateAmount: z.string().optional(),
-giftExpense: z.string().optional(),
-institutionalLiabilities: z.string().optional(),
-nonInstitutionalLiabilities: z.string().optional(),
-otherLiabilities: z.string().optional(),
-totalAssetOfBusiness: z.string().optional(),
-lessBusinessLiabilities: z.string().optional(),
-companyName1: z.string().optional(),
-companyName2: z.string().optional(),
-companyName3: z.string().optional(),
-noOfShare1: z.string().optional(),
-noOfShare2: z.string().optional(),
-noOfShare3: z.string().optional(),
-value1: z.string().optional(),
-value2: z.string().optional(),
-value3: z.string().optional(),
-nameOfPartnershipFirm1: z.string().optional(),
-nameOfPartnershipFirm2: z.string().optional(),
-nameOfPartnershipFirm3: z.string().optional(),
-shareOfProfit1: z.string().optional(),
-shareOfProfit2: z.string().optional(),
-shareOfProfit3: z.string().optional(),
-capitalContributed1: z.string().optional(),
-capitalContributed2: z.string().optional(),
-capitalContributed3: z.string().optional(),
-totalIncomeShownInTheReturn: z.number().optional(),
-taxExemptedIncomeAndAllowance: z.number().optional(),
-receiptOfGiftOtherReceipts: z.number().optional(),
-totalSourceOfFund: z.number().optional(),
-sumOfSourceOfFundAndPreviousYearsNetWealth: z.number().optional(),
-expenseRelatingToLifestyle: z.number().optional(),
-totalExpensesAndLoss: z.number().optional(),
-netWealthAtTheLastDateOfThisFinancialYear: z.number().optional(),
-totalLiabilitiesOutsideBusiness: z.number().optional(),
-grossWealth: z.number().optional(),
-businessCapitalAmount1: z.number().optional(),
-businessCapitalAmount2: z.number().optional(),
-directorsShareholdingsInTheCompanies: z.number().optional(),
-businessCapitalOfPartnershipFirm: z.number().optional(),
-
-  
-
-// Image 9
-locationDescription1: z.string().optional(),
-locationDescription2: z.string().optional(),
-locationDescription3: z.string().optional(),
-locationDescription4: z.string().optional(),
-locationDescription5: z.string().optional(),
-locationValue1: z.string().optional(),
-locationValue2: z.string().optional(),
-locationValue3: z.string().optional(),
-locationValue4: z.string().optional(),
-locationValue5: z.string().optional(),
-agriculturalLocationAndDescription1: z.string().optional(),
-agriculturalLocationAndDescription2: z.string().optional(),
-agriculturalLocationAndDescription3: z.string().optional(),
-agriculturalLocationValue1: z.string().optional(),
-agriculturalLocationValue2: z.string().optional(),
-agriculturalLocationValue3: z.string().optional(),
-shareDebentureUnitCertificate: z.string().optional(),
-bondsGovernment: z.string().optional(),
-sanchayapatraSavingsCertificate: z.string().optional(),
-depositPensionScheme: z.string().optional(),
-loansGivenToOthers: z.string().optional(),
-name: z.string().optional(),
-nid: z.string().optional(),
-nidValue: z.string().optional(),
-savingDeposit: z.string().optional(),
-providentFund: z.string().optional(),
-otherInvestment1: z.string().optional(),
-otherInvestment2: z.string().optional(),
-typeOfMotorVehicle1: z.string().optional(),
-typeOfMotorVehicle2: z.string().optional(),
-registrationNumber1: z.string().optional(),
-registrationNumber2: z.string().optional(),
-motorValue1: z.string().optional(),
-motorValue2: z.string().optional(),
-ornaments1: z.string().optional(),
-ornaments2: z.string().optional(),
-furnitureAndElectronic: z.string().optional(),
-othersAssets1: z.string().optional(),
-othersAssets2: z.string().optional(),
-bankBalance: z.string().optional(),
-cashInHand: z.string().optional(),
-others1: z.string().optional(),
-others2: z.string().optional(),
-assetOutsideBangladesh: z.string().optional(),
-nonAgriculturalPropertyLandHouseProperty: z.number().optional(),
-agriculturalProperty: z.number().optional(),
-totalFinancialAssets: z.number().optional(),
-motorVehiclesAmount: z.number().optional(),
-totalAssetslocatedInBangladesh: z.number().optional(),
-totalCashInHandsAndFundOutsideBusiness: z.number().optional(),
-totalAssetsInBangladeshAndOutsideBangladesh: z.number().optional(),
-
-
-// Image 10
+  // Image 10
   totalIncomeShown: z.string().optional(),
   totalTaxPaid: z.string().optional(),
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  // Image 3 - govt
-  basicPayGovtEmploymentAmount: z.number().nullable().optional(),
-  arrearPayGovtEmploymentAmount: z.number().nullable().optional(),
-  specialAllowanceGovtEmploymentAmount: z.number().nullable().optional(),
-  houseRentAllowanceGovtEmploymentAmount: z.number().nullable().optional(),
-  medicalAllowanceGovtEmployment: z.number().nullable(),
-  conveyanceAllowanceGovtEmployment: z.number().nullable(),
-  festivalAllowanceGovtEmployment: z.number().nullable(),
-  allowanceForSupportStaffGovtEmployment: z.number().nullable(),
-  leaveAllowanceGovtEmployment: z.number().nullable(),
-  honorariumRewardGovtEmployment: z.number().nullable(),
-  overtimeAllowanceGovtEmployment: z.number().nullable(),
-  banglaNoboborshoAllowancesGovtEmployment: z.number().nullable(),
-  interestAccruedProvidentFundGovtEmployment: z.number().nullable(),
-  lumpGrantGovtEmployment: z.number().nullable(),
-  gratuityGovtEmployment: z.number().nullable(),
-  otherAllowanceGovtEmployment: z.number().nullable(),
-  otherAllowanceExemptedGovtEmployment: z.number().nullable(),
-  totalGovtEmployment: z.number().nullable(),
-  // image 4 - private
-  basicPayPrivateEmployment: z.number().nullable(),
-  allowancesPrivateEmployment: z.number().nullable(),
-  advanceArrearSalaryPrivateEmployment: z.number().nullable(),
-  gratuityAnnuityPensionOrSimilarBenefitPrivateEmployment: z
-    .number()
-    .nullable(),
-  perquisitesPrivateEmployment: z.number().nullable(),
-  receiptInLieuOfOrInAdditionToSalaryOrWagesPrivateEmployment: z
-    .number()
-    .nullable(),
-  incomeFromEmployeeShareSchemePrivateEmployment: z.number().nullable(),
-  accommodationFacilityPrivateEmployment: z.number().nullable(),
-  transportFacilityPrivateEmployment: z.number().nullable(),
-  anyOtherFacilityProvidedByEmployerPrivateEmployment: z.number().nullable(),
-  employerContributionToRecognizedProvidentFundPrivateEmployment: z
-    .number()
-    .nullable(),
-  otherIfAnyPrivateEmployment: z.number().nullable(),
-  totalSalaryReceivedPrivateEmployment: z.number().nullable(),
-  exemptedAmountPrivateEmployment: z.number().nullable(),
-  totalIncomeFromSalaryPrivateEmployment: z.number().nullable(),
 });
 
 export type IndividualTaxReturnFormInput = z.infer<

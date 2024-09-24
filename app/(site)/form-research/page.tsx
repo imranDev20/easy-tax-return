@@ -209,10 +209,24 @@ const ResponsiveFormOverlay: React.FC = () => {
     handleSubmit,
     control,
     formState: { errors },
+    reset,
+    getValues,
+    watch,
+    setValue,
   } = useForm<TaxpayerForm>({
     resolver: zodResolver(taxpayerSchema),
-    defaultValues: {},
+    defaultValues: {
+      circle: "",
+      zone: "",
+    },
   });
+
+  useEffect(() => {
+    reset({
+      ...getValues(),
+      fullName: watch("nationalIdOrPassport"),
+    });
+  }, [reset, watch, getValues]);
 
   useEffect(() => {
     const updateScale = () => {
@@ -248,7 +262,6 @@ const ResponsiveFormOverlay: React.FC = () => {
 
   const onSubmit: SubmitHandler<TaxpayerForm> = (data) => {
     console.log(data);
-    // Handle form submission
   };
 
   const renderField = (field: FormField, imageIndex: number) => {
@@ -276,6 +289,11 @@ const ResponsiveFormOverlay: React.FC = () => {
               placeholder={field.placeholder}
               className="w-full h-full absolute border px-2 border-sky-300 rounded-none bg-sky-300/10 focus:border-sky-500 focus:ring-0 focus:outline-0 focus:bg-transparent hover:border-sky-500"
               style={{ fontSize: `${14 * scale}px` }}
+              onBlur={(e) => {
+                if (field.name === "nationalIdOrPassport") {
+                  setValue("fullName", watch("nationalIdOrPassport") || "");
+                }
+              }}
             />
 
             {isRequired && (
@@ -380,21 +398,21 @@ const ResponsiveFormOverlay: React.FC = () => {
   );
 
   return (
-    <div className="bg-secondary min-h-screen pb-20">
-      <div className="container mx-auto py-12">
-        <h1 className="text-4xl md:text-5xl font-bold text-primary mb-4 font-serif text-center">
-          Online Tax Return Form
-        </h1>
-        <p className="text-gray-700 mb-8 text-center max-w-2xl mx-auto">
-          Complete your tax return easily and securely. Our form is designed to
-          guide you through the process step by step.
-        </p>
+    <form onSubmit={handleSubmit(onSubmit)}>
+      <div className="bg-secondary min-h-screen pb-20">
+        <div className="container mx-auto py-12">
+          <h1 className="text-4xl md:text-5xl font-bold text-primary mb-4 font-serif text-center">
+            Online Tax Return Form
+          </h1>
+          <p className="text-gray-700 mb-8 text-center max-w-2xl mx-auto">
+            Complete your tax return easily and securely. Our form is designed
+            to guide you through the process step by step.
+          </p>
 
-        <div
-          className={`bg-white shadow-lg rounded-lg overflow-hidden mx-auto`}
-        >
-          <div className="p-6">
-            <form onSubmit={handleSubmit(onSubmit)}>
+          <div
+            className={`bg-white shadow-lg rounded-lg overflow-hidden mx-auto`}
+          >
+            <div className="p-6">
               <div className="relative" ref={containerRef}>
                 {images.map((image, index) => (
                   <div
@@ -416,96 +434,99 @@ const ResponsiveFormOverlay: React.FC = () => {
                   </div>
                 ))}
               </div>
-            </form>
+            </div>
+          </div>
+
+          <div className="mt-12 text-center">
+            <h3 className="text-2xl font-semibold mb-4 font-serif text-primary">
+              Need Assistance?
+            </h3>
+            <p className="text-gray-700 mb-4">
+              Our tax experts are here to help you with any questions or
+              concerns.
+            </p>
+            <Button className="px-6 py-3 bg-secondary text-primary border-2 border-primary rounded-lg font-semibold text-lg transition duration-300 hover:bg-primary hover:text-white">
+              Contact Support
+            </Button>
           </div>
         </div>
 
-        <div className="mt-12 text-center">
-          <h3 className="text-2xl font-semibold mb-4 font-serif text-primary">
-            Need Assistance?
-          </h3>
-          <p className="text-gray-700 mb-4">
-            Our tax experts are here to help you with any questions or concerns.
-          </p>
-          <Button className="px-6 py-3 bg-secondary text-primary border-2 border-primary rounded-lg font-semibold text-lg transition duration-300 hover:bg-primary hover:text-white">
-            Contact Support
-          </Button>
+        {/* Scrollspy */}
+        <div className="fixed right-4 top-1/2 transform -translate-y-1/2 z-10">
+          {images.map((_, index) => (
+            <button
+              type="button"
+              key={index}
+              onClick={() => scrollToImage(index)}
+              className={`block mb-2 w-8 h-8 rounded-full ${
+                currentImageIndex === index
+                  ? "bg-primary text-white"
+                  : "bg-gray-300"
+              }`}
+            >
+              {index + 1}
+            </button>
+          ))}
         </div>
-      </div>
 
-      {/* Scrollspy */}
-      <div className="fixed right-4 top-1/2 transform -translate-y-1/2 z-10">
-        {images.map((_, index) => (
-          <button
-            type="button"
-            key={index}
-            onClick={() => scrollToImage(index)}
-            className={`block mb-2 w-8 h-8 rounded-full ${
-              currentImageIndex === index
-                ? "bg-primary text-white"
-                : "bg-gray-300"
-            }`}
-          >
-            {index + 1}
-          </button>
-        ))}
-      </div>
-
-      <div className="fixed bottom-0 left-0 right-0 bg-white shadow-lg border-t border-gray-200">
-        <div className="container mx-auto flex justify-between items-center py-3 px-4">
-          <div className="flex items-center space-x-4">
-            <div className="flex items-center space-x-2">
+        <div className="fixed bottom-0 left-0 right-0 bg-white shadow-lg border-t border-gray-200">
+          <div className="container mx-auto flex justify-between items-center py-3 px-4">
+            <div className="flex items-center space-x-4">
+              <div className="flex items-center space-x-2">
+                <Button
+                  variant="outline"
+                  size="icon"
+                  className="h-8 w-8"
+                  onClick={() =>
+                    scrollToImage(Math.max(0, currentImageIndex - 1))
+                  }
+                  disabled={currentImageIndex === 0}
+                  title="Previous Page"
+                >
+                  <ArrowLeft className="h-4 w-4" />
+                </Button>
+                <span className="text-sm font-medium">
+                  Page {currentImageIndex + 1} of {images.length}
+                </span>
+                <Button
+                  variant="outline"
+                  size="icon"
+                  className="h-8 w-8"
+                  onClick={() =>
+                    scrollToImage(
+                      Math.min(images.length - 1, currentImageIndex + 1)
+                    )
+                  }
+                  disabled={currentImageIndex === images.length - 1}
+                  title="Next Page"
+                >
+                  <ArrowRight className="h-4 w-4" />
+                </Button>
+              </div>
+            </div>
+            <div className="flex items-center space-x-4">
               <Button
+                type="button"
+                onClick={() => console.log("Save for later")}
                 variant="outline"
-                size="icon"
-                className="h-8 w-8"
-                onClick={() =>
-                  scrollToImage(Math.max(0, currentImageIndex - 1))
-                }
-                disabled={currentImageIndex === 0}
-                title="Previous Page"
+                className="px-4 py-2 text-primary border-primary hover:bg-primary hover:text-white transition-colors duration-300"
               >
-                <ArrowLeft className="h-4 w-4" />
+                <Save className="mr-2 h-4 w-4" />
+                Save for Later
               </Button>
-              <span className="text-sm font-medium">
-                Page {currentImageIndex + 1} of {images.length}
-              </span>
               <Button
-                variant="outline"
-                size="icon"
-                className="h-8 w-8"
-                onClick={() =>
-                  scrollToImage(
-                    Math.min(images.length - 1, currentImageIndex + 1)
-                  )
-                }
-                disabled={currentImageIndex === images.length - 1}
-                title="Next Page"
+                type="submit"
+                onClick={() => console.log("Save PDF")}
+                className="px-6 py-2 bg-primary text-white font-semibold transition duration-300 hover:bg-primary-dark"
               >
-                <ArrowRight className="h-4 w-4" />
+                <Download className="mr-2 h-5 w-5" />
+                Save PDF
               </Button>
             </div>
           </div>
-          <div className="flex items-center space-x-4">
-            <Button
-              onClick={() => console.log("Save for later")}
-              variant="outline"
-              className="px-4 py-2 text-primary border-primary hover:bg-primary hover:text-white transition-colors duration-300"
-            >
-              <Save className="mr-2 h-4 w-4" />
-              Save for Later
-            </Button>
-            <Button
-              onClick={() => console.log("Save PDF")}
-              className="px-6 py-2 bg-primary text-white font-semibold transition duration-300 hover:bg-primary-dark"
-            >
-              <Download className="mr-2 h-5 w-5" />
-              Save PDF
-            </Button>
-          </div>
         </div>
       </div>
-    </div>
+    </form>
   );
 };
 
