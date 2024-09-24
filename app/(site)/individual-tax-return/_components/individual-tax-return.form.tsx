@@ -2079,6 +2079,17 @@ const IndividualTaxReturnForm: React.FC = () => {
       imageIndex: 5,
     },
     {
+      name: "interestProfitFromBankFI.amountOfIncome",
+      type: "text",
+      label: "interestProfitFromBankFIAmount",
+
+      x: 490,
+      y: 730,
+      width: 115,
+      height: 18,
+      imageIndex: 5,
+    },
+    {
       name: "interestProfitFromBankFINetTaxableIncome",
       type: "text",
       label: "interestProfitFromBankFINetTaxableIncome",
@@ -2230,17 +2241,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       height: 18,
       imageIndex: 5,
     },
-    {
-      name: "interestProfitFromBankFIAmount",
-      type: "text",
-      label: "interestProfitFromBankFIAmount",
-
-      x: 490,
-      y: 730,
-      width: 115,
-      height: 18,
-      imageIndex: 5,
-    },
+   
     {
       name: "incomeFromSavingCertificatesAmount",
       type: "text",

@@ -10,7 +10,13 @@ import {
 import z from "zod";
 
 
-
+const incomeItemSchema = z.object({
+  particulars: z.string().optional(),
+  amountOfIncome: z.number().nullable().optional(),
+  deductionsExpensesExemptedIncome: z.number().optional(),
+  netTaxableIncome: z.number().nullable().optional(),
+  taxDeductedAtSource: z.number().nullable().optional(),
+});
 
 // Define the Zod schema
 export const individualTaxReturnSchema = z.object({
@@ -191,7 +197,7 @@ export const individualTaxReturnSchema = z.object({
   openingCapital: z.string().optional(),
   withdrawalsInTheIncomeYear: z.string().optional(),
   liabilities: z.string().optional(),
-  interestProfitFromBankFIAmount: z.string().optional(),
+  interestProfitFromBankFI: incomeItemSchema,
   interestProfitFromBankFIDeductions: z.string().optional(),
   interestProfitFromBankFITax: z.string().optional(),
   incomeFromSavingCertificatesAmount: z.string().optional(),
