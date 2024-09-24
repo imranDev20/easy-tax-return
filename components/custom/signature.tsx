@@ -8,9 +8,11 @@ import { useToast } from "@/hooks/use-toast";
 interface SignatureFieldProps {
   onChange: (signatureData: string | null) => void;
   value: string | null;
+  width: number;
+  height: number;
 }
 
-const SignatureField: React.FC<SignatureFieldProps> = ({ onChange, value }) => {
+const SignatureField: React.FC<SignatureFieldProps> = ({ onChange, value, width, height }) => {
   const [mode, setMode] = useState<"draw" | "type" | "upload">("draw");
   const [typedSignature, setTypedSignature] = useState("");
   const [uploadedSignature, setUploadedSignature] = useState<string | null>(null);
@@ -97,8 +99,8 @@ const SignatureField: React.FC<SignatureFieldProps> = ({ onChange, value }) => {
       case "type":
         // Create a canvas element to render the typed signature
         const canvas = document.createElement('canvas');
-        canvas.width = 500;
-        canvas.height = 80;
+        canvas.width = width;
+        canvas.height = height;
         const ctx = canvas.getContext('2d');
         if (ctx) {
           ctx.font = '30px Arial';
@@ -168,8 +170,8 @@ const SignatureField: React.FC<SignatureFieldProps> = ({ onChange, value }) => {
         <SignatureCanvas
         ref={signatureCanvasRef}
         canvasProps={{
-          width: 500,
-          height: 200,
+          width: width,
+          height: height,
           className: "border rounded-md",
         }}
       />
@@ -202,8 +204,8 @@ const SignatureField: React.FC<SignatureFieldProps> = ({ onChange, value }) => {
               src={uploadedSignature}
               alt="Uploaded Signature"
               className="max-w-full h-auto"
-              width={500}
-              height={80}
+              width={100}
+              height={20}
             />
           )}
         </div>

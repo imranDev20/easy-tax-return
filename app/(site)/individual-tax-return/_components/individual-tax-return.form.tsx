@@ -258,33 +258,73 @@ const IndividualTaxReturnForm: React.FC = () => {
         particulars: "",
         taxDeductedAtSource: 0,
       },
+      incomeFromSavingCertificates: {
+        amountOfIncome: 0,
+        deductionsExpensesExemptedIncome: 0,
+        netTaxableIncome: 0,
+        particulars: "",
+        taxDeductedAtSource: 0,
+      },
 
-      interestProfitFromBankFIDeductions: "",
-      interestProfitFromBankFITax: "",
-      incomeFromSavingCertificatesAmount: "",
-      incomeFromSavingCertificatesDeductions: "",
-      incomeFromSavingCertificatesTax: "",
-      incomeFromSecuritiesDebenturesAmount: "",
-      incomeFromSecuritiesDebenturesDeductions: "",
-      incomeFromSecuritiesDebenturesTax: "",
-      incomeFromFinancialProductSchemeAmount: "",
-      incomeFromFinancialProductSchemeDeductions: "",
-      incomeFromFinancialProductSchemeTax: "",
-      dividendIncomeAmount: "",
-      dividendIncomeDeductions: "",
-      dividendIncomeTax: "",
-      capitalGainFromTransferOfPropertyAmount: "",
-      capitalGainFromTransferOfPropertyDeductions: "",
-      capitalGainFromTransferOfPropertyTax: "",
-      incomeFromBusinessAmount: "",
-      incomeFromBusinessDeductions: "",
-      incomeFromBusinessTax: "",
-      workersParticipationFundAmount: "",
-      workersParticipationFundDeductions: "",
-      workersParticipationFundTax: "",
-      incomeFromOtherSourcesAmount: "",
-      incomeFromOtherSourcesDeductions: "",
-      incomeFromOtherSourcesTax: "",
+      incomeFromSecuritiesDebentures: {
+        amountOfIncome: 0,
+        deductionsExpensesExemptedIncome: 0,
+        netTaxableIncome: 0,
+        particulars: "",
+        taxDeductedAtSource: 0,
+      },
+           
+      incomeFromFinancialProductScheme: {
+        amountOfIncome: 0,
+        deductionsExpensesExemptedIncome: 0,
+        netTaxableIncome: 0,
+        particulars: "",
+        taxDeductedAtSource: 0,
+      },                    
+      dividendIncome:{
+        amountOfIncome: 0,
+        deductionsExpensesExemptedIncome: 0,
+        netTaxableIncome: 0,
+        particulars: "",
+        taxDeductedAtSource: 0,
+      },
+      capitalGainFromTransferOfProperty:{
+        amountOfIncome: 0,
+        deductionsExpensesExemptedIncome: 0,
+        netTaxableIncome: 0,
+        particulars: "",
+        taxDeductedAtSource: 0,
+      },
+      incomeFromBusinessMinTax:{
+        amountOfIncome: 0,
+        deductionsExpensesExemptedIncome: 0,
+        netTaxableIncome: 0,
+        particulars: "",
+        taxDeductedAtSource: 0,
+      },
+      workersParticipationFund:{
+        amountOfIncome: 0,
+        deductionsExpensesExemptedIncome: 0,
+        netTaxableIncome: 0,
+        particulars: "",
+        taxDeductedAtSource: 0,
+      },
+      incomeFromOtherSourcesMinTax:{
+        amountOfIncome: 0,
+        deductionsExpensesExemptedIncome: 0,
+        netTaxableIncome: 0,
+        particulars: "",
+        taxDeductedAtSource: 0,
+      },
+      otherSubjectToMinTax:{
+        amountOfIncome: 0,
+        deductionsExpensesExemptedIncome: 0,
+        netTaxableIncome: 0,
+        particulars: "",
+        taxDeductedAtSource: 0,
+      },
+
+      
       lifeInsurancePremium: "",
       contributionToDeposit: "",
       investmentInGovernmentSecurities1: "",
@@ -425,15 +465,6 @@ const IndividualTaxReturnForm: React.FC = () => {
       netProfit3: 0.0,
       closingCpital: 0.0,
       totalCapitalsAndLiabilities: 0.0,
-      interestProfitFromBankFINetTaxableIncome: 0.0,
-      incomeFromSavingCertificatesNetTaxableIncome: 0.0,
-      // incomeFromSecuritiesDebenturesNetTaxableIncome: 0.0,
-      incomeFromFinancialProductSchemeNetTaxableIncome: 0.0,
-      dividendIncomeNetTaxableIncome: 0.0,
-      capitalGainFromTransferofPropertyNetTaxableIncome: 0.0,
-      incomeFromBusinessNetTaxableIncome: 0.0,
-      workersParticinationFundNetTaxableIncome: 0.0,
-      incomeFromOtherSourcesNetTaxableIncome: 0.0,
       totalAllowableInvestmentContribution: 0.0,
       taxDeductedCollectedAtSourceAmount: 0.0,
       advanceTaxPaidAmountTaka: 0.0,
@@ -2095,9 +2126,20 @@ const IndividualTaxReturnForm: React.FC = () => {
       imageIndex: 5,
     },
     {
-      name: "interestProfitFromBankFINetTaxableIncome",
-      type: "text",
-      label: "interestProfitFromBankFINetTaxableIncome",
+      name: "interestProfitFromBankFI.deductionsExpensesExemptedIncome",
+      type: "number",
+      label: "Interest/Profit from Bank/FI Deduction",
+
+      x: 605,
+      y: 730,
+      width: 115,
+      height: 18,
+      imageIndex: 5,
+    },
+    {
+      name: "interestProfitFromBankFI.netTaxableIncome",
+      type: "number",
+      label: "Interest/Profit from Bank/FI Net Taxable",
 
       disabled: true,
       x: 720,
@@ -2107,8 +2149,41 @@ const IndividualTaxReturnForm: React.FC = () => {
       imageIndex: 5,
     },
     {
-      name: "incomeFromSavingCertificatesNetTaxableIncome",
-      type: "text",
+      name: "interestProfitFromBankFI.taxDeductedAtSource",
+      type: "number",
+      label: "Interest/Profit from Bank/FI  Tax Deduction",
+      value: "",
+      x: 828,
+      y: 730,
+      width: 112,
+      height: 18,
+      imageIndex: 5,
+    },
+    {
+      name: "incomeFromSavingCertificates.amountOfIncome",
+      type: "number",
+      label: "incomeFromSavingCertificatesAmount",
+
+      x: 490,
+      y: 750,
+      width: 115,
+      height: 18,
+      imageIndex: 5,
+    },
+    {
+      name: "incomeFromSavingCertificates.deductionsExpensesExemptedIncome",
+      type: "number",
+      label: "incomeFromSavingCertificatesDeductions",
+
+      x: 605,
+      y: 748,
+      width: 115,
+      height: 18,
+      imageIndex: 5,
+    },
+    {
+      name: "incomeFromSavingCertificates.netTaxableIncome",
+      type: "number",
       label: "incomeFromSavingCertificatesNetTaxableIncome",
 
       disabled: true,
@@ -2119,8 +2194,42 @@ const IndividualTaxReturnForm: React.FC = () => {
       imageIndex: 5,
     },
     {
-      name: "incomeFromSavingCertificatesNetTaxableIncome",
-      type: "text",
+      name: "incomeFromSavingCertificates.taxDeductedAtSource",
+      type: "number",
+      label: "incomeFromSavingCertificatesTax",
+
+      x: 828,
+      y: 748,
+      width: 112,
+      height: 18,
+      imageIndex: 5,
+    },
+    {
+      name: "incomeFromSecuritiesDebentures.amountOfIncome",
+      type: "number",
+      label: "incomeFromSecuritiesDebenturesAmount",
+
+      x: 490,
+      y: 765,
+      width: 115,
+      height: 18,
+      imageIndex: 5,
+    },
+    {
+      name: "incomeFromSecuritiesDebentures.deductionsExpensesExemptedIncome",
+      type: "number",
+      label: "incomeFromSecuritiesDebenturesDeductions",
+
+      x: 605,
+      y: 766,
+      width: 115,
+      height: 18,
+      imageIndex: 5,
+    },
+    
+    {
+      name: "incomeFromSecuritiesDebentures.netTaxableIncome",
+      type: "number",
       label: "incomeFromSavingCertificatesNetTaxableIncome",
 
       disabled: true,
@@ -2131,8 +2240,41 @@ const IndividualTaxReturnForm: React.FC = () => {
       imageIndex: 5,
     },
     {
-      name: "incomeFromFinancialProductSchemeNetTaxableIncome",
-      type: "text",
+      name: "incomeFromSecuritiesDebentures.taxDeductedAtSource",
+      type: "number",
+      label: "incomeFromSecuritiesDebenturesTax",
+
+      x: 828,
+      y: 766,
+      width: 112,
+      height: 18,
+      imageIndex: 5,
+    },
+    {
+      name: "incomeFromFinancialProductScheme.amountOfIncome",
+      type: "number",
+      label: "incomeFromFinancialProductSchemeAmount",
+
+      x: 490,
+      y: 785,
+      width: 115,
+      height: 18,
+      imageIndex: 5,
+    },
+    {
+      name: "incomeFromFinancialProductScheme.deductionsExpensesExemptedIncome",
+      type: "number",
+      label: "incomeFromFinancialProductSchemeDeductions",
+
+      x: 605,
+      y: 784,
+      width: 115,
+      height: 18,
+      imageIndex: 5,
+    },
+    {
+      name: "incomeFromFinancialProductScheme.netTaxableIncome",
+      type: "number",
       label: "incomeFromFinancialProductSchemeNetTaxableIncome",
 
       disabled: true,
@@ -2143,8 +2285,41 @@ const IndividualTaxReturnForm: React.FC = () => {
       imageIndex: 5,
     },
     {
-      name: "dividendIncomeNetTaxableIncome",
-      type: "text",
+      name: "incomeFromFinancialProductScheme.taxDeductedAtSource",
+      type: "number",
+      label: "incomeFromFinancialProductSchemeTax",
+
+      x: 828,
+      y: 784,
+      width: 112,
+      height: 18,
+      imageIndex: 5,
+    },
+    {
+      name: "dividendIncome.amountOfIncome",
+      type: "number",
+      label: "dividendIncomeAmount",
+
+      x: 490,
+      y: 800,
+      width: 115,
+      height: 18,
+      imageIndex: 5,
+    },
+    {
+      name: "dividendIncome.deductionsExpensesExemptedIncome",
+      type: "number",
+      label: "dividendIncomeDeductions",
+
+      x: 605,
+      y: 802,
+      width: 115,
+      height: 18,
+      imageIndex: 5,
+    },
+    {
+      name: "dividendIncome.netTaxableIncome",
+      type: "number",
       label: "dividendIncomeNetTaxableIncome",
 
       disabled: true,
@@ -2155,8 +2330,41 @@ const IndividualTaxReturnForm: React.FC = () => {
       imageIndex: 5,
     },
     {
-      name: "capitalGainFromTransferofPropertyNetTaxableIncome",
+      name: "dividendIncome.taxDeductedAtSource",
       type: "text",
+      label: "dividendIncomeTax",
+
+      x: 828,
+      y: 800,
+      width: 112,
+      height: 18,
+      imageIndex: 5,
+    },
+    {
+      name: "capitalGainFromTransferOfProperty.amountOfIncome",
+      type: "number",
+      label: "capitalGainFromTransferOfPropertyAmount",
+
+      x: 490,
+      y: 820,
+      width: 115,
+      height: 18,
+      imageIndex: 5,
+    },
+    {
+      name: "capitalGainFromTransferOfProperty.deductionsExpensesExemptedIncome",
+      type: "number",
+      label: "capitalGainFromTransferOfPropertyDeductions",
+
+      x: 605,
+      y: 820,
+      width: 115,
+      height: 18,
+      imageIndex: 5,
+    },
+    {
+      name: "capitalGainFromTransferOfProperty.netTaxableIncome",
+      type: "number",
       label: "capitalGainFromTransferofPropertyNetTaxableIncome",
 
       disabled: true,
@@ -2167,8 +2375,41 @@ const IndividualTaxReturnForm: React.FC = () => {
       imageIndex: 5,
     },
     {
-      name: "incomeFromBusinessNetTaxableIncome",
-      type: "text",
+      name: "capitalGainFromTransferOfProperty.taxDeductedAtSource",
+      type: "number",
+      label: "capitalGainFromTransferOfPropertyTax",
+
+      x: 828,
+      y: 820,
+      width: 112,
+      height: 18,
+      imageIndex: 5,
+    },
+    {
+      name: "incomeFromBusinessMinTax.amountOfIncome",
+      type: "number",
+      label: "incomeFromBusinessAmount",
+
+      x: 490,
+      y: 838,
+      width: 115,
+      height: 18,
+      imageIndex: 5,
+    },
+    {
+      name: "incomeFromBusinessMinTax.deductionsExpensesExemptedIncome",
+      type: "number",
+      label: "incomeFromBusinessDeductions",
+
+      x: 605,
+      y: 838,
+      width: 115,
+      height: 18,
+      imageIndex: 5,
+    },
+    {
+      name: "incomeFromBusinessMinTax.netTaxableIncome",
+      type: "number",
       label: "incomeFromBusinessNetTaxableIncome",
 
       disabled: true,
@@ -2178,9 +2419,42 @@ const IndividualTaxReturnForm: React.FC = () => {
       height: 15,
       imageIndex: 5,
     },
+    
     {
-      name: "workersParticinationFundNetTaxableIncome",
-      type: "text",
+      name: "incomeFromBusinessMinTax.taxDeductedAtSource",
+      type: "number",
+      label: "incomeFromBusinessTax",
+
+      x: 828,
+      y: 838,
+      width: 112,
+      height: 18,
+      imageIndex: 5,
+    },
+    {
+      name: "workersParticipationFund.amountOfIncome",
+      type: "number",
+      label: "workersParticipationFundAmount",
+      x: 490,
+      y: 856,
+      width: 115,
+      height: 18,
+      imageIndex: 5,
+    },
+    {
+      name: "workersParticipationFund.deductionsExpensesExemptedIncome",
+      type: "number",
+      label: "workersParticipationFundDeductions",
+
+      x: 605,
+      y: 856,
+      width: 115,
+      height: 18,
+      imageIndex: 5,
+    },
+    {
+      name: "workersParticipationFund.netTaxableIncome",
+      type: "number",
       label: "workersParticinationFundNetTaxableIncome",
 
       disabled: true,
@@ -2191,8 +2465,41 @@ const IndividualTaxReturnForm: React.FC = () => {
       imageIndex: 5,
     },
     {
-      name: "incomeFromOtherSourcesNetTaxableIncome",
-      type: "text",
+      name: "workersParticipationFund.taxDeductedAtSource",
+      type: "number",
+      label: "workersParticipationFundTax",
+
+      x: 828,
+      y: 856,
+      width: 112,
+      height: 18,
+      imageIndex: 5,
+    },
+    {
+      name: "incomeFromOtherSourcesMinTax.amountOfIncome",
+      type: "number",
+      label: "incomeFromOtherSourcesAmount",
+
+      x: 490,
+      y: 873,
+      width: 115,
+      height: 18,
+      imageIndex: 5,
+    },
+    {
+      name: "incomeFromOtherSourcesMinTax.deductionsExpensesExemptedIncome",
+      type: "number",
+      label: "incomeFromOtherSourcesDeductions",
+
+      x: 605,
+      y: 872,
+      width: 115,
+      height: 18,
+      imageIndex: 5,
+    },
+    {
+      name: "incomeFromOtherSourcesMinTax.netTaxableIncome",
+      type: "number",
       label: "incomeFromOtherSourcesNetTaxableIncome",
 
       disabled: true,
@@ -2202,6 +2509,72 @@ const IndividualTaxReturnForm: React.FC = () => {
       height: 15,
       imageIndex: 5,
     },
+    {
+      name: "incomeFromOtherSourcesMinTax.taxDeductedAtSource",
+      type: "text",
+      label: "incomeFromOtherSourcesTax",
+
+      x: 828,
+      y: 874,
+      width: 112,
+      height: 18,
+      imageIndex: 5,
+    },
+    {
+      name: "otherSubjectToMinTax.particulars",
+      type: "text",
+      label: "customSource.particulars",
+      x: 135,      
+      y: 890,
+      width: 355,      
+      height: 18,
+      imageIndex: 5,
+    },
+    {
+      name: "otherSubjectToMinTax.amountOfIncome",
+      type: "number",
+      label: "customSource.amountOfIncome",
+
+      x: 490,
+      y: 890,
+      width: 112,
+      height: 18,
+      imageIndex: 5,
+    },
+    {
+      name: "otherSubjectToMinTax.deductionsExpensesExemptedIncome",
+      type: "number",
+      label: "customSource.deductionsExpensesExemptedIncome",
+
+      x: 605,
+      y: 890,
+      width: 112,
+      height: 18,
+      imageIndex: 5,
+    },
+    {
+      name: "otherSubjectToMinTax.netTaxableIncome",
+      type: "number",
+      label: "customSource.netTaxableIncome",
+      disabled:true,
+      x: 718,
+      y: 890,
+      width: 108,
+      height: 18,
+      imageIndex: 5,
+    },
+    {
+      name: "otherSubjectToMinTax.taxDeductedAtSource",
+      type: "number",
+      label: "customSource.taxDeductedAtSource",
+      
+      x: 828,
+      y: 890,
+      width: 110,
+      height: 18,
+      imageIndex: 5,
+    },
+
     {
       name: "otherAssets",
       type: "text",
@@ -2247,292 +2620,8 @@ const IndividualTaxReturnForm: React.FC = () => {
       imageIndex: 5,
     },
 
-    {
-      name: "incomeFromSavingCertificatesAmount",
-      type: "text",
-      label: "incomeFromSavingCertificatesAmount",
 
-      x: 490,
-      y: 750,
-      width: 115,
-      height: 18,
-      imageIndex: 5,
-    },
-    {
-      name: "incomeFromSecuritiesDebenturesAmount",
-      type: "text",
-      label: "incomeFromSecuritiesDebenturesAmount",
-
-      x: 490,
-      y: 765,
-      width: 115,
-      height: 18,
-      imageIndex: 5,
-    },
-    {
-      name: "incomeFromFinancialProductSchemeAmount",
-      type: "text",
-      label: "incomeFromFinancialProductSchemeAmount",
-
-      x: 490,
-      y: 785,
-      width: 115,
-      height: 18,
-      imageIndex: 5,
-    },
-    {
-      name: "dividendIncomeAmount",
-      type: "text",
-      label: "dividendIncomeAmount",
-
-      x: 490,
-      y: 800,
-      width: 115,
-      height: 18,
-      imageIndex: 5,
-    },
-    {
-      name: "capitalGainFromTransferOfPropertyAmount",
-      type: "text",
-      label: "capitalGainFromTransferOfPropertyAmount",
-
-      x: 490,
-      y: 820,
-      width: 115,
-      height: 18,
-      imageIndex: 5,
-    },
-    {
-      name: "incomeFromBusinessAmount",
-      type: "text",
-      label: "incomeFromBusinessAmount",
-
-      x: 490,
-      y: 838,
-      width: 115,
-      height: 18,
-      imageIndex: 5,
-    },
-    {
-      name: "workersParticipationFundAmount",
-      type: "text",
-      label: "workersParticipationFundAmount",
-
-      x: 490,
-      y: 856,
-      width: 115,
-      height: 18,
-      imageIndex: 5,
-    },
-    {
-      name: "incomeFromOtherSourcesAmount",
-      type: "text",
-      label: "incomeFromOtherSourcesAmount",
-
-      x: 490,
-      y: 873,
-      width: 115,
-      height: 18,
-      imageIndex: 5,
-    },
-    {
-      name: "interestProfitFromBankFIDeductions",
-      type: "text",
-      label: "interestProfitFromBankFIDeductions",
-
-      x: 605,
-      y: 730,
-      width: 115,
-      height: 18,
-      imageIndex: 5,
-    },
-    {
-      name: "incomeFromSavingCertificatesDeductions",
-      type: "text",
-      label: "incomeFromSavingCertificatesDeductions",
-
-      x: 605,
-      y: 748,
-      width: 115,
-      height: 18,
-      imageIndex: 5,
-    },
-    {
-      name: "incomeFromSecuritiesDebenturesDeductions",
-      type: "text",
-      label: "incomeFromSecuritiesDebenturesDeductions",
-
-      x: 605,
-      y: 766,
-      width: 115,
-      height: 18,
-      imageIndex: 5,
-    },
-    {
-      name: "incomeFromFinancialProductSchemeDeductions",
-      type: "text",
-      label: "incomeFromFinancialProductSchemeDeductions",
-
-      x: 605,
-      y: 784,
-      width: 115,
-      height: 18,
-      imageIndex: 5,
-    },
-    {
-      name: "dividendIncomeDeductions",
-      type: "text",
-      label: "dividendIncomeDeductions",
-
-      x: 605,
-      y: 802,
-      width: 115,
-      height: 18,
-      imageIndex: 5,
-    },
-    {
-      name: "capitalGainFromTransferOfPropertyDeductions",
-      type: "text",
-      label: "capitalGainFromTransferOfPropertyDeductions",
-
-      x: 605,
-      y: 820,
-      width: 115,
-      height: 18,
-      imageIndex: 5,
-    },
-    {
-      name: "incomeFromBusinessDeductions",
-      type: "text",
-      label: "incomeFromBusinessDeductions",
-
-      x: 605,
-      y: 838,
-      width: 115,
-      height: 18,
-      imageIndex: 5,
-    },
-    {
-      name: "workersParticipationFundDeductions",
-      type: "text",
-      label: "workersParticipationFundDeductions",
-
-      x: 605,
-      y: 856,
-      width: 115,
-      height: 18,
-      imageIndex: 5,
-    },
-    {
-      name: "incomeFromOtherSourcesDeductions",
-      type: "text",
-      label: "incomeFromOtherSourcesDeductions",
-
-      x: 605,
-      y: 872,
-      width: 115,
-      height: 18,
-      imageIndex: 5,
-    },
-    {
-      name: "interestProfitFromBankFITax",
-      type: "text",
-      label: "interestProfitFromBankFITax",
-
-      x: 828,
-      y: 730,
-      width: 112,
-      height: 18,
-      imageIndex: 5,
-    },
-    {
-      name: "incomeFromSavingCertificatesTax",
-      type: "text",
-      label: "incomeFromSavingCertificatesTax",
-
-      x: 828,
-      y: 748,
-      width: 112,
-      height: 18,
-      imageIndex: 5,
-    },
-    {
-      name: "incomeFromSecuritiesDebenturesTax",
-      type: "text",
-      label: "incomeFromSecuritiesDebenturesTax",
-
-      x: 828,
-      y: 766,
-      width: 112,
-      height: 18,
-      imageIndex: 5,
-    },
-    {
-      name: "incomeFromFinancialProductSchemeTax",
-      type: "text",
-      label: "incomeFromFinancialProductSchemeTax",
-
-      x: 828,
-      y: 784,
-      width: 112,
-      height: 18,
-      imageIndex: 5,
-    },
-    {
-      name: "dividendIncomeTax",
-      type: "text",
-      label: "dividendIncomeTax",
-
-      x: 828,
-      y: 800,
-      width: 112,
-      height: 18,
-      imageIndex: 5,
-    },
-    {
-      name: "capitalGainFromTransferOfPropertyTax",
-      type: "text",
-      label: "capitalGainFromTransferOfPropertyTax",
-
-      x: 828,
-      y: 820,
-      width: 112,
-      height: 18,
-      imageIndex: 5,
-    },
-    {
-      name: "incomeFromBusinessTax",
-      type: "text",
-      label: "incomeFromBusinessTax",
-
-      x: 828,
-      y: 838,
-      width: 112,
-      height: 18,
-      imageIndex: 5,
-    },
-    {
-      name: "workersParticipationFundTax",
-      type: "text",
-      label: "workersParticipationFundTax",
-
-      x: 828,
-      y: 856,
-      width: 112,
-      height: 18,
-      imageIndex: 5,
-    },
-    {
-      name: "incomeFromOtherSourcesTax",
-      type: "text",
-      label: "incomeFromOtherSourcesTax",
-
-      x: 828,
-      y: 874,
-      width: 112,
-      height: 18,
-      imageIndex: 5,
-    },
+   
 
     // Image 6
 
@@ -2548,15 +2637,14 @@ const IndividualTaxReturnForm: React.FC = () => {
       imageIndex: 6,
     },
     {
-      name: "totalAllowableInvestmentContribution",
+      name: "tin",
       type: "text",
-      label: "totalAllowableInvestmentContribution",
-
+      label: "TIN",
       disabled: true,
-      x: 795,
-      y: 405,
-      width: 140,
-      height: 15,
+      x: 668,
+      y: 125,
+      width: 265,
+      height: 18,
       imageIndex: 6,
     },
     {
@@ -2705,21 +2793,23 @@ const IndividualTaxReturnForm: React.FC = () => {
       imageIndex: 6,
     },
     {
-      name: "tin",
+      name: "totalAllowableInvestmentContribution",
       type: "text",
-      label: "TIN",
+      label: "totalAllowableInvestmentContribution",
+
       disabled: true,
-      x: 668,
-      y: 125,
-      width: 265,
-      height: 18,
+      x: 795,
+      y: 405,
+      width: 140,
+      height: 15,
       imageIndex: 6,
     },
+    
     {
       name: "taxOnIncomeFromPoultryHatcheriesFishFarming",
       type: "text",
       label: "taxOnIncomeFromPoultryHatcheriesFishFarming",
-      disabled: true,
+      // disabled: true,
       x: 735,
       y: 915,
       width: 200,
@@ -2728,18 +2818,7 @@ const IndividualTaxReturnForm: React.FC = () => {
     },
 
     // Image 7
-
-    {
-      name: "tin",
-      type: "text",
-      label: "TIN",
-      disabled: true,
-      x: 668,
-      y: 135,
-      width: 265,
-      height: 20,
-      imageIndex: 7,
-    },
+    // 45 inputs
     {
       name: "taxpayerName",
       type: "text",
@@ -2751,6 +2830,39 @@ const IndividualTaxReturnForm: React.FC = () => {
       height: 20,
       imageIndex: 7,
     },
+    {
+      name: "taxpayerName",
+      type: "text",
+      label: "Tax payer name",
+      disabled: true,
+      x: 150,
+      y: 595,
+      width: 345,
+      height: 20,
+      imageIndex: 7,
+    },
+    {
+      name: "signature",
+      type: "signature",
+      label: "Signature",
+      x: 650,
+      y: 540,
+      width: 200,
+      height: 40,
+      imageIndex: 7,
+    },
+    {
+      name: "tin",
+      type: "text",
+      label: "TIN",
+      disabled: true,
+      x: 668,
+      y: 135,
+      width: 265,
+      height: 20,
+      imageIndex: 7,
+    },
+    
     {
       name: "expensesForFoodAmount",
       type: "text",
@@ -3211,7 +3323,7 @@ const IndividualTaxReturnForm: React.FC = () => {
     },
 
     // Image 8
-
+    // input 42
     {
       name: "taxpayerName",
       type: "text",
@@ -3698,6 +3810,7 @@ const IndividualTaxReturnForm: React.FC = () => {
     },
 
     // Image 9
+    // inputs 54
 
     {
       name: "nonAgriculturalPropertyLandHouseProperty",
@@ -3905,7 +4018,6 @@ const IndividualTaxReturnForm: React.FC = () => {
       height: 18,
       imageIndex: 9,
     },
-
     {
       name: "agriculturalLocationAndDescription1",
       type: "text",
@@ -4059,7 +4171,6 @@ const IndividualTaxReturnForm: React.FC = () => {
       height: 18,
       imageIndex: 9,
     },
-
     {
       name: "savingDeposit",
       type: "text",
@@ -4235,7 +4346,6 @@ const IndividualTaxReturnForm: React.FC = () => {
       height: 18,
       imageIndex: 9,
     },
-
     {
       name: "cashInHand",
       type: "text",
@@ -4276,6 +4386,16 @@ const IndividualTaxReturnForm: React.FC = () => {
       y: 768,
       width: 170,
       height: 18,
+      imageIndex: 9,
+    },
+    {
+      name: "signature",
+      type: "signature",
+      label: "Signature",
+      x: 650,
+      y: 850,
+      width: 200,
+      height: 40,
       imageIndex: 9,
     },
 
@@ -4579,11 +4699,13 @@ const IndividualTaxReturnForm: React.FC = () => {
               name="signature"
               control={control}
               render={({ field: { onChange, value } }) => (
-                <SignatureField
+                <SignatureField 
                   onChange={(signatureData) => {
                     onChange(signatureData);
                     console.log("Signature updated:", signatureData);
                   }}
+                  width={field.width}
+                  height= {field.height}
                   value={value as string}
                 />
               )}
