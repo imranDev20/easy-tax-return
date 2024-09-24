@@ -364,10 +364,10 @@ totalAssetsInBangladeshAndOutsideBangladesh: z.number().optional(),
 
 
   // Image 3 - govt
-  basicPayGovtEmployment: z.number().nullable(),
-  arrearPayGovtEmployment: z.number().nullable(),
-  specialAllowanceGovtEmployment: z.number().nullable(),
-  houseRentAllowanceGovtEmployment: z.number().nullable(),
+  basicPayGovtEmploymentAmount: z.number().nullable().optional(),
+  arrearPayGovtEmploymentAmount: z.number().nullable().optional(),
+  specialAllowanceGovtEmploymentAmount: z.number().nullable().optional(),
+  houseRentAllowanceGovtEmploymentAmount: z.number().nullable().optional(),
   medicalAllowanceGovtEmployment: z.number().nullable(),
   conveyanceAllowanceGovtEmployment: z.number().nullable(),
   festivalAllowanceGovtEmployment: z.number().nullable(),

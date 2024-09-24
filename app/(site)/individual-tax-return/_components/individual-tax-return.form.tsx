@@ -87,7 +87,7 @@ interface BaseFormField {
   y: number;
   disabled?: boolean;
   isVisible?: boolean;
-  value?: string;
+  value?: string | number;
   width: number;
   height: number;
   imageIndex: number;
@@ -1344,10 +1344,10 @@ const IndividualTaxReturnForm: React.FC = () => {
     },
 
     {
-      name: "total",
-      type: "text",
-      label: "total",
-      disabled: true,
+      name: "basicPayGovtEmploymentAmount",
+      type: "number",
+      label: "basicPayGovtEmploymentAmount",   
+        // disabled: true,   
       x: 475,
       y: 216,
       width: 151,
@@ -1355,10 +1355,10 @@ const IndividualTaxReturnForm: React.FC = () => {
       imageIndex: 3,
     },
     {
-      name: "totalAmount",
-      type: "text",
-      label: "TIN",
-      disabled: true,
+      name: "arrearPayGovtEmploymentAmount",
+      type: "number",
+      label: "arrearPayGovtEmploymentAmount",
+      // disabled: true,
       x: 475,
       y: 235,
       width: 151,
@@ -1377,10 +1377,10 @@ const IndividualTaxReturnForm: React.FC = () => {
       imageIndex: 3,
     },
     {
-      name: "tin",
-      type: "text",
-      label: "TIN",
-      disabled: true,
+      name: "specialAllowanceGovtEmploymentAmount",
+      type: "number",
+      label: "specialAllowanceGovtEmploymentAmount",
+      // disabled: true,
       x: 475,
       y: 288,
       width: 151,
@@ -1388,10 +1388,10 @@ const IndividualTaxReturnForm: React.FC = () => {
       imageIndex: 3,
     },
     {
-      name: "tin",
-      type: "text",
-      label: "TIN",
-      disabled: true,
+      name: "houseRentAllowanceGovtEmploymentAmount",
+      type: "number",
+      label: "houseRentAllowanceGovtEmploymentAmount",
+      // disabled: true,
       x: 475,
       y: 307,
       width: 151,
@@ -4389,25 +4389,21 @@ const IndividualTaxReturnForm: React.FC = () => {
               <div style={fieldStyle} className="relative overflow-hidden">
                 <input
                   onChange={(e) => {
-                    let newValue = e.target.value;
-                    if (field.type === "number" && newValue !== "") {
-                      newValue = parseFloat(newValue).toFixed(2);
-                    }
+                    let newValue = e.target.value;                   
                     onChange(newValue);
                   }}
                   value={
-                    field.type === "number" && value !== ""
-                      ? parseFloat(value as string).toFixed(2)
-                      : (value as string)
+                   value as string
                   }
                   type={field.type}
-                  className={`w-full h-full absolute border ${!field.isVisible ? "hidden": "block"} px-2 font-medium ${
+                  className={`w-full h-full absolute border   px-2 font-medium ${
                     !field.disabled
                       ? "border-sky-300 rounded-none bg-sky-300/10 focus:border-sky-500 focus:ring-0 focus:outline-0 focus:bg-transparent hover:border-sky-500"
                       : " bg-[#F5F5F5] font-semibold text-[#948C91]"
                   }  `}
                   style={{ fontSize: `${14 * scale}px` }}
                   disabled={field.disabled}
+                  
                 />
 
                 {/* Conditional rendering for the required indicator */}
