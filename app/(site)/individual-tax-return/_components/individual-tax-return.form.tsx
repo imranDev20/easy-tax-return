@@ -80,13 +80,13 @@ interface DateFieldPosition {
 }
 
 interface BaseFormField {
-  name: keyof IndividualTaxReturnFormInput;
+  name: string;
   type: FieldType;
   label: string;
   x: number;
   y: number;
   disabled?: boolean;
-  value?: string | number;
+  value?: string | number | Date;
   width: number;
   height: number;
   imageIndex: number;
@@ -251,7 +251,14 @@ const IndividualTaxReturnForm: React.FC = () => {
       openingCapital: "",
       withdrawalsInTheIncomeYear: "",
       liabilities: "",
-      interestProfitFromBankFIAmount: "",
+      interestProfitFromBankFI: {
+        amountOfIncome: 0,
+        deductionsExpensesExemptedIncome: 0,
+        netTaxableIncome: 0,
+        particulars: "",
+        taxDeductedAtSource: 0,
+      },
+
       interestProfitFromBankFIDeductions: "",
       interestProfitFromBankFITax: "",
       incomeFromSavingCertificatesAmount: "",
@@ -953,8 +960,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       height: 29,
       imageIndex: 1,
     },
-   
-  
+
     {
       name: "incomeFromCapitalGains",
       type: "text",
@@ -1634,7 +1640,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       height: 34,
       imageIndex: 4,
     },
-  
+
     {
       name: "valueOfAnyBenefit",
       type: "text",
@@ -1645,7 +1651,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       height: 20,
       imageIndex: 4,
     },
-    
+
     {
       name: "totalRentValue",
       type: "number",
@@ -1712,7 +1718,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       height: 20,
       imageIndex: 4,
     },
-    
+
     {
       name: "adjustedAdvanceRent",
       type: "text",
@@ -2080,9 +2086,8 @@ const IndividualTaxReturnForm: React.FC = () => {
     },
     {
       name: "interestProfitFromBankFI.amountOfIncome",
-      type: "text",
-      label: "interestProfitFromBankFIAmount",
-
+      type: "number",
+      label: "Interest/Profit from Bank/FI Amount",
       x: 490,
       y: 730,
       width: 115,
@@ -2241,7 +2246,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       height: 18,
       imageIndex: 5,
     },
-   
+
     {
       name: "incomeFromSavingCertificatesAmount",
       type: "text",
@@ -2883,7 +2888,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       height: 32,
       imageIndex: 7,
     },
-   
+
     {
       name: "utilityExpenseComment",
       type: "text",
@@ -4461,7 +4466,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       case "number":
         return (
           <Controller
-            name={field.name}
+            name={field.name as any}
             control={control}
             render={({ field: { onChange, value } }) => {
               return (
@@ -4516,7 +4521,7 @@ const IndividualTaxReturnForm: React.FC = () => {
         return (
           <RadioGroup
             control={control}
-            name={field.name}
+            name={field.name as any}
             options={field.options}
             scale={scale}
             disabled={field.disabled}
@@ -4530,7 +4535,7 @@ const IndividualTaxReturnForm: React.FC = () => {
         return (
           <div style={fieldStyle}>
             <Controller
-              name={field.name}
+              name={field.name as any}
               control={control}
               render={({ field: { onChange, value } }) => (
                 <CustomSelect
@@ -4550,7 +4555,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       case "date":
         return (
           <Controller
-            name={field.name}
+            name={field.name as any}
             control={control}
             render={({ field: { onChange, value } }) => (
               <CustomDatePicker
@@ -4589,7 +4594,7 @@ const IndividualTaxReturnForm: React.FC = () => {
         return (
           <div style={fieldStyle} className="relative overflow-hidden">
             <textarea
-              {...register(field.name)}
+              {...register(field.name as any)}
               className="w-full h-full absolute border px-2 border-sky-300 rounded-none bg-sky-300/10 focus:border-sky-500 focus:ring-0 focus:outline-0 focus:bg-transparent hover:border-sky-500"
               style={{ fontSize: `${14 * scale}px` }}
             />
