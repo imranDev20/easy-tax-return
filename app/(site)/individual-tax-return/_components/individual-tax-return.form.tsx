@@ -86,7 +86,7 @@ interface BaseFormField {
   x: number;
   y: number;
   disabled?: boolean;
-  onBlur?: (event: FocusEvent) => void;
+  onBlur?: (event: React.FocusEvent<HTMLInputElement, Element>) => void;
   value?: string | number | Date;
   width: number;
   height: number;
@@ -202,7 +202,6 @@ const IndividualTaxReturnForm: React.FC = () => {
       incomeFishFarming: false,
       incomeFishFarmingAmount: "",
       shareOfIncomeFromAOP: "",
-      shareOfIncomeFromAOPAmount: "",
       incomeOfMinor: "",
       taxableIncomeFromAbroad: "",
       minimumTax: undefined,
@@ -441,62 +440,62 @@ const IndividualTaxReturnForm: React.FC = () => {
       others1: "",
       others2: "",
       assetOutsideBangladesh: "",
-      incomeFromEmployment:"0.0",
-      incomeFromRent:"0.0",
-      incomeFromAgriculture:"0.0",
-      incomeFromBusiness:"0.0",
-      incomeFromBusinessMinimum:"0.0",
-      incomeFromCapitalGains:"0.0",
-      incomeFromFinancialAssets:"0.0",
-      incomeFromOtherSources:"0.0",
-      totalIncome:"0.0",
-      totalAmountPayable:"0.0",
-      taxDeductedOrCollected:"0.0",
-      totalTaxPaidAndAdjusted:"0.0",
-      excessPayment:"0.0",
-      taxExemptedTaxFreeIncome:"0.0",
-      totalRentValue:"0.0",
-      totalAdmissibleDeduction:"0.0",
-      netIncome:"0.0",
-      netProfit:"0.0",
-      netProfit2:"0.0",
-      cashInHandAtBank:"0.0",
-      totalAssets:"0.0",
-      netProfit3:"0.0",
-      closingCpital:"0.0",
-      totalCapitalsAndLiabilities:"0.0",
-      totalAllowableInvestmentContribution:"0.0",
-      taxDeductedCollectedAtSourceAmount:"0.0",
-      advanceTaxPaidAmountTaka:"0.0",
-      totalAmount:"0.0",
-      totalAmount2:"0.0",
-      totalAmount3:"0.0",
+      incomeFromEmployment: "0.0",
+      incomeFromRent: "0.0",
+      incomeFromAgriculture: "0.0",
+      incomeFromBusiness: "0.0",
+      incomeFromBusinessMinimum: "0.0",
+      incomeFromCapitalGains: "0.0",
+      incomeFromFinancialAssets: "0.0",
+      incomeFromOtherSources: "0.0",
+      totalIncome: "0.0",
+      totalAmountPayable: "0.0",
+      taxDeductedOrCollected: "0.0",
+      totalTaxPaidAndAdjusted: "0.0",
+      excessPayment: "0.0",
+      taxExemptedTaxFreeIncome: "0.0",
+      totalRentValue: "0.0",
+      totalAdmissibleDeduction: "0.0",
+      netIncome: "0.0",
+      netProfit: "0.0",
+      netProfit2: "0.0",
+      cashInHandAtBank: "0.0",
+      totalAssets: "0.0",
+      netProfit3: "0.0",
+      closingCpital: "0.0",
+      totalCapitalsAndLiabilities: "0.0",
+      totalAllowableInvestmentContribution: "0.0",
+      taxDeductedCollectedAtSourceAmount: "0.0",
+      advanceTaxPaidAmountTaka: "0.0",
+      totalAmount: "0.0",
+      totalAmount2: "0.0",
+      totalAmount3: "0.0",
       taxOnIncomeFromPoultryHatcheriesFishFarming: "",
       typeOfTaxExemptedTaxFreeIncome6: "",
       typeOfTaxExemptedTaxFreeIncome7: "",
       typeOfTaxExemptedTaxFreeIncomeAmount6: "",
       typeOfTaxExemptedTaxFreeIncomeAmount7: "",
-      totalIncomeShownInTheReturn:"0.0",
-      taxExemptedIncomeAndAllowance:"0.0",
-      receiptOfGiftOtherReceipts:"0.0",
-      totalSourceOfFund:"0.0",
-      sumOfSourceOfFundAndPreviousYearsNetWealth:"0.0",
-      expenseRelatingToLifestyle:"0.0",
-      totalExpensesAndLoss:"0.0",
-      netWealthAtTheLastDateOfThisFinancialYear:"0.0",
-      totalLiabilitiesOutsideBusiness:"0.0",
-      grossWealth:"0.0",
-      businessCapitalAmount1:"0.0",
-      businessCapitalAmount2:"0.0",
-      directorsShareholdingsInTheCompanies:"0.0",
-      businessCapitalOfPartnershipFirm:"0.0",
-      nonAgriculturalPropertyLandHouseProperty:"0.0",
-      agriculturalProperty:"0.0",
-      totalFinancialAssets:"0.0",
-      motorVehiclesAmount:"0.0",
-      totalAssetslocatedInBangladesh:"0.0",
-      totalCashInHandsAndFundOutsideBusiness:"0.0",
-      totalAssetsInBangladeshAndOutsideBangladesh:"0.0",
+      totalIncomeShownInTheReturn: "0.0",
+      taxExemptedIncomeAndAllowance: "0.0",
+      receiptOfGiftOtherReceipts: "0.0",
+      totalSourceOfFund: "0.0",
+      sumOfSourceOfFundAndPreviousYearsNetWealth: "0.0",
+      expenseRelatingToLifestyle: "0.0",
+      totalExpensesAndLoss: "0.0",
+      netWealthAtTheLastDateOfThisFinancialYear: "0.0",
+      totalLiabilitiesOutsideBusiness: "0.0",
+      grossWealth: "0.0",
+      businessCapitalAmount1: "0.0",
+      businessCapitalAmount2: "0.0",
+      directorsShareholdingsInTheCompanies: "0.0",
+      businessCapitalOfPartnershipFirm: "0.0",
+      nonAgriculturalPropertyLandHouseProperty: "0.0",
+      agriculturalProperty: "0.0",
+      totalFinancialAssets: "0.0",
+      motorVehiclesAmount: "0.0",
+      totalAssetslocatedInBangladesh: "0.0",
+      totalCashInHandsAndFundOutsideBusiness: "0.0",
+      totalAssetsInBangladeshAndOutsideBangladesh: "0.0",
       totalIncomeShown: "",
       totalTaxPaid: "",
 
@@ -530,21 +529,7 @@ const IndividualTaxReturnForm: React.FC = () => {
     formState: { errors, isDirty },
   } = form;
 
-  const govtPaySchaleCalculation = () => {
-    const basicPay = getValues().basicPayGovtEmployment.amount;
-    const arrearPay = getValues().arrearPayGovtEmployment.amount;
-    const specialAllowance = getValues().specialAllowanceGovtEmployment.amount;
-
-    // const totalAmount = basicPay + arrearPay + specialAllowance;
-
-    // setValue("totalGovtEmployment.amount", totalAmount);
-
-    // setValue("totalIncomeShown", total);
-    // setValue("totalTaxPaid", total * "0".1);
-  };
-
-  console.log("signature upload link:", getValues().signature);
-  // console.log(watch("taxpayerName"));
+  const calculateScheduleOneTotalAmountGovt = () => {};
 
   useEffect(() => {
     const subscription = watch((value, { name }) => {
@@ -575,7 +560,7 @@ const IndividualTaxReturnForm: React.FC = () => {
   }, [watch, setValue]);
 
   const formFields: FormField[] = [
-    // Image "0"
+    // Image 1
 
     {
       name: "taxpayerName",
@@ -873,7 +858,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       imageIndex: 0,
     },
 
-    // Image 1
+    // Image 2
     {
       name: "statementOfIncomeYearEndedOn",
       type: "date",
@@ -992,19 +977,7 @@ const IndividualTaxReturnForm: React.FC = () => {
     {
       name: "shareOfIncomeFromAOP",
       type: "text",
-      label: "shareOfIncomeFromAOP",
-
-      x: 600,
-      y: 450,
-      width: 100,
-      height: 29,
-      imageIndex: 1,
-    },
-    {
-      name: "shareOfIncomeFromAOPAmount",
-      type: "text",
-      label: "shareOfIncomeFromAOPAmount",
-
+      label: "",
       x: 770,
       y: 450,
       width: 168,
@@ -1186,7 +1159,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       imageIndex: 1,
     },
 
-    // Image 2
+    // Image 3
 
     {
       name: "taxDeductedOrCollected",
@@ -1359,7 +1332,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       imageIndex: 2,
     },
 
-    // Image 3
+    // Image 4
     {
       name: "isIncomeFromEmployment",
       type: "radio",
@@ -1435,7 +1408,7 @@ const IndividualTaxReturnForm: React.FC = () => {
     {
       name: "tin",
       type: "text",
-      label: "TIN",
+      label: "",
       disabled: true,
       x: 668,
       y: 147,
@@ -1447,9 +1420,10 @@ const IndividualTaxReturnForm: React.FC = () => {
     {
       name: "basicPayGovtEmployment.amount",
       type: "number",
-      label: "basicPayGovtEmploymentAmount",
-      onBlur: () => {
-        return govtPaySchaleCalculation();
+      label: "",
+      onBlur: (e) => {
+        calculateScheduleOneTotalAmountGovt();
+        setValue("basicPayGovtEmployment.taxable", e.target.value);
       },
       // disabled: true,
       x: 475,
@@ -1459,9 +1433,9 @@ const IndividualTaxReturnForm: React.FC = () => {
       imageIndex: 3,
     },
     {
-      name: "basicPayGovtEmployment.amount",
+      name: "basicPayGovtEmployment.taxable",
       type: "number",
-      label: "basicPayGovtEmploymentTaxable",
+      label: "",
       disabled: true,
       x: 785,
       y: 216,
@@ -1479,11 +1453,14 @@ const IndividualTaxReturnForm: React.FC = () => {
       width: 151,
       height: 32,
       imageIndex: 3,
+      onBlur(event) {
+        setValue("arrearPayGovtEmployment.taxable", event.target.value);
+      },
     },
     {
-      name: "arrearPayGovtEmployment.amount",
+      name: "arrearPayGovtEmployment.taxable",
       type: "number",
-      label: "arrearPayGovtEmploymentTaxable",
+      label: "",
       disabled: true,
       x: 785,
       y: 235,
@@ -1494,18 +1471,24 @@ const IndividualTaxReturnForm: React.FC = () => {
     {
       name: "specialAllowanceGovtEmployment.amount",
       type: "number",
-      label: "specialAllowanceGovtEmployment.amount",
+      label: "",
       // disabled: true,
       x: 475,
       y: 268,
       width: 151,
       height: 18,
       imageIndex: 3,
+      onBlur(event) {
+        setValue(
+          "specialAllowanceGovtEmployment.taxExempted",
+          event.target.value
+        );
+      },
     },
     {
-      name: "specialAllowanceGovtEmployment.amount",
+      name: "specialAllowanceGovtEmployment.taxExempted",
       type: "number",
-      label: "specialAllowanceGovtEmployment.taxExempted",
+      label: "",
       disabled: true,
       x: 630,
       y: 268,
@@ -1514,9 +1497,9 @@ const IndividualTaxReturnForm: React.FC = () => {
       imageIndex: 3,
     },
     {
-      name: "specialAllowanceGovtEmploymentAmount",
+      name: "basicPayGovtEmployment.amount",
       type: "number",
-      label: "specialAllowanceGovtEmploymentAmount",
+      label: "",
       // disabled: true,
       x: 475,
       y: 288,
@@ -1525,7 +1508,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       imageIndex: 3,
     },
     {
-      name: "houseRentAllowanceGovtEmploymentAmount",
+      name: "basicPayGovtEmployment.amount",
       type: "number",
       label: "houseRentAllowanceGovtEmploymentAmount",
       // disabled: true,
@@ -1536,7 +1519,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       imageIndex: 3,
     },
     {
-      name: "conveyanceAllowanceGovtEmployment",
+      name: "basicPayGovtEmployment.amount",
       type: "text",
       label: "TIN",
       disabled: false,
@@ -1547,7 +1530,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       imageIndex: 3,
     },
     {
-      name: "festivalAllowanceGovtEmployment",
+      name: "basicPayGovtEmployment.amount",
       type: "text",
       label: "TIN",
       disabled: false,
@@ -1559,7 +1542,7 @@ const IndividualTaxReturnForm: React.FC = () => {
     },
 
     {
-      name: "allowanceForSupportStaffGovtEmployment",
+      name: "basicPayGovtEmployment.amount",
       type: "text",
       label: "TIN",
       disabled: false,
@@ -1570,7 +1553,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       imageIndex: 3,
     },
     {
-      name: "leaveAllowanceGovtEmployment",
+      name: "basicPayGovtEmployment.amount",
       type: "text",
       label: "TIN",
       disabled: false,
@@ -1581,7 +1564,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       imageIndex: 3,
     },
     {
-      name: "honorariumRewardGovtEmployment",
+      name: "basicPayGovtEmployment.amount",
       type: "text",
       label: "TIN",
       disabled: false,
@@ -1592,7 +1575,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       imageIndex: 3,
     },
     {
-      name: "overtimeAllowanceGovtEmployment",
+      name: "basicPayGovtEmployment.amount",
       type: "text",
       label: "TIN",
       disabled: false,
@@ -1603,7 +1586,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       imageIndex: 3,
     },
     {
-      name: "banglaNoboborshoAllowancesGovtEmployment",
+      name: "basicPayGovtEmployment.amount",
       type: "text",
       label: "TIN",
       disabled: false,
@@ -1614,7 +1597,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       imageIndex: 3,
     },
     {
-      name: "interestAccruedProvidentFundGovtEmployment",
+      name: "basicPayGovtEmployment.amount",
       type: "text",
       label: "TIN",
       disabled: false,
@@ -1625,7 +1608,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       imageIndex: 3,
     },
     {
-      name: "lumpGrantGovtEmployment",
+      name: "basicPayGovtEmployment.amount",
       type: "text",
       label: "TIN",
       disabled: false,
@@ -1636,7 +1619,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       imageIndex: 3,
     },
     {
-      name: "gratuityGovtEmployment",
+      name: "basicPayGovtEmployment.amount",
       type: "text",
       label: "TIN",
       disabled: false,
@@ -1647,7 +1630,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       imageIndex: 3,
     },
     {
-      name: "otherAllowanceGovtEmployment",
+      name: "basicPayGovtEmployment.amount",
       type: "text",
       label: "TIN",
       disabled: false,
@@ -1658,7 +1641,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       imageIndex: 3,
     },
     {
-      name: "otherAllowanceExemptedGovtEmployment",
+      name: "basicPayGovtEmployment.amount",
       type: "text",
       label: "TIN",
       disabled: false,
@@ -1669,7 +1652,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       imageIndex: 3,
     },
     {
-      name: "totalGovtEmployment",
+      name: "basicPayGovtEmployment.amount",
       type: "text",
       label: "TIN",
       disabled: false,
@@ -1680,8 +1663,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       imageIndex: 3,
     },
 
-    // Image 4
-
+    // Image 5
     {
       name: "taxpayerName",
       type: "text",
@@ -1831,7 +1813,6 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "vacancyAllowance",
       type: "text",
       label: "vacancyAllowance",
-
       x: 750,
       y: 320,
       width: 95,
@@ -1987,7 +1968,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       imageIndex: 4,
     },
 
-    //  Image 5
+    //  Image 6
     {
       name: "taxpayerName",
       type: "text",
@@ -2686,7 +2667,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       imageIndex: 5,
     },
 
-    // Image 6
+    // Image 7
 
     {
       name: "taxpayerName",
@@ -2880,7 +2861,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       imageIndex: 6,
     },
 
-    // Image 7
+    // Image 8
     // 45 inputs
     {
       name: "taxpayerName",
@@ -3385,7 +3366,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       imageIndex: 7,
     },
 
-    // Image 8
+    // Image 9
     // input 42
     {
       name: "taxpayerName",
@@ -3872,7 +3853,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       imageIndex: 8,
     },
 
-    // Image 9
+    // Image 10
     // inputs 54
 
     {
@@ -4472,7 +4453,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       imageIndex: 9,
     },
 
-    // Image 10
+    // Image 11
 
     {
       name: "taxpayerName",
@@ -4678,6 +4659,7 @@ const IndividualTaxReturnForm: React.FC = () => {
                     }  `}
                     style={{ fontSize: `${14 * scale}px` }}
                     disabled={field.disabled}
+                    onBlur={field.onBlur}
                   />
 
                   {/* Conditional rendering for the required indicator */}
