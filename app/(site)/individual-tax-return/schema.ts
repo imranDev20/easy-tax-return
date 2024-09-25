@@ -12,10 +12,17 @@ import z from "zod";
 
 const incomeItemSchema = z.object({
   particulars: z.string().optional(),
-  amountOfIncome: z.number().nullable().optional(),
-  deductionsExpensesExemptedIncome: z.number().optional(),
-  netTaxableIncome: z.number().nullable().optional(),
-  taxDeductedAtSource: z.number().nullable().optional(),
+  amountOfIncome: z.string().nullable().optional(),
+  deductionsExpensesExemptedIncome: z.string().optional(),
+  netTaxableIncome: z.string().nullable().optional(),
+  taxDeductedAtSource: z.string().nullable().optional(),
+});
+
+const govtPayScaleSchema = z.object({
+  amount: z.string().nullable().optional(),
+  taxExempted: z.string().nullable().optional(),
+  taxable: z.string().nullable().optional(),
+
 });
 
 // Define the Zod schema
@@ -56,18 +63,18 @@ export const individualTaxReturnSchema = z.object({
 
   // Image 1
   statementOfIncomeYearEndedOn: z.date(),
-  incomeFromEmployment: z.number().optional(),
-  incomeFromRent: z.number().optional(),
-  incomeFromAgriculture: z.number().optional(),
+  incomeFromEmployment: z.string().optional(),
+  incomeFromRent: z.string().optional(),
+  incomeFromAgriculture: z.string().optional(),
   incomeFishFarming: z.boolean().optional(),
   incomeFishFarmingAmount: z.string().optional(),
-  incomeFromBusiness: z.number().optional(),
-  incomeFromBusinessMinimum: z.number().optional(),
-  incomeFromCapitalGains: z.number().optional(),
-  incomeFromFinancialAssets: z.number().optional(),
-  incomeFromOtherSources: z.number().optional(),
-  totalIncome: z.number().optional(),
-  totalAmountPayable: z.number().optional(),
+  incomeFromBusiness: z.string().optional(),
+  incomeFromBusinessMinimum: z.string().optional(),
+  incomeFromCapitalGains: z.string().optional(),
+  incomeFromFinancialAssets: z.string().optional(),
+  incomeFromOtherSources: z.string().optional(),
+  totalIncome: z.string().optional(),
+  totalAmountPayable: z.string().optional(),
   shareOfIncomeFromAOP: z.string(),
   shareOfIncomeFromAOPAmount: z.string().optional(),
   incomeOfMinor: z.string().optional(),
@@ -81,10 +88,10 @@ export const individualTaxReturnSchema = z.object({
   calculate: z.nativeEnum(CalculationType),
 
   // Image 2
-  taxDeductedOrCollected: z.number().optional(),
-  totalTaxPaidAndAdjusted: z.number().optional(),
-  excessPayment: z.number().optional(),
-  taxExemptedTaxFreeIncome: z.number().optional(),
+  taxDeductedOrCollected: z.string().optional(),
+  totalTaxPaidAndAdjusted: z.string().optional(),
+  excessPayment: z.string().optional(),
+  taxExemptedTaxFreeIncome: z.string().optional(),
   advanceTaxPaidAmount: z.string().optional(),
   adjustmentOfTaxRefund: z.string().optional(),
   taxPaidWithThisReturn: z.string(),
@@ -100,59 +107,59 @@ export const individualTaxReturnSchema = z.object({
   isIncomeFromEmployment: z.nativeEnum(IncomeFromEmployment),
   typeOfEmployment: z.nativeEnum(EmploymentType),
 
-  basicPayGovtEmployment: z.number().nullable().optional(),
-  arrearPayGovtEmployment: z.number().nullable().optional(),
-  specialAllowanceGovtEmployment: z.number().nullable().optional(),
-  houseRentAllowanceGovtEmployment: z.number().nullable().optional(),
-  basicPayGovtEmploymentAmount: z.number().nullable().optional(),
-  arrearPayGovtEmploymentAmount: z.number().nullable().optional(),
-  specialAllowanceGovtEmploymentAmount: z.number().nullable().optional(),
-  houseRentAllowanceGovtEmploymentAmount: z.number().nullable().optional(),
-  medicalAllowanceGovtEmployment: z.number().nullable(),
-  conveyanceAllowanceGovtEmployment: z.number().nullable(),
-  festivalAllowanceGovtEmployment: z.number().nullable(),
-  allowanceForSupportStaffGovtEmployment: z.number().nullable(),
-  leaveAllowanceGovtEmployment: z.number().nullable(),
-  honorariumRewardGovtEmployment: z.number().nullable(),
-  overtimeAllowanceGovtEmployment: z.number().nullable(),
-  banglaNoboborshoAllowancesGovtEmployment: z.number().nullable(),
-  interestAccruedProvidentFundGovtEmployment: z.number().nullable(),
-  lumpGrantGovtEmployment: z.number().nullable(),
-  gratuityGovtEmployment: z.number().nullable(),
-  otherAllowanceGovtEmployment: z.number().nullable(),
-  otherAllowanceExemptedGovtEmployment: z.number().nullable(),
-  totalGovtEmployment: z.number().nullable(),
+  basicPayGovtEmployment: govtPayScaleSchema,
+  arrearPayGovtEmployment: govtPayScaleSchema,
+  specialAllowanceGovtEmployment: govtPayScaleSchema,
+  houseRentAllowanceGovtEmployment: z.string().nullable().optional(),
+  basicPayGovtEmploymentAmount: z.string().nullable().optional(),
+  arrearPayGovtEmploymentAmount: z.string().nullable().optional(),
+  specialAllowanceGovtEmploymentAmount: z.string().nullable().optional(),
+  houseRentAllowanceGovtEmploymentAmount: z.string().nullable().optional(),
+  medicalAllowanceGovtEmployment: z.string().nullable(),
+  conveyanceAllowanceGovtEmployment: z.string().nullable(),
+  festivalAllowanceGovtEmployment: z.string().nullable(),
+  allowanceForSupportStaffGovtEmployment: z.string().nullable(),
+  leaveAllowanceGovtEmployment: z.string().nullable(),
+  honorariumRewardGovtEmployment: z.string().nullable(),
+  overtimeAllowanceGovtEmployment: z.string().nullable(),
+  banglaNoboborshoAllowancesGovtEmployment: z.string().nullable(),
+  interestAccruedProvidentFundGovtEmployment: z.string().nullable(),
+  lumpGrantGovtEmployment: z.string().nullable(),
+  gratuityGovtEmployment: z.string().nullable(),
+  otherAllowanceGovtEmployment: z.string().nullable(),
+  otherAllowanceExemptedGovtEmployment: z.string().nullable(),
+  totalGovtEmployment: z.string().nullable(),
 
   // image 3 // private
-  basicPayPrivateEmployment: z.number().nullable().optional(),
-  allowancesPrivateEmployment: z.number().nullable().optional(),
-  advanceArrearSalaryPrivateEmployment: z.number().nullable().optional(),
+  basicPayPrivateEmployment: z.string().nullable().optional(),
+  allowancesPrivateEmployment: z.string().nullable().optional(),
+  advanceArrearSalaryPrivateEmployment: z.string().nullable().optional(),
   gratuityAnnuityPensionOrSimilarBenefitPrivateEmployment: z
-    .number()
+    .string()
     .nullable()
     .optional(),
-  perquisitesPrivateEmployment: z.number().nullable().optional(),
+  perquisitesPrivateEmployment: z.string().nullable().optional(),
   receiptInLieuOfOrInAdditionToSalaryOrWagesPrivateEmployment: z
-    .number()
+    .string()
     .nullable()
     .optional(),
   incomeFromEmployeeShareSchemePrivateEmployment: z
-    .number()
+    .string()
     .nullable()
     .optional(),
-  accommodationFacilityPrivateEmployment: z.number().nullable().optional(),
-  transportFacilityPrivateEmployment: z.number().nullable().optional(),
+  accommodationFacilityPrivateEmployment: z.string().nullable().optional(),
+  transportFacilityPrivateEmployment: z.string().nullable().optional(),
   anyOtherFacilityProvidedByEmployerPrivateEmployment: z
-    .number()
+    .string()
     .nullable()
     .optional(),
   employerContributionToRecognizedProvidentFundPrivateEmployment: z
-    .number()
+    .string()
     .nullable(),
-  otherIfAnyPrivateEmployment: z.number().nullable(),
-  totalSalaryReceivedPrivateEmployment: z.number().nullable(),
-  exemptedAmountPrivateEmployment: z.number().nullable(),
-  totalIncomeFromSalaryPrivateEmployment: z.number().nullable(),
+  otherIfAnyPrivateEmployment: z.string().nullable(),
+  totalSalaryReceivedPrivateEmployment: z.string().nullable(),
+  exemptedAmountPrivateEmployment: z.string().nullable(),
+  totalIncomeFromSalaryPrivateEmployment: z.string().nullable(),
 
   
   
@@ -172,15 +179,15 @@ export const individualTaxReturnSchema = z.object({
   insurancePremiumPaid: z.string().optional(),
   others: z.string().optional(),
   taxpayersShare: z.string(),
-  taxpayersShareAmount: z.number().nullable().optional(),
+  taxpayersShareAmount: z.string().nullable().optional(),
   taxDeductedSourceFromIncomeRent: z.string().optional(),
   salesTurnoverReceipt: z.string().optional(),
   grossProfit: z.string().optional(),
   generalExpensesSellingExpenses: z.string().optional(),
-  totalRentValue: z.number().optional(),
-  totalAdmissibleDeduction: z.number().optional(),
-  netIncome: z.number().optional(),
-  netProfit: z.number().optional(),
+  totalRentValue: z.string().optional(),
+  totalAdmissibleDeduction: z.string().optional(),
+  netIncome: z.string().optional(),
+  netProfit: z.string().optional(),
 
   // image 5
   // 62 inputs
@@ -207,12 +214,12 @@ export const individualTaxReturnSchema = z.object({
   workersParticipationFund: incomeItemSchema,
   incomeFromOtherSourcesMinTax: incomeItemSchema,
   otherSubjectToMinTax: incomeItemSchema,  
-  netProfit2: z.number().optional(),
-  cashInHandAtBank: z.number().optional(),
-  totalAssets: z.number().optional(),
-  netProfit3: z.number().optional(),
-  closingCpital: z.number().optional(),
-  totalCapitalsAndLiabilities: z.number().optional(),
+  netProfit2: z.string().optional(),
+  cashInHandAtBank: z.string().optional(),
+  totalAssets: z.string().optional(),
+  netProfit3: z.string().optional(),
+  closingCpital: z.string().optional(),
+  totalCapitalsAndLiabilities: z.string().optional(),
 
   // Image 6
   lifeInsurancePremium: z.string().optional(),
@@ -228,16 +235,16 @@ export const individualTaxReturnSchema = z.object({
   contributionToZakatFund2: z.string().optional(),
   othersIf1: z.string().optional(),
   othersIf2: z.string().optional(),
-  totalAllowableInvestmentContribution: z.number().optional(),
+  totalAllowableInvestmentContribution: z.string().optional(),
   taxOnIncomeFromPoultryHatcheriesFishFarming: z.string().optional(),
 
   // Image 7
   expensesForFoodAmount: z.string().optional(),
-  taxDeductedCollectedAtSourceAmount: z.number().optional(),
-  advanceTaxPaidAmountTaka: z.number().optional(),
-  totalAmount: z.number().optional(),
-  totalAmount2: z.number().optional(),
-  totalAmount3: z.number().optional(),
+  taxDeductedCollectedAtSourceAmount: z.string().optional(),
+  advanceTaxPaidAmountTaka: z.string().optional(),
+  totalAmount: z.string().optional(),
+  totalAmount2: z.string().optional(),
+  totalAmount3: z.string().optional(),
   expensesForFoodComment: z.string().optional(),
   housingExpenseAmount: z.string().optional(),  
   housingExpenseComment: z.string().optional(),
@@ -301,20 +308,20 @@ export const individualTaxReturnSchema = z.object({
   capitalContributed1: z.string().optional(),
   capitalContributed2: z.string().optional(),
   capitalContributed3: z.string().optional(),
-  totalIncomeShownInTheReturn: z.number().optional(),
-  taxExemptedIncomeAndAllowance: z.number().optional(),
-  receiptOfGiftOtherReceipts: z.number().optional(),
-  totalSourceOfFund: z.number().optional(),
-  sumOfSourceOfFundAndPreviousYearsNetWealth: z.number().optional(),
-  expenseRelatingToLifestyle: z.number().optional(),
-  totalExpensesAndLoss: z.number().optional(),
-  netWealthAtTheLastDateOfThisFinancialYear: z.number().optional(),
-  totalLiabilitiesOutsideBusiness: z.number().optional(),
-  grossWealth: z.number().optional(),
-  businessCapitalAmount1: z.number().optional(),
-  businessCapitalAmount2: z.number().optional(),
-  directorsShareholdingsInTheCompanies: z.number().optional(),
-  businessCapitalOfPartnershipFirm: z.number().optional(),
+  totalIncomeShownInTheReturn: z.string().optional(),
+  taxExemptedIncomeAndAllowance: z.string().optional(),
+  receiptOfGiftOtherReceipts: z.string().optional(),
+  totalSourceOfFund: z.string().optional(),
+  sumOfSourceOfFundAndPreviousYearsNetWealth: z.string().optional(),
+  expenseRelatingToLifestyle: z.string().optional(),
+  totalExpensesAndLoss: z.string().optional(),
+  netWealthAtTheLastDateOfThisFinancialYear: z.string().optional(),
+  totalLiabilitiesOutsideBusiness: z.string().optional(),
+  grossWealth: z.string().optional(),
+  businessCapitalAmount1: z.string().optional(),
+  businessCapitalAmount2: z.string().optional(),
+  directorsShareholdingsInTheCompanies: z.string().optional(),
+  businessCapitalOfPartnershipFirm: z.string().optional(),
 
   // Image 9
   locationDescription1: z.string().optional(),
@@ -361,13 +368,15 @@ export const individualTaxReturnSchema = z.object({
   others1: z.string().optional(),
   others2: z.string().optional(),
   assetOutsideBangladesh: z.string().optional(),
-  nonAgriculturalPropertyLandHouseProperty: z.number().optional(),
-  agriculturalProperty: z.number().optional(),
-  totalFinancialAssets: z.number().optional(),
-  motorVehiclesAmount: z.number().optional(),
-  totalAssetslocatedInBangladesh: z.number().optional(),
-  totalCashInHandsAndFundOutsideBusiness: z.number().optional(),
-  totalAssetsInBangladeshAndOutsideBangladesh: z.number().optional(),
+  nonAgriculturalPropertyLandHouseProperty: z.string().optional(),
+  agriculturalProperty: z.string().optional(),
+  totalFinancialAssets: z.string().optional(),
+  motorVehiclesAmount: z.string().optional(),
+  totalAssetslocatedInBangladesh: z.string().optional(),
+  totalCashInHandsAndFundOutsideBusiness: z.string().optional(),
+  totalAssetsInBangladeshAndOutsideBangladesh: z.string().optional(),
+  humanVarification:z.string(),
+
 
   // Image 10
   totalIncomeShown: z.string().optional(),
