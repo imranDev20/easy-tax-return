@@ -119,9 +119,9 @@ export const individualTaxReturnSchema = z.object({
   interestAccruedProvidentFundGovtEmployment: govtPayScaleSchema,
   lumpGrantGovtEmployment: govtPayScaleSchema,
   gratuityGovtEmployment: govtPayScaleSchema,
-  otherAllowanceGovtEmployment: govtPayScaleSchema,
-  otherAllowanceExemptedGovtEmployment: govtPayScaleSchema,
+  otherAllowanceGovtEmployment: govtPayScaleSchema,  
   totalGovtEmployment: govtPayScaleSchema,
+  taxDeductedAtSourceFromIncomefromEmployment: z.string(),
 
   // image 3 // private
   basicPayPrivateEmployment: z.string().nullable().optional(),
@@ -142,17 +142,20 @@ export const individualTaxReturnSchema = z.object({
     .optional(),
   accommodationFacilityPrivateEmployment: z.string().nullable().optional(),
   transportFacilityPrivateEmployment: z.string().nullable().optional(),
+  transporFacilityPrivateCheck: z.boolean().optional(),
+  tranportFacilityPrivateVehicleCC: z.enum(["Vehicle up to 2500 cc", "Vehicle above to 2500 cc"]),
   anyOtherFacilityProvidedByEmployerPrivateEmployment: z
     .string()
     .nullable()
     .optional(),
   employerContributionToRecognizedProvidentFundPrivateEmployment: z
     .string()
-    .nullable(),
-  otherIfAnyPrivateEmployment: z.string().nullable(),
-  totalSalaryReceivedPrivateEmployment: z.string().nullable(),
-  exemptedAmountPrivateEmployment: z.string().nullable(),
-  totalIncomeFromSalaryPrivateEmployment: z.string().nullable(),
+    .nullable().optional(),
+  otherIfAnyPrivateEmployment: z.string().nullable().optional(),
+  totalSalaryReceivedPrivateEmployment: z.string().nullable().optional(),
+  exemptedAmountPrivateEmployment: z.string().nullable().optional(),
+  totalIncomeFromSalaryPrivateEmployment: z.string().nullable().optional(),
+ 
 
   // Image 5
   locationDescriptionOwnershipProportionOfProperty: z.string().optional(),
