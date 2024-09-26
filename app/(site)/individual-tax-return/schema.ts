@@ -5,6 +5,7 @@ import {
   RepairCollection,
   EmploymentType,
   IncomeFromEmployment,
+  TransportCCType,
 } from "@prisma/client";
 
 import z from "zod";
@@ -119,7 +120,7 @@ export const individualTaxReturnSchema = z.object({
   interestAccruedProvidentFundGovtEmployment: govtPayScaleSchema,
   lumpGrantGovtEmployment: govtPayScaleSchema,
   gratuityGovtEmployment: govtPayScaleSchema,
-  otherAllowanceGovtEmployment: govtPayScaleSchema,  
+  otherAllowanceGovtEmployment: govtPayScaleSchema,
   totalGovtEmployment: govtPayScaleSchema,
   taxDeductedAtSourceFromIncomefromEmployment: z.string(),
 
@@ -143,19 +144,19 @@ export const individualTaxReturnSchema = z.object({
   accommodationFacilityPrivateEmployment: z.string().nullable().optional(),
   transportFacilityPrivateEmployment: z.string().nullable().optional(),
   transporFacilityPrivateCheck: z.boolean().optional(),
-  tranportFacilityPrivateVehicleCC: z.enum(["Vehicle up to 2500 cc", "Vehicle above to 2500 cc"]),
+  tranportFacilityPrivateVehicleCC: z.nativeEnum(TransportCCType).optional(),
   anyOtherFacilityProvidedByEmployerPrivateEmployment: z
     .string()
     .nullable()
     .optional(),
   employerContributionToRecognizedProvidentFundPrivateEmployment: z
     .string()
-    .nullable().optional(),
+    .nullable()
+    .optional(),
   otherIfAnyPrivateEmployment: z.string().nullable().optional(),
   totalSalaryReceivedPrivateEmployment: z.string().nullable().optional(),
   exemptedAmountPrivateEmployment: z.string().nullable().optional(),
   totalIncomeFromSalaryPrivateEmployment: z.string().nullable().optional(),
- 
 
   // Image 5
   locationDescriptionOwnershipProportionOfProperty: z.string().optional(),

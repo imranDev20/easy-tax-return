@@ -86,10 +86,11 @@ interface BaseFormField {
   x: number;
   y: number;
   disabled?: boolean;
-  onBlur?: (event: string) => void;
+  onBlur?: (value: string | boolean) => void;
   value?: string | number | Date;
   width: number;
   height: number;
+  isVisible?: boolean;
   imageIndex: number;
 }
 
@@ -618,6 +619,70 @@ const IndividualTaxReturnForm: React.FC = () => {
     formState: { errors, isDirty },
   } = form;
 
+  const calculatePrivateEmploymentTotals = useCallback(() => {
+    const fields = [
+      "basicPayPrivateEmployment",
+      "allowancesPrivateEmployment",
+      "advanceArrearSalaryPrivateEmployment",
+      "gratuityAnnuityPensionOrSimilarBenefitPrivateEmployment",
+      "perquisitesPrivateEmployment",
+      "receiptInLieuOfOrInAdditionToSalaryOrWagesPrivateEmployment",
+      "incomeFromEmployeeShareSchemePrivateEmployment",
+      "accommodationFacilityPrivateEmployment",
+      "transportFacilityPrivateEmployment",
+      "anyOtherFacilityProvidedByEmployerPrivateEmployment",
+      "employerContributionToRecognizedProvidentFundPrivateEmployment",
+      "otherIfAnyPrivateEmployment",
+    ] as const;
+
+    let totalIncome = 0;
+
+    for (const field of fields) {
+      const fieldValue = watch(field);
+      if (fieldValue && typeof fieldValue === "string") {
+        const amount = parseFloat(fieldValue);
+        if (!isNaN(amount)) {
+          totalIncome += amount;
+        }
+      }
+    }
+
+    // Handle transport facility checkbox and vehicle CC
+    const transportFacilityChecked = watch("transporFacilityPrivateCheck");
+    const vehicleCC = watch("tranportFacilityPrivateVehicleCC");
+
+    if (vehicleCC && transportFacilityChecked) {
+      const transportAmount = vehicleCC === "LT_EQ_2500" ? 120000 : 300000;
+      const currentTransportIncome = parseFloat(
+        watch("transportFacilityPrivateEmployment") || "0"
+      );
+
+      if (currentTransportIncome) {
+        totalIncome = totalIncome - currentTransportIncome;
+      }
+      totalIncome += transportAmount;
+
+      setValue(
+        "transportFacilityPrivateEmployment",
+        transportAmount.toFixed(2)
+      );
+    }
+
+    const totalExempted = Math.round(Math.min(totalIncome / 3, 450000));
+    const totalIncomeFromSalary = totalIncome - totalExempted;
+
+    setValue("exemptedAmountPrivateEmployment", totalExempted.toFixed(2));
+    setValue("totalSalaryReceivedPrivateEmployment", totalIncome.toFixed(2));
+    setValue(
+      "totalIncomeFromSalaryPrivateEmployment",
+      totalIncomeFromSalary.toFixed(2)
+    );
+
+    return {
+      totalIncome: isNaN(totalIncome) ? 0 : totalIncome,
+    };
+  }, [watch, setValue]);
+
   const calcualateScheduleOneOtherAllowanceGovtTaxable = () => {
     const incomeAmount = parseFloat(
       watch("otherAllowanceGovtEmployment.amount") || "0"
@@ -815,27 +880,31 @@ const IndividualTaxReturnForm: React.FC = () => {
     setValue("totalRentValue", total.toFixed(2));
   };
 
-  // useEffect(() => {
-  //   const subscription = watch((value, { name }) => {
-  //     if (name === "netWealthSurcharge") {
-  //       if (value.netWealthSurcharge === "YES") {
-  //         setValue("netWealthSurchargeAmount", "0.0");
-  //       } else {
-  //         setValue("netWealthSurchargeAmount", undefined);
-  //       }
-  //     }
+  useEffect(() => {
+    const subscription = watch((value, { name }) => {
+      if (name === "netWealthSurcharge") {
+        if (value.netWealthSurcharge === "YES") {
+          setValue("netWealthSurchargeAmount", "0.0");
+        } else {
+          setValue("netWealthSurchargeAmount", undefined);
+        }
+      }
 
-  //     if (name === "netWealthLastDate") {
-  //       if (value.netWealthLastDate === "NO_I_AM_A_NEW_TAXPAYER") {
-  //         setValue("netWealthLastDateAmount", "0.0");
-  //       } else {
-  //         setValue("netWealthLastDateAmount", "");
-  //       }
-  //     }
-  //   });
+      if (name === "tranportFacilityPrivateVehicleCC") {
+        calculatePrivateEmploymentTotals();
+      }
 
-  //   return () => subscription.unsubscribe();
-  // }, [watch, setValue]);
+      if (name === "netWealthLastDate") {
+        if (value.netWealthLastDate === "NO_I_AM_A_NEW_TAXPAYER") {
+          setValue("netWealthLastDateAmount", "0.0");
+        } else {
+          setValue("netWealthLastDateAmount", "");
+        }
+      }
+    });
+
+    return () => subscription.unsubscribe();
+  }, [watch, setValue, calculatePrivateEmploymentTotals]);
 
   const formFields: FormField[] = [
     // Image 1
@@ -1700,7 +1769,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       type: "number",
       label: "",
       onBlur: (val) => {
-        setValue("basicPayGovtEmployment.taxable", val);
+        if (val === "string") setValue("basicPayGovtEmployment.taxable", val);
         calculateScheduleOneGovtTotals();
       },
       // disabled: true,
@@ -1733,7 +1802,8 @@ const IndividualTaxReturnForm: React.FC = () => {
       imageIndex: 3,
       onBlur: (val) => {
         calculateScheduleOneGovtTotals();
-        setValue("arrearPayGovtEmployment.taxable", val);
+
+        if (val === "string") setValue("arrearPayGovtEmployment.taxable", val);
       },
     },
     {
@@ -1759,7 +1829,8 @@ const IndividualTaxReturnForm: React.FC = () => {
       imageIndex: 3,
       onBlur: (val) => {
         calculateScheduleOneGovtTotals();
-        setValue("specialAllowanceGovtEmployment.taxExempted", val);
+        if (val === "string")
+          setValue("specialAllowanceGovtEmployment.taxExempted", val);
       },
     },
     {
@@ -1785,7 +1856,8 @@ const IndividualTaxReturnForm: React.FC = () => {
       imageIndex: 3,
       onBlur: (val) => {
         calculateScheduleOneGovtTotals();
-        setValue("houseRentAllowanceGovtEmployment.taxExempted", val);
+        if (val === "string")
+          setValue("houseRentAllowanceGovtEmployment.taxExempted", val);
       },
     },
     {
@@ -1811,7 +1883,8 @@ const IndividualTaxReturnForm: React.FC = () => {
       imageIndex: 3,
       onBlur: (val) => {
         calculateScheduleOneGovtTotals();
-        setValue("medicalAllowanceGovtEmployment.taxExempted", val);
+        if (val === "string")
+          setValue("medicalAllowanceGovtEmployment.taxExempted", val);
       },
     },
     {
@@ -1837,7 +1910,8 @@ const IndividualTaxReturnForm: React.FC = () => {
       imageIndex: 3,
       onBlur: (val) => {
         calculateScheduleOneGovtTotals();
-        setValue("conveyanceAllowanceGovtEmployment.taxExempted", val);
+        if (val === "string")
+          setValue("conveyanceAllowanceGovtEmployment.taxExempted", val);
       },
     },
     {
@@ -1863,7 +1937,8 @@ const IndividualTaxReturnForm: React.FC = () => {
       imageIndex: 3,
       onBlur: (val) => {
         calculateScheduleOneGovtTotals();
-        setValue("festivalAllowanceGovtEmployment.taxable", val);
+        if (val === "string")
+          setValue("festivalAllowanceGovtEmployment.taxable", val);
       },
     },
     {
@@ -1890,7 +1965,8 @@ const IndividualTaxReturnForm: React.FC = () => {
       imageIndex: 3,
       onBlur: (val) => {
         calculateScheduleOneGovtTotals();
-        setValue("allowanceForSupportStaffGovtEmployment.taxExempted", val);
+        if (val === "string")
+          setValue("allowanceForSupportStaffGovtEmployment.taxExempted", val);
       },
     },
     {
@@ -1916,7 +1992,8 @@ const IndividualTaxReturnForm: React.FC = () => {
       imageIndex: 3,
       onBlur: (val) => {
         calculateScheduleOneGovtTotals();
-        setValue("leaveAllowanceGovtEmployment.taxExempted", val);
+        if (val === "string")
+          setValue("leaveAllowanceGovtEmployment.taxExempted", val);
       },
     },
     {
@@ -1942,7 +2019,8 @@ const IndividualTaxReturnForm: React.FC = () => {
       imageIndex: 3,
       onBlur: (val) => {
         calculateScheduleOneGovtTotals();
-        setValue("honorariumRewardGovtEmployment.taxExempted", val);
+        if (val === "string")
+          setValue("honorariumRewardGovtEmployment.taxExempted", val);
       },
     },
     {
@@ -1968,7 +2046,8 @@ const IndividualTaxReturnForm: React.FC = () => {
       imageIndex: 3,
       onBlur: (val) => {
         calculateScheduleOneGovtTotals();
-        setValue("overtimeAllowanceGovtEmployment.taxExempted", val);
+        if (val === "string")
+          setValue("overtimeAllowanceGovtEmployment.taxExempted", val);
       },
     },
     {
@@ -1994,7 +2073,8 @@ const IndividualTaxReturnForm: React.FC = () => {
       imageIndex: 3,
       onBlur: (val) => {
         calculateScheduleOneGovtTotals();
-        setValue("banglaNoboborshoAllowancesGovtEmployment.taxExempted", val);
+        if (val === "string")
+          setValue("banglaNoboborshoAllowancesGovtEmployment.taxExempted", val);
       },
     },
     {
@@ -2020,7 +2100,11 @@ const IndividualTaxReturnForm: React.FC = () => {
       imageIndex: 3,
       onBlur: (val) => {
         calculateScheduleOneGovtTotals();
-        setValue("interestAccruedProvidentFundGovtEmployment.taxExempted", val);
+        if (val === "string")
+          setValue(
+            "interestAccruedProvidentFundGovtEmployment.taxExempted",
+            val
+          );
       },
     },
     {
@@ -2046,7 +2130,8 @@ const IndividualTaxReturnForm: React.FC = () => {
       imageIndex: 3,
       onBlur: (val) => {
         calculateScheduleOneGovtTotals();
-        setValue("lumpGrantGovtEmployment.taxExempted", val);
+        if (val === "string")
+          setValue("lumpGrantGovtEmployment.taxExempted", val);
       },
     },
     {
@@ -2072,7 +2157,8 @@ const IndividualTaxReturnForm: React.FC = () => {
       imageIndex: 3,
       onBlur: (val) => {
         calculateScheduleOneGovtTotals();
-        setValue("gratuityGovtEmployment.taxExempted", val);
+        if (val === "string")
+          setValue("gratuityGovtEmployment.taxExempted", val);
       },
     },
     {
@@ -2086,6 +2172,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       height: 18,
       imageIndex: 3,
     },
+
     {
       name: "otherAllowanceGovtEmployment.amount",
       type: "number",
@@ -2184,6 +2271,9 @@ const IndividualTaxReturnForm: React.FC = () => {
       width: 151,
       height: 18,
       imageIndex: 3,
+      onBlur() {
+        calculatePrivateEmploymentTotals();
+      },
     },
     {
       name: "allowancesPrivateEmployment",
@@ -2195,6 +2285,9 @@ const IndividualTaxReturnForm: React.FC = () => {
       width: 151,
       height: 18,
       imageIndex: 3,
+      onBlur() {
+        calculatePrivateEmploymentTotals();
+      },
     },
     {
       name: "advanceArrearSalaryPrivateEmployment",
@@ -2206,6 +2299,9 @@ const IndividualTaxReturnForm: React.FC = () => {
       width: 151,
       height: 18,
       imageIndex: 3,
+      onBlur() {
+        calculatePrivateEmploymentTotals();
+      },
     },
     {
       name: "gratuityAnnuityPensionOrSimilarBenefitPrivateEmployment",
@@ -2217,6 +2313,9 @@ const IndividualTaxReturnForm: React.FC = () => {
       width: 151,
       height: 18,
       imageIndex: 3,
+      onBlur() {
+        calculatePrivateEmploymentTotals();
+      },
     },
     {
       name: "perquisitesPrivateEmployment",
@@ -2228,6 +2327,9 @@ const IndividualTaxReturnForm: React.FC = () => {
       width: 151,
       height: 18,
       imageIndex: 3,
+      onBlur() {
+        calculatePrivateEmploymentTotals();
+      },
     },
     {
       name: "receiptInLieuOfOrInAdditionToSalaryOrWagesPrivateEmployment",
@@ -2239,6 +2341,9 @@ const IndividualTaxReturnForm: React.FC = () => {
       width: 151,
       height: 18,
       imageIndex: 3,
+      onBlur() {
+        calculatePrivateEmploymentTotals();
+      },
     },
     {
       name: "incomeFromEmployeeShareSchemePrivateEmployment",
@@ -2250,6 +2355,9 @@ const IndividualTaxReturnForm: React.FC = () => {
       width: 151,
       height: 18,
       imageIndex: 3,
+      onBlur() {
+        calculatePrivateEmploymentTotals();
+      },
     },
     {
       name: "accommodationFacilityPrivateEmployment",
@@ -2261,6 +2369,42 @@ const IndividualTaxReturnForm: React.FC = () => {
       width: 151,
       height: 18,
       imageIndex: 3,
+      onBlur() {
+        calculatePrivateEmploymentTotals();
+      },
+    },
+    {
+      name: "transporFacilityPrivateCheck",
+      type: "checkbox",
+      label: "",
+      x: 295,
+      y: 805,
+      width: 30,
+      height: 18,
+      imageIndex: 3,
+      onBlur() {
+        calculatePrivateEmploymentTotals();
+      },
+    },
+
+    {
+      name: "tranportFacilityPrivateVehicleCC",
+      type: "select",
+      label: "",
+      placeholder: "Choose One",
+      options: [
+        { label: "Vehicle up to 2500 cc", value: "LT_EQ_2500" },
+        {
+          label: "Vehicle above to 2500 cc",
+          value: "GT_2500",
+        },
+      ],
+      x: 330,
+      y: 805,
+      width: 290,
+      height: 18,
+      imageIndex: 3,
+      isVisible: watch("transporFacilityPrivateCheck"),
     },
     {
       name: "transportFacilityPrivateEmployment",
@@ -2273,34 +2417,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       height: 18,
       imageIndex: 3,
     },
-    {
-      name: "transporFacilityPrivateCheck",
-      type: "checkbox",
-      label: "",
-      x: 295,
-      y: 805,
-      width: 30,
-      height: 18,
-      imageIndex: 3,
-    },
-    {
-      name: "tranportFacilityPrivateVehicleCC",
-      type: "select",
-      label: "",
-      placeholder: "Choose One",
-      options: [
-        { label: "Vehicle up to 2500 cc", value: "Vehicle up to 2500 cc" },
-        {
-          label: "Vehicle above to 2500 cc",
-          value: "Vehicle above to 2500 cc",
-        },
-      ],
-      x: 330,
-      y: 805,
-      width: 290,
-      height: 18,
-      imageIndex: 3,
-    },
+
     {
       name: "anyOtherFacilityProvidedByEmployerPrivateEmployment",
       type: "number",
@@ -2311,6 +2428,9 @@ const IndividualTaxReturnForm: React.FC = () => {
       width: 151,
       height: 18,
       imageIndex: 3,
+      onBlur() {
+        calculatePrivateEmploymentTotals();
+      },
     },
     {
       name: "employerContributionToRecognizedProvidentFundPrivateEmployment",
@@ -2322,6 +2442,9 @@ const IndividualTaxReturnForm: React.FC = () => {
       width: 151,
       height: 18,
       imageIndex: 3,
+      onBlur() {
+        calculatePrivateEmploymentTotals();
+      },
     },
     {
       name: "otherIfAnyPrivateEmployment",
@@ -2333,12 +2456,15 @@ const IndividualTaxReturnForm: React.FC = () => {
       width: 151,
       height: 18,
       imageIndex: 3,
+      onBlur() {
+        calculatePrivateEmploymentTotals();
+      },
     },
     {
       name: "totalSalaryReceivedPrivateEmployment",
       type: "number",
       label: "",
-      // disabled: true,
+      disabled: true,
       x: 630,
       y: 884,
       width: 151,
@@ -2360,7 +2486,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "exemptedAmountPrivateEmployment",
       type: "number",
       label: "",
-      // disabled: true,
+      disabled: true,
       x: 630,
       y: 903,
       width: 151,
@@ -2382,7 +2508,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "totalIncomeFromSalaryPrivateEmployment",
       type: "number",
       label: "",
-      // disabled: true,
+      disabled: true,
       x: 630,
       y: 922,
       width: 151,
@@ -5454,6 +5580,8 @@ const IndividualTaxReturnForm: React.FC = () => {
 
     const isRequired = isFieldRequired(individualTaxReturnSchema, field.name);
 
+    // console.log(watch("tranportFacilityPrivateVehicleCC"));
+
     switch (field.type) {
       case "text":
       case "email":
@@ -5512,6 +5640,7 @@ const IndividualTaxReturnForm: React.FC = () => {
             width={field.width}
             height={field.height}
             required={isFieldRequired(individualTaxReturnSchema, field.name)}
+            onBlur={field.onBlur}
           />
         );
       case "radio":
@@ -5543,9 +5672,8 @@ const IndividualTaxReturnForm: React.FC = () => {
                   scale={scale}
                   required={isRequired}
                   placeholder={field.placeholder}
-                  onBlur={(e) => {
-                    if (field?.onBlur) field.onBlur(e);
-                  }}
+                  onBlur={field.onBlur}
+                  isVisible={field.isVisible}
                 />
               )}
             />
@@ -5572,26 +5700,25 @@ const IndividualTaxReturnForm: React.FC = () => {
           />
         );
 
-      case "signature":
-        return (
-          <div style={fieldStyle}>
-            <Controller
-              name="signature"
-              control={control}
-              render={({ field: { onChange, value } }) => (
-                <SignatureField
-                  onChange={(signatureData) => {
-                    onChange(signatureData);
-                    console.log("Signature updated:", signatureData);
-                  }}
-                  width={field.width}
-                  height={field.height}
-                  value={value as string}
-                />
-              )}
-            />
-          </div>
-        );
+      // case "signature":
+      //   return (
+      //     <div style={fieldStyle}>
+      //       <Controller
+      //         name="signature"
+      //         control={control}
+      //         render={({ field: { onChange, value } }) => (
+      //           <SignatureField
+      //             onChange={(signatureData) => {
+      //               onChange(signatureData);
+      //             }}
+      //             width={field.width}
+      //             height={field.height}
+      //             value={value as string}
+      //           />
+      //         )}
+      //       />
+      //     </div>
+      //   );
       case "textarea":
         return (
           <div style={fieldStyle} className="relative overflow-hidden">

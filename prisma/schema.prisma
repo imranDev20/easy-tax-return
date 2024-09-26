@@ -64,6 +64,11 @@ enum EmploymentType {
   PRIVATE
 }
 
+enum TransportCCType {
+  LT_EQ_2500
+  GT_2500
+}
+
 model User {
   id            String    @id @default(cuid())
   name          String?
@@ -178,6 +183,7 @@ model IndividualTaxes {
   receiptInLieuOfOrInAdditionToSalaryOrWagesPrivateEmployment    Float?
   incomeFromEmployeeShareSchemePrivateEmployment                 Float?
   accommodationFacilityPrivateEmployment                         Float?
+  tranportFacilityPrivateVehicleCC                               TransportCCType
   transportFacilityPrivateEmployment                             Float?
   anyOtherFacilityProvidedByEmployerPrivateEmployment            Float?
   employerContributionToRecognizedProvidentFundPrivateEmployment Float?
