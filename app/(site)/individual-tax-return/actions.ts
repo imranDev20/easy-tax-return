@@ -1,4 +1,4 @@
-"use server"
+"use server";
 
 import prisma from "@/lib/prisma";
 import { revalidatePath } from "next/cache";
@@ -6,11 +6,12 @@ import {
   IndividualTaxReturnFormInput,
   individualTaxReturnSchema,
 } from "./schema";
-import axios from 'axios';
-import { v4 as uuidv4 } from 'uuid';
+import axios from "axios";
+import { v4 as uuidv4 } from "uuid";
 
-
-export async function createIndividualTaxReturn(data: IndividualTaxReturnFormInput) {
+export async function createIndividualTaxReturn(
+  data: IndividualTaxReturnFormInput
+) {
   try {
     const validatedData = individualTaxReturnSchema.parse(data);
 
@@ -18,7 +19,7 @@ export async function createIndividualTaxReturn(data: IndividualTaxReturnFormInp
       // Step 1: Create the individual tax return
       const createIndividualTaxReturn = await prisma.individualTaxes.create({
         data: {
-          userId: data.userId ??"",
+          userId: data.userId ?? "",
           taxpayerName: data.taxpayerName,
           nationalId: data.nationalId,
           tin: data.tin,
@@ -39,7 +40,7 @@ export async function createIndividualTaxReturn(data: IndividualTaxReturnFormInp
           businessName: data.businessName,
           bin: data.bin,
           partnersInfo: data.partnersInfo,
-        
+
           partnersMembersAssociation1: data.partnersMembersAssociation1,
           partnersMembersAssociation2: data.partnersMembersAssociation2,
           incomeFishFarming: data.incomeFishFarming,
@@ -55,13 +56,16 @@ export async function createIndividualTaxReturn(data: IndividualTaxReturnFormInp
           advanceTaxPaidAmount: data.advanceTaxPaidAmount,
           adjustmentOfTaxRefund: data.adjustmentOfTaxRefund,
           taxPaidWithThisReturn: data.taxPaidWithThisReturn,
-          listOfDocumentsFurnishedWithThisReturn1: data.listOfDocumentsFurnishedWithThisReturn1,
-          listOfDocumentsFurnishedWithThisReturn2: data.listOfDocumentsFurnishedWithThisReturn2,
+          listOfDocumentsFurnishedWithThisReturn1:
+            data.listOfDocumentsFurnishedWithThisReturn1,
+          listOfDocumentsFurnishedWithThisReturn2:
+            data.listOfDocumentsFurnishedWithThisReturn2,
           fatherOrHusband: data.fatherOrHusband,
           placeOfSignature: data.placeOfSignature,
           signature: data.signature,
-          dateOfSignature: data.dateOfSignature.toISOString(),     
-          locationDescriptionOwnershipProportionOfProperty: data.locationDescriptionOwnershipProportionOfProperty,
+          dateOfSignature: data.dateOfSignature.toISOString(),
+          locationDescriptionOwnershipProportionOfProperty:
+            data.locationDescriptionOwnershipProportionOfProperty,
           rentReceivedOrAnnualValue: data.rentReceivedOrAnnualValue,
           advanceRentReceived: data.advanceRentReceived,
           valueOfAnyBenefit: data.valueOfAnyBenefit,
@@ -73,7 +77,7 @@ export async function createIndividualTaxReturn(data: IndividualTaxReturnFormInp
           interestMortgageCapitalCharge: data.interestMortgageCapitalCharge,
           insurancePremiumPaid: data.insurancePremiumPaid,
           others: data.others,
-          taxpayersShare: data.taxpayersShare,
+          taxpayersShare: data.taxpayersSharePercentage,
           taxDeductedSourceFromIncomeRent: data.taxDeductedSourceFromIncomeRent,
           salesTurnoverReceipt: data.salesTurnoverReceipt,
           grossProfit: data.grossProfit,
@@ -83,7 +87,8 @@ export async function createIndividualTaxReturn(data: IndividualTaxReturnFormInp
           addressOfBusiness: data.addressOfBusiness,
           salesTurnoverReceipts: data.salesTurnoverReceipt,
           grossProfitAmount: data.grossProfitAmount,
-          generalAdministrativeSellingExpenses: data.generalAdministrativeSellingExpenses,
+          generalAdministrativeSellingExpenses:
+            data.generalAdministrativeSellingExpenses,
           badDebtExpense: data.badDebtExpense,
           inventories: data.inventories,
           fixedAssets: data.fixedAssets,
@@ -92,40 +97,57 @@ export async function createIndividualTaxReturn(data: IndividualTaxReturnFormInp
           withdrawalsInTheIncomeYear: data.withdrawalsInTheIncomeYear,
           liabilities: data.liabilities,
           interestProfitFromBankFIAmount: data.interestProfitFromBankFIAmount,
-          interestProfitFromBankFIDeductions: data.interestProfitFromBankFIDeductions,
+          interestProfitFromBankFIDeductions:
+            data.interestProfitFromBankFIDeductions,
           interestProfitFromBankFITax: data.interestProfitFromBankFITax,
-          incomeFromSavingCertificatesAmount: data.incomeFromSavingCertificatesAmount,
-          incomeFromSavingCertificatesDeductions: data.incomeFromBusinessDeductions,
+          incomeFromSavingCertificatesAmount:
+            data.incomeFromSavingCertificatesAmount,
+          incomeFromSavingCertificatesDeductions:
+            data.incomeFromBusinessDeductions,
           incomeFromSavingCertificatesTax: data.incomeFromSavingCertificatesTax,
-          incomeFromSecuritiesDebenturesAmount: data.incomeFromSecuritiesDebenturesAmount,
-          incomeFromSecuritiesDebenturesDeductions: data.incomeFromSecuritiesDebenturesDeductions,
-          incomeFromSecuritiesDebenturesTax: data.incomeFromSecuritiesDebenturesTax,
-          incomeFromFinancialProductSchemeAmount: data.incomeFromFinancialProductSchemeAmount,
-          incomeFromFinancialProductSchemeDeductions: data.incomeFromFinancialProductSchemeDeductions,
-          incomeFromFinancialProductSchemeTax: data.incomeFromFinancialProductSchemeTax,
+          incomeFromSecuritiesDebenturesAmount:
+            data.incomeFromSecuritiesDebenturesAmount,
+          incomeFromSecuritiesDebenturesDeductions:
+            data.incomeFromSecuritiesDebenturesDeductions,
+          incomeFromSecuritiesDebenturesTax:
+            data.incomeFromSecuritiesDebenturesTax,
+          incomeFromFinancialProductSchemeAmount:
+            data.incomeFromFinancialProductSchemeAmount,
+          incomeFromFinancialProductSchemeDeductions:
+            data.incomeFromFinancialProductSchemeDeductions,
+          incomeFromFinancialProductSchemeTax:
+            data.incomeFromFinancialProductSchemeTax,
           dividendIncomeAmount: data.dividendIncomeAmount,
           dividendIncomeDeductions: data.dividendIncomeDeductions,
           dividendIncomeTax: data.dividendIncomeTax,
-          capitalGainFromTransferOfPropertyAmount: data.capitalGainFromTransferOfPropertyAmount,
-          capitalGainFromTransferOfPropertyDeductions: data.capitalGainFromTransferOfPropertyDeductions,
-          capitalGainFromTransferOfPropertyTax: data.capitalGainFromTransferOfPropertyTax,
+          capitalGainFromTransferOfPropertyAmount:
+            data.capitalGainFromTransferOfPropertyAmount,
+          capitalGainFromTransferOfPropertyDeductions:
+            data.capitalGainFromTransferOfPropertyDeductions,
+          capitalGainFromTransferOfPropertyTax:
+            data.capitalGainFromTransferOfPropertyTax,
           incomeFromBusinessAmount: data.incomeFromBusinessAmount,
           incomeFromBusinessDeductions: data.incomeFromBusinessDeductions,
           incomeFromBusinessTax: data.incomeFromBusinessTax,
           workersParticipationFundAmount: data.workersParticipationFundAmount,
-          workersParticipationFundDeductions: data.workersParticipationFundDeductions,
+          workersParticipationFundDeductions:
+            data.workersParticipationFundDeductions,
           workersParticipationFundTax: data.workersParticipationFundTax,
           incomeFromOtherSourcesAmount: data.incomeFromOtherSourcesAmount,
-          incomeFromOtherSourcesDeductions: data.incomeFromOtherSourcesDeductions,
+          incomeFromOtherSourcesDeductions:
+            data.incomeFromOtherSourcesDeductions,
           incomeFromOtherSourcesTax: data.incomeFromOtherSourcesTax,
           lifeInsurancePremium: data.lifeInsurancePremium,
           contributionToDeposit: data.contributionToDeposit,
-          investmentInGovernmentSecurities1: data.investmentInGovernmentSecurities1,
-          investmentInGovernmentSecurities2: data.investmentInGovernmentSecurities2,
+          investmentInGovernmentSecurities1:
+            data.investmentInGovernmentSecurities1,
+          investmentInGovernmentSecurities2:
+            data.investmentInGovernmentSecurities2,
           investmentInSecurities: data.investmentInSecurities,
           contributionToProvidentFund: data.contributionToProvidentFund,
           selfAndEmployersContribution: data.selfAndEmployersContribution,
-          contributionToSuperAnnuationFund: data.contributionToSuperAnnuationFund,
+          contributionToSuperAnnuationFund:
+            data.contributionToSuperAnnuationFund,
           contributionToBenevolentFund: data.contributionToBenevolentFund,
           contributionToZakatFund1: data.contributionToZakatFund1,
           contributionToZakatFund2: data.contributionToZakatFund2,
@@ -135,8 +157,10 @@ export async function createIndividualTaxReturn(data: IndividualTaxReturnFormInp
           expensesForFoodComment: data.expensesForFoodComment,
           housingExpenseAmount: data.housingExpenseAmount,
           housingExpenseComment: data.housingExpenseComment,
-          personalTransportationExpensesAmount: data.personalTransportationExpensesAmount,
-          personalTransportationExpensesAmountComment: data.personalTransportationExpensesAmountComment,
+          personalTransportationExpensesAmount:
+            data.personalTransportationExpensesAmount,
+          personalTransportationExpensesAmountComment:
+            data.personalTransportationExpensesAmountComment,
           utilityExpenseAmount: data.utilityExpenseAmount,
           utilityExpenseComment: data.utilityExpenseComment,
           educationExpensesAmount: data.educationExpensesAmount,
@@ -201,9 +225,12 @@ export async function createIndividualTaxReturn(data: IndividualTaxReturnFormInp
           locationValue3: data.locationValue3,
           locationValue4: data.locationValue4,
           locationValue5: data.locationValue4,
-          agriculturalLocationAndDescription1: data.agriculturalLocationAndDescription1,
-          agriculturalLocationAndDescription2: data.agriculturalLocationAndDescription2,
-          agriculturalLocationAndDescription3: data.agriculturalLocationAndDescription3,
+          agriculturalLocationAndDescription1:
+            data.agriculturalLocationAndDescription1,
+          agriculturalLocationAndDescription2:
+            data.agriculturalLocationAndDescription2,
+          agriculturalLocationAndDescription3:
+            data.agriculturalLocationAndDescription3,
           agriculturalLocationValue1: data.agriculturalLocationValue1,
           agriculturalLocationValue2: data.agriculturalLocationValue2,
           agriculturalLocationValue3: data.agriculturalLocationValue3,
@@ -239,7 +266,10 @@ export async function createIndividualTaxReturn(data: IndividualTaxReturnFormInp
       });
 
       // Step 2: Create the payment
-      const paymentResult = await createPayment(data.total ?? "50", data.userId);
+      const paymentResult = await createPayment(
+        data.total ?? "50",
+        data.userId
+      );
 
       return {
         createIndividualTaxReturn,
@@ -255,69 +285,78 @@ export async function createIndividualTaxReturn(data: IndividualTaxReturnFormInp
   } catch (error) {
     console.error(error);
     return {
-      message: "An error occurred while submitting individual tax return and processing payment.",
+      message:
+        "An error occurred while submitting individual tax return and processing payment.",
       success: false,
     };
   }
 }
 
-
-
 // bkash actions
 async function getBkashHeaders() {
-  const tokenResponse = await axios.post(process.env.BKASH_GRANT_TOKEN_URL as string, {
-    app_key: process.env.BKASH_API_KEY,
-    app_secret: process.env.BKASH_SECRET_KEY,
-  }, {
-    headers: {
-      "Content-Type": "application/json",
-      "Accept": "application/json",
-      username: process.env.BKASH_USERNAME,
-      password: process.env.BKASH_PASSWORD,
+  const tokenResponse = await axios.post(
+    process.env.BKASH_GRANT_TOKEN_URL as string,
+    {
+      app_key: process.env.BKASH_API_KEY,
+      app_secret: process.env.BKASH_SECRET_KEY,
+    },
+    {
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+        username: process.env.BKASH_USERNAME,
+        password: process.env.BKASH_PASSWORD,
+      },
     }
-  });
+  );
 
   return {
     "Content-Type": "application/json",
     Accept: "application/json",
     authorization: tokenResponse.data.id_token,
-    'x-app-key': process.env.BKASH_API_KEY,
+    "x-app-key": process.env.BKASH_API_KEY,
   };
 }
 interface PaymentResponse {
   bkashURL: string;
 }
 
-export async function createPayment(amount: string, userId = "123545"): Promise<PaymentResponse | Error> {
+export async function createPayment(
+  amount: string,
+  userId = "123545"
+): Promise<PaymentResponse | Error> {
   try {
     const headers = await getBkashHeaders();
-    const { data } = await axios.post(process.env.BKASH_CREATE_PAYMENT_URL as string, {
-      mode: '0011',
-      payerReference: " ",
-      callbackURL: `${process.env.NEXT_PUBLIC_API_URL}/api/bkash/payment/callback`,
-      amount: amount,
-      currency: "BDT",
-      intent: 'sale',
-      merchantInvoiceNumber: 'Inv' + uuidv4().substring(0, 5)
-    }, { headers });
-    
+    const { data } = await axios.post(
+      process.env.BKASH_CREATE_PAYMENT_URL as string,
+      {
+        mode: "0011",
+        payerReference: " ",
+        callbackURL: `${process.env.NEXT_PUBLIC_API_URL}/api/bkash/payment/callback`,
+        amount: amount,
+        currency: "BDT",
+        intent: "sale",
+        merchantInvoiceNumber: "Inv" + uuidv4().substring(0, 5),
+      },
+      { headers }
+    );
+
     return { bkashURL: data.bkashURL };
   } catch (error) {
     return error as Error;
   }
 }
 
-
 // export async function handleCallback(paymentID, status) {
 //   if (status === 'cancel' || status === 'failure') {
 //     return { redirect: `/error?message=${status}` };
 //   }
-  
+
 //   if (status === 'success') {
 //     try {
 //       const headers = await getBkashHeaders();
 //       const { data } = await axios.post(process.env.BKASH_EXECUTE_PAYMENT_URL as string, { paymentID }, { headers });
-      
+
 //       if (data && data.statusCode === '0000') {
 //         await prisma.payment.create({
 //           data: {

@@ -59,6 +59,7 @@ import { createIndividualTaxReturn, createPayment } from "../actions";
 import { useToast } from "@/hooks/use-toast";
 import { useRouter } from "next/navigation";
 import CustomCheckbox from "@/components/custom/checkbox";
+import { RepairCollection } from "@prisma/client";
 
 // Define the possible field types
 type FieldType =
@@ -86,7 +87,7 @@ interface BaseFormField {
   x: number;
   y: number;
   disabled?: boolean;
-  onBlur?: (event: React.FocusEvent<HTMLInputElement, Element>) => void;
+  onBlur?: (event: string) => void;
   value?: string | number | Date;
   width: number;
   height: number;
@@ -226,14 +227,14 @@ const IndividualTaxReturnForm: React.FC = () => {
       valueOfAnyBenefit: "",
       adjustedAdvanceRent: "",
       vacancyAllowance: "",
-      repairCollection: undefined,
+      repairCollectionProperty: undefined,
       repairCollectionAmount: "",
       municipalOrLocalTax: "",
       landRevenue: "",
       interestMortgageCapitalCharge: "",
       insurancePremiumPaid: "",
       others: "",
-      taxpayersShare: "100",
+      taxpayersSharePercentage: "100",
       taxDeductedSourceFromIncomeRent: "",
       salesTurnoverReceipt: "",
       grossProfit: "",
@@ -309,6 +310,7 @@ const IndividualTaxReturnForm: React.FC = () => {
         particulars: "",
         taxDeductedAtSource: "0",
       },
+
       incomeFromOtherSourcesMinTax: {
         amountOfIncome: "0",
         deductionsExpensesExemptedIncome: "0",
@@ -529,7 +531,131 @@ const IndividualTaxReturnForm: React.FC = () => {
     formState: { errors, isDirty },
   } = form;
 
-  const calculateScheduleOneTotalAmountGovt = () => {};
+  const calculateScheduleThreeNetProfit = () => {
+    const grossProfit = parseFloat(watch("grossProfit") || "0");
+    const generalExpensesSellingExpenses = parseFloat(
+      watch("generalExpensesSellingExpenses") || "0"
+    );
+
+    // Handle NaN cases
+    const safeGrossProfit = isNaN(grossProfit) ? 0 : grossProfit;
+    const safeGeneralExpensesSellingExpenses = isNaN(
+      generalExpensesSellingExpenses
+    )
+      ? 0
+      : generalExpensesSellingExpenses;
+
+    const netProfit = safeGrossProfit - safeGeneralExpensesSellingExpenses;
+
+    // Ensure the result is not NaN before setting the value
+    const safeNetProfit = isNaN(netProfit) ? 0 : netProfit;
+
+    setValue("netProfit", safeNetProfit.toFixed(2));
+    return safeNetProfit;
+  };
+
+  const calculateTaxPayersShare = () => {
+    const netIncome = parseFloat(watch("netIncome") || "0");
+    const taxpayersSharePercentage = parseFloat(
+      watch("taxpayersSharePercentage") || "0"
+    );
+
+    // Handle NaN cases
+    const safeNetIncome = isNaN(netIncome) ? 0 : netIncome;
+    const safeTaxpayersSharePercentage = isNaN(taxpayersSharePercentage)
+      ? 0
+      : taxpayersSharePercentage;
+
+    const result = safeNetIncome * (safeTaxpayersSharePercentage / 100);
+
+    // Ensure the result is not NaN before setting the value
+    const safeResult = isNaN(result) ? 0 : result;
+
+    setValue("taxpayersShareAmount", safeResult.toFixed(2));
+    return safeResult;
+  };
+
+  const calculateScheduleOneNetIncome = () => {
+    const totalRentValue = parseFloat(watch("totalRentValue") || "0");
+    const totalAdmissibleDeduction = parseFloat(
+      watch("totalAdmissibleDeduction") || "0"
+    );
+
+    const netIncome = totalRentValue - totalAdmissibleDeduction;
+
+    // Set the calculated net income in the form
+    setValue("netIncome", netIncome.toFixed(2));
+    return netIncome;
+  };
+
+  const calculateTotalAdmissibleDeduction = () => {
+    const fields = [
+      "repairCollectionAmount",
+      "municipalOrLocalTax",
+      "landRevenue",
+      "interestMortgageCapitalCharge",
+      "insurancePremiumPaid",
+      "others",
+    ];
+
+    const total = fields.reduce((sum, field) => {
+      const value = watch(field as keyof IndividualTaxReturnFormInput);
+      const numberValue = parseFloat(value?.toString() || "0");
+      return sum + (isNaN(numberValue) ? 0 : numberValue);
+    }, 0);
+
+    setValue("totalAdmissibleDeduction", total.toFixed(2));
+    return total;
+  };
+
+  const calculateRepairCollectionAmount = (
+    repairCollectionType?: RepairCollection
+  ) => {
+    const watchedRepairCollection = watch("repairCollectionProperty");
+    const effectiveRepairCollection =
+      repairCollectionType || watchedRepairCollection;
+    const totalRentValue = parseFloat(watch("totalRentValue") || "0");
+
+    let calculatedAmount = 0;
+
+    switch (effectiveRepairCollection) {
+      case "COMMERCIAL_PROPERTY":
+        calculatedAmount = totalRentValue * 0.3;
+        break;
+      case "NON_COMMERCIAL":
+      case "RESIDENTIAL_PROPERTY":
+      case "MIXED_PROPERTY":
+        calculatedAmount = totalRentValue * 0.25;
+        break;
+      default:
+        calculatedAmount = 0;
+    }
+
+    setValue("repairCollectionAmount", calculatedAmount.toFixed(2));
+  };
+
+  const calculateTotalRentValue = () => {
+    const parseNumber = (value: string | undefined): number => {
+      if (value === undefined) return 0;
+      const parsed = parseFloat(value);
+      return isNaN(parsed) ? 0 : parsed;
+    };
+
+    const rentReceivedOrAnnualValue = watch("rentReceivedOrAnnualValue");
+    const advanceRentReceived = watch("advanceRentReceived");
+    const valueOfAnyBenefit = watch("valueOfAnyBenefit");
+    const adjustedAdvanceRent = watch("adjustedAdvanceRent");
+    const vacancyAllowance = watch("vacancyAllowance");
+
+    const total =
+      parseNumber(rentReceivedOrAnnualValue) +
+      parseNumber(advanceRentReceived) +
+      parseNumber(valueOfAnyBenefit) -
+      parseNumber(adjustedAdvanceRent) -
+      parseNumber(vacancyAllowance);
+
+    setValue("totalRentValue", total.toFixed(2));
+  };
 
   useEffect(() => {
     const subscription = watch((value, { name }) => {
@@ -540,13 +666,7 @@ const IndividualTaxReturnForm: React.FC = () => {
           setValue("netWealthSurchargeAmount", undefined);
         }
       }
-      if (name === "repairCollection") {
-        if (value.repairCollection) {
-          setValue("repairCollectionAmount", "0.0");
-        } else {
-          setValue("repairCollectionAmount", undefined);
-        }
-      }
+
       if (name === "netWealthLastDate") {
         if (value.netWealthLastDate === "NO_I_AM_A_NEW_TAXPAYER") {
           setValue("netWealthLastDateAmount", "0.0");
@@ -908,9 +1028,9 @@ const IndividualTaxReturnForm: React.FC = () => {
       imageIndex: 1,
     },
     {
-      name: "incomeFromRent",
+      name: "taxpayersShareAmount", // this is taxable income fromt rent
       type: "text",
-      label: "incomeFromRent",
+      label: "",
       disabled: true,
       x: 774,
       y: 208,
@@ -919,9 +1039,9 @@ const IndividualTaxReturnForm: React.FC = () => {
       imageIndex: 1,
     },
     {
-      name: "incomeFromAgriculture",
+      name: "netProfit", // this is income from agriculture
       type: "text",
-      label: "incomeFromAgriculture",
+      label: "",
       disabled: true,
       x: 774,
       y: 236,
@@ -1421,9 +1541,8 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "basicPayGovtEmployment.amount",
       type: "number",
       label: "",
-      onBlur: (e) => {
-        calculateScheduleOneTotalAmountGovt();
-        setValue("basicPayGovtEmployment.taxable", e.target.value);
+      onBlur: (val) => {
+        setValue("basicPayGovtEmployment.taxable", val);
       },
       // disabled: true,
       x: 475,
@@ -1453,8 +1572,8 @@ const IndividualTaxReturnForm: React.FC = () => {
       width: 151,
       height: 32,
       imageIndex: 3,
-      onBlur(event) {
-        setValue("arrearPayGovtEmployment.taxable", event.target.value);
+      onBlur(val) {
+        setValue("arrearPayGovtEmployment.taxable", val);
       },
     },
     {
@@ -1478,11 +1597,8 @@ const IndividualTaxReturnForm: React.FC = () => {
       width: 151,
       height: 18,
       imageIndex: 3,
-      onBlur(event) {
-        setValue(
-          "specialAllowanceGovtEmployment.taxExempted",
-          event.target.value
-        );
+      onBlur(val) {
+        setValue("specialAllowanceGovtEmployment.taxExempted", val);
       },
     },
     {
@@ -1643,7 +1759,7 @@ const IndividualTaxReturnForm: React.FC = () => {
     {
       name: "basicPayGovtEmployment.amount",
       type: "text",
-      label: "TIN",
+      label: "",
       disabled: false,
       x: 630,
       y: 535,
@@ -1675,6 +1791,307 @@ const IndividualTaxReturnForm: React.FC = () => {
       height: 19,
       imageIndex: 4,
     },
+
+    {
+      name: "tin",
+      type: "text",
+      label: "TIN",
+      disabled: true,
+      x: 666,
+      y: 130,
+      width: 271,
+      height: 19,
+      imageIndex: 4,
+    },
+
+    {
+      name: "locationDescriptionOwnershipProportionOfProperty",
+      type: "textarea",
+      label: "locationDescriptionOwnershipProportionOfProperty",
+
+      x: 90,
+      y: 227,
+      width: 260,
+      height: 340,
+      imageIndex: 4,
+    },
+
+    {
+      name: "rentReceivedOrAnnualValue",
+      type: "number",
+      label: "rentReceivedOrAnnualValue",
+      x: 750,
+      y: 227,
+      width: 95,
+      height: 34,
+      imageIndex: 4,
+      onBlur() {
+        calculateTotalRentValue();
+        calculateRepairCollectionAmount();
+        calculateScheduleOneNetIncome();
+        calculateTaxPayersShare();
+      },
+    },
+
+    {
+      name: "advanceRentReceived",
+      type: "number",
+      label: "advanceRentReceived",
+      x: 750,
+      y: 260,
+      width: 95,
+      height: 20,
+      imageIndex: 4,
+      onBlur() {
+        calculateTotalRentValue();
+        calculateRepairCollectionAmount();
+        calculateScheduleOneNetIncome();
+        calculateTaxPayersShare();
+      },
+    },
+
+    {
+      name: "valueOfAnyBenefit",
+      type: "number",
+      label: "valueOfAnyBenefit",
+      x: 750,
+      y: 280,
+      width: 95,
+      height: 20,
+      imageIndex: 4,
+      onBlur() {
+        calculateTotalRentValue();
+        calculateRepairCollectionAmount();
+        calculateScheduleOneNetIncome();
+        calculateTaxPayersShare();
+      },
+    },
+
+    {
+      name: "adjustedAdvanceRent",
+      type: "text",
+      label: "adjustedAdvanceRent",
+      x: 750,
+      y: 300,
+      width: 95,
+      height: 20,
+      imageIndex: 4,
+      onBlur() {
+        calculateTotalRentValue();
+        calculateRepairCollectionAmount();
+        calculateScheduleOneNetIncome();
+        calculateTaxPayersShare();
+      },
+    },
+
+    {
+      name: "vacancyAllowance",
+      type: "text",
+      label: "vacancyAllowance",
+      x: 750,
+      y: 320,
+      width: 95,
+      height: 18,
+      imageIndex: 4,
+      onBlur() {
+        calculateTotalRentValue();
+        calculateRepairCollectionAmount();
+        calculateScheduleOneNetIncome();
+        calculateTaxPayersShare();
+      },
+    },
+
+    {
+      name: "totalRentValue",
+      type: "number",
+      label: "totalRentValue",
+      disabled: true,
+      x: 845,
+      y: 339,
+      width: 90,
+      height: 18,
+      imageIndex: 4,
+    },
+
+    {
+      name: "repairCollectionProperty",
+      type: "select",
+      label: "Choose One",
+      placeholder: "Choose One",
+      options: REPAIR_COLLECTION_OPTIONS.map((repairCollection) => ({
+        label: snakeToNormalText(repairCollection),
+        value: repairCollection,
+      })),
+      x: 640,
+      y: 378,
+      width: 110,
+      height: 18,
+      imageIndex: 4,
+      onBlur: (val) => {
+        calculateRepairCollectionAmount(val as RepairCollection);
+        calculateTotalAdmissibleDeduction();
+        calculateScheduleOneNetIncome();
+        calculateTaxPayersShare();
+      },
+    },
+
+    {
+      name: "repairCollectionAmount",
+      label: "repairCollectionAmount",
+      type: "text",
+      disabled: true,
+      x: 753,
+      y: 378,
+      width: 90,
+      height: 18,
+      imageIndex: 4,
+      onBlur() {
+        calculateTotalAdmissibleDeduction();
+        calculateScheduleOneNetIncome();
+        calculateTaxPayersShare();
+      },
+    },
+
+    {
+      name: "municipalOrLocalTax",
+      type: "text",
+      label: "municipalOrLocalTax",
+      x: 751,
+      y: 397,
+      width: 95,
+      height: 19,
+      imageIndex: 4,
+      onBlur() {
+        calculateTotalAdmissibleDeduction();
+        calculateScheduleOneNetIncome();
+        calculateTaxPayersShare();
+      },
+    },
+
+    {
+      name: "landRevenue",
+      type: "text",
+      label: "landRevenue",
+      x: 751,
+      y: 417,
+      width: 95,
+      height: 19,
+      imageIndex: 4,
+      onBlur() {
+        calculateTotalAdmissibleDeduction();
+        calculateScheduleOneNetIncome();
+        calculateTaxPayersShare();
+      },
+    },
+
+    {
+      name: "interestMortgageCapitalCharge",
+      type: "text",
+      label: "interestMortgageCapitalCharge",
+      x: 751,
+      y: 435,
+      width: 95,
+      height: 34,
+      imageIndex: 4,
+      onBlur() {
+        calculateTotalAdmissibleDeduction();
+        calculateScheduleOneNetIncome();
+        calculateTaxPayersShare();
+      },
+    },
+
+    {
+      name: "insurancePremiumPaid",
+      type: "text",
+      label: "insurancePremiumPaid",
+      x: 751,
+      y: 470,
+      width: 95,
+      height: 19,
+      imageIndex: 4,
+      onBlur() {
+        calculateTotalAdmissibleDeduction();
+        calculateScheduleOneNetIncome();
+        calculateTaxPayersShare();
+      },
+    },
+
+    {
+      name: "others",
+      type: "text",
+      label: "others",
+      x: 751,
+      y: 490,
+      width: 95,
+      height: 19,
+      imageIndex: 4,
+      onBlur() {
+        calculateTotalAdmissibleDeduction();
+        calculateScheduleOneNetIncome();
+        calculateTaxPayersShare();
+      },
+    },
+    {
+      name: "totalAdmissibleDeduction",
+      type: "text",
+      label: "totalAdmissibleDeduction",
+      disabled: true,
+      x: 845,
+      y: 508,
+      width: 90,
+      height: 18,
+      imageIndex: 4,
+    },
+    {
+      name: "netIncome",
+      type: "text",
+      label: "netIncome",
+      disabled: true,
+      x: 845,
+      y: 528,
+      width: 90,
+      height: 18,
+      imageIndex: 4,
+    },
+
+    {
+      name: "taxpayersSharePercentage",
+      type: "text",
+      label: "",
+      x: 655,
+      y: 547,
+      width: 60,
+      height: 18,
+      imageIndex: 4,
+      onBlur() {
+        calculateTaxPayersShare();
+      },
+    },
+
+    {
+      name: "taxpayersShareAmount",
+      type: "text",
+      label: "taxpayersShareAmount",
+      disabled: true,
+      x: 845,
+      y: 548,
+      width: 90,
+      height: 18,
+      imageIndex: 4,
+    },
+
+    {
+      name: "taxDeductedSourceFromIncomeRent",
+      type: "text",
+      label: "taxDeductedSourceFromIncomeRent",
+      x: 845,
+      y: 570,
+      width: 95,
+      height: 19,
+      imageIndex: 4,
+    },
+
+    // schedule 3
     {
       name: "taxpayerName",
       type: "text",
@@ -1699,272 +2116,53 @@ const IndividualTaxReturnForm: React.FC = () => {
     },
 
     {
-      name: "tin",
-      type: "text",
-      label: "TIN",
-      disabled: true,
-      x: 666,
-      y: 130,
-      width: 271,
-      height: 19,
-      imageIndex: 4,
-    },
-    {
-      name: "rentReceivedOrAnnualValue",
-      type: "text",
-      label: "rentReceivedOrAnnualValue",
-      x: 750,
-      y: 227,
-      width: 95,
-      height: 34,
-      imageIndex: 4,
-    },
-
-    {
-      name: "valueOfAnyBenefit",
-      type: "text",
-      label: "valueOfAnyBenefit",
-      x: 750,
-      y: 280,
-      width: 95,
-      height: 20,
-      imageIndex: 4,
-    },
-
-    {
-      name: "totalRentValue",
-      type: "number",
-      label: "totalRentValue",
-      disabled: false,
-      x: 845,
-      y: 338,
-      width: 90,
-      height: 20,
-      imageIndex: 4,
-    },
-    {
-      name: "totalAdmissibleDeduction",
-      type: "text",
-      label: "totalAdmissibleDeduction",
-      disabled: true,
-      x: 845,
-      y: 508,
-      width: 90,
-      height: 18,
-      imageIndex: 4,
-    },
-    {
-      name: "netIncome",
-      type: "text",
-      label: "netIncome",
-      disabled: true,
-      x: 845,
-      y: 528,
-      width: 90,
-      height: 18,
-      imageIndex: 4,
-    },
-    {
-      name: "netProfit",
-      type: "text",
-      label: "netProfit",
-
-      disabled: true,
-      x: 845,
-      y: 840,
-      width: 90,
-      height: 15,
-      imageIndex: 4,
-    },
-    {
-      name: "locationDescriptionOwnershipProportionOfProperty",
-      type: "textarea",
-      label: "locationDescriptionOwnershipProportionOfProperty",
-
-      x: 90,
-      y: 227,
-      width: 260,
-      height: 340,
-      imageIndex: 4,
-    },
-    {
-      name: "advanceRentReceived",
-      type: "text",
-      label: "advanceRentReceived",
-      x: 750,
-      y: 260,
-      width: 95,
-      height: 20,
-      imageIndex: 4,
-    },
-
-    {
-      name: "adjustedAdvanceRent",
-      type: "text",
-      label: "adjustedAdvanceRent",
-
-      x: 750,
-      y: 300,
-      width: 95,
-      height: 20,
-      imageIndex: 4,
-    },
-    {
-      name: "vacancyAllowance",
-      type: "text",
-      label: "vacancyAllowance",
-      x: 750,
-      y: 320,
-      width: 95,
-      height: 18,
-      imageIndex: 4,
-    },
-
-    {
-      name: "repairCollection",
-      type: "select",
-      label: "Choose One",
-      placeholder: "Choose One",
-      options: REPAIR_COLLECTION_OPTIONS.map((repairCollection) => ({
-        label: snakeToNormalText(repairCollection),
-        value: repairCollection,
-      })),
-      x: 640,
-      y: 376,
-      width: 110,
-      height: 20,
-      imageIndex: 4,
-    },
-
-    {
-      name: "repairCollectionAmount",
-      label: "repairCollectionAmount",
-      type: "text",
-      disabled: true,
-      x: 751,
-      y: 376,
-      width: 95,
-      height: 20,
-      imageIndex: 4,
-    },
-    {
-      name: "municipalOrLocalTax",
-      type: "text",
-      label: "municipalOrLocalTax",
-
-      x: 751,
-      y: 397,
-      width: 95,
-      height: 19,
-      imageIndex: 4,
-    },
-    {
-      name: "landRevenue",
-      type: "text",
-      label: "landRevenue",
-
-      x: 751,
-      y: 417,
-      width: 95,
-      height: 19,
-      imageIndex: 4,
-    },
-    {
-      name: "interestMortgageCapitalCharge",
-      type: "text",
-      label: "interestMortgageCapitalCharge",
-      x: 751,
-      y: 435,
-      width: 95,
-      height: 34,
-      imageIndex: 4,
-    },
-    {
-      name: "insurancePremiumPaid",
-      type: "text",
-      label: "insurancePremiumPaid",
-
-      x: 751,
-      y: 470,
-      width: 95,
-      height: 19,
-      imageIndex: 4,
-    },
-    {
-      name: "others",
-      type: "text",
-      label: "others",
-
-      x: 751,
-      y: 490,
-      width: 95,
-      height: 19,
-      imageIndex: 4,
-    },
-    {
-      name: "taxpayersShare",
-      type: "text",
-      label: "taxpayersShare",
-
-      x: 655,
-      y: 546,
-      width: 60,
-      height: 19,
-      imageIndex: 4,
-    },
-    {
-      name: "taxpayersShareAmount",
-      type: "text",
-      label: "taxpayersShareAmount",
-      disabled: true,
-      x: 845,
-      y: 546,
-      width: 90,
-      height: 19,
-      imageIndex: 4,
-    },
-    {
-      name: "taxDeductedSourceFromIncomeRent",
-      type: "text",
-      label: "taxDeductedSourceFromIncomeRent",
-
-      x: 845,
-      y: 570,
-      width: 95,
-      height: 19,
-      imageIndex: 4,
-    },
-    {
       name: "salesTurnoverReceipt",
       type: "text",
       label: "salesTurnoverReceipt",
-
       x: 844,
       y: 765,
       width: 95,
       height: 20,
       imageIndex: 4,
     },
+
     {
       name: "grossProfit",
       type: "text",
       label: "grossProfit",
-
       x: 844,
       y: 785,
       width: 95,
       height: 20,
       imageIndex: 4,
+      onBlur() {
+        calculateScheduleThreeNetProfit();
+      },
     },
+
     {
       name: "generalExpensesSellingExpenses",
       type: "text",
       label: "generalExpensesSellingExpenses",
-
       x: 844,
       y: 805,
       width: 95,
       height: 34,
+      imageIndex: 4,
+      onBlur(event) {
+        calculateScheduleThreeNetProfit();
+      },
+    },
+
+    {
+      name: "netProfit",
+      type: "text",
+      label: "netProfit",
+      disabled: true,
+      x: 845,
+      y: 840,
+      width: 90,
+      height: 15,
       imageIndex: 4,
     },
 
@@ -4659,7 +4857,9 @@ const IndividualTaxReturnForm: React.FC = () => {
                     }  `}
                     style={{ fontSize: `${14 * scale}px` }}
                     disabled={field.disabled}
-                    onBlur={field.onBlur}
+                    onBlur={(e) => {
+                      if (field?.onBlur) field.onBlur(e.target.value);
+                    }}
                   />
 
                   {/* Conditional rendering for the required indicator */}
@@ -4721,6 +4921,9 @@ const IndividualTaxReturnForm: React.FC = () => {
                   scale={scale}
                   required={isRequired}
                   placeholder={field.placeholder}
+                  onBlur={(e) => {
+                    if (field?.onBlur) field.onBlur(e);
+                  }}
                 />
               )}
             />
@@ -4807,10 +5010,6 @@ const IndividualTaxReturnForm: React.FC = () => {
     },
     []
   );
-
-  useEffect(() => {
-    console.log(watch("totalRentValue"));
-  }, [watch]);
 
   return (
     <div className="bg-secondary min-h-screen">

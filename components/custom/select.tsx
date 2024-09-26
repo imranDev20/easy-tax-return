@@ -15,6 +15,7 @@ interface CustomSelectProps {
   style?: React.CSSProperties;
   scale: number;
   required: boolean;
+  onBlur?: (value: string) => void;
 }
 
 const CustomSelect: React.FC<CustomSelectProps> = ({
@@ -26,6 +27,7 @@ const CustomSelect: React.FC<CustomSelectProps> = ({
   style,
   scale,
   required,
+  onBlur,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const selectRef = useRef<HTMLDivElement>(null);
@@ -47,6 +49,7 @@ const CustomSelect: React.FC<CustomSelectProps> = ({
   }, []);
 
   const handleSelect = (option: Option) => {
+    onBlur && onBlur(option.value);
     onChange(option.value);
     setIsOpen(false);
   };
