@@ -236,13 +236,13 @@ const IndividualTaxReturnForm: React.FC = () => {
       taxpayersSharePercentage: "100",
       taxDeductedSourceFromIncomeRent: "",
       salesTurnoverReceipt: "",
-      grossProfit: "",
+      grossProfitFromAgriculture: "",
       generalExpensesSellingExpenses: "",
       nameOfBusiness: "",
       natureOfBusiness: "",
       addressOfBusiness: "",
       salesTurnoverReceipts: "",
-      grossProfitAmount: "",
+      grossProfitFromBusiness: "",
       generalAdministrativeSellingExpenses: "",
       badDebtExpense: "",
       inventories: "",
@@ -458,11 +458,11 @@ const IndividualTaxReturnForm: React.FC = () => {
       totalRentValue: "0.0",
       totalAdmissibleDeduction: "0.0",
       netIncome: "0.0",
-      netProfit: "0.0",
-      netProfit2: "0.0",
+      netProfitFromAgriculture: "0.0",
+      netProfitFromBusinessIncome: "0.00",
       cashInHandAtBank: "0.0",
       totalAssets: "0.0",
-      netProfit3: "0.0",
+      netProfitFromBusinessBalance: "0.0",
       closingCpital: "0.0",
       totalCapitalsAndLiabilities: "0.0",
       totalAllowableInvestmentContribution: "0.0",
@@ -619,6 +619,26 @@ const IndividualTaxReturnForm: React.FC = () => {
     formState: { errors, isDirty },
   } = form;
 
+  // Schedule 4
+  const calculateNetProfitFromBusinessIncome = (): number => {
+    const grossProfit = parseFloat(watch("grossProfitFromBusiness") || "0");
+    const expenses = parseFloat(
+      watch("generalAdministrativeSellingExpenses") || "0"
+    );
+    const badDebt = parseFloat(watch("badDebtExpense") || "0");
+
+    // Guard against NaN values
+    const safeGrossProfit = isNaN(grossProfit) ? 0 : grossProfit;
+    const safeExpenses = isNaN(expenses) ? 0 : expenses;
+    const safeBadDebt = isNaN(badDebt) ? 0 : badDebt;
+
+    // Calculate net profit
+    const netProfit = safeGrossProfit - safeExpenses - safeBadDebt;
+    setValue("netProfitFromBusinessIncome", netProfit.toFixed(2));
+    return Math.max(netProfit, 0);
+  };
+
+  // Schedule 1
   const calculatePrivateEmploymentTotals = useCallback(() => {
     const fields = [
       "basicPayPrivateEmployment",
@@ -755,25 +775,32 @@ const IndividualTaxReturnForm: React.FC = () => {
   };
 
   const calculateScheduleThreeNetProfit = () => {
-    const grossProfit = parseFloat(watch("grossProfit") || "0");
+    const grossProfitFromAgriculture = parseFloat(
+      watch("grossProfitFromAgriculture") || "0"
+    );
     const generalExpensesSellingExpenses = parseFloat(
       watch("generalExpensesSellingExpenses") || "0"
     );
 
     // Handle NaN cases
-    const safeGrossProfit = isNaN(grossProfit) ? 0 : grossProfit;
+    const safeGrossProfit = isNaN(grossProfitFromAgriculture)
+      ? 0
+      : grossProfitFromAgriculture;
     const safeGeneralExpensesSellingExpenses = isNaN(
       generalExpensesSellingExpenses
     )
       ? 0
       : generalExpensesSellingExpenses;
 
-    const netProfit = safeGrossProfit - safeGeneralExpensesSellingExpenses;
+    const netProfitFromAgriculture =
+      safeGrossProfit - safeGeneralExpensesSellingExpenses;
 
     // Ensure the result is not NaN before setting the value
-    const safeNetProfit = isNaN(netProfit) ? 0 : netProfit;
+    const safeNetProfit = isNaN(netProfitFromAgriculture)
+      ? 0
+      : netProfitFromAgriculture;
 
-    setValue("netProfit", safeNetProfit.toFixed(2));
+    setValue("netProfitFromAgriculture", safeNetProfit.toFixed(2));
     return safeNetProfit;
   };
 
@@ -1289,7 +1316,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       imageIndex: 1,
     },
     {
-      name: "netProfit", // this is income from agriculture
+      name: "netProfitFromAgriculture", // this is income from agriculture
       type: "text",
       label: "",
       disabled: true,
@@ -2889,7 +2916,7 @@ const IndividualTaxReturnForm: React.FC = () => {
     {
       name: "salesTurnoverReceipt",
       type: "text",
-      label: "salesTurnoverReceipt",
+      label: "",
       x: 844,
       y: 765,
       width: 95,
@@ -2898,9 +2925,9 @@ const IndividualTaxReturnForm: React.FC = () => {
     },
 
     {
-      name: "grossProfit",
+      name: "grossProfitFromAgriculture",
       type: "text",
-      label: "grossProfit",
+      label: "",
       x: 844,
       y: 785,
       width: 95,
@@ -2926,9 +2953,9 @@ const IndividualTaxReturnForm: React.FC = () => {
     },
 
     {
-      name: "netProfit",
+      name: "netProfitFromAgriculture",
       type: "text",
-      label: "netProfit",
+      label: "",
       disabled: true,
       x: 845,
       y: 840,
@@ -2975,7 +3002,6 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "natureOfBusiness",
       type: "text",
       label: "natureOfBusiness",
-
       x: 318,
       y: 192,
       width: 590,
@@ -2986,7 +3012,6 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "addressOfBusiness",
       type: "text",
       label: "addressOfBusiness",
-
       x: 318,
       y: 213,
       width: 590,
@@ -2997,7 +3022,6 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "salesTurnoverReceipts",
       type: "text",
       label: "salesTurnoverReceipts",
-
       x: 703,
       y: 285,
       width: 205,
@@ -3005,43 +3029,71 @@ const IndividualTaxReturnForm: React.FC = () => {
       imageIndex: 5,
     },
     {
-      name: "grossProfitAmount",
+      name: "grossProfitFromBusiness",
       type: "text",
-      label: "grossProfitAmount",
-
+      label: "",
       x: 703,
       y: 303,
       width: 205,
       height: 18,
       imageIndex: 5,
+      onBlur() {
+        calculateNetProfitFromBusinessIncome();
+      },
     },
     {
       name: "generalAdministrativeSellingExpenses",
       type: "text",
-      label: "generalAdministrativeSellingExpenses",
-
+      label: "",
       x: 703,
       y: 320,
       width: 205,
       height: 18,
       imageIndex: 5,
+      onBlur() {
+        calculateNetProfitFromBusinessIncome();
+      },
     },
     {
       name: "badDebtExpense",
       type: "text",
       label: "badDebtExpense",
-
       x: 703,
       y: 338,
       width: 205,
       height: 18,
+      imageIndex: 5,
+      onBlur() {
+        calculateNetProfitFromBusinessIncome();
+      },
+    },
+    {
+      name: "netProfitFromBusinessIncome",
+      type: "text",
+      label: "",
+      disabled: true,
+      x: 702,
+      y: 358,
+      width: 205,
+      height: 15,
+      imageIndex: 5,
+    },
+
+    {
+      name: "cashInHandAtBank",
+      type: "text",
+      label: "cashInHandAtBank",
+      disabled: true,
+      x: 702,
+      y: 425,
+      width: 200,
+      height: 15,
       imageIndex: 5,
     },
     {
       name: "inventories",
       type: "text",
       label: "inventories",
-
       x: 700,
       y: 442,
       width: 205,
@@ -3052,42 +3104,17 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "fixedAssets",
       type: "text",
       label: "fixedAssets",
-
       x: 700,
       y: 460,
       width: 205,
       height: 18,
       imageIndex: 5,
     },
-    {
-      name: "netProfit2",
-      type: "text",
-      label: "netProfit2",
 
-      disabled: true,
-      x: 702,
-      y: 358,
-      width: 205,
-      height: 15,
-      imageIndex: 5,
-    },
-    {
-      name: "cashInHandAtBank",
-      type: "text",
-      label: "cashInHandAtBank",
-
-      disabled: true,
-      x: 702,
-      y: 425,
-      width: 200,
-      height: 15,
-      imageIndex: 5,
-    },
     {
       name: "totalAssets",
       type: "text",
       label: "totalAssets",
-
       disabled: true,
       x: 702,
       y: 495,
@@ -3096,15 +3123,35 @@ const IndividualTaxReturnForm: React.FC = () => {
       imageIndex: 5,
     },
     {
-      name: "netProfit3",
+      name: "openingCapital",
       type: "text",
-      label: "netProfit3",
-
+      label: "openingCapital",
+      x: 700,
+      y: 512,
+      width: 205,
+      height: 18,
+      imageIndex: 5,
+    },
+    {
+      name: "netProfitFromBusinessBalance",
+      type: "text",
+      label: "",
       disabled: true,
       x: 702,
       y: 530,
       width: 200,
       height: 15,
+      imageIndex: 5,
+    },
+    {
+      name: "withdrawalsInTheIncomeYear",
+      type: "text",
+      label: "withdrawalsInTheIncomeYear",
+
+      x: 700,
+      y: 548,
+      width: 205,
+      height: 18,
       imageIndex: 5,
     },
     {
@@ -3120,6 +3167,16 @@ const IndividualTaxReturnForm: React.FC = () => {
       imageIndex: 5,
     },
     {
+      name: "liabilities",
+      type: "text",
+      label: "liabilities",
+      x: 700,
+      y: 583,
+      width: 205,
+      height: 18,
+      imageIndex: 5,
+    },
+    {
       name: "totalCapitalsAndLiabilities",
       type: "text",
       label: "totalCapitalsAndLiabilities",
@@ -3131,6 +3188,8 @@ const IndividualTaxReturnForm: React.FC = () => {
       height: 15,
       imageIndex: 5,
     },
+
+    // statement of income subject to minimum tax .........................................
     {
       name: "interestProfitFromBankFI.amountOfIncome",
       type: "number",
@@ -3144,7 +3203,7 @@ const IndividualTaxReturnForm: React.FC = () => {
     {
       name: "interestProfitFromBankFI.deductionsExpensesExemptedIncome",
       type: "number",
-      label: "Interest/Profit from Bank/FI Deduction",
+      label: "",
 
       x: 605,
       y: 730,
@@ -3155,8 +3214,7 @@ const IndividualTaxReturnForm: React.FC = () => {
     {
       name: "interestProfitFromBankFI.netTaxableIncome",
       type: "number",
-      label: "Interest/Profit from Bank/FI Net Taxable",
-
+      label: "",
       disabled: true,
       x: 720,
       y: 732,
@@ -3598,39 +3656,6 @@ const IndividualTaxReturnForm: React.FC = () => {
 
       x: 700,
       y: 477,
-      width: 205,
-      height: 18,
-      imageIndex: 5,
-    },
-    {
-      name: "openingCapital",
-      type: "text",
-      label: "openingCapital",
-
-      x: 700,
-      y: 512,
-      width: 205,
-      height: 18,
-      imageIndex: 5,
-    },
-    {
-      name: "withdrawalsInTheIncomeYear",
-      type: "text",
-      label: "withdrawalsInTheIncomeYear",
-
-      x: 700,
-      y: 548,
-      width: 205,
-      height: 18,
-      imageIndex: 5,
-    },
-    {
-      name: "liabilities",
-      type: "text",
-      label: "liabilities",
-
-      x: 700,
-      y: 583,
       width: 205,
       height: 18,
       imageIndex: 5,
@@ -5363,7 +5388,6 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "cashInHand",
       type: "text",
       label: "cashInHand",
-
       x: 620,
       y: 698,
       width: 155,
@@ -5428,7 +5452,6 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "taxpayerName",
       type: "text",
       label: "taxpayerName",
-
       disabled: true,
       x: 355,
       y: 390,
@@ -5437,9 +5460,9 @@ const IndividualTaxReturnForm: React.FC = () => {
       imageIndex: 10,
     },
     {
-      name: "nid",
+      name: "nationalId",
       type: "text",
-      label: "nid",
+      label: "",
 
       disabled: true,
       x: 555,
@@ -5463,7 +5486,7 @@ const IndividualTaxReturnForm: React.FC = () => {
     {
       name: "circle",
       type: "text",
-      label: "circle",
+      label: "",
 
       disabled: true,
       x: 170,
@@ -5475,7 +5498,7 @@ const IndividualTaxReturnForm: React.FC = () => {
     {
       name: "zone",
       type: "text",
-      label: "zone",
+      label: "",
 
       disabled: true,
       x: 555,
@@ -5487,7 +5510,7 @@ const IndividualTaxReturnForm: React.FC = () => {
     {
       name: "totalIncomeShown",
       type: "text",
-      label: "totalIncomeShown",
+      label: "",
 
       disabled: true,
       x: 410,
@@ -5499,8 +5522,7 @@ const IndividualTaxReturnForm: React.FC = () => {
     {
       name: "totalTaxPaid",
       type: "text",
-      label: "totalTaxPaid",
-
+      label: "",
       disabled: true,
       x: 410,
       y: 610,

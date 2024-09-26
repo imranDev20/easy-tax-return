@@ -178,21 +178,25 @@ export const individualTaxReturnSchema = z.object({
   taxpayersShareAmount: z.string().nullable().optional(),
   taxDeductedSourceFromIncomeRent: z.string().optional(),
   salesTurnoverReceipt: z.string().optional(),
-  grossProfit: z.string().optional(),
+  grossProfitFromAgriculture: z.string().optional(),
   generalExpensesSellingExpenses: z.string().optional(),
   totalAdmissibleDeduction: z.string().optional(),
   netIncome: z.string().optional(),
-  netProfit: z.string().optional(),
+  netProfitFromAgriculture: z.string().optional(),
 
   // image 5
   // 62 inputs
   nameOfBusiness: z.string().optional(),
   natureOfBusiness: z.string().optional(),
   addressOfBusiness: z.string().optional(),
+
+  // summary of income
   salesTurnoverReceipts: z.string().optional(),
-  grossProfitAmount: z.string().optional(),
+  grossProfitFromBusiness: z.string().optional(),
   generalAdministrativeSellingExpenses: z.string().optional(),
   badDebtExpense: z.string().optional(),
+  netProfitFromBusinessIncome: z.string().optional(),
+  // balance sheet
   inventories: z.string().optional(),
   fixedAssets: z.string().optional(),
   otherAssets: z.string().optional(),
@@ -209,10 +213,10 @@ export const individualTaxReturnSchema = z.object({
   workersParticipationFund: incomeItemSchema,
   incomeFromOtherSourcesMinTax: incomeItemSchema,
   otherSubjectToMinTax: incomeItemSchema,
-  netProfit2: z.string().optional(),
+
   cashInHandAtBank: z.string().optional(),
   totalAssets: z.string().optional(),
-  netProfit3: z.string().optional(),
+  netProfitFromBusinessBalance: z.string().optional(),
   closingCpital: z.string().optional(),
   totalCapitalsAndLiabilities: z.string().optional(),
 
