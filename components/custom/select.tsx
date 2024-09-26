@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import { ChevronDown } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 interface Option {
   label: string;
@@ -15,6 +16,8 @@ interface CustomSelectProps {
   style?: React.CSSProperties;
   scale: number;
   required: boolean;
+  onBlur?: (value: string) => void;
+  isVisible?: boolean;
 }
 
 const CustomSelect: React.FC<CustomSelectProps> = ({
@@ -26,6 +29,8 @@ const CustomSelect: React.FC<CustomSelectProps> = ({
   style,
   scale,
   required,
+  onBlur,
+  isVisible,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const selectRef = useRef<HTMLDivElement>(null);
@@ -47,6 +52,7 @@ const CustomSelect: React.FC<CustomSelectProps> = ({
   }, []);
 
   const handleSelect = (option: Option) => {
+    if (onBlur) onBlur(option.value);
     onChange(option.value);
     setIsOpen(false);
   };
@@ -66,7 +72,10 @@ const CustomSelect: React.FC<CustomSelectProps> = ({
       style={combinedStyle}
     >
       <div
-        className="w-full h-full bg-white border border-sky-300 hover:border-sky-500 cursor-pointer relative"
+        className={cn(
+          "w-full h-full bg-white border border-sky-300 hover:border-sky-500 cursor-pointer relative",
+          isVisible ? "block" : "hidden"
+        )}
         onClick={() => setIsOpen(!isOpen)}
       >
         <div className="relative items-center justify-between flex px-2 overflow-hidden w-full h-full">

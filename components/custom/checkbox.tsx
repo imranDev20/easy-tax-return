@@ -10,6 +10,7 @@ interface CustomCheckboxProps {
   width: number;
   height: number;
   required: boolean;
+  onBlur?: (val: string | boolean) => void;
 }
 
 const CustomCheckbox: React.FC<CustomCheckboxProps> = ({
@@ -21,6 +22,7 @@ const CustomCheckbox: React.FC<CustomCheckboxProps> = ({
   width,
   height,
   required,
+  onBlur,
 }) => {
   const [isChecked, setIsChecked] = useState(false);
 
@@ -44,7 +46,7 @@ const CustomCheckbox: React.FC<CustomCheckboxProps> = ({
     const newCheckedState = e.target.checked;
     setIsChecked(newCheckedState);
     onChange(e);
-    localStorage.setItem(name, JSON.stringify(newCheckedState));
+    if (onBlur) onBlur(e.target.checked);
   };
 
   return (
