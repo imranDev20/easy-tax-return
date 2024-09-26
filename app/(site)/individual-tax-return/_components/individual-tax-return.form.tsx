@@ -1761,7 +1761,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       width: 151,
       height: 18,
       imageIndex: 3,
-      onBlur(event) {
+      onBlur(val) {
         setValue("conveyanceAllowanceGovtEmployment.taxExempted", val);
       },
     },
