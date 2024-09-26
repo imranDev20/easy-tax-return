@@ -901,6 +901,29 @@ const IndividualTaxReturnForm: React.FC = () => {
           setValue("netWealthLastDateAmount", "");
         }
       }
+
+      if (
+        name === "isIncomeFromEmployment" ||
+        name === "typeOfEmployment" ||
+        name === "totalIncomeFromSalaryPrivateEmployment" ||
+        name === "totalGovtEmployment"
+      ) {
+        if (value.isIncomeFromEmployment === "YES") {
+          if (value.typeOfEmployment === "PRIVATE") {
+            setValue(
+              "incomeFromEmployment",
+              value.totalIncomeFromSalaryPrivateEmployment || "0.00"
+            );
+          } else if (value.typeOfEmployment === "GOVERNMENT") {
+            setValue(
+              "incomeFromEmployment",
+              value.totalGovtEmployment?.taxable || "0.00"
+            );
+          }
+        } else {
+          setValue("incomeFromEmployment", "0.00");
+        }
+      }
     });
 
     return () => subscription.unsubscribe();
@@ -1246,7 +1269,7 @@ const IndividualTaxReturnForm: React.FC = () => {
     {
       name: "incomeFromEmployment",
       type: "text",
-      label: "incomeFromEmployment",
+      label: "",
       disabled: true,
       x: 774,
       y: 180,
@@ -1736,7 +1759,7 @@ const IndividualTaxReturnForm: React.FC = () => {
           height: 20,
           x: 930,
           y: 48,
-          value: "GOVERTMENT",
+          value: "GOVERNMENT",
           width: 33,
         },
       ],
