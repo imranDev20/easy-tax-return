@@ -319,6 +319,8 @@ export const individualTaxReturnSchema = z.object({
   businessCapitalOfPartnershipFirm: z.string().optional(),
 
   // Image 9
+  nonAgriculturalPropertyLandHouseProperty: z.string().optional(),
+
   locationDescription1: z.string().optional(),
   locationDescription2: z.string().optional(),
   locationDescription3: z.string().optional(),
@@ -329,12 +331,14 @@ export const individualTaxReturnSchema = z.object({
   locationValue3: z.string().optional(),
   locationValue4: z.string().optional(),
   locationValue5: z.string().optional(),
+
   agriculturalLocationAndDescription1: z.string().optional(),
   agriculturalLocationAndDescription2: z.string().optional(),
   agriculturalLocationAndDescription3: z.string().optional(),
   agriculturalLocationValue1: z.string().optional(),
   agriculturalLocationValue2: z.string().optional(),
   agriculturalLocationValue3: z.string().optional(),
+
   shareDebentureUnitCertificate: z.string().optional(),
   bondsGovernment: z.string().optional(),
   sanchayapatraSavingsCertificate: z.string().optional(),
@@ -345,8 +349,9 @@ export const individualTaxReturnSchema = z.object({
   nidValue: z.string().optional(),
   savingDeposit: z.string().optional(),
   providentFund: z.string().optional(),
-  otherInvestment1: z.string().optional(),
-  otherInvestment2: z.string().optional(),
+  otherInvestmentDesc: z.string().optional(),
+  otherInvestmentAmount: z.string().optional(),
+
   typeOfMotorVehicle1: z.string().optional(),
   typeOfMotorVehicle2: z.string().optional(),
   registrationNumber1: z.string().optional(),
@@ -363,7 +368,6 @@ export const individualTaxReturnSchema = z.object({
   others1: z.string().optional(),
   others2: z.string().optional(),
   assetOutsideBangladesh: z.string().optional(),
-  nonAgriculturalPropertyLandHouseProperty: z.string().optional(),
   agriculturalProperty: z.string().optional(),
   totalFinancialAssets: z.string().optional(),
   motorVehiclesAmount: z.string().optional(),

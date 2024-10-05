@@ -116,6 +116,7 @@ interface RadioGroupProps<TFieldValues extends FieldValues> {
   label: string;
   disabled?: boolean;
   resetFields?: (keyof IndividualTaxReturnFormInput)[];
+  onBlur?: (value: string | boolean) => void;
 }
 
 function RadioGroup<TFieldValues extends FieldValues>({
@@ -129,6 +130,7 @@ function RadioGroup<TFieldValues extends FieldValues>({
   y,
   disabled = false,
   resetFields,
+  onBlur,
 }: RadioGroupProps<TFieldValues>) {
   const { resetField } = useFormContext<IndividualTaxReturnFormInput>();
 
@@ -159,6 +161,10 @@ function RadioGroup<TFieldValues extends FieldValues>({
               checked={value === option.value}
               onChange={(newValue) => {
                 onChange(newValue);
+
+                if (typeof newValue === "string") {
+                  onBlur && onBlur(newValue);
+                }
 
                 resetFields &&
                   resetFields.forEach((fieldName) => resetField(fieldName));
