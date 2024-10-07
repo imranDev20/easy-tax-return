@@ -209,6 +209,91 @@ const IndividualTaxReturnForm: React.FC = () => {
     formState: { errors, isDirty },
   } = form;
 
+  const calculateTotalAssetsInBangladeshAndOutside = () => {
+    const nonAgriculturalProperty = calculateTotalNonAgriculturalAssets();
+    const agriculturalProperty = calculateTotalAgriculturalAssets();
+    const totalFinancialAssets = calculateTotalFinancialAssets();
+    const totalMotorValue = calculateTotalMotorValue();
+    const totalCashInHandAndFund = calculateTotalCashInHandAndFund();
+
+    const fields = [
+      "ornamentsValue",
+      "furnitureAndElectronic",
+      "othersAssetsValue",
+      "assetOutsideBangladesh",
+    ];
+
+    let totalInBangladesh =
+      nonAgriculturalProperty +
+      agriculturalProperty +
+      totalFinancialAssets +
+      totalMotorValue +
+      totalCashInHandAndFund;
+
+    let totalIncludingOutside = totalInBangladesh;
+
+    fields.forEach((field) => {
+      const value = watch(field as keyof IndividualTaxReturnFormInput);
+      const numberValue = parseFloat(value?.toString() || "0");
+
+      if (isNaN(numberValue)) {
+        console.warn(`Invalid value for ${field}: ${value}`);
+        return;
+      }
+
+      const safeValue = Math.max(0, numberValue);
+
+      if (field !== "assetOutsideBangladesh") {
+        totalInBangladesh += safeValue;
+      }
+      totalIncludingOutside += safeValue;
+    });
+
+    const safeTotalInBangladesh = Math.round(totalInBangladesh * 100) / 100;
+    const safeTotalIncludingOutside =
+      Math.round(totalIncludingOutside * 100) / 100;
+
+    setValue(
+      "totalAssetslocatedInBangladesh",
+      safeTotalInBangladesh.toFixed(2)
+    );
+
+    setValue(
+      "totalAssetsInBangladeshAndOutsideBangladesh",
+      safeTotalIncludingOutside.toFixed(2)
+    );
+
+    return {
+      totalInBangladesh: safeTotalInBangladesh,
+      totalIncludingOutside: safeTotalIncludingOutside,
+    };
+  };
+
+  const calculateTotalCashInHandAndFund = () => {
+    const fields = ["bankBalance", "cashInHand", "othersValue"];
+
+    const total = fields.reduce((sum, field) => {
+      const value = watch(field as keyof IndividualTaxReturnFormInput);
+      const numberValue = parseFloat(value?.toString() || "0");
+
+      // Guard against NaN and return the current sum if the value is not a valid number
+      if (isNaN(numberValue)) {
+        console.warn(`Invalid value for ${field}: ${value}`);
+        return sum;
+      }
+
+      // Ensure we're adding a positive number (or zero)
+      return sum + Math.max(0, numberValue);
+    }, 0);
+
+    // Ensure the final total is not NaN, and round to 2 decimal places
+    const safeTotal = isNaN(total) ? 0 : Math.round(total * 100) / 100;
+
+    // Assuming you have a field for the total cash in hand and fund outside business
+    setValue("totalCashInHandsAndFundOutsideBusiness", safeTotal.toFixed(2));
+    return safeTotal;
+  };
+
   const calculateTotalMotorValue = () => {
     const fields = ["motorValue1", "motorValue2"];
 
@@ -269,7 +354,7 @@ const IndividualTaxReturnForm: React.FC = () => {
     return safeTotal;
   };
 
-  const calculateTotalAgriculturalLocationValue = () => {
+  const calculateTotalAgriculturalAssets = () => {
     const fields = [
       "agriculturalLocationValue1",
       "agriculturalLocationValue2",
@@ -298,7 +383,7 @@ const IndividualTaxReturnForm: React.FC = () => {
     return safeTotal;
   };
 
-  const calculateTotalLocationValue = () => {
+  const calculateTotalNonAgriculturalAssets = () => {
     const fields = [
       "locationValue1",
       "locationValue2",
@@ -5100,7 +5185,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       imageIndex: 9,
       isVisible: true,
       onBlur() {
-        calculateTotalLocationValue();
+        calculateTotalAssetsInBangladeshAndOutside();
       },
     },
     {
@@ -5125,7 +5210,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       imageIndex: 9,
       isVisible: true,
       onBlur() {
-        calculateTotalLocationValue();
+        calculateTotalAssetsInBangladeshAndOutside();
       },
     },
     {
@@ -5151,7 +5236,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       imageIndex: 9,
       isVisible: true,
       onBlur() {
-        calculateTotalLocationValue();
+        calculateTotalAssetsInBangladeshAndOutside();
       },
     },
     {
@@ -5176,7 +5261,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       imageIndex: 9,
       isVisible: true,
       onBlur() {
-        calculateTotalLocationValue();
+        calculateTotalAssetsInBangladeshAndOutside();
       },
     },
     {
@@ -5202,7 +5287,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       imageIndex: 9,
       isVisible: true,
       onBlur() {
-        calculateTotalLocationValue();
+        calculateTotalAssetsInBangladeshAndOutside();
       },
     },
 
@@ -5228,7 +5313,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       imageIndex: 9,
       isVisible: true,
       onBlur() {
-        calculateTotalAgriculturalLocationValue();
+        calculateTotalAssetsInBangladeshAndOutside();
       },
     },
     {
@@ -5253,7 +5338,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       imageIndex: 9,
       isVisible: true,
       onBlur() {
-        calculateTotalAgriculturalLocationValue();
+        calculateTotalAssetsInBangladeshAndOutside();
       },
     },
     {
@@ -5278,7 +5363,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       imageIndex: 9,
       isVisible: true,
       onBlur() {
-        calculateTotalAgriculturalLocationValue();
+        calculateTotalAssetsInBangladeshAndOutside();
       },
     },
 
@@ -5306,7 +5391,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       imageIndex: 9,
       isVisible: true,
       onBlur() {
-        calculateTotalFinancialAssets();
+        calculateTotalAssetsInBangladeshAndOutside();
       },
     },
 
@@ -5321,7 +5406,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       imageIndex: 9,
       isVisible: true,
       onBlur() {
-        calculateTotalFinancialAssets();
+        calculateTotalAssetsInBangladeshAndOutside();
       },
     },
     {
@@ -5335,7 +5420,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       imageIndex: 9,
       isVisible: true,
       onBlur() {
-        calculateTotalFinancialAssets();
+        calculateTotalAssetsInBangladeshAndOutside();
       },
     },
     {
@@ -5349,7 +5434,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       imageIndex: 9,
       isVisible: true,
       onBlur() {
-        calculateTotalFinancialAssets();
+        calculateTotalAssetsInBangladeshAndOutside();
       },
     },
 
@@ -5364,7 +5449,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       imageIndex: 9,
       isVisible: true,
       onBlur() {
-        calculateTotalFinancialAssets();
+        calculateTotalAssetsInBangladeshAndOutside();
       },
     },
     {
@@ -5400,7 +5485,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       imageIndex: 9,
       isVisible: true,
       onBlur() {
-        calculateTotalFinancialAssets();
+        calculateTotalAssetsInBangladeshAndOutside();
       },
     },
     {
@@ -5414,7 +5499,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       imageIndex: 9,
       isVisible: true,
       onBlur() {
-        calculateTotalFinancialAssets();
+        calculateTotalAssetsInBangladeshAndOutside();
       },
     },
     {
@@ -5428,7 +5513,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       imageIndex: 9,
       isVisible: true,
       onBlur() {
-        calculateTotalFinancialAssets();
+        calculateTotalAssetsInBangladeshAndOutside();
       },
     },
     {
@@ -5453,7 +5538,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       imageIndex: 9,
       isVisible: true,
       onBlur() {
-        calculateTotalFinancialAssets();
+        calculateTotalAssetsInBangladeshAndOutside();
       },
     },
     {
@@ -5518,7 +5603,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       imageIndex: 9,
       isVisible: true,
       onBlur() {
-        calculateTotalMotorValue();
+        calculateTotalAssetsInBangladeshAndOutside();
       },
     },
 
@@ -5557,7 +5642,129 @@ const IndividualTaxReturnForm: React.FC = () => {
       imageIndex: 9,
       isVisible: true,
       onBlur() {
-        calculateTotalMotorValue();
+        calculateTotalAssetsInBangladeshAndOutside();
+      },
+    },
+    {
+      name: "ornamentsDesc",
+      type: "text",
+      label: "",
+      x: 420,
+      y: 610,
+      width: 355,
+      height: 18,
+      imageIndex: 9,
+      isVisible: true,
+    },
+
+    {
+      name: "ornamentsValue",
+      type: "text",
+      label: "",
+      x: 770,
+      y: 610,
+      width: 170,
+      height: 18,
+      imageIndex: 9,
+      isVisible: true,
+      onBlur() {
+        calculateTotalAssetsInBangladeshAndOutside();
+      },
+    },
+
+    {
+      name: "furnitureAndElectronic",
+      type: "text",
+      label: "furnitureAndElectronic",
+      x: 770,
+      y: 628,
+      width: 170,
+      height: 18,
+      imageIndex: 9,
+      isVisible: true,
+      onBlur() {
+        calculateTotalAssetsInBangladeshAndOutside();
+      },
+    },
+
+    {
+      name: "othersAssetsDesc",
+      type: "text",
+      label: "othersAssets1",
+      x: 550,
+      y: 645,
+      width: 220,
+      height: 18,
+      imageIndex: 9,
+      isVisible: true,
+    },
+
+    {
+      name: "othersAssetsValue",
+      type: "text",
+      label: "othersAssets2",
+      x: 770,
+      y: 645,
+      width: 170,
+      height: 18,
+      imageIndex: 9,
+      isVisible: true,
+      onBlur() {
+        calculateTotalAssetsInBangladeshAndOutside();
+      },
+    },
+
+    {
+      name: "bankBalance",
+      type: "text",
+      label: "bankBalance",
+      x: 620,
+      y: 680,
+      width: 155,
+      height: 18,
+      imageIndex: 9,
+      isVisible: true,
+      onBlur() {
+        calculateTotalAssetsInBangladeshAndOutside();
+      },
+    },
+    {
+      name: "cashInHand",
+      type: "text",
+      label: "cashInHand",
+      x: 620,
+      y: 698,
+      width: 155,
+      height: 18,
+      imageIndex: 9,
+      isVisible: true,
+      onBlur() {
+        calculateTotalAssetsInBangladeshAndOutside();
+      },
+    },
+    {
+      name: "othersDesc",
+      type: "text",
+      label: "",
+      x: 300,
+      y: 715,
+      width: 320,
+      height: 18,
+      imageIndex: 9,
+      isVisible: true,
+    },
+    {
+      name: "othersValue",
+      type: "text",
+      label: "others2",
+      x: 620,
+      y: 715,
+      width: 155,
+      height: 18,
+      imageIndex: 9,
+      isVisible: true,
+      onBlur() {
+        calculateTotalAssetsInBangladeshAndOutside();
       },
     },
 
@@ -5586,6 +5793,22 @@ const IndividualTaxReturnForm: React.FC = () => {
       isVisible: true,
     },
     {
+      name: "assetOutsideBangladesh",
+      type: "text",
+      label: "assetOutsideBangladesh",
+      x: 770,
+      y: 768,
+      disabled: false,
+      width: 170,
+      height: 18,
+      imageIndex: 9,
+      isVisible: true,
+      onBlur() {
+        calculateTotalAssetsInBangladeshAndOutside();
+      },
+    },
+
+    {
       name: "totalAssetsInBangladeshAndOutsideBangladesh",
       type: "text",
       label: "",
@@ -5594,117 +5817,6 @@ const IndividualTaxReturnForm: React.FC = () => {
       y: 785,
       width: 160,
       height: 16,
-      imageIndex: 9,
-      isVisible: true,
-    },
-
-    {
-      name: "ornaments1",
-      type: "text",
-      label: "ornaments1",
-      x: 420,
-      y: 610,
-      width: 355,
-      height: 18,
-      imageIndex: 9,
-      isVisible: true,
-    },
-    {
-      name: "ornaments2",
-      type: "text",
-      label: "ornaments2",
-      x: 770,
-      y: 610,
-      width: 170,
-      height: 18,
-      imageIndex: 9,
-      isVisible: true,
-    },
-    {
-      name: "furnitureAndElectronic",
-      type: "text",
-      label: "furnitureAndElectronic",
-      x: 770,
-      y: 628,
-      width: 170,
-      height: 18,
-      imageIndex: 9,
-      isVisible: true,
-    },
-    {
-      name: "othersAssets2",
-      type: "text",
-      label: "othersAssets2",
-      x: 770,
-      y: 645,
-      width: 170,
-      height: 18,
-      imageIndex: 9,
-      isVisible: true,
-    },
-    {
-      name: "othersAssets1",
-      type: "text",
-      label: "othersAssets1",
-      x: 550,
-      y: 645,
-      width: 220,
-      height: 18,
-      imageIndex: 9,
-      isVisible: true,
-    },
-    {
-      name: "bankBalance",
-      type: "text",
-      label: "bankBalance",
-      x: 620,
-      y: 680,
-      width: 155,
-      height: 18,
-      imageIndex: 9,
-      isVisible: true,
-    },
-    {
-      name: "cashInHand",
-      type: "text",
-      label: "cashInHand",
-      x: 620,
-      y: 698,
-      width: 155,
-      height: 18,
-      imageIndex: 9,
-      isVisible: true,
-    },
-    {
-      name: "others2",
-      type: "text",
-      label: "others2",
-      x: 620,
-      y: 715,
-      width: 155,
-      height: 18,
-      imageIndex: 9,
-      isVisible: true,
-    },
-    {
-      name: "others1",
-      type: "text",
-      label: "others1",
-      x: 300,
-      y: 715,
-      width: 320,
-      height: 18,
-      imageIndex: 9,
-      isVisible: true,
-    },
-    {
-      name: "assetOutsideBangladesh",
-      type: "text",
-      label: "assetOutsideBangladesh",
-      x: 770,
-      y: 768,
-      width: 170,
-      height: 18,
       imageIndex: 9,
       isVisible: true,
     },
