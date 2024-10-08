@@ -451,6 +451,8 @@ const IndividualTaxReturnForm: React.FC = () => {
     const safeTotal = isNaN(total) ? 0 : Math.round(total * 100) / 100;
 
     setValue("totalExpenseIndividualPerson.amount", safeTotal.toFixed(2));
+    setValue("expenseRelatingToLifestyle",safeTotal.toFixed(2));
+    calculateTotalExpenseAndLoss();
     return safeTotal;
   };
 
@@ -536,7 +538,104 @@ const IndividualTaxReturnForm: React.FC = () => {
     setValue("netProfitFromBusinessIncome", netProfit.toFixed(2));
     return Math.max(netProfit, 0);
   };
+  // Image 8 statement of assests
+  const calculateGrossWealth = useCallback(() => {
+    const fields = [
+      "netWealthAtTheLastDateOfThisFinancialYear",
+      "totalLiabilitiesOutsideBusiness",        
+    ];
+  
+    const total = fields.reduce((sum, field) => {
+      const value = watch(field as keyof IndividualTaxReturnFormInput);
+      const numberValue = parseFloat(value?.toString() || "0");
+      return sum + (isNaN(numberValue) ? 0 : numberValue);
+    }, 0);
+  
+    setValue("grossWealth", total.toFixed(2));  
+    return total;
+   },[setValue, watch]);
+  const calculateNetWealthLastDateOfThisFinancialYear = useCallback(() => {
+    const sumOfSourceOfFundPreviousYear = getValues("sumOfSourceOfFundAndPreviousYearsNetWealth");
+    const totalExpenseAndLoss = getValues("totalExpensesAndLoss");
 
+    const result = parseFloat(sumOfSourceOfFundPreviousYear?.toString() || "0") - parseFloat(totalExpenseAndLoss?.toString() || "0");
+
+    setValue("netWealthAtTheLastDateOfThisFinancialYear", result.toFixed(2));
+    calculateGrossWealth();
+
+  },[getValues,  setValue,calculateGrossWealth]);
+  const calculateSumOfSourceOfFund = useCallback(() => {
+    const fields = [
+      "totalSourceOfFund",
+      "netWealthLastDateAmount"
+    ];
+
+    const total = fields.reduce((sum, field) => {
+      const value = watch(field as keyof IndividualTaxReturnFormInput);
+      const numberValue = parseFloat(value?.toString() || "0");
+      return sum + (isNaN(numberValue) ? 0 : numberValue);
+    }, 0);
+
+    setValue("sumOfSourceOfFundAndPreviousYearsNetWealth", total.toFixed(2));
+    calculateNetWealthLastDateOfThisFinancialYear();
+    return total;
+  },[setValue, watch, calculateNetWealthLastDateOfThisFinancialYear])
+  const calculateTotalSourceOfFunds = useCallback(() => {
+    const fields = [
+      "totalIncomeShownInTheReturn",
+      "taxExemptedIncomeAndAllowance",
+      "receiptOfGiftOtherReceipts",    
+    ];
+
+    const total = fields.reduce((sum, field) => {
+      const value = watch(field as keyof IndividualTaxReturnFormInput);
+      const numberValue = parseFloat(value?.toString() || "0");
+      return sum + (isNaN(numberValue) ? 0 : numberValue);
+    }, 0);
+
+    setValue("totalSourceOfFund", total.toFixed(2));
+    calculateSumOfSourceOfFund();
+    return total;
+
+  },[setValue, watch, calculateSumOfSourceOfFund]);
+
+  const calculateTotalExpenseAndLoss = () => {
+    const fields = [
+      "expenseRelatingToLifestyle",
+      "giftExpense",
+        
+    ];
+
+    const total = fields.reduce((sum, field) => {
+      const value = watch(field as keyof IndividualTaxReturnFormInput);
+      const numberValue = parseFloat(value?.toString() || "0");
+      return sum + (isNaN(numberValue) ? 0 : numberValue);
+    }, 0);
+
+    setValue("totalExpensesAndLoss", total.toFixed(2));   
+    calculateNetWealthLastDateOfThisFinancialYear() ;
+    return total;
+  }
+
+ const calculateLiabilitiesOutSideBusiness = () => {
+  const fields = [
+    "institutionalLiabilities",
+    "nonInstitutionalLiabilities",
+    "otherLiabilities",    
+  ];
+
+  const total = fields.reduce((sum, field) => {
+    const value = watch(field as keyof IndividualTaxReturnFormInput);
+    const numberValue = parseFloat(value?.toString() || "0");
+    return sum + (isNaN(numberValue) ? 0 : numberValue);
+  }, 0);
+
+  setValue("totalLiabilitiesOutsideBusiness", total.toFixed(2));  
+  calculateGrossWealth();
+  return total;
+ }
+ 
+  
   // Schedule 1
   const calculatePrivateEmploymentTotals = useCallback(() => {
     const fields = [
@@ -600,11 +699,11 @@ const IndividualTaxReturnForm: React.FC = () => {
     setValue("incomeFromEmployment", totalIncomeFromSalary.toFixed(2)); // for the second page
     setValue("totalIncomeShownInTheReturn", totalIncomeFromSalary.toFixed(2)); // for the 9th page
     setValue("taxExemptedIncomeAndAllowance", totalExempted.toFixed(2)); // for 9th page
-
+    calculateTotalSourceOfFunds();
     return {
       totalIncome: isNaN(totalIncome) ? 0 : totalIncome,
     };
-  }, [watch, setValue]);
+  }, [watch, setValue,calculateTotalSourceOfFunds]);
 
   const calcualateScheduleOneOtherAllowanceGovtTaxable = () => {
     const incomeAmount = parseFloat(
@@ -619,7 +718,7 @@ const IndividualTaxReturnForm: React.FC = () => {
 
     return result;
   };
-
+  
   const calculateScheduleOneGovtTotals = () => {
     const taxExemptedFields = [
       "specialAllowanceGovtEmployment",
@@ -703,7 +802,7 @@ const IndividualTaxReturnForm: React.FC = () => {
     setValue("incomeFromEmployment", totalTaxable.toFixed(2)); // for second page
     setValue("totalIncomeShownInTheReturn", totalTaxable.toFixed(2)); // for 9th page
     setValue("taxExemptedIncomeAndAllowance", totalTaxExempted.toFixed(2)); // for 9th page
-
+    calculateTotalSourceOfFunds();
     return {
       totalIncome: isNaN(totalIncome) ? 0 : totalIncome,
       totalTaxExempted: isNaN(totalTaxExempted) ? 0 : totalTaxExempted,
@@ -869,6 +968,8 @@ const IndividualTaxReturnForm: React.FC = () => {
 
     return () => subscription.unsubscribe();
   }, [watch, setValue, calculatePrivateEmploymentTotals]);
+
+ 
 
   const formFields: FormField[] = [
     // Image 1
@@ -4679,13 +4780,16 @@ const IndividualTaxReturnForm: React.FC = () => {
       type: "text",
       label: "receiptOfGiftOtherReceipts",
 
-      disabled: true,
+      disabled: false,
       x: 775,
       y: 410,
       width: 160,
       height: 16,
       imageIndex: 8,
       isVisible: true,
+      onBlur: () => {
+        calculateTotalSourceOfFunds();
+      }
     },
     {
       name: "totalSourceOfFund",
@@ -4848,6 +4952,9 @@ const IndividualTaxReturnForm: React.FC = () => {
       label: "netWealthLastDateAmount",
       disabled:
         watch("netWealthLastDate") === "NO_I_AM_A_NEW_TAXPAYER" ? true : false,
+        onBlur: () =>  {
+          calculateSumOfSourceOfFund();
+        },
 
       x: 772,
       y: 445,
@@ -4860,6 +4967,9 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "giftExpense",
       type: "text",
       label: "giftExpense",
+      onBlur: () => {
+        calculateTotalExpenseAndLoss();
+      },
       x: 772,
       y: 515,
       width: 168,
@@ -4871,6 +4981,9 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "institutionalLiabilities",
       type: "text",
       label: "institutionalLiabilities",
+      onBlur: () => {
+        calculateLiabilitiesOutSideBusiness();
+      },
       x: 772,
       y: 585,
       width: 168,
@@ -4882,6 +4995,9 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "nonInstitutionalLiabilities",
       type: "text",
       label: "nonInstitutionalLiabilities",
+      onBlur: () => {
+        calculateLiabilitiesOutSideBusiness();
+      },
 
       x: 772,
       y: 605,
@@ -4894,6 +5010,9 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "otherLiabilities",
       type: "text",
       label: "otherLiabilities",
+      onBlur: () => {
+        calculateLiabilitiesOutSideBusiness();
+      },
 
       x: 772,
       y: 620,
