@@ -59,6 +59,7 @@ import { useToast } from "@/hooks/use-toast";
 import { useRouter } from "next/navigation";
 import CustomCheckbox from "@/components/custom/checkbox";
 import { RepairCollection } from "@prisma/client";
+import { z } from "zod";
 
 // Define the possible field types
 type FieldType =
@@ -79,8 +80,26 @@ interface DateFieldPosition {
   height: number;
 }
 
+// Helper type to infer the type from a Zod schema
+type Infer<T> = T extends z.ZodType<infer R> ? R : never;
+
+// Updated NestedKeys type
+type NestedKeys<T, Prefix extends string = ""> = T extends z.ZodType
+  ? NestedKeys<Infer<T>, Prefix>
+  : T extends Array<any>
+  ? `${Prefix}${number}`
+  : T extends object
+  ? {
+      [K in keyof T & (string | number)]: T[K] extends z.ZodType
+        ? `${Prefix}${K}` | NestedKeys<Infer<T[K]>, `${Prefix}${K}.`>
+        : T[K] extends object
+        ? `${Prefix}${K}` | NestedKeys<T[K], `${Prefix}${K}.`>
+        : `${Prefix}${K}`;
+    }[keyof T & (string | number)]
+  : never;
+
 interface BaseFormField {
-  name: string;
+  name: NestedKeys<IndividualTaxReturnFormInput>;
   type: FieldType;
   label: string;
   x: number;
@@ -176,436 +195,7 @@ const IndividualTaxReturnForm: React.FC = () => {
 
   const form = useForm<IndividualTaxReturnFormInput>({
     resolver: zodResolver(individualTaxReturnSchema),
-    defaultValues: {
-      taxpayerName: "",
-      nationalId: "",
-      tin: "",
-      circle: "",
-      zone: "",
-      residentialStatus: "RESIDENT",
-      specialBenefits: "NONE",
-      isParentOfDisabledPerson: undefined,
-      dateOfBirth: undefined,
-      statementOfIncomeYearEndedOn: undefined,
-      spouseName: "",
-      spouseTin: "",
-      addressLine1: "",
-      addressLine2: "",
-      telephone: "",
-      mobile: "",
-      email: "",
-      employerName: "",
-      businessName: "",
-      bin: "",
-      partnersMembersAssociation1: "",
-      partnersMembersAssociation2: "",
-      incomeFishFarming: false,
-      incomeFishFarmingAmount: "",
-      shareOfIncomeFromAOP: "",
-      incomeOfMinor: "",
-      taxableIncomeFromAbroad: "",
-      minimumTax: undefined,
-      netWealthSurcharge: undefined,
-      taxPayable: "0.0",
-      netWealthSurchargeAmount: "",
-      environmentalSurcharge: "",
-      delayInterest: "",
-      calculate: undefined,
-      advanceTaxPaidAmount: "",
-      adjustmentOfTaxRefund: "",
-      taxPaidWithThisReturn: "",
-      listOfDocumentsFurnishedWithThisReturn1: "",
-      listOfDocumentsFurnishedWithThisReturn2: "",
-      fatherOrHusband: "",
-      placeOfSignature: "",
-      signature: "",
-      dateOfSignature: undefined,
-      locationDescriptionOwnershipProportionOfProperty: "",
-      rentReceivedOrAnnualValue: "",
-      advanceRentReceived: "",
-      valueOfAnyBenefit: "",
-      adjustedAdvanceRent: "",
-      vacancyAllowance: "",
-      repairCollectionProperty: undefined,
-      repairCollectionAmount: "",
-      municipalOrLocalTax: "",
-      landRevenue: "",
-      interestMortgageCapitalCharge: "",
-      insurancePremiumPaid: "",
-      others: "",
-      taxpayersSharePercentage: "100",
-      taxDeductedSourceFromIncomeRent: "",
-      salesTurnoverReceipt: "",
-      grossProfitFromAgriculture: "",
-      generalExpensesSellingExpenses: "",
-      nameOfBusiness: "",
-      natureOfBusiness: "",
-      addressOfBusiness: "",
-      salesTurnoverReceipts: "",
-      grossProfitFromBusiness: "",
-      generalAdministrativeSellingExpenses: "",
-      badDebtExpense: "",
-      inventories: "",
-      fixedAssets: "",
-      otherAssets: "",
-      openingCapital: "",
-      withdrawalsInTheIncomeYear: "",
-      liabilities: "",
-      interestProfitFromBankFI: {
-        amountOfIncome: "0",
-        deductionsExpensesExemptedIncome: "0",
-        netTaxableIncome: "0",
-        particulars: "",
-        taxDeductedAtSource: "0",
-      },
-      incomeFromSavingCertificates: {
-        amountOfIncome: "0",
-        deductionsExpensesExemptedIncome: "0",
-        netTaxableIncome: "0",
-        particulars: "",
-        taxDeductedAtSource: "0",
-      },
-
-      incomeFromSecuritiesDebentures: {
-        amountOfIncome: "0",
-        deductionsExpensesExemptedIncome: "0",
-        netTaxableIncome: "0",
-        particulars: "",
-        taxDeductedAtSource: "0",
-      },
-
-      incomeFromFinancialProductScheme: {
-        amountOfIncome: "0",
-        deductionsExpensesExemptedIncome: "0",
-        netTaxableIncome: "0",
-        particulars: "",
-        taxDeductedAtSource: "0",
-      },
-      dividendIncome: {
-        amountOfIncome: "0",
-        deductionsExpensesExemptedIncome: "0",
-        netTaxableIncome: "0",
-        particulars: "",
-        taxDeductedAtSource: "0",
-      },
-      capitalGainFromTransferOfProperty: {
-        amountOfIncome: "0",
-        deductionsExpensesExemptedIncome: "0",
-        netTaxableIncome: "0",
-        particulars: "",
-        taxDeductedAtSource: "0",
-      },
-      incomeFromBusinessMinTax: {
-        amountOfIncome: "0",
-        deductionsExpensesExemptedIncome: "0",
-        netTaxableIncome: "0",
-        particulars: "",
-        taxDeductedAtSource: "0",
-      },
-      workersParticipationFund: {
-        amountOfIncome: "0",
-        deductionsExpensesExemptedIncome: "0",
-        netTaxableIncome: "0",
-        particulars: "",
-        taxDeductedAtSource: "0",
-      },
-
-      incomeFromOtherSourcesMinTax: {
-        amountOfIncome: "0",
-        deductionsExpensesExemptedIncome: "0",
-        netTaxableIncome: "0",
-        particulars: "",
-        taxDeductedAtSource: "0",
-      },
-      otherSubjectToMinTax: {
-        amountOfIncome: "0",
-        deductionsExpensesExemptedIncome: "0",
-        netTaxableIncome: "0",
-        particulars: "",
-        taxDeductedAtSource: "0",
-      },
-
-      lifeInsurancePremium: "",
-      contributionToDeposit: "",
-      investmentInGovernmentSecurities1: "",
-      investmentInGovernmentSecurities2: "",
-      investmentInSecurities: "",
-      contributionToProvidentFund: "",
-      selfAndEmployersContribution: "",
-      contributionToSuperAnnuationFund: "",
-      contributionToBenevolentFund: "",
-      contributionToZakatFund1: "",
-      contributionToZakatFund2: "",
-      othersIf1: "",
-      othersIf2: "",
-      expensesForFoodAmount: "",
-      expensesForFoodComment: "",
-      housingExpenseAmount: "",
-      housingExpenseComment: "",
-      personalTransportationExpensesAmount: "",
-      personalTransportationExpensesAmountComment: "",
-      utilityExpenseAmount: "",
-      utilityExpenseComment: "",
-      educationExpensesAmount: "",
-      educationExpensesComment: "",
-      personalExpenseAmount: "",
-      personalExpenseComment: "",
-      festivalExpenseAmount: "",
-      festivalExpenseComment: "",
-      taxDeductedComment: "",
-      // advanceTaxPaid2Amount: "",
-      advanceTaxPaidComment: "",
-      taxSurchargePaidAmount: "",
-      taxSurchargePaidComment: "",
-      interestPaidAmount: "",
-      interestPaidComment: "",
-      total: "",
-      exemptedIncomeFromSalary: "",
-      exemptedIncomeFromBusiness: "",
-      exemptedAgriculturalIncome: "",
-      incomeFromProvidentFund: "",
-      foreignRemittance: "",
-      typeOfReceipts1: "",
-      typeOfReceipts2: "",
-      typeOfReceipts3: "",
-      typeOfReceiptsAmount1: "",
-      typeOfReceiptsAmount2: "",
-      typeOfReceiptsAmount3: "",
-      netWealthLastDate: undefined,
-      netWealthLastDateAmount: "",
-      giftExpense: "",
-      institutionalLiabilities: "",
-      nonInstitutionalLiabilities: "",
-      otherLiabilities: "",
-      totalAssetOfBusiness: "",
-      lessBusinessLiabilities: "",
-      companyName1: "",
-      companyName2: "",
-      companyName3: "",
-      noOfShare1: "",
-      noOfShare2: "",
-      noOfShare3: "",
-      value1: "",
-      value2: "",
-      value3: "",
-      nameOfPartnershipFirm1: "",
-      nameOfPartnershipFirm2: "",
-      nameOfPartnershipFirm3: "",
-      shareOfProfit1: "",
-      shareOfProfit2: "",
-      shareOfProfit3: "",
-      capitalContributed1: "",
-      capitalContributed2: "",
-      capitalContributed3: "",
-      locationDescription1: "",
-      locationDescription2: "",
-      locationDescription3: "",
-      locationDescription4: "",
-      locationDescription5: "",
-      locationValue1: "",
-      locationValue2: "",
-      locationValue3: "",
-      locationValue4: "",
-      locationValue5: "",
-      agriculturalLocationAndDescription1: "",
-      agriculturalLocationAndDescription2: "",
-      agriculturalLocationAndDescription3: "",
-      agriculturalLocationValue1: "",
-      agriculturalLocationValue2: "",
-      agriculturalLocationValue3: "",
-      shareDebentureUnitCertificate: "",
-      bondsGovernment: "",
-      sanchayapatraSavingsCertificate: "",
-      depositPensionScheme: "",
-      loansGivenToOthers: "",
-      name: "",
-      nid: "",
-      nidValue: "",
-      savingDeposit: "",
-      providentFund: "",
-      otherInvestment1: "",
-      otherInvestment2: "",
-      typeOfMotorVehicle1: "",
-      typeOfMotorVehicle2: "",
-      registrationNumber1: "",
-      registrationNumber2: "",
-      motorValue1: "",
-      motorValue2: "",
-      ornaments1: "",
-      ornaments2: "",
-      furnitureAndElectronic: "",
-      othersAssets1: "",
-      othersAssets2: "",
-      bankBalance: "",
-      cashInHand: "",
-      others1: "",
-      others2: "",
-      assetOutsideBangladesh: "",
-      incomeFromEmployment: "0.0",
-      incomeFromRent: "0.0",
-      incomeFromAgriculture: "0.0",
-      incomeFromBusiness: "0.0",
-      incomeFromBusinessMinimum: "0.0",
-      incomeFromCapitalGains: "0.0",
-      incomeFromFinancialAssets: "0.0",
-      incomeFromOtherSources: "0.0",
-      totalIncome: "0.0",
-      totalAmountPayable: "0.0",
-      taxDeductedOrCollected: "0.0",
-      totalTaxPaidAndAdjusted: "0.0",
-      excessPayment: "0.0",
-      taxExemptedTaxFreeIncome: "0.0",
-      totalRentValue: "0.0",
-      totalAdmissibleDeduction: "0.0",
-      netIncome: "0.0",
-      netProfitFromAgriculture: "0.0",
-      netProfitFromBusinessIncome: "0.00",
-      cashInHandAtBank: "0.0",
-      totalAssets: "0.0",
-      netProfitFromBusinessBalance: "0.0",
-      closingCpital: "0.0",
-      totalCapitalsAndLiabilities: "0.0",
-      totalAllowableInvestmentContribution: "0.0",
-      taxDeductedCollectedAtSourceAmount: "0.0",
-      advanceTaxPaidAmountTaka: "0.0",
-      totalAmount: "0.0",
-      totalAmount2: "0.0",
-      totalAmount3: "0.0",
-      taxOnIncomeFromPoultryHatcheriesFishFarming: "",
-      typeOfTaxExemptedTaxFreeIncome6: "",
-      typeOfTaxExemptedTaxFreeIncome7: "",
-      typeOfTaxExemptedTaxFreeIncomeAmount6: "",
-      typeOfTaxExemptedTaxFreeIncomeAmount7: "",
-      totalIncomeShownInTheReturn: "0.0",
-      taxExemptedIncomeAndAllowance: "0.0",
-      receiptOfGiftOtherReceipts: "0.0",
-      totalSourceOfFund: "0.0",
-      sumOfSourceOfFundAndPreviousYearsNetWealth: "0.0",
-      expenseRelatingToLifestyle: "0.0",
-      totalExpensesAndLoss: "0.0",
-      netWealthAtTheLastDateOfThisFinancialYear: "0.0",
-      totalLiabilitiesOutsideBusiness: "0.0",
-      grossWealth: "0.0",
-      businessCapitalAmount1: "0.0",
-      businessCapitalAmount2: "0.0",
-      directorsShareholdingsInTheCompanies: "0.0",
-      businessCapitalOfPartnershipFirm: "0.0",
-      nonAgriculturalPropertyLandHouseProperty: "0.0",
-      agriculturalProperty: "0.0",
-      totalFinancialAssets: "0.0",
-      motorVehiclesAmount: "0.0",
-      totalAssetslocatedInBangladesh: "0.0",
-      totalCashInHandsAndFundOutsideBusiness: "0.0",
-      totalAssetsInBangladeshAndOutsideBangladesh: "0.0",
-      totalIncomeShown: "",
-      totalTaxPaid: "",
-
-      // Image 3
-      // govt
-      basicPayGovtEmployment: {
-        amount: undefined,
-        taxExempted: undefined,
-        taxable: undefined,
-      },
-      arrearPayGovtEmployment: {
-        amount: undefined,
-        taxExempted: undefined,
-        taxable: undefined,
-      },
-      specialAllowanceGovtEmployment: {
-        amount: undefined,
-        taxExempted: undefined,
-        taxable: undefined,
-      },
-      houseRentAllowanceGovtEmployment: {
-        amount: undefined,
-        taxExempted: undefined,
-        taxable: undefined,
-      },
-      medicalAllowanceGovtEmployment: {
-        amount: undefined,
-        taxExempted: undefined,
-        taxable: undefined,
-      },
-      conveyanceAllowanceGovtEmployment: {
-        amount: undefined,
-        taxExempted: undefined,
-        taxable: undefined,
-      },
-      festivalAllowanceGovtEmployment: {
-        amount: undefined,
-        taxExempted: undefined,
-        taxable: undefined,
-      },
-      allowanceForSupportStaffGovtEmployment: {
-        amount: undefined,
-        taxExempted: undefined,
-        taxable: undefined,
-      },
-      leaveAllowanceGovtEmployment: {
-        amount: undefined,
-        taxExempted: undefined,
-        taxable: undefined,
-      },
-      honorariumRewardGovtEmployment: {
-        amount: undefined,
-        taxExempted: undefined,
-        taxable: undefined,
-      },
-      overtimeAllowanceGovtEmployment: {
-        amount: undefined,
-        taxExempted: undefined,
-        taxable: undefined,
-      },
-      banglaNoboborshoAllowancesGovtEmployment: {
-        amount: undefined,
-        taxExempted: undefined,
-        taxable: undefined,
-      },
-      interestAccruedProvidentFundGovtEmployment: {
-        amount: undefined,
-        taxExempted: undefined,
-        taxable: undefined,
-      },
-      lumpGrantGovtEmployment: {
-        amount: undefined,
-        taxExempted: undefined,
-        taxable: undefined,
-      },
-      gratuityGovtEmployment: {
-        amount: undefined,
-        taxExempted: undefined,
-        taxable: undefined,
-      },
-      otherAllowanceGovtEmployment: {
-        amount: undefined,
-        taxExempted: undefined,
-        taxable: undefined,
-      },
-      totalGovtEmployment: {
-        amount: undefined,
-        taxExempted: undefined,
-        taxable: undefined,
-      },
-      taxDeductedAtSourceFromIncomefromEmployment: "",
-
-      // private
-      basicPayPrivateEmployment: "",
-      allowancesPrivateEmployment: "",
-      advanceArrearSalaryPrivateEmployment: "",
-      gratuityAnnuityPensionOrSimilarBenefitPrivateEmployment: "",
-      perquisitesPrivateEmployment: "",
-      receiptInLieuOfOrInAdditionToSalaryOrWagesPrivateEmployment: "",
-      incomeFromEmployeeShareSchemePrivateEmployment: "",
-      accommodationFacilityPrivateEmployment: "",
-      transportFacilityPrivateEmployment: "",
-      anyOtherFacilityProvidedByEmployerPrivateEmployment: "",
-      employerContributionToRecognizedProvidentFundPrivateEmployment: "",
-      otherIfAnyPrivateEmployment: "",
-      totalSalaryReceivedPrivateEmployment: "",
-      exemptedAmountPrivateEmployment: "",
-      totalIncomeFromSalaryPrivateEmployment: "",
-    },
+    defaultValues: {},
   });
 
   const {
@@ -619,8 +209,317 @@ const IndividualTaxReturnForm: React.FC = () => {
     formState: { errors, isDirty },
   } = form;
 
+  const calculateTotalAssetsInBangladeshAndOutside = () => {
+    const nonAgriculturalProperty = calculateTotalNonAgriculturalAssets();
+    const agriculturalProperty = calculateTotalAgriculturalAssets();
+    const totalFinancialAssets = calculateTotalFinancialAssets();
+    const totalMotorValue = calculateTotalMotorValue();
+    const totalCashInHandAndFund = calculateTotalCashInHandAndFund();
+
+    const fields = [
+      "ornamentsValue",
+      "furnitureAndElectronic",
+      "othersAssetsValue",
+      "assetOutsideBangladesh",
+    ];
+
+    let totalInBangladesh =
+      nonAgriculturalProperty +
+      agriculturalProperty +
+      totalFinancialAssets +
+      totalMotorValue +
+      totalCashInHandAndFund;
+
+    let totalIncludingOutside = totalInBangladesh;
+
+    fields.forEach((field) => {
+      const value = watch(field as keyof IndividualTaxReturnFormInput);
+      const numberValue = parseFloat(value?.toString() || "0");
+
+      if (isNaN(numberValue)) {
+        console.warn(`Invalid value for ${field}: ${value}`);
+        return;
+      }
+
+      const safeValue = Math.max(0, numberValue);
+
+      if (field !== "assetOutsideBangladesh") {
+        totalInBangladesh += safeValue;
+      }
+      totalIncludingOutside += safeValue;
+    });
+
+    const safeTotalInBangladesh = Math.round(totalInBangladesh * 100) / 100;
+    const safeTotalIncludingOutside =
+      Math.round(totalIncludingOutside * 100) / 100;
+
+    setValue(
+      "totalAssetslocatedInBangladesh",
+      safeTotalInBangladesh.toFixed(2)
+    );
+
+    setValue(
+      "totalAssetsInBangladeshAndOutsideBangladesh",
+      safeTotalIncludingOutside.toFixed(2)
+    );
+
+    return {
+      totalInBangladesh: safeTotalInBangladesh,
+      totalIncludingOutside: safeTotalIncludingOutside,
+    };
+  };
+
+  const calculateTotalCashInHandAndFund = () => {
+    const fields = ["bankBalance", "cashInHand", "othersValue"];
+
+    const total = fields.reduce((sum, field) => {
+      const value = watch(field as keyof IndividualTaxReturnFormInput);
+      const numberValue = parseFloat(value?.toString() || "0");
+
+      // Guard against NaN and return the current sum if the value is not a valid number
+      if (isNaN(numberValue)) {
+        console.warn(`Invalid value for ${field}: ${value}`);
+        return sum;
+      }
+
+      // Ensure we're adding a positive number (or zero)
+      return sum + Math.max(0, numberValue);
+    }, 0);
+
+    // Ensure the final total is not NaN, and round to 2 decimal places
+    const safeTotal = isNaN(total) ? 0 : Math.round(total * 100) / 100;
+
+    // Assuming you have a field for the total cash in hand and fund outside business
+    setValue("totalCashInHandsAndFundOutsideBusiness", safeTotal.toFixed(2));
+    return safeTotal;
+  };
+
+  const calculateTotalMotorValue = () => {
+    const fields = ["motorValue1", "motorValue2"];
+
+    const total = fields.reduce((sum, field) => {
+      const value = watch(field as keyof IndividualTaxReturnFormInput);
+      const numberValue = parseFloat(value?.toString() || "0");
+
+      // Guard against NaN and return the current sum if the value is not a valid number
+      if (isNaN(numberValue)) {
+        console.warn(`Invalid value for ${field}: ${value}`);
+        return sum;
+      }
+
+      // Ensure we're adding a positive number (or zero)
+      return sum + Math.max(0, numberValue);
+    }, 0);
+
+    // Ensure the final total is not NaN, and round to 2 decimal places
+    const safeTotal = isNaN(total) ? 0 : Math.round(total * 100) / 100;
+
+    // Assuming you have a field for the total motor value
+    setValue("motorVehiclesAmount", safeTotal.toFixed(2));
+    return safeTotal;
+  };
+
+  const calculateTotalFinancialAssets = () => {
+    const fields = [
+      "shareDebentureUnitCertificate",
+      "bondsGovernment",
+      "sanchayapatraSavingsCertificate",
+      "depositPensionScheme",
+      "loansGivenToOthers",
+      "nidValue",
+      "savingDeposit",
+      "providentFund",
+      "otherInvestmentAmount",
+    ];
+
+    const total = fields.reduce((sum, field) => {
+      const value = watch(field as keyof IndividualTaxReturnFormInput);
+      const numberValue = parseFloat(value?.toString() || "0");
+
+      // Guard against NaN and return the current sum if the value is not a valid number
+      if (isNaN(numberValue)) {
+        console.warn(`Invalid value for ${field}: ${value}`);
+        return sum;
+      }
+
+      // Ensure we're adding a positive number (or zero)
+      return sum + Math.max(0, numberValue);
+    }, 0);
+
+    // Ensure the final total is not NaN, and round to 2 decimal places
+    const safeTotal = isNaN(total) ? 0 : Math.round(total * 100) / 100;
+
+    // Assuming you have a field for the total financial assets
+    setValue("totalFinancialAssets", safeTotal.toFixed(2));
+    return safeTotal;
+  };
+
+  const calculateTotalAgriculturalAssets = () => {
+    const fields = [
+      "agriculturalLocationValue1",
+      "agriculturalLocationValue2",
+      "agriculturalLocationValue3",
+    ];
+
+    const total = fields.reduce((sum, field) => {
+      const value = watch(field as keyof IndividualTaxReturnFormInput);
+      const numberValue = parseFloat(value?.toString() || "0");
+
+      // Guard against NaN and return the current sum if the value is not a valid number
+      if (isNaN(numberValue)) {
+        console.warn(`Invalid value for ${field}: ${value}`);
+        return sum;
+      }
+
+      // Ensure we're adding a positive number (or zero)
+      return sum + Math.max(0, numberValue);
+    }, 0);
+
+    // Ensure the final total is not NaN, and round to 2 decimal places
+    const safeTotal = isNaN(total) ? 0 : Math.round(total * 100) / 100;
+
+    // Assuming you have a field for the total agricultural location value
+    setValue("agriculturalProperty", safeTotal.toFixed(2));
+    return safeTotal;
+  };
+
+  const calculateTotalNonAgriculturalAssets = () => {
+    const fields = [
+      "locationValue1",
+      "locationValue2",
+      "locationValue3",
+      "locationValue4",
+      "locationValue5",
+    ];
+
+    const total = fields.reduce((sum, field) => {
+      const value = watch(field as keyof IndividualTaxReturnFormInput);
+      const numberValue = parseFloat(value?.toString() || "0");
+
+      // Guard against NaN and return the current sum if the value is not a valid number
+      if (isNaN(numberValue)) {
+        console.warn(`Invalid value for ${field}: ${value}`);
+        return sum;
+      }
+
+      // Ensure we're adding a positive number (or zero)
+      return sum + Math.max(0, numberValue);
+    }, 0);
+
+    // Ensure the final total is not NaN, and round to 2 decimal places
+    const safeTotal = isNaN(total) ? 0 : Math.round(total * 100) / 100;
+
+    // Assuming you have a field for the total location value
+    setValue("nonAgriculturalPropertyLandHouseProperty", safeTotal.toFixed(2));
+
+    return safeTotal;
+  };
+
+  // individual person expense
+  const calculateTotalExpenseIndividualPerson = () => {
+    const fields = [
+      "expensesForFood",
+      "housingExpense",
+      "personalTransportationExpenses",
+      "utilityExpense",
+      "educationExpenses",
+      "personalExpenseForLocalForeignTravel",
+      "festivalExpense",
+      "taxDeductedCollectedAtSource",
+      "advanceTaxPaid",
+      "taxSurchargePaid",
+      "interestPaid",
+    ];
+
+    const total = fields.reduce((sum, field) => {
+      const value = watch(
+        `${field}.amount` as keyof IndividualTaxReturnFormInput
+      );
+      const numberValue = parseFloat(value?.toString() || "0");
+
+      // Guard against NaN and return the current sum if the value is not a valid number
+      if (isNaN(numberValue)) {
+        console.warn(`Invalid value for ${field}: ${value}`);
+        return sum;
+      }
+
+      // Ensure we're adding a positive number (or zero)
+      return sum + Math.max(0, numberValue);
+    }, 0);
+
+    // Ensure the final total is not NaN, and round to 2 decimal places
+    const safeTotal = isNaN(total) ? 0 : Math.round(total * 100) / 100;
+
+    setValue("totalExpenseIndividualPerson.amount", safeTotal.toFixed(2));
+    return safeTotal;
+  };
+
+  // rebate
+  const calculateTotalAllowableInvestmentContribution = () => {
+    const fields = [
+      "lifeInsurancePremium",
+      "contributionToDeposit",
+      "investmentInGovernmentSecuritiesDetails",
+      "investmentInGovernmentSecuritiesAmount",
+      "investmentInSecurities",
+      "contributionToProvidentFund",
+      "selfAndEmployersContribution",
+      "contributionToSuperAnnuationFund",
+      "contributionToBenevolentFund",
+      "contributionToZakatFundAmount",
+      "othersRebateAmount",
+    ];
+
+    const total = fields.reduce((sum, field) => {
+      const value = watch(field as keyof IndividualTaxReturnFormInput);
+      const numberValue = parseFloat(value?.toString() || "0");
+      return sum + (isNaN(numberValue) ? 0 : numberValue);
+    }, 0);
+
+    setValue("totalAllowableInvestmentContribution", total.toFixed(2));
+    return total;
+  };
+
   // Schedule 4
+  const calculateSummaryOfBalanceSheet = () => {
+    const netProfitFromBusinessIncome = parseFloat(
+      watch("netProfitFromBusinessIncome") || "0"
+    );
+
+    const cashInHandAtBank = parseFloat(watch("cashInHandAtBank") || "0");
+    const inventories = parseFloat(watch("inventories") || "0");
+    const fixedAssets = parseFloat(watch("fixedAssets") || "0");
+    const otherAssets = parseFloat(watch("otherAssets") || "0");
+
+    const totalAssets =
+      cashInHandAtBank + inventories + otherAssets + fixedAssets;
+
+    setValue("totalAssets", totalAssets.toFixed(2));
+
+    const openingCapital = parseFloat(watch("openingCapital") || "0");
+    const withdrawalsInTheIncomeYear = parseFloat(
+      watch("withdrawalsInTheIncomeYear") || "0"
+    );
+
+    const closingCapital =
+      openingCapital + netProfitFromBusinessIncome - withdrawalsInTheIncomeYear;
+
+    setValue("closingCapital", closingCapital.toFixed(2));
+
+    const liabilities = parseFloat(watch("liabilities") || "0");
+    const totalCapitalsAndLiabilities = liabilities + closingCapital;
+
+    setValue(
+      "totalCapitalsAndLiabilities",
+      totalCapitalsAndLiabilities.toFixed(2)
+    );
+
+    return 0;
+  };
+
   const calculateNetProfitFromBusinessIncome = (): number => {
+    calculateSummaryOfBalanceSheet();
+
     const grossProfit = parseFloat(watch("grossProfitFromBusiness") || "0");
     const expenses = parseFloat(
       watch("generalAdministrativeSellingExpenses") || "0"
@@ -698,6 +597,10 @@ const IndividualTaxReturnForm: React.FC = () => {
       totalIncomeFromSalary.toFixed(2)
     );
 
+    setValue("incomeFromEmployment", totalIncomeFromSalary.toFixed(2)); // for the second page
+    setValue("totalIncomeShownInTheReturn", totalIncomeFromSalary.toFixed(2)); // for the 9th page
+    setValue("taxExemptedIncomeAndAllowance", totalExempted.toFixed(2)); // for 9th page
+
     return {
       totalIncome: isNaN(totalIncome) ? 0 : totalIncome,
     };
@@ -718,58 +621,92 @@ const IndividualTaxReturnForm: React.FC = () => {
   };
 
   const calculateScheduleOneGovtTotals = () => {
-    const fields = [
-      "basicPayGovtEmployment",
-      "arrearPayGovtEmployment",
+    const taxExemptedFields = [
       "specialAllowanceGovtEmployment",
       "houseRentAllowanceGovtEmployment",
       "medicalAllowanceGovtEmployment",
       "conveyanceAllowanceGovtEmployment",
-      "festivalAllowanceGovtEmployment",
       "allowanceForSupportStaffGovtEmployment",
       "leaveAllowanceGovtEmployment",
       "honorariumRewardGovtEmployment",
-      "overtimeAllowanceGovtEmployment",
       "banglaNoboborshoAllowancesGovtEmployment",
+      "overtimeAllowanceGovtEmployment",
       "interestAccruedProvidentFundGovtEmployment",
       "lumpGrantGovtEmployment",
       "gratuityGovtEmployment",
-      "otherAllowanceGovtEmployment",
     ] as const;
 
-    let totalExempted = 0;
+    const taxableFields = [
+      "basicPayGovtEmployment",
+      "arrearPayGovtEmployment",
+      "festivalAllowanceGovtEmployment",
+    ] as const;
+
     let totalIncome = 0;
+    let totalTaxExempted = 0;
     let totalTaxable = 0;
 
-    for (const field of fields) {
+    // Calculate total income and tax exempted
+    for (const field of taxExemptedFields) {
       const fieldValue = watch(field);
-
       if (
         fieldValue &&
         typeof fieldValue === "object" &&
         "amount" in fieldValue
       ) {
-        const exemptedAmount = parseFloat(fieldValue.taxExempted || "0");
-        const incomeAmount = parseFloat(fieldValue.amount || "0");
-
-        if (!isNaN(exemptedAmount)) {
-          totalExempted += exemptedAmount;
-        }
-        if (!isNaN(incomeAmount)) {
-          totalIncome += incomeAmount;
+        const amount = parseFloat(fieldValue.amount || "0");
+        if (!isNaN(amount)) {
+          totalIncome += amount;
+          totalTaxExempted += amount;
         }
       }
     }
 
-    totalTaxable = totalIncome - totalExempted;
+    // Calculate taxable income and add to total income
+    for (const field of taxableFields) {
+      const fieldValue = watch(field);
+      if (
+        fieldValue &&
+        typeof fieldValue === "object" &&
+        "amount" in fieldValue
+      ) {
+        const amount = parseFloat(fieldValue.amount || "0");
+        if (!isNaN(amount)) {
+          totalIncome += amount;
+          totalTaxable += amount;
+        }
+      }
+    }
 
-    setValue("totalGovtEmployment.taxExempted", totalExempted.toFixed(2));
+    // Handle otherAllowanceGovtEmployment separately
+    const otherAllowance = watch("otherAllowanceGovtEmployment");
+    if (
+      otherAllowance &&
+      typeof otherAllowance === "object" &&
+      "amount" in otherAllowance &&
+      "taxExempted" in otherAllowance
+    ) {
+      const amount = parseFloat(otherAllowance.amount || "0");
+      const taxExempted = parseFloat(otherAllowance.taxExempted || "0");
+      if (!isNaN(amount) && !isNaN(taxExempted)) {
+        totalIncome += amount;
+        totalTaxExempted += taxExempted;
+        totalTaxable += amount - taxExempted;
+      }
+    }
+
+    // Set the calculated values
     setValue("totalGovtEmployment.amount", totalIncome.toFixed(2));
+    setValue("totalGovtEmployment.taxExempted", totalTaxExempted.toFixed(2));
     setValue("totalGovtEmployment.taxable", totalTaxable.toFixed(2));
 
+    setValue("incomeFromEmployment", totalTaxable.toFixed(2)); // for second page
+    setValue("totalIncomeShownInTheReturn", totalTaxable.toFixed(2)); // for 9th page
+    setValue("taxExemptedIncomeAndAllowance", totalTaxExempted.toFixed(2)); // for 9th page
+
     return {
-      totalExempted: isNaN(totalExempted) ? 0 : totalExempted,
       totalIncome: isNaN(totalIncome) ? 0 : totalIncome,
+      totalTaxExempted: isNaN(totalTaxExempted) ? 0 : totalTaxExempted,
       totalTaxable: isNaN(totalTaxable) ? 0 : totalTaxable,
     };
   };
@@ -908,7 +845,7 @@ const IndividualTaxReturnForm: React.FC = () => {
   };
 
   useEffect(() => {
-    const subscription = watch((value, { name }) => {
+    const subscription = watch((value, { name, type }) => {
       if (name === "netWealthSurcharge") {
         if (value.netWealthSurcharge === "YES") {
           setValue("netWealthSurchargeAmount", "0.0");
@@ -928,29 +865,6 @@ const IndividualTaxReturnForm: React.FC = () => {
           setValue("netWealthLastDateAmount", "");
         }
       }
-
-      if (
-        name === "isIncomeFromEmployment" ||
-        name === "typeOfEmployment" ||
-        name === "totalIncomeFromSalaryPrivateEmployment" ||
-        name === "totalGovtEmployment"
-      ) {
-        if (value.isIncomeFromEmployment === "YES") {
-          if (value.typeOfEmployment === "PRIVATE") {
-            setValue(
-              "incomeFromEmployment",
-              value.totalIncomeFromSalaryPrivateEmployment || "0.00"
-            );
-          } else if (value.typeOfEmployment === "GOVERNMENT") {
-            setValue(
-              "incomeFromEmployment",
-              value.totalGovtEmployment?.taxable || "0.00"
-            );
-          }
-        } else {
-          setValue("incomeFromEmployment", "0.00");
-        }
-      }
     });
 
     return () => subscription.unsubscribe();
@@ -968,6 +882,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       width: 594,
       height: 30,
       imageIndex: 0,
+      isVisible: true,
     },
 
     {
@@ -979,6 +894,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       width: 397,
       height: 30,
       imageIndex: 0,
+      isVisible: true,
     },
     {
       name: "tin",
@@ -990,6 +906,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       width: 397,
       height: 30,
       imageIndex: 0,
+      isVisible: true,
     },
     {
       name: "circle",
@@ -1000,6 +917,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       width: 285,
       height: 30,
       imageIndex: 0,
+      isVisible: true,
     },
     {
       name: "zone",
@@ -1011,6 +929,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       width: 250,
       height: 30,
       imageIndex: 0,
+      isVisible: true,
     },
     {
       name: "residentialStatus",
@@ -1039,6 +958,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       width: 1000,
       height: 1000,
       imageIndex: 0,
+      isVisible: true,
     },
     {
       name: "specialBenefits",
@@ -1092,6 +1012,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       width: 1000,
       height: 1000,
       imageIndex: 0,
+      isVisible: true,
     },
     {
       name: "isParentOfDisabledPerson",
@@ -1112,6 +1033,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       width: 1000,
       height: 1000,
       imageIndex: 0,
+      isVisible: true,
     },
     {
       name: "dateOfBirth",
@@ -1126,6 +1048,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       dayPosition: { x: 150, y: 620, width: 60, height: 29 },
       monthPosition: { x: 220, y: 620, width: 60, height: 29 },
       yearPosition: { x: 290, y: 620, width: 100, height: 29 },
+      isVisible: true,
     },
     {
       name: "spouseName",
@@ -1137,39 +1060,40 @@ const IndividualTaxReturnForm: React.FC = () => {
       width: 287,
       height: 34,
       imageIndex: 0,
+      isVisible: true,
     },
     {
       name: "spouseTin",
       type: "text",
       label: "",
-
       x: 650,
       y: 612,
       width: 287,
       height: 39,
       imageIndex: 0,
+      isVisible: true,
     },
     {
       name: "addressLine1",
       type: "text",
       label: "",
-
       x: 223,
       y: 651,
       width: 712,
       height: 32,
       imageIndex: 0,
+      isVisible: true,
     },
     {
       name: "addressLine2",
       type: "text",
       label: "",
-
       x: 223,
       y: 682,
       width: 712,
       height: 30,
       imageIndex: 0,
+      isVisible: true,
     },
     {
       name: "telephone",
@@ -1180,6 +1104,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       width: 267,
       height: 31,
       imageIndex: 0,
+      isVisible: true,
     },
     {
       name: "mobile",
@@ -1190,39 +1115,40 @@ const IndividualTaxReturnForm: React.FC = () => {
       width: 281,
       height: 31,
       imageIndex: 0,
+      isVisible: true,
     },
     {
       name: "email",
       type: "email",
       label: "",
-
       x: 678,
       y: 731,
       width: 259,
       height: 31,
       imageIndex: 0,
+      isVisible: true,
     },
     {
       name: "employerName",
       type: "text",
       label: "",
-
       x: 130,
       y: 782,
       width: 805,
       height: 30,
       imageIndex: 0,
+      isVisible: true,
     },
     {
       name: "businessName",
       type: "text",
       label: "",
-
       x: 488,
       y: 812,
       width: 449,
       height: 31,
       imageIndex: 0,
+      isVisible: true,
     },
     {
       name: "bin",
@@ -1233,6 +1159,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       width: 449,
       height: 31,
       imageIndex: 0,
+      isVisible: true,
     },
     {
       name: "partnersMembersAssociation1",
@@ -1243,6 +1170,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       width: 807,
       height: 30,
       imageIndex: 0,
+      isVisible: true,
     },
     {
       name: "partnersMembersAssociation2",
@@ -1253,6 +1181,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       width: 807,
       height: 30,
       imageIndex: 0,
+      isVisible: true,
     },
 
     // Image 2
@@ -1260,7 +1189,6 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "statementOfIncomeYearEndedOn",
       type: "date",
       label: "",
-
       x: 100,
       y: 100,
       width: 397,
@@ -1269,17 +1197,19 @@ const IndividualTaxReturnForm: React.FC = () => {
       dayPosition: { x: 720, y: 40, width: 60, height: 29 },
       monthPosition: { x: 785, y: 40, width: 60, height: 29 },
       yearPosition: { x: 850, y: 40, width: 100, height: 29 },
+      isVisible: true,
     },
     {
       name: "taxpayerName",
       type: "text",
       label: "",
       x: 92,
-      y: 112,
+      y: 113,
       disabled: true,
       width: 570,
-      height: 22,
+      height: 21,
       imageIndex: 1,
+      isVisible: true,
     },
     {
       name: "tin",
@@ -1291,6 +1221,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       width: 265,
       height: 20,
       imageIndex: 1,
+      isVisible: true,
     },
 
     {
@@ -1303,6 +1234,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       width: 160,
       height: 25,
       imageIndex: 1,
+      isVisible: true,
     },
     {
       name: "taxpayersShareAmount", // this is taxable income fromt rent
@@ -1314,6 +1246,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       width: 160,
       height: 25,
       imageIndex: 1,
+      isVisible: true,
     },
     {
       name: "netProfitFromAgriculture", // this is income from agriculture
@@ -1325,6 +1258,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       width: 160,
       height: 25,
       imageIndex: 1,
+      isVisible: true,
     },
     {
       name: "incomeFishFarming",
@@ -1335,6 +1269,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       width: 50,
       height: 29,
       imageIndex: 1,
+      isVisible: true,
     },
     {
       name: "incomeFishFarmingAmount",
@@ -1346,30 +1281,31 @@ const IndividualTaxReturnForm: React.FC = () => {
       width: 166,
       height: 30,
       imageIndex: 1,
+      isVisible: true,
     },
     {
       name: "incomeFromBusiness",
       type: "text",
       label: "incomeFromBusiness",
-
       disabled: true,
       x: 774,
       y: 300,
       width: 160,
       height: 25,
       imageIndex: 1,
+      isVisible: true,
     },
     {
       name: "incomeFromBusinessMinimum",
       type: "text",
       label: "incomeFromBusinessMinimum",
-
       disabled: true,
       x: 774,
       y: 328,
       width: 160,
       height: 25,
       imageIndex: 1,
+      isVisible: true,
     },
     {
       name: "shareOfIncomeFromAOP",
@@ -1380,6 +1316,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       width: 168,
       height: 29,
       imageIndex: 1,
+      isVisible: true,
     },
     {
       name: "incomeOfMinor",
@@ -1390,78 +1327,79 @@ const IndividualTaxReturnForm: React.FC = () => {
       width: 168,
       height: 29,
       imageIndex: 1,
+      isVisible: true,
     },
 
     {
       name: "incomeFromCapitalGains",
       type: "text",
       label: "incomeFromCapitalGains",
-
       disabled: true,
       x: 774,
       y: 357,
       width: 160,
       height: 25,
       imageIndex: 1,
+      isVisible: true,
     },
     {
       name: "incomeFromFinancialAssets",
       type: "text",
       label: "incomeFromFinancialAssets",
-
       disabled: true,
       x: 774,
       y: 388,
       width: 160,
       height: 25,
       imageIndex: 1,
+      isVisible: true,
     },
     {
       name: "incomeFromOtherSources",
       type: "text",
       label: "incomeFromOtherSources",
-
       disabled: true,
       x: 774,
       y: 418,
       width: 160,
       height: 30,
       imageIndex: 1,
+      isVisible: true,
     },
     {
       name: "totalIncome",
       type: "text",
       label: "totalIncome",
-
       disabled: true,
       x: 774,
       y: 538,
       width: 160,
-      height: 25,
+      height: 27,
       imageIndex: 1,
+      isVisible: true,
     },
     {
       name: "totalAmountPayable",
       type: "text",
       label: "totalAmountPayable",
-
       disabled: true,
       x: 774,
       y: 855,
       width: 160,
       height: 25,
       imageIndex: 1,
+      isVisible: true,
     },
     {
       name: "taxableIncomeFromAbroad",
       type: "text",
       label: "incomeOfMinor",
-
       x: 770,
       y: 508,
       width: 168,
       height: 29,
       imageIndex: 1,
+      isVisible: true,
     },
     {
       name: "minimumTax",
@@ -1472,12 +1410,12 @@ const IndividualTaxReturnForm: React.FC = () => {
         label: snakeToNormalText(minimumTax),
         value: minimumTax,
       })),
-
       x: 270,
       y: 708,
       width: 350,
       height: 28,
       imageIndex: 1,
+      isVisible: true,
     },
     {
       name: "taxPayable",
@@ -1490,18 +1428,19 @@ const IndividualTaxReturnForm: React.FC = () => {
       width: 165,
       height: 25,
       imageIndex: 1,
+      isVisible: true,
     },
     {
       name: "netWealthSurchargeAmount",
       type: "text",
       label: "netWealthSurchargeAmount",
-
       disabled: true,
       x: 774,
       y: 768,
       width: 160,
       height: 25,
       imageIndex: 1,
+      isVisible: true,
     },
     {
       name: "netWealthSurcharge",
@@ -1518,6 +1457,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       width: 599,
       height: 12,
       imageIndex: 1,
+      isVisible: true,
     },
     {
       name: "environmentalSurcharge",
@@ -1528,6 +1468,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       width: 170,
       height: 29,
       imageIndex: 1,
+      isVisible: true,
     },
     {
       name: "delayInterest",
@@ -1539,6 +1480,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       width: 170,
       height: 29,
       imageIndex: 1,
+      isVisible: true,
     },
     {
       name: "calculate",
@@ -1554,6 +1496,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       width: 160,
       height: 29,
       imageIndex: 1,
+      isVisible: true,
     },
 
     // Image 3
@@ -1562,105 +1505,105 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "taxDeductedOrCollected",
       type: "text",
       label: "taxDeductedOrCollected",
-
       disabled: true,
       x: 775,
       y: 111,
       width: 160,
       height: 25,
       imageIndex: 2,
+      isVisible: true,
     },
     {
       name: "totalTaxPaidAndAdjusted",
       type: "text",
       label: "totalTaxPaidAndAdjusted",
-
       disabled: true,
       x: 775,
       y: 225,
       width: 160,
       height: 25,
       imageIndex: 2,
+      isVisible: true,
     },
     {
       name: "excessPayment",
       type: "text",
       label: "excessPayment",
-
       disabled: true,
       x: 775,
       y: 255,
       width: 160,
       height: 25,
       imageIndex: 2,
+      isVisible: true,
     },
     {
       name: "taxExemptedTaxFreeIncome",
       type: "text",
       label: "taxExemptedTaxFreeIncome",
-
       disabled: true,
       x: 775,
       y: 312,
       width: 160,
       height: 25,
       imageIndex: 2,
+      isVisible: true,
     },
 
     {
       name: "advanceTaxPaidAmount",
       type: "text",
-      label: "Advance Tax PaidAmount",
-
+      label: "",
       x: 770,
       y: 137,
       width: 170,
       height: 29,
       imageIndex: 2,
+      isVisible: true,
     },
     {
       name: "adjustmentOfTaxRefund",
       type: "text",
       label: "adjustmentOfTaxRefund",
-
       x: 770,
       y: 167,
       width: 170,
       height: 29,
       imageIndex: 2,
+      isVisible: true,
     },
     {
       name: "taxPaidWithThisReturn",
       type: "text",
       label: "taxPaidWithThisReturn",
-
       x: 770,
       y: 195,
       width: 170,
       height: 29,
       imageIndex: 2,
+      isVisible: true,
     },
     {
       name: "listOfDocumentsFurnishedWithThisReturn1",
       type: "textarea",
       label: "listOfDocumentsFurnishedWithThisReturn1",
-
       x: 91,
       y: 384,
       width: 425,
       height: 300,
       imageIndex: 2,
+      isVisible: true,
     },
     {
       name: "listOfDocumentsFurnishedWithThisReturn2",
       type: "textarea",
       label: "listOfDocumentsFurnishedWithThisReturn2",
-
       x: 516,
       y: 384,
       width: 424,
       height: 300,
       imageIndex: 2,
+      isVisible: true,
     },
     {
       name: "fatherOrHusband",
@@ -1671,6 +1614,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       width: 300,
       height: 29,
       imageIndex: 2,
+      isVisible: true,
     },
     {
       name: "placeOfSignature",
@@ -1681,12 +1625,12 @@ const IndividualTaxReturnForm: React.FC = () => {
       width: 250,
       height: 29,
       imageIndex: 2,
+      isVisible: true,
     },
     {
       name: "dateOfSignature",
       type: "date",
       label: "Date of Signature",
-
       x: 538,
       y: 910,
       width: 397,
@@ -1695,6 +1639,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       dayPosition: { x: 150, y: 920, width: 60, height: 29 },
       monthPosition: { x: 220, y: 920, width: 60, height: 29 },
       yearPosition: { x: 290, y: 920, width: 100, height: 29 },
+      isVisible: true,
     },
     {
       name: "taxpayerName",
@@ -1706,6 +1651,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       width: 300,
       height: 22,
       imageIndex: 2,
+      isVisible: true,
     },
     {
       name: "tin",
@@ -1717,6 +1663,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       width: 275,
       height: 22,
       imageIndex: 2,
+      isVisible: true,
     },
     {
       name: "signature",
@@ -1727,6 +1674,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       width: 500,
       height: 200,
       imageIndex: 2,
+      isVisible: true,
     },
 
     // Image 4
@@ -1759,6 +1707,7 @@ const IndividualTaxReturnForm: React.FC = () => {
           width: 33,
         },
       ],
+      isVisible: true,
     },
     {
       name: "typeOfEmployment",
@@ -1790,6 +1739,48 @@ const IndividualTaxReturnForm: React.FC = () => {
           width: 33,
         },
       ],
+
+      resetFields: [
+        "basicPayGovtEmployment",
+        "arrearPayGovtEmployment",
+        "specialAllowanceGovtEmployment",
+        "houseRentAllowanceGovtEmployment",
+        "medicalAllowanceGovtEmployment",
+        "conveyanceAllowanceGovtEmployment",
+        "festivalAllowanceGovtEmployment",
+        "allowanceForSupportStaffGovtEmployment",
+        "leaveAllowanceGovtEmployment",
+        "honorariumRewardGovtEmployment",
+        "overtimeAllowanceGovtEmployment",
+        "banglaNoboborshoAllowancesGovtEmployment",
+        "interestAccruedProvidentFundGovtEmployment",
+        "lumpGrantGovtEmployment",
+        "gratuityGovtEmployment",
+        "otherAllowanceGovtEmployment",
+        "totalGovtEmployment",
+        "taxDeductedAtSourceFromIncomefromEmployment",
+        "basicPayPrivateEmployment",
+        "allowancesPrivateEmployment",
+        "advanceArrearSalaryPrivateEmployment",
+        "gratuityAnnuityPensionOrSimilarBenefitPrivateEmployment",
+        "perquisitesPrivateEmployment",
+        "receiptInLieuOfOrInAdditionToSalaryOrWagesPrivateEmployment",
+        "incomeFromEmployeeShareSchemePrivateEmployment",
+        "accommodationFacilityPrivateEmployment",
+        "transportFacilityPrivateEmployment",
+        "transporFacilityPrivateCheck",
+        "tranportFacilityPrivateVehicleCC",
+        "anyOtherFacilityProvidedByEmployerPrivateEmployment",
+        "employerContributionToRecognizedProvidentFundPrivateEmployment",
+        "otherIfAnyPrivateEmployment",
+        "totalSalaryReceivedPrivateEmployment",
+        "exemptedAmountPrivateEmployment",
+        "totalIncomeFromSalaryPrivateEmployment",
+        "incomeFromEmployment",
+        "totalIncomeShownInTheReturn",
+        "taxExemptedIncomeAndAllowance", // from page 9
+      ],
+      isVisible: true,
     },
     {
       name: "taxpayerName",
@@ -1801,6 +1792,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       width: 570,
       height: 18,
       imageIndex: 3,
+      isVisible: true,
     },
     {
       name: "tin",
@@ -1812,6 +1804,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       width: 265,
       height: 18,
       imageIndex: 3,
+      isVisible: true,
     },
 
     {
@@ -1819,15 +1812,20 @@ const IndividualTaxReturnForm: React.FC = () => {
       type: "number",
       label: "",
       onBlur: (val) => {
-        if (val === "string") setValue("basicPayGovtEmployment.taxable", val);
+        console.log(typeof val);
+
+        if (typeof val === "string")
+          setValue("basicPayGovtEmployment.taxable", val);
+
         calculateScheduleOneGovtTotals();
       },
-      // disabled: true,
-      x: 475,
-      y: 216,
-      width: 151,
-      height: 18,
+
+      x: 474,
+      y: 215,
+      width: 153,
+      height: 19,
       imageIndex: 3,
+      isVisible: watch("typeOfEmployment") === "GOVERNMENT",
     },
     {
       name: "basicPayGovtEmployment.taxable",
@@ -1839,12 +1837,12 @@ const IndividualTaxReturnForm: React.FC = () => {
       width: 151,
       height: 18,
       imageIndex: 3,
+      isVisible: watch("typeOfEmployment") === "GOVERNMENT",
     },
     {
       name: "arrearPayGovtEmployment.amount",
       type: "number",
       label: "",
-      // disabled: true,
       x: 475,
       y: 235,
       width: 151,
@@ -1853,8 +1851,10 @@ const IndividualTaxReturnForm: React.FC = () => {
       onBlur: (val) => {
         calculateScheduleOneGovtTotals();
 
-        if (val === "string") setValue("arrearPayGovtEmployment.taxable", val);
+        if (typeof val === "string")
+          setValue("arrearPayGovtEmployment.taxable", val);
       },
+      isVisible: watch("typeOfEmployment") === "GOVERNMENT",
     },
     {
       name: "arrearPayGovtEmployment.taxable",
@@ -1866,12 +1866,12 @@ const IndividualTaxReturnForm: React.FC = () => {
       width: 151,
       height: 32,
       imageIndex: 3,
+      isVisible: watch("typeOfEmployment") === "GOVERNMENT",
     },
     {
       name: "specialAllowanceGovtEmployment.amount",
       type: "number",
       label: "",
-      // disabled: true,
       x: 475,
       y: 268,
       width: 151,
@@ -1879,9 +1879,10 @@ const IndividualTaxReturnForm: React.FC = () => {
       imageIndex: 3,
       onBlur: (val) => {
         calculateScheduleOneGovtTotals();
-        if (val === "string")
+        if (typeof val === "string")
           setValue("specialAllowanceGovtEmployment.taxExempted", val);
       },
+      isVisible: watch("typeOfEmployment") === "GOVERNMENT",
     },
     {
       name: "specialAllowanceGovtEmployment.taxExempted",
@@ -1893,12 +1894,12 @@ const IndividualTaxReturnForm: React.FC = () => {
       width: 151,
       height: 18,
       imageIndex: 3,
+      isVisible: watch("typeOfEmployment") === "GOVERNMENT",
     },
     {
       name: "houseRentAllowanceGovtEmployment.amount",
       type: "number",
       label: "",
-      // disabled: true,
       x: 475,
       y: 288,
       width: 151,
@@ -1906,9 +1907,10 @@ const IndividualTaxReturnForm: React.FC = () => {
       imageIndex: 3,
       onBlur: (val) => {
         calculateScheduleOneGovtTotals();
-        if (val === "string")
+        if (typeof val === "string")
           setValue("houseRentAllowanceGovtEmployment.taxExempted", val);
       },
+      isVisible: watch("typeOfEmployment") === "GOVERNMENT",
     },
     {
       name: "houseRentAllowanceGovtEmployment.taxExempted",
@@ -1920,12 +1922,12 @@ const IndividualTaxReturnForm: React.FC = () => {
       width: 151,
       height: 18,
       imageIndex: 3,
+      isVisible: watch("typeOfEmployment") === "GOVERNMENT",
     },
     {
       name: "medicalAllowanceGovtEmployment.amount",
       type: "number",
       label: "",
-      // disabled: true,
       x: 475,
       y: 307,
       width: 151,
@@ -1933,9 +1935,10 @@ const IndividualTaxReturnForm: React.FC = () => {
       imageIndex: 3,
       onBlur: (val) => {
         calculateScheduleOneGovtTotals();
-        if (val === "string")
+        if (typeof val === "string")
           setValue("medicalAllowanceGovtEmployment.taxExempted", val);
       },
+      isVisible: watch("typeOfEmployment") === "GOVERNMENT",
     },
     {
       name: "medicalAllowanceGovtEmployment.taxExempted",
@@ -1947,6 +1950,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       width: 151,
       height: 18,
       imageIndex: 3,
+      isVisible: watch("typeOfEmployment") === "GOVERNMENT",
     },
     {
       name: "conveyanceAllowanceGovtEmployment.amount",
@@ -1960,9 +1964,10 @@ const IndividualTaxReturnForm: React.FC = () => {
       imageIndex: 3,
       onBlur: (val) => {
         calculateScheduleOneGovtTotals();
-        if (val === "string")
+        if (typeof val === "string")
           setValue("conveyanceAllowanceGovtEmployment.taxExempted", val);
       },
+      isVisible: watch("typeOfEmployment") === "GOVERNMENT",
     },
     {
       name: "conveyanceAllowanceGovtEmployment.taxExempted",
@@ -1974,7 +1979,9 @@ const IndividualTaxReturnForm: React.FC = () => {
       width: 151,
       height: 18,
       imageIndex: 3,
+      isVisible: watch("typeOfEmployment") === "GOVERNMENT",
     },
+
     {
       name: "festivalAllowanceGovtEmployment.amount",
       type: "number",
@@ -1987,9 +1994,10 @@ const IndividualTaxReturnForm: React.FC = () => {
       imageIndex: 3,
       onBlur: (val) => {
         calculateScheduleOneGovtTotals();
-        if (val === "string")
+        if (typeof val === "string")
           setValue("festivalAllowanceGovtEmployment.taxable", val);
       },
+      isVisible: watch("typeOfEmployment") === "GOVERNMENT",
     },
     {
       name: "festivalAllowanceGovtEmployment.taxable",
@@ -2001,6 +2009,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       width: 151,
       height: 16,
       imageIndex: 3,
+      isVisible: watch("typeOfEmployment") === "GOVERNMENT",
     },
 
     {
@@ -2015,9 +2024,10 @@ const IndividualTaxReturnForm: React.FC = () => {
       imageIndex: 3,
       onBlur: (val) => {
         calculateScheduleOneGovtTotals();
-        if (val === "string")
+        if (typeof val === "string")
           setValue("allowanceForSupportStaffGovtEmployment.taxExempted", val);
       },
+      isVisible: watch("typeOfEmployment") === "GOVERNMENT",
     },
     {
       name: "allowanceForSupportStaffGovtEmployment.taxExempted",
@@ -2029,6 +2039,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       width: 151,
       height: 16,
       imageIndex: 3,
+      isVisible: watch("typeOfEmployment") === "GOVERNMENT",
     },
     {
       name: "leaveAllowanceGovtEmployment.amount",
@@ -2042,9 +2053,10 @@ const IndividualTaxReturnForm: React.FC = () => {
       imageIndex: 3,
       onBlur: (val) => {
         calculateScheduleOneGovtTotals();
-        if (val === "string")
+        if (typeof val === "string")
           setValue("leaveAllowanceGovtEmployment.taxExempted", val);
       },
+      isVisible: watch("typeOfEmployment") === "GOVERNMENT",
     },
     {
       name: "leaveAllowanceGovtEmployment.taxExempted",
@@ -2056,6 +2068,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       width: 151,
       height: 18,
       imageIndex: 3,
+      isVisible: watch("typeOfEmployment") === "GOVERNMENT",
     },
     {
       name: "honorariumRewardGovtEmployment.amount",
@@ -2069,9 +2082,10 @@ const IndividualTaxReturnForm: React.FC = () => {
       imageIndex: 3,
       onBlur: (val) => {
         calculateScheduleOneGovtTotals();
-        if (val === "string")
+        if (typeof val === "string")
           setValue("honorariumRewardGovtEmployment.taxExempted", val);
       },
+      isVisible: watch("typeOfEmployment") === "GOVERNMENT",
     },
     {
       name: "honorariumRewardGovtEmployment.taxExempted",
@@ -2083,6 +2097,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       width: 151,
       height: 18,
       imageIndex: 3,
+      isVisible: watch("typeOfEmployment") === "GOVERNMENT",
     },
     {
       name: "overtimeAllowanceGovtEmployment.amount",
@@ -2096,9 +2111,10 @@ const IndividualTaxReturnForm: React.FC = () => {
       imageIndex: 3,
       onBlur: (val) => {
         calculateScheduleOneGovtTotals();
-        if (val === "string")
+        if (typeof val === "string")
           setValue("overtimeAllowanceGovtEmployment.taxExempted", val);
       },
+      isVisible: watch("typeOfEmployment") === "GOVERNMENT",
     },
     {
       name: "overtimeAllowanceGovtEmployment.taxExempted",
@@ -2110,6 +2126,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       width: 151,
       height: 18,
       imageIndex: 3,
+      isVisible: watch("typeOfEmployment") === "GOVERNMENT",
     },
     {
       name: "banglaNoboborshoAllowancesGovtEmployment.amount",
@@ -2123,9 +2140,10 @@ const IndividualTaxReturnForm: React.FC = () => {
       imageIndex: 3,
       onBlur: (val) => {
         calculateScheduleOneGovtTotals();
-        if (val === "string")
+        if (typeof val === "string")
           setValue("banglaNoboborshoAllowancesGovtEmployment.taxExempted", val);
       },
+      isVisible: watch("typeOfEmployment") === "GOVERNMENT",
     },
     {
       name: "banglaNoboborshoAllowancesGovtEmployment.taxExempted",
@@ -2137,6 +2155,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       width: 151,
       height: 18,
       imageIndex: 3,
+      isVisible: watch("typeOfEmployment") === "GOVERNMENT",
     },
     {
       name: "interestAccruedProvidentFundGovtEmployment.amount",
@@ -2150,12 +2169,13 @@ const IndividualTaxReturnForm: React.FC = () => {
       imageIndex: 3,
       onBlur: (val) => {
         calculateScheduleOneGovtTotals();
-        if (val === "string")
+        if (typeof val === "string")
           setValue(
             "interestAccruedProvidentFundGovtEmployment.taxExempted",
             val
           );
       },
+      isVisible: watch("typeOfEmployment") === "GOVERNMENT",
     },
     {
       name: "interestAccruedProvidentFundGovtEmployment.taxExempted",
@@ -2167,6 +2187,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       width: 151,
       height: 32,
       imageIndex: 3,
+      isVisible: watch("typeOfEmployment") === "GOVERNMENT",
     },
     {
       name: "lumpGrantGovtEmployment.amount",
@@ -2180,9 +2201,10 @@ const IndividualTaxReturnForm: React.FC = () => {
       imageIndex: 3,
       onBlur: (val) => {
         calculateScheduleOneGovtTotals();
-        if (val === "string")
+        if (typeof val === "string")
           setValue("lumpGrantGovtEmployment.taxExempted", val);
       },
+      isVisible: watch("typeOfEmployment") === "GOVERNMENT",
     },
     {
       name: "lumpGrantGovtEmployment.taxExempted",
@@ -2194,6 +2216,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       width: 151,
       height: 18,
       imageIndex: 3,
+      isVisible: watch("typeOfEmployment") === "GOVERNMENT",
     },
     {
       name: "gratuityGovtEmployment.amount",
@@ -2207,9 +2230,10 @@ const IndividualTaxReturnForm: React.FC = () => {
       imageIndex: 3,
       onBlur: (val) => {
         calculateScheduleOneGovtTotals();
-        if (val === "string")
+        if (typeof val === "string")
           setValue("gratuityGovtEmployment.taxExempted", val);
       },
+      isVisible: watch("typeOfEmployment") === "GOVERNMENT",
     },
     {
       name: "gratuityGovtEmployment.taxExempted",
@@ -2221,6 +2245,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       width: 151,
       height: 18,
       imageIndex: 3,
+      isVisible: watch("typeOfEmployment") === "GOVERNMENT",
     },
 
     {
@@ -2233,10 +2258,11 @@ const IndividualTaxReturnForm: React.FC = () => {
       width: 151,
       height: 18,
       imageIndex: 3,
-      onBlur(value) {
+      onBlur() {
         calcualateScheduleOneOtherAllowanceGovtTaxable();
         calculateScheduleOneGovtTotals();
       },
+      isVisible: watch("typeOfEmployment") === "GOVERNMENT",
     },
     {
       name: "otherAllowanceGovtEmployment.taxExempted",
@@ -2248,10 +2274,11 @@ const IndividualTaxReturnForm: React.FC = () => {
       width: 151,
       height: 18,
       imageIndex: 3,
-      onBlur(value) {
+      onBlur() {
         calcualateScheduleOneOtherAllowanceGovtTaxable();
         calculateScheduleOneGovtTotals();
       },
+      isVisible: watch("typeOfEmployment") === "GOVERNMENT",
     },
     {
       name: "otherAllowanceGovtEmployment.taxable",
@@ -2263,6 +2290,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       width: 151,
       height: 18,
       imageIndex: 3,
+      isVisible: watch("typeOfEmployment") === "GOVERNMENT",
     },
     {
       name: "totalGovtEmployment.amount",
@@ -2274,6 +2302,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       width: 151,
       height: 18,
       imageIndex: 3,
+      isVisible: watch("typeOfEmployment") === "GOVERNMENT",
     },
     {
       name: "totalGovtEmployment.taxExempted",
@@ -2285,6 +2314,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       width: 151,
       height: 18,
       imageIndex: 3,
+      isVisible: watch("typeOfEmployment") === "GOVERNMENT",
     },
     {
       name: "totalGovtEmployment.taxable",
@@ -2296,17 +2326,19 @@ const IndividualTaxReturnForm: React.FC = () => {
       width: 151,
       height: 18,
       imageIndex: 3,
+      isVisible: watch("typeOfEmployment") === "GOVERNMENT",
     },
     {
       name: "taxDeductedAtSourceFromIncomefromEmployment",
       type: "number",
-      label: "",
+      label: "Tax Deducted at source from employment",
       // disabled: true,
       x: 785,
       y: 576,
       width: 151,
       height: 18,
       imageIndex: 3,
+      isVisible: watch("typeOfEmployment") === "GOVERNMENT",
     },
 
     // private
@@ -2315,7 +2347,6 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "basicPayPrivateEmployment",
       type: "number",
       label: "",
-      // disabled: true,
       x: 630,
       y: 650,
       width: 151,
@@ -2324,12 +2355,12 @@ const IndividualTaxReturnForm: React.FC = () => {
       onBlur() {
         calculatePrivateEmploymentTotals();
       },
+      isVisible: watch("typeOfEmployment") === "PRIVATE",
     },
     {
       name: "allowancesPrivateEmployment",
       type: "number",
       label: "",
-      // disabled: true,
       x: 630,
       y: 670,
       width: 151,
@@ -2338,6 +2369,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       onBlur() {
         calculatePrivateEmploymentTotals();
       },
+      isVisible: watch("typeOfEmployment") === "PRIVATE",
     },
     {
       name: "advanceArrearSalaryPrivateEmployment",
@@ -2352,6 +2384,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       onBlur() {
         calculatePrivateEmploymentTotals();
       },
+      isVisible: watch("typeOfEmployment") === "PRIVATE",
     },
     {
       name: "gratuityAnnuityPensionOrSimilarBenefitPrivateEmployment",
@@ -2366,6 +2399,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       onBlur() {
         calculatePrivateEmploymentTotals();
       },
+      isVisible: watch("typeOfEmployment") === "PRIVATE",
     },
     {
       name: "perquisitesPrivateEmployment",
@@ -2380,6 +2414,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       onBlur() {
         calculatePrivateEmploymentTotals();
       },
+      isVisible: watch("typeOfEmployment") === "PRIVATE",
     },
     {
       name: "receiptInLieuOfOrInAdditionToSalaryOrWagesPrivateEmployment",
@@ -2394,6 +2429,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       onBlur() {
         calculatePrivateEmploymentTotals();
       },
+      isVisible: watch("typeOfEmployment") === "PRIVATE",
     },
     {
       name: "incomeFromEmployeeShareSchemePrivateEmployment",
@@ -2408,6 +2444,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       onBlur() {
         calculatePrivateEmploymentTotals();
       },
+      isVisible: watch("typeOfEmployment") === "PRIVATE",
     },
     {
       name: "accommodationFacilityPrivateEmployment",
@@ -2422,6 +2459,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       onBlur() {
         calculatePrivateEmploymentTotals();
       },
+      isVisible: watch("typeOfEmployment") === "PRIVATE",
     },
     {
       name: "transporFacilityPrivateCheck",
@@ -2435,6 +2473,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       onBlur() {
         calculatePrivateEmploymentTotals();
       },
+      isVisible: watch("typeOfEmployment") === "PRIVATE",
     },
 
     {
@@ -2454,7 +2493,9 @@ const IndividualTaxReturnForm: React.FC = () => {
       width: 290,
       height: 18,
       imageIndex: 3,
-      isVisible: watch("transporFacilityPrivateCheck"),
+      isVisible:
+        watch("transporFacilityPrivateCheck") &&
+        watch("typeOfEmployment") === "PRIVATE",
     },
     {
       name: "transportFacilityPrivateEmployment",
@@ -2466,6 +2507,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       width: 151,
       height: 18,
       imageIndex: 3,
+      isVisible: watch("typeOfEmployment") === "PRIVATE",
     },
 
     {
@@ -2481,12 +2523,12 @@ const IndividualTaxReturnForm: React.FC = () => {
       onBlur() {
         calculatePrivateEmploymentTotals();
       },
+      isVisible: watch("typeOfEmployment") === "PRIVATE",
     },
     {
       name: "employerContributionToRecognizedProvidentFundPrivateEmployment",
       type: "number",
       label: "",
-      // disabled: true,
       x: 630,
       y: 845,
       width: 151,
@@ -2495,6 +2537,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       onBlur() {
         calculatePrivateEmploymentTotals();
       },
+      isVisible: watch("typeOfEmployment") === "PRIVATE",
     },
     {
       name: "otherIfAnyPrivateEmployment",
@@ -2509,6 +2552,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       onBlur() {
         calculatePrivateEmploymentTotals();
       },
+      isVisible: watch("typeOfEmployment") === "PRIVATE",
     },
     {
       name: "totalSalaryReceivedPrivateEmployment",
@@ -2520,6 +2564,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       width: 151,
       height: 18,
       imageIndex: 3,
+      isVisible: watch("typeOfEmployment") === "PRIVATE",
     },
     {
       name: "totalSalaryReceivedPrivateEmployment",
@@ -2531,6 +2576,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       width: 151,
       height: 18,
       imageIndex: 3,
+      isVisible: watch("typeOfEmployment") === "PRIVATE",
     },
     {
       name: "exemptedAmountPrivateEmployment",
@@ -2542,6 +2588,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       width: 151,
       height: 18,
       imageIndex: 3,
+      isVisible: watch("typeOfEmployment") === "PRIVATE",
     },
     {
       name: "exemptedAmountPrivateEmployment",
@@ -2553,6 +2600,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       width: 151,
       height: 18,
       imageIndex: 3,
+      isVisible: watch("typeOfEmployment") === "PRIVATE",
     },
     {
       name: "totalIncomeFromSalaryPrivateEmployment",
@@ -2564,6 +2612,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       width: 151,
       height: 18,
       imageIndex: 3,
+      isVisible: watch("typeOfEmployment") === "PRIVATE",
     },
     {
       name: "totalIncomeFromSalaryPrivateEmployment",
@@ -2575,6 +2624,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       width: 151,
       height: 18,
       imageIndex: 3,
+      isVisible: watch("typeOfEmployment") === "PRIVATE",
     },
 
     // Image 5
@@ -2588,6 +2638,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       width: 570,
       height: 19,
       imageIndex: 4,
+      isVisible: true,
     },
 
     {
@@ -2600,6 +2651,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       width: 271,
       height: 19,
       imageIndex: 4,
+      isVisible: true,
     },
 
     {
@@ -2612,6 +2664,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       width: 260,
       height: 340,
       imageIndex: 4,
+      isVisible: true,
     },
 
     {
@@ -2629,6 +2682,7 @@ const IndividualTaxReturnForm: React.FC = () => {
         calculateScheduleOneNetIncome();
         calculateTaxPayersShare();
       },
+      isVisible: true,
     },
 
     {
@@ -2646,6 +2700,7 @@ const IndividualTaxReturnForm: React.FC = () => {
         calculateScheduleOneNetIncome();
         calculateTaxPayersShare();
       },
+      isVisible: true,
     },
 
     {
@@ -2663,6 +2718,7 @@ const IndividualTaxReturnForm: React.FC = () => {
         calculateScheduleOneNetIncome();
         calculateTaxPayersShare();
       },
+      isVisible: true,
     },
 
     {
@@ -2680,6 +2736,7 @@ const IndividualTaxReturnForm: React.FC = () => {
         calculateScheduleOneNetIncome();
         calculateTaxPayersShare();
       },
+      isVisible: true,
     },
 
     {
@@ -2697,6 +2754,7 @@ const IndividualTaxReturnForm: React.FC = () => {
         calculateScheduleOneNetIncome();
         calculateTaxPayersShare();
       },
+      isVisible: true,
     },
 
     {
@@ -2709,6 +2767,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       width: 90,
       height: 18,
       imageIndex: 4,
+      isVisible: true,
     },
 
     {
@@ -2731,6 +2790,7 @@ const IndividualTaxReturnForm: React.FC = () => {
         calculateScheduleOneNetIncome();
         calculateTaxPayersShare();
       },
+      isVisible: true,
     },
 
     {
@@ -2748,6 +2808,7 @@ const IndividualTaxReturnForm: React.FC = () => {
         calculateScheduleOneNetIncome();
         calculateTaxPayersShare();
       },
+      isVisible: true,
     },
 
     {
@@ -2764,6 +2825,7 @@ const IndividualTaxReturnForm: React.FC = () => {
         calculateScheduleOneNetIncome();
         calculateTaxPayersShare();
       },
+      isVisible: true,
     },
 
     {
@@ -2780,6 +2842,7 @@ const IndividualTaxReturnForm: React.FC = () => {
         calculateScheduleOneNetIncome();
         calculateTaxPayersShare();
       },
+      isVisible: true,
     },
 
     {
@@ -2796,6 +2859,7 @@ const IndividualTaxReturnForm: React.FC = () => {
         calculateScheduleOneNetIncome();
         calculateTaxPayersShare();
       },
+      isVisible: true,
     },
 
     {
@@ -2812,6 +2876,7 @@ const IndividualTaxReturnForm: React.FC = () => {
         calculateScheduleOneNetIncome();
         calculateTaxPayersShare();
       },
+      isVisible: true,
     },
 
     {
@@ -2828,6 +2893,7 @@ const IndividualTaxReturnForm: React.FC = () => {
         calculateScheduleOneNetIncome();
         calculateTaxPayersShare();
       },
+      isVisible: true,
     },
     {
       name: "totalAdmissibleDeduction",
@@ -2839,6 +2905,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       width: 90,
       height: 18,
       imageIndex: 4,
+      isVisible: true,
     },
     {
       name: "netIncome",
@@ -2850,6 +2917,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       width: 90,
       height: 18,
       imageIndex: 4,
+      isVisible: true,
     },
 
     {
@@ -2864,6 +2932,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       onBlur() {
         calculateTaxPayersShare();
       },
+      isVisible: true,
     },
 
     {
@@ -2876,6 +2945,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       width: 90,
       height: 18,
       imageIndex: 4,
+      isVisible: true,
     },
 
     {
@@ -2887,6 +2957,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       width: 95,
       height: 19,
       imageIndex: 4,
+      isVisible: true,
     },
 
     // schedule 3
@@ -2900,6 +2971,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       width: 570,
       height: 19,
       imageIndex: 4,
+      isVisible: true,
     },
     {
       name: "tin",
@@ -2911,6 +2983,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       width: 271,
       height: 19,
       imageIndex: 4,
+      isVisible: true,
     },
 
     {
@@ -2922,6 +2995,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       width: 95,
       height: 20,
       imageIndex: 4,
+      isVisible: true,
     },
 
     {
@@ -2936,6 +3010,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       onBlur() {
         calculateScheduleThreeNetProfit();
       },
+      isVisible: true,
     },
 
     {
@@ -2950,6 +3025,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       onBlur() {
         calculateScheduleThreeNetProfit();
       },
+      isVisible: true,
     },
 
     {
@@ -2962,6 +3038,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       width: 90,
       height: 15,
       imageIndex: 4,
+      isVisible: true,
     },
 
     //  Image 6
@@ -2975,6 +3052,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       width: 570,
       height: 22,
       imageIndex: 5,
+      isVisible: true,
     },
     {
       name: "tin",
@@ -2986,6 +3064,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       width: 265,
       height: 20,
       imageIndex: 5,
+      isVisible: true,
     },
     {
       name: "nameOfBusiness",
@@ -2997,6 +3076,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       width: 590,
       height: 21,
       imageIndex: 5,
+      isVisible: true,
     },
     {
       name: "natureOfBusiness",
@@ -3007,6 +3087,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       width: 590,
       height: 21,
       imageIndex: 5,
+      isVisible: true,
     },
     {
       name: "addressOfBusiness",
@@ -3017,6 +3098,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       width: 590,
       height: 21,
       imageIndex: 5,
+      isVisible: true,
     },
     {
       name: "salesTurnoverReceipts",
@@ -3027,6 +3109,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       width: 205,
       height: 18,
       imageIndex: 5,
+      isVisible: true,
     },
     {
       name: "grossProfitFromBusiness",
@@ -3040,6 +3123,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       onBlur() {
         calculateNetProfitFromBusinessIncome();
       },
+      isVisible: true,
     },
     {
       name: "generalAdministrativeSellingExpenses",
@@ -3053,6 +3137,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       onBlur() {
         calculateNetProfitFromBusinessIncome();
       },
+      isVisible: true,
     },
     {
       name: "badDebtExpense",
@@ -3066,6 +3151,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       onBlur() {
         calculateNetProfitFromBusinessIncome();
       },
+      isVisible: true,
     },
     {
       name: "netProfitFromBusinessIncome",
@@ -3077,18 +3163,23 @@ const IndividualTaxReturnForm: React.FC = () => {
       width: 205,
       height: 15,
       imageIndex: 5,
+      isVisible: true,
     },
 
     {
       name: "cashInHandAtBank",
       type: "text",
       label: "cashInHandAtBank",
-      disabled: true,
+      disabled: false,
       x: 702,
       y: 425,
       width: 200,
       height: 15,
       imageIndex: 5,
+      onBlur() {
+        calculateSummaryOfBalanceSheet();
+      },
+      isVisible: true,
     },
     {
       name: "inventories",
@@ -3099,6 +3190,10 @@ const IndividualTaxReturnForm: React.FC = () => {
       width: 205,
       height: 18,
       imageIndex: 5,
+      onBlur() {
+        calculateSummaryOfBalanceSheet();
+      },
+      isVisible: true,
     },
     {
       name: "fixedAssets",
@@ -3109,6 +3204,25 @@ const IndividualTaxReturnForm: React.FC = () => {
       width: 205,
       height: 18,
       imageIndex: 5,
+      onBlur() {
+        calculateSummaryOfBalanceSheet();
+      },
+      isVisible: true,
+    },
+
+    {
+      name: "otherAssets",
+      type: "text",
+      label: "otherAssets",
+      x: 700,
+      y: 477,
+      width: 205,
+      height: 18,
+      imageIndex: 5,
+      onBlur() {
+        calculateSummaryOfBalanceSheet();
+      },
+      isVisible: true,
     },
 
     {
@@ -3121,6 +3235,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       width: 200,
       height: 15,
       imageIndex: 5,
+      isVisible: true,
     },
     {
       name: "openingCapital",
@@ -3131,9 +3246,13 @@ const IndividualTaxReturnForm: React.FC = () => {
       width: 205,
       height: 18,
       imageIndex: 5,
+      onBlur() {
+        calculateSummaryOfBalanceSheet();
+      },
+      isVisible: true,
     },
     {
-      name: "netProfitFromBusinessBalance",
+      name: "netProfitFromBusinessIncome",
       type: "text",
       label: "",
       disabled: true,
@@ -3142,29 +3261,33 @@ const IndividualTaxReturnForm: React.FC = () => {
       width: 200,
       height: 15,
       imageIndex: 5,
+      isVisible: true,
     },
     {
       name: "withdrawalsInTheIncomeYear",
       type: "text",
       label: "withdrawalsInTheIncomeYear",
-
       x: 700,
       y: 548,
       width: 205,
       height: 18,
       imageIndex: 5,
+      onBlur() {
+        calculateSummaryOfBalanceSheet();
+      },
+      isVisible: true,
     },
     {
-      name: "closingCpital",
+      name: "closingCapital",
       type: "text",
-      label: "closingCpital",
-
+      label: "",
       disabled: true,
       x: 702,
       y: 565,
       width: 200,
       height: 15,
       imageIndex: 5,
+      isVisible: true,
     },
     {
       name: "liabilities",
@@ -3175,6 +3298,10 @@ const IndividualTaxReturnForm: React.FC = () => {
       width: 205,
       height: 18,
       imageIndex: 5,
+      onBlur() {
+        calculateSummaryOfBalanceSheet();
+      },
+      isVisible: true,
     },
     {
       name: "totalCapitalsAndLiabilities",
@@ -3187,6 +3314,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       width: 200,
       height: 15,
       imageIndex: 5,
+      isVisible: true,
     },
 
     // statement of income subject to minimum tax .........................................
@@ -3199,6 +3327,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       width: 115,
       height: 18,
       imageIndex: 5,
+      isVisible: true,
     },
     {
       name: "interestProfitFromBankFI.deductionsExpensesExemptedIncome",
@@ -3210,6 +3339,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       width: 115,
       height: 18,
       imageIndex: 5,
+      isVisible: true,
     },
     {
       name: "interestProfitFromBankFI.netTaxableIncome",
@@ -3221,6 +3351,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       width: 105,
       height: 15,
       imageIndex: 5,
+      isVisible: true,
     },
     {
       name: "interestProfitFromBankFI.taxDeductedAtSource",
@@ -3232,6 +3363,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       width: 112,
       height: 18,
       imageIndex: 5,
+      isVisible: true,
     },
     {
       name: "incomeFromSavingCertificates.amountOfIncome",
@@ -3243,6 +3375,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       width: 115,
       height: 18,
       imageIndex: 5,
+      isVisible: true,
     },
     {
       name: "incomeFromSavingCertificates.deductionsExpensesExemptedIncome",
@@ -3254,6 +3387,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       width: 115,
       height: 18,
       imageIndex: 5,
+      isVisible: true,
     },
     {
       name: "incomeFromSavingCertificates.netTaxableIncome",
@@ -3266,6 +3400,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       width: 105,
       height: 15,
       imageIndex: 5,
+      isVisible: true,
     },
     {
       name: "incomeFromSavingCertificates.taxDeductedAtSource",
@@ -3277,6 +3412,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       width: 112,
       height: 18,
       imageIndex: 5,
+      isVisible: true,
     },
     {
       name: "incomeFromSecuritiesDebentures.amountOfIncome",
@@ -3288,6 +3424,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       width: 115,
       height: 18,
       imageIndex: 5,
+      isVisible: true,
     },
     {
       name: "incomeFromSecuritiesDebentures.deductionsExpensesExemptedIncome",
@@ -3299,6 +3436,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       width: 115,
       height: 18,
       imageIndex: 5,
+      isVisible: true,
     },
 
     {
@@ -3312,6 +3450,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       width: 105,
       height: 15,
       imageIndex: 5,
+      isVisible: true,
     },
     {
       name: "incomeFromSecuritiesDebentures.taxDeductedAtSource",
@@ -3323,6 +3462,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       width: 112,
       height: 18,
       imageIndex: 5,
+      isVisible: true,
     },
     {
       name: "incomeFromFinancialProductScheme.amountOfIncome",
@@ -3334,6 +3474,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       width: 115,
       height: 18,
       imageIndex: 5,
+      isVisible: true,
     },
     {
       name: "incomeFromFinancialProductScheme.deductionsExpensesExemptedIncome",
@@ -3345,6 +3486,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       width: 115,
       height: 18,
       imageIndex: 5,
+      isVisible: true,
     },
     {
       name: "incomeFromFinancialProductScheme.netTaxableIncome",
@@ -3357,6 +3499,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       width: 105,
       height: 15,
       imageIndex: 5,
+      isVisible: true,
     },
     {
       name: "incomeFromFinancialProductScheme.taxDeductedAtSource",
@@ -3368,6 +3511,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       width: 112,
       height: 18,
       imageIndex: 5,
+      isVisible: true,
     },
     {
       name: "dividendIncome.amountOfIncome",
@@ -3379,6 +3523,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       width: 115,
       height: 18,
       imageIndex: 5,
+      isVisible: true,
     },
     {
       name: "dividendIncome.deductionsExpensesExemptedIncome",
@@ -3390,6 +3535,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       width: 115,
       height: 18,
       imageIndex: 5,
+      isVisible: true,
     },
     {
       name: "dividendIncome.netTaxableIncome",
@@ -3402,6 +3548,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       width: 105,
       height: 15,
       imageIndex: 5,
+      isVisible: true,
     },
     {
       name: "dividendIncome.taxDeductedAtSource",
@@ -3413,6 +3560,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       width: 112,
       height: 18,
       imageIndex: 5,
+      isVisible: true,
     },
     {
       name: "capitalGainFromTransferOfProperty.amountOfIncome",
@@ -3424,6 +3572,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       width: 115,
       height: 18,
       imageIndex: 5,
+      isVisible: true,
     },
     {
       name: "capitalGainFromTransferOfProperty.deductionsExpensesExemptedIncome",
@@ -3435,6 +3584,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       width: 115,
       height: 18,
       imageIndex: 5,
+      isVisible: true,
     },
     {
       name: "capitalGainFromTransferOfProperty.netTaxableIncome",
@@ -3447,6 +3597,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       width: 105,
       height: 15,
       imageIndex: 5,
+      isVisible: true,
     },
     {
       name: "capitalGainFromTransferOfProperty.taxDeductedAtSource",
@@ -3458,6 +3609,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       width: 112,
       height: 18,
       imageIndex: 5,
+      isVisible: true,
     },
     {
       name: "incomeFromBusinessMinTax.amountOfIncome",
@@ -3469,6 +3621,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       width: 115,
       height: 18,
       imageIndex: 5,
+      isVisible: true,
     },
     {
       name: "incomeFromBusinessMinTax.deductionsExpensesExemptedIncome",
@@ -3480,6 +3633,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       width: 115,
       height: 18,
       imageIndex: 5,
+      isVisible: true,
     },
     {
       name: "incomeFromBusinessMinTax.netTaxableIncome",
@@ -3492,6 +3646,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       width: 105,
       height: 15,
       imageIndex: 5,
+      isVisible: true,
     },
 
     {
@@ -3504,6 +3659,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       width: 112,
       height: 18,
       imageIndex: 5,
+      isVisible: true,
     },
     {
       name: "workersParticipationFund.amountOfIncome",
@@ -3514,6 +3670,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       width: 115,
       height: 18,
       imageIndex: 5,
+      isVisible: true,
     },
     {
       name: "workersParticipationFund.deductionsExpensesExemptedIncome",
@@ -3525,6 +3682,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       width: 115,
       height: 18,
       imageIndex: 5,
+      isVisible: true,
     },
     {
       name: "workersParticipationFund.netTaxableIncome",
@@ -3537,6 +3695,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       width: 105,
       height: 15,
       imageIndex: 5,
+      isVisible: true,
     },
     {
       name: "workersParticipationFund.taxDeductedAtSource",
@@ -3548,6 +3707,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       width: 112,
       height: 18,
       imageIndex: 5,
+      isVisible: true,
     },
     {
       name: "incomeFromOtherSourcesMinTax.amountOfIncome",
@@ -3559,6 +3719,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       width: 115,
       height: 18,
       imageIndex: 5,
+      isVisible: true,
     },
     {
       name: "incomeFromOtherSourcesMinTax.deductionsExpensesExemptedIncome",
@@ -3570,6 +3731,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       width: 115,
       height: 18,
       imageIndex: 5,
+      isVisible: true,
     },
     {
       name: "incomeFromOtherSourcesMinTax.netTaxableIncome",
@@ -3582,6 +3744,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       width: 105,
       height: 15,
       imageIndex: 5,
+      isVisible: true,
     },
     {
       name: "incomeFromOtherSourcesMinTax.taxDeductedAtSource",
@@ -3593,6 +3756,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       width: 112,
       height: 18,
       imageIndex: 5,
+      isVisible: true,
     },
     {
       name: "otherSubjectToMinTax.particulars",
@@ -3603,6 +3767,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       width: 355,
       height: 18,
       imageIndex: 5,
+      isVisible: true,
     },
     {
       name: "otherSubjectToMinTax.amountOfIncome",
@@ -3614,6 +3779,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       width: 112,
       height: 18,
       imageIndex: 5,
+      isVisible: true,
     },
     {
       name: "otherSubjectToMinTax.deductionsExpensesExemptedIncome",
@@ -3625,6 +3791,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       width: 112,
       height: 18,
       imageIndex: 5,
+      isVisible: true,
     },
     {
       name: "otherSubjectToMinTax.netTaxableIncome",
@@ -3636,6 +3803,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       width: 108,
       height: 18,
       imageIndex: 5,
+      isVisible: true,
     },
     {
       name: "otherSubjectToMinTax.taxDeductedAtSource",
@@ -3647,18 +3815,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       width: 110,
       height: 18,
       imageIndex: 5,
-    },
-
-    {
-      name: "otherAssets",
-      type: "text",
-      label: "otherAssets",
-
-      x: 700,
-      y: 477,
-      width: 205,
-      height: 18,
-      imageIndex: 5,
+      isVisible: true,
     },
 
     // Image 7
@@ -3673,6 +3830,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       width: 570,
       height: 18,
       imageIndex: 6,
+      isVisible: true,
     },
     {
       name: "tin",
@@ -3684,151 +3842,191 @@ const IndividualTaxReturnForm: React.FC = () => {
       width: 265,
       height: 18,
       imageIndex: 6,
+      isVisible: true,
     },
     {
       name: "lifeInsurancePremium",
       type: "text",
       label: "lifeInsurancePremium",
-
       x: 795,
       y: 195,
       width: 145,
       height: 18,
       imageIndex: 6,
+      onBlur() {
+        calculateTotalAllowableInvestmentContribution();
+      },
+      isVisible: true,
     },
     {
       name: "contributionToDeposit",
       type: "text",
       label: "contributionToDeposit",
-
       x: 795,
       y: 215,
       width: 145,
       height: 18,
       imageIndex: 6,
+      onBlur() {
+        calculateTotalAllowableInvestmentContribution();
+      },
+      isVisible: true,
     },
     {
-      name: "investmentInGovernmentSecurities1",
+      name: "investmentInGovernmentSecuritiesDetails",
       type: "text",
-      label: "investmentInGovernmentSecurities1",
-
+      label: "investmentInGovernmentSecuritiesDetails",
       x: 490,
       y: 248,
       width: 305,
       height: 18,
       imageIndex: 6,
+      onBlur() {
+        calculateTotalAllowableInvestmentContribution();
+      },
+      isVisible: true,
     },
     {
-      name: "investmentInGovernmentSecurities2",
+      name: "investmentInGovernmentSecuritiesAmount",
       type: "text",
-      label: "investmentInGovernmentSecurities2",
-
+      label: "investmentInGovernmentSecuritiesAmount",
       x: 795,
       y: 232,
       width: 145,
       height: 35,
       imageIndex: 6,
+      onBlur() {
+        calculateTotalAllowableInvestmentContribution();
+      },
+      isVisible: true,
     },
     {
       name: "investmentInSecurities",
       type: "text",
       label: "investmentInSecurities",
-
       x: 795,
       y: 265,
       width: 145,
       height: 20,
       imageIndex: 6,
+      onBlur() {
+        calculateTotalAllowableInvestmentContribution();
+      },
+      isVisible: true,
     },
     {
       name: "contributionToProvidentFund",
       type: "text",
       label: "contributionToProvidentFund",
-
       x: 795,
       y: 284,
       width: 145,
       height: 20,
       imageIndex: 6,
+      onBlur() {
+        calculateTotalAllowableInvestmentContribution();
+      },
+      isVisible: true,
     },
     {
       name: "selfAndEmployersContribution",
       type: "text",
       label: "selfAndEmployersContribution",
-
       x: 795,
       y: 306,
       width: 145,
       height: 20,
       imageIndex: 6,
+      onBlur() {
+        calculateTotalAllowableInvestmentContribution();
+      },
+      isVisible: true,
     },
     {
       name: "contributionToSuperAnnuationFund",
       type: "text",
       label: "contributionToSuperAnnuationFund",
-
       x: 795,
       y: 324,
       width: 145,
       height: 20,
       imageIndex: 6,
+      onBlur() {
+        calculateTotalAllowableInvestmentContribution();
+      },
+      isVisible: true,
     },
     {
       name: "contributionToBenevolentFund",
       type: "text",
       label: "contributionToBenevolentFund",
-
       x: 795,
       y: 344,
       width: 145,
       height: 20,
       imageIndex: 6,
+      onBlur() {
+        calculateTotalAllowableInvestmentContribution();
+      },
+      isVisible: true,
     },
     {
-      name: "contributionToZakatFund1",
+      name: "contributionToZakatFundDetails",
       type: "text",
-      label: "contributionToZakatFund1",
-
+      label: "contributionToZakatFundDetails",
       x: 380,
       y: 364,
       width: 415,
       height: 20,
       imageIndex: 6,
+      onBlur() {
+        calculateTotalAllowableInvestmentContribution();
+      },
+      isVisible: true,
     },
 
     {
-      name: "contributionToZakatFund2",
+      name: "contributionToZakatFundAmount",
       type: "text",
-      label: "contributionToZakatFund2",
-
+      label: "",
       x: 795,
       y: 364,
       width: 145,
       height: 20,
       imageIndex: 6,
+      onBlur() {
+        calculateTotalAllowableInvestmentContribution();
+      },
+      isVisible: true,
     },
     {
-      name: "othersIf1",
+      name: "othersRebateDetails",
       type: "text",
-      label: "othersIf1",
-
+      label: "othersRebateDetails",
       x: 395,
       y: 382,
       width: 400,
       height: 20,
       imageIndex: 6,
+      onBlur() {
+        calculateTotalAllowableInvestmentContribution();
+      },
+      isVisible: true,
     },
 
     {
-      name: "othersIf2",
+      name: "othersRebateAmount",
       type: "text",
-      label: "othersIf2",
-
+      label: "",
       x: 795,
       y: 382,
       width: 145,
       height: 20,
       imageIndex: 6,
+      onBlur() {
+        calculateTotalAllowableInvestmentContribution();
+      },
+      isVisible: true,
     },
     {
       name: "totalAllowableInvestmentContribution",
@@ -3841,6 +4039,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       width: 140,
       height: 15,
       imageIndex: 6,
+      isVisible: true,
     },
 
     {
@@ -3853,6 +4052,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       width: 200,
       height: 18,
       imageIndex: 6,
+      isVisible: true,
     },
 
     // Image 8
@@ -3867,28 +4067,9 @@ const IndividualTaxReturnForm: React.FC = () => {
       width: 570,
       height: 20,
       imageIndex: 7,
+      isVisible: true,
     },
-    {
-      name: "taxpayerName",
-      type: "text",
-      label: "Tax payer name",
-      disabled: true,
-      x: 150,
-      y: 595,
-      width: 345,
-      height: 20,
-      imageIndex: 7,
-    },
-    {
-      name: "signature",
-      type: "signature",
-      label: "Signature",
-      x: 650,
-      y: 540,
-      width: 200,
-      height: 40,
-      imageIndex: 7,
-    },
+
     {
       name: "tin",
       type: "text",
@@ -3899,55 +4080,332 @@ const IndividualTaxReturnForm: React.FC = () => {
       width: 265,
       height: 20,
       imageIndex: 7,
+      isVisible: true,
     },
 
     {
-      name: "expensesForFoodAmount",
+      name: "expensesForFood.amount",
       type: "text",
-      label: "expensesForFoodAmount",
-
+      label: "",
       x: 598,
       y: 205,
       width: 135,
       height: 20,
       imageIndex: 7,
+      onBlur() {
+        calculateTotalExpenseIndividualPerson();
+      },
+      isVisible: true,
+    },
+
+    {
+      name: "expensesForFood.comment",
+      type: "text",
+      label: "",
+      x: 732,
+      y: 205,
+      width: 208,
+      height: 20,
+      imageIndex: 7,
+      isVisible: true,
     },
     {
-      name: "taxDeductedCollectedAtSourceAmount",
+      name: "housingExpense.amount",
       type: "text",
-      label: "taxDeductedCollectedAtSourceAmount",
+      label: "",
+      x: 598,
+      y: 225,
+      width: 135,
+      height: 17,
+      imageIndex: 7,
+      onBlur() {
+        calculateTotalExpenseIndividualPerson();
+      },
+      isVisible: true,
+    },
+    {
+      name: "housingExpense.comment",
+      type: "text",
+      label: "",
+      x: 732,
+      y: 225,
+      width: 208,
+      height: 17,
+      imageIndex: 7,
+      isVisible: true,
+    },
+    {
+      name: "personalTransportationExpenses.amount",
+      type: "text",
+      label: "",
+      x: 598,
+      y: 242,
+      width: 135,
+      height: 17,
+      imageIndex: 7,
+      onBlur() {
+        calculateTotalExpenseIndividualPerson();
+      },
+      isVisible: true,
+    },
+    {
+      name: "personalTransportationExpenses.comment",
+      type: "text",
+      label: "",
+      x: 732,
+      y: 242,
+      width: 208,
+      height: 17,
+      imageIndex: 7,
+      isVisible: true,
+    },
+    {
+      name: "utilityExpense.amount",
+      type: "text",
+      label: "",
+      x: 598,
+      y: 260,
+      width: 135,
+      height: 32,
+      imageIndex: 7,
+      onBlur() {
+        calculateTotalExpenseIndividualPerson();
+      },
+      isVisible: true,
+    },
 
+    {
+      name: "utilityExpense.comment",
+      type: "text",
+      label: "",
+      x: 732,
+      y: 260,
+      width: 208,
+      height: 32,
+      imageIndex: 7,
+      isVisible: true,
+    },
+    {
+      name: "educationExpenses.amount",
+      type: "text",
+      label: "",
+      x: 598,
+      y: 292,
+      width: 135,
+      height: 17,
+      imageIndex: 7,
+      onBlur() {
+        calculateTotalExpenseIndividualPerson();
+      },
+      isVisible: true,
+    },
+    {
+      name: "educationExpenses.comment",
+      type: "text",
+      label: "",
+
+      x: 732,
+      y: 292,
+      width: 208,
+      height: 17,
+      imageIndex: 7,
+      isVisible: true,
+    },
+    {
+      name: "personalExpenseForLocalForeignTravel.amount",
+      type: "text",
+      label: "",
+      x: 598,
+      y: 311,
+      width: 135,
+      height: 32,
+      imageIndex: 7,
+      onBlur() {
+        calculateTotalExpenseIndividualPerson();
+      },
+      isVisible: true,
+    },
+    {
+      name: "personalExpenseForLocalForeignTravel.comment",
+      type: "text",
+      label: "",
+      x: 732,
+      y: 311,
+      width: 208,
+      height: 32,
+      imageIndex: 7,
+      isVisible: true,
+    },
+    {
+      name: "festivalExpense.amount",
+      type: "text",
+      label: "",
+      x: 598,
+      y: 345,
+      width: 135,
+      height: 17,
+      imageIndex: 7,
+      onBlur() {
+        calculateTotalExpenseIndividualPerson();
+      },
+      isVisible: true,
+    },
+    {
+      name: "festivalExpense.comment",
+      type: "text",
+      label: "",
+      x: 732,
+      y: 345,
+      width: 208,
+      height: 17,
+      imageIndex: 7,
+      isVisible: true,
+    },
+
+    {
+      name: "taxDeductedCollectedAtSource.amount",
+      type: "text",
+      label: "",
       disabled: true,
       x: 598,
-      y: 360,
+      y: 362,
       width: 135,
-      height: 30,
+      height: 32,
       imageIndex: 7,
+      onBlur() {
+        calculateTotalExpenseIndividualPerson();
+      },
+      isVisible: true,
     },
     {
-      name: "advanceTaxPaidAmountTaka",
+      name: "taxDeductedCollectedAtSource.comment",
       type: "text",
-      label: "advanceTaxPaidAmountTaka",
+      label: "",
+      x: 732,
+      y: 362,
+      width: 208,
+      height: 32,
+      imageIndex: 7,
+      isVisible: true,
+    },
 
+    {
+      name: "advanceTaxPaidAmount",
+      type: "text",
+      label: "",
       disabled: true,
       x: 598,
       y: 395,
       width: 135,
       height: 18,
       imageIndex: 7,
+      isVisible: true,
+    },
+
+    {
+      name: "advanceTaxPaid.comment",
+      type: "text",
+      label: "advanceTaxPaidComment",
+
+      x: 732,
+      y: 395,
+      width: 208,
+      height: 19,
+      imageIndex: 7,
+      isVisible: true,
+    },
+
+    {
+      name: "taxSurchargePaid.amount",
+      type: "text",
+      label: "",
+      x: 596,
+      y: 412,
+      width: 138,
+      height: 35,
+      imageIndex: 7,
+      onBlur() {
+        calculateTotalExpenseIndividualPerson();
+      },
+      isVisible: true,
     },
     {
-      name: "totalAmount",
+      name: "taxSurchargePaid.comment",
       type: "text",
-      label: "totalAmount",
+      label: "",
 
+      x: 732,
+      y: 412,
+      width: 208,
+      height: 35,
+      imageIndex: 7,
+      isVisible: true,
+    },
+    {
+      name: "interestPaid.amount",
+      type: "text",
+      label: "",
+      x: 596,
+      y: 445,
+      width: 138,
+      height: 35,
+      imageIndex: 7,
+      onBlur() {
+        calculateTotalExpenseIndividualPerson();
+      },
+      isVisible: true,
+    },
+
+    {
+      name: "interestPaid.comment",
+      type: "text",
+      label: "",
+      x: 732,
+      y: 445,
+      width: 208,
+      height: 35,
+      imageIndex: 7,
+      isVisible: true,
+    },
+
+    {
+      name: "totalExpenseIndividualPerson.amount",
+      type: "text",
+      label: "",
       disabled: true,
       x: 598,
-      y: 478,
+      y: 480,
       width: 135,
-      height: 18,
+      height: 17,
       imageIndex: 7,
+      isVisible: true,
     },
+
+    {
+      name: "totalExpenseIndividualPerson.comment",
+      type: "text",
+      label: "total",
+      x: 732,
+      y: 480,
+      width: 208,
+      height: 17,
+      imageIndex: 7,
+      isVisible: true,
+    },
+
+    {
+      name: "taxpayerName",
+      type: "text",
+      label: "",
+      disabled: true,
+      x: 150,
+      y: 595,
+      width: 345,
+      height: 20,
+      imageIndex: 7,
+      isVisible: true,
+    },
+
     {
       name: "totalAmount2",
       type: "text",
@@ -3959,251 +4417,31 @@ const IndividualTaxReturnForm: React.FC = () => {
       width: 150,
       height: 16,
       imageIndex: 7,
+      isVisible: true,
     },
     {
       name: "totalAmount3",
       type: "text",
       label: "totalAmount3",
-
       disabled: true,
       x: 785,
       y: 928,
       width: 150,
       height: 16,
       imageIndex: 7,
-    },
-    {
-      name: "expensesForFoodComment",
-      type: "text",
-      label: "expensesForFoodComment",
-
-      x: 732,
-      y: 205,
-      width: 208,
-      height: 20,
-      imageIndex: 7,
-    },
-    {
-      name: "housingExpenseAmount",
-      type: "text",
-      label: "housingExpenseAmount",
-
-      x: 598,
-      y: 225,
-      width: 135,
-      height: 17,
-      imageIndex: 7,
-    },
-    {
-      name: "housingExpenseComment",
-      type: "text",
-      label: "housingExpenseComment",
-
-      x: 732,
-      y: 225,
-      width: 208,
-      height: 17,
-      imageIndex: 7,
-    },
-    {
-      name: "personalTransportationExpensesAmount",
-      type: "text",
-      label: "personalTransportationExpensesAmount",
-
-      x: 598,
-      y: 242,
-      width: 135,
-      height: 17,
-      imageIndex: 7,
-    },
-    {
-      name: "personalTransportationExpensesAmountComment",
-      type: "text",
-      label: "personalTransportationExpensesAmountComment",
-
-      x: 732,
-      y: 242,
-      width: 208,
-      height: 17,
-      imageIndex: 7,
-    },
-    {
-      name: "utilityExpenseAmount",
-      type: "text",
-      label: "utilityExpenseAmount",
-
-      x: 598,
-      y: 260,
-      width: 135,
-      height: 32,
-      imageIndex: 7,
+      isVisible: true,
     },
 
-    {
-      name: "utilityExpenseComment",
-      type: "text",
-      label: "utilityExpenseComment",
-
-      x: 732,
-      y: 260,
-      width: 208,
-      height: 32,
-      imageIndex: 7,
-    },
-    {
-      name: "educationExpensesAmount",
-      type: "text",
-      label: "educationExpensesAmount",
-
-      x: 598,
-      y: 292,
-      width: 135,
-      height: 17,
-      imageIndex: 7,
-    },
-    {
-      name: "educationExpensesComment",
-      type: "text",
-      label: "educationExpensesComment",
-
-      x: 732,
-      y: 292,
-      width: 208,
-      height: 17,
-      imageIndex: 7,
-    },
-    {
-      name: "personalExpenseAmount",
-      type: "text",
-      label: "personalExpenseAmount",
-
-      x: 598,
-      y: 311,
-      width: 135,
-      height: 32,
-      imageIndex: 7,
-    },
-    {
-      name: "personalExpenseComment",
-      type: "text",
-      label: "personalExpenseComment",
-
-      x: 732,
-      y: 311,
-      width: 208,
-      height: 32,
-      imageIndex: 7,
-    },
-    {
-      name: "festivalExpenseAmount",
-      type: "text",
-      label: "festivalExpenseAmount",
-
-      x: 598,
-      y: 345,
-      width: 135,
-      height: 17,
-      imageIndex: 7,
-    },
-    {
-      name: "festivalExpenseComment",
-      type: "text",
-      label: "festivalExpenseComment",
-
-      x: 732,
-      y: 345,
-      width: 208,
-      height: 17,
-      imageIndex: 7,
-    },
-    {
-      name: "taxDeductedComment",
-      type: "text",
-      label: "taxDeductedComment",
-
-      x: 732,
-      y: 360,
-      width: 208,
-      height: 35,
-      imageIndex: 7,
-    },
-
-    {
-      name: "advanceTaxPaidComment",
-      type: "text",
-      label: "advanceTaxPaidComment",
-
-      x: 732,
-      y: 395,
-      width: 208,
-      height: 19,
-      imageIndex: 7,
-    },
-    {
-      name: "taxSurchargePaidAmount",
-      type: "text",
-      label: "taxSurchargePaidAmount",
-
-      x: 596,
-      y: 412,
-      width: 138,
-      height: 35,
-      imageIndex: 7,
-    },
-    {
-      name: "taxSurchargePaidComment",
-      type: "text",
-      label: "taxSurchargePaidComment",
-
-      x: 732,
-      y: 412,
-      width: 208,
-      height: 35,
-      imageIndex: 7,
-    },
-    {
-      name: "interestPaidAmount",
-      type: "text",
-      label: "interestPaidAmount",
-
-      x: 596,
-      y: 445,
-      width: 138,
-      height: 35,
-      imageIndex: 7,
-    },
-    {
-      name: "interestPaidComment",
-      type: "text",
-      label: "interestPaidComment",
-
-      x: 732,
-      y: 445,
-      width: 208,
-      height: 35,
-      imageIndex: 7,
-    },
-    {
-      name: "total",
-      type: "text",
-      label: "total",
-
-      x: 732,
-      y: 480,
-      width: 208,
-      height: 19,
-      imageIndex: 7,
-    },
     {
       name: "exemptedIncomeFromSalary",
       type: "text",
       label: "exemptedIncomeFromSalary",
-
       x: 782,
       y: 672,
       width: 157,
       height: 19,
       imageIndex: 7,
+      isVisible: true,
     },
     {
       name: "exemptedIncomeFromBusiness",
@@ -4215,6 +4453,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       width: 157,
       height: 19,
       imageIndex: 7,
+      isVisible: true,
     },
     {
       name: "exemptedAgriculturalIncome",
@@ -4226,6 +4465,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       width: 157,
       height: 19,
       imageIndex: 7,
+      isVisible: true,
     },
     {
       name: "incomeFromProvidentFund",
@@ -4237,6 +4477,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       width: 157,
       height: 19,
       imageIndex: 7,
+      isVisible: true,
     },
     {
       name: "foreignRemittance",
@@ -4248,6 +4489,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       width: 157,
       height: 19,
       imageIndex: 7,
+      isVisible: true,
     },
     {
       name: "typeOfReceipts1",
@@ -4259,6 +4501,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       width: 642,
       height: 19,
       imageIndex: 7,
+      isVisible: true,
     },
     {
       name: "typeOfReceiptsAmount1",
@@ -4270,6 +4513,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       width: 157,
       height: 19,
       imageIndex: 7,
+      isVisible: true,
     },
     {
       name: "typeOfReceipts2",
@@ -4281,6 +4525,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       width: 642,
       height: 19,
       imageIndex: 7,
+      isVisible: true,
     },
     {
       name: "typeOfReceiptsAmount2",
@@ -4292,6 +4537,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       width: 157,
       height: 19,
       imageIndex: 7,
+      isVisible: true,
     },
     {
       name: "typeOfReceipts3",
@@ -4303,6 +4549,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       width: 642,
       height: 19,
       imageIndex: 7,
+      isVisible: true,
     },
     {
       name: "typeOfReceiptsAmount3",
@@ -4314,6 +4561,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       width: 157,
       height: 19,
       imageIndex: 7,
+      isVisible: true,
     },
     {
       name: "typeOfTaxExemptedTaxFreeIncome6",
@@ -4325,6 +4573,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       width: 645,
       height: 19,
       imageIndex: 7,
+      isVisible: true,
     },
     {
       name: "typeOfTaxExemptedTaxFreeIncomeAmount6",
@@ -4336,6 +4585,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       width: 158,
       height: 19,
       imageIndex: 7,
+      isVisible: true,
     },
     {
       name: "typeOfTaxExemptedTaxFreeIncome7",
@@ -4347,6 +4597,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       width: 645,
       height: 19,
       imageIndex: 7,
+      isVisible: true,
     },
     {
       name: "typeOfTaxExemptedTaxFreeIncomeAmount7",
@@ -4358,6 +4609,19 @@ const IndividualTaxReturnForm: React.FC = () => {
       width: 158,
       height: 19,
       imageIndex: 7,
+      isVisible: true,
+    },
+
+    {
+      name: "signature",
+      type: "signature",
+      label: "Signature",
+      x: 650,
+      y: 540,
+      width: 200,
+      height: 40,
+      imageIndex: 7,
+      isVisible: true,
     },
 
     // Image 9
@@ -4372,6 +4636,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       width: 570,
       height: 20,
       imageIndex: 8,
+      isVisible: true,
     },
     {
       name: "tin",
@@ -4383,30 +4648,31 @@ const IndividualTaxReturnForm: React.FC = () => {
       width: 265,
       height: 20,
       imageIndex: 8,
+      isVisible: true,
     },
     {
       name: "totalIncomeShownInTheReturn",
       type: "text",
-      label: "totalIncomeShownInTheReturn",
-
+      label: "",
       disabled: true,
       x: 775,
       y: 375,
       width: 160,
       height: 16,
       imageIndex: 8,
+      isVisible: true,
     },
     {
       name: "taxExemptedIncomeAndAllowance",
       type: "text",
-      label: "taxExemptedIncomeAndAllowance",
-
+      label: "",
       disabled: true,
       x: 775,
       y: 393,
       width: 160,
       height: 16,
       imageIndex: 8,
+      isVisible: true,
     },
     {
       name: "receiptOfGiftOtherReceipts",
@@ -4419,6 +4685,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       width: 160,
       height: 16,
       imageIndex: 8,
+      isVisible: true,
     },
     {
       name: "totalSourceOfFund",
@@ -4431,6 +4698,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       width: 160,
       height: 16,
       imageIndex: 8,
+      isVisible: true,
     },
     {
       name: "sumOfSourceOfFundAndPreviousYearsNetWealth",
@@ -4443,6 +4711,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       width: 160,
       height: 16,
       imageIndex: 8,
+      isVisible: true,
     },
     {
       name: "expenseRelatingToLifestyle",
@@ -4455,6 +4724,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       width: 160,
       height: 16,
       imageIndex: 8,
+      isVisible: true,
     },
     {
       name: "totalExpensesAndLoss",
@@ -4467,18 +4737,19 @@ const IndividualTaxReturnForm: React.FC = () => {
       width: 160,
       height: 16,
       imageIndex: 8,
+      isVisible: true,
     },
     {
       name: "netWealthAtTheLastDateOfThisFinancialYear",
       type: "text",
       label: "netWealthAtTheLastDateOfThisFinancialYear",
-
       disabled: true,
       x: 775,
       y: 552,
       width: 160,
       height: 16,
       imageIndex: 8,
+      isVisible: true,
     },
     {
       name: "totalLiabilitiesOutsideBusiness",
@@ -4491,6 +4762,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       width: 160,
       height: 16,
       imageIndex: 8,
+      isVisible: true,
     },
     {
       name: "grossWealth",
@@ -4503,18 +4775,19 @@ const IndividualTaxReturnForm: React.FC = () => {
       width: 160,
       height: 16,
       imageIndex: 8,
+      isVisible: true,
     },
     {
       name: "businessCapitalAmount1",
       type: "text",
       label: "businessCapitalAmount1",
-
       disabled: true,
       x: 640,
       y: 747,
       width: 130,
       height: 16,
       imageIndex: 8,
+      isVisible: true,
     },
     {
       name: "businessCapitalAmount2",
@@ -4527,30 +4800,31 @@ const IndividualTaxReturnForm: React.FC = () => {
       width: 160,
       height: 16,
       imageIndex: 8,
+      isVisible: true,
     },
     {
       name: "directorsShareholdingsInTheCompanies",
       type: "text",
       label: "directorsShareholdingsInTheCompanies",
-
       disabled: true,
       x: 775,
       y: 765,
       width: 160,
       height: 16,
       imageIndex: 8,
+      isVisible: true,
     },
     {
       name: "businessCapitalOfPartnershipFirm",
       type: "text",
       label: "businessCapitalOfPartnershipFirm",
-
       disabled: true,
       x: 775,
       y: 852,
       width: 160,
       height: 16,
       imageIndex: 8,
+      isVisible: true,
     },
     {
       name: "netWealthLastDate",
@@ -4566,12 +4840,12 @@ const IndividualTaxReturnForm: React.FC = () => {
       width: 194,
       height: 18,
       imageIndex: 8,
+      isVisible: true,
     },
     {
       name: "netWealthLastDateAmount",
       type: "text",
       label: "netWealthLastDateAmount",
-
       disabled:
         watch("netWealthLastDate") === "NO_I_AM_A_NEW_TAXPAYER" ? true : false,
 
@@ -4580,28 +4854,29 @@ const IndividualTaxReturnForm: React.FC = () => {
       width: 168,
       height: 18,
       imageIndex: 8,
+      isVisible: true,
     },
     {
       name: "giftExpense",
       type: "text",
       label: "giftExpense",
-
       x: 772,
       y: 515,
       width: 168,
       height: 18,
       imageIndex: 8,
+      isVisible: true,
     },
     {
       name: "institutionalLiabilities",
       type: "text",
       label: "institutionalLiabilities",
-
       x: 772,
       y: 585,
       width: 168,
       height: 18,
       imageIndex: 8,
+      isVisible: true,
     },
     {
       name: "nonInstitutionalLiabilities",
@@ -4613,6 +4888,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       width: 168,
       height: 18,
       imageIndex: 8,
+      isVisible: true,
     },
     {
       name: "otherLiabilities",
@@ -4624,6 +4900,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       width: 168,
       height: 18,
       imageIndex: 8,
+      isVisible: true,
     },
     {
       name: "totalAssetOfBusiness",
@@ -4635,6 +4912,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       width: 135,
       height: 18,
       imageIndex: 8,
+      isVisible: true,
     },
     {
       name: "lessBusinessLiabilities",
@@ -4646,6 +4924,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       width: 135,
       height: 18,
       imageIndex: 8,
+      isVisible: true,
     },
     {
       name: "companyName1",
@@ -4657,6 +4936,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       width: 320,
       height: 18,
       imageIndex: 8,
+      isVisible: true,
     },
     {
       name: "companyName2",
@@ -4668,6 +4948,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       width: 320,
       height: 18,
       imageIndex: 8,
+      isVisible: true,
     },
     {
       name: "companyName3",
@@ -4679,6 +4960,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       width: 320,
       height: 18,
       imageIndex: 8,
+      isVisible: true,
     },
     {
       name: "noOfShare1",
@@ -4690,6 +4972,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       width: 135,
       height: 18,
       imageIndex: 8,
+      isVisible: true,
     },
     {
       name: "noOfShare2",
@@ -4701,6 +4984,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       width: 135,
       height: 18,
       imageIndex: 8,
+      isVisible: true,
     },
     {
       name: "noOfShare3",
@@ -4712,6 +4996,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       width: 135,
       height: 18,
       imageIndex: 8,
+      isVisible: true,
     },
     {
       name: "value1",
@@ -4723,6 +5008,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       width: 135,
       height: 18,
       imageIndex: 8,
+      isVisible: true,
     },
     {
       name: "value2",
@@ -4734,6 +5020,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       width: 135,
       height: 18,
       imageIndex: 8,
+      isVisible: true,
     },
     {
       name: "value3",
@@ -4745,6 +5032,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       width: 135,
       height: 18,
       imageIndex: 8,
+      isVisible: true,
     },
     {
       name: "nameOfPartnershipFirm1",
@@ -4756,6 +5044,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       width: 320,
       height: 18,
       imageIndex: 8,
+      isVisible: true,
     },
     {
       name: "nameOfPartnershipFirm2",
@@ -4767,6 +5056,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       width: 320,
       height: 18,
       imageIndex: 8,
+      isVisible: true,
     },
     {
       name: "nameOfPartnershipFirm3",
@@ -4778,6 +5068,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       width: 320,
       height: 18,
       imageIndex: 8,
+      isVisible: true,
     },
 
     {
@@ -4790,6 +5081,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       width: 135,
       height: 18,
       imageIndex: 8,
+      isVisible: true,
     },
     {
       name: "shareOfProfit2",
@@ -4801,6 +5093,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       width: 135,
       height: 18,
       imageIndex: 8,
+      isVisible: true,
     },
     {
       name: "shareOfProfit3",
@@ -4812,6 +5105,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       width: 135,
       height: 18,
       imageIndex: 8,
+      isVisible: true,
     },
     {
       name: "capitalContributed1",
@@ -4823,6 +5117,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       width: 135,
       height: 18,
       imageIndex: 8,
+      isVisible: true,
     },
     {
       name: "capitalContributed2",
@@ -4834,6 +5129,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       width: 135,
       height: 18,
       imageIndex: 8,
+      isVisible: true,
     },
     {
       name: "capitalContributed3",
@@ -4845,6 +5141,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       width: 135,
       height: 18,
       imageIndex: 8,
+      isVisible: true,
     },
 
     // Image 10
@@ -4853,372 +5150,355 @@ const IndividualTaxReturnForm: React.FC = () => {
     {
       name: "nonAgriculturalPropertyLandHouseProperty",
       type: "text",
-      label: "nonAgriculturalPropertyLandHouseProperty",
-
+      label: "",
       disabled: true,
       x: 775,
       y: 85,
       width: 160,
       height: 25,
       imageIndex: 9,
+      isVisible: true,
     },
-    {
-      name: "agriculturalProperty",
-      type: "text",
-      label: "agriculturalProperty",
 
-      disabled: true,
-      x: 775,
-      y: 237,
-      width: 160,
-      height: 16,
-      imageIndex: 9,
-    },
-    {
-      name: "totalFinancialAssets",
-      type: "text",
-      label: "totalFinancialAssets",
-
-      disabled: true,
-      x: 775,
-      y: 521,
-      width: 160,
-      height: 16,
-      imageIndex: 9,
-    },
-    {
-      name: "motorVehiclesAmount",
-      type: "text",
-      label: "motorVehiclesAmount",
-
-      disabled: true,
-      x: 775,
-      y: 538,
-      width: 160,
-      height: 16,
-      imageIndex: 9,
-    },
-    {
-      name: "totalCashInHandsAndFundOutsideBusiness",
-      type: "text",
-      label: "totalCashInHandsAndFundOutsideBusiness",
-
-      disabled: true,
-      x: 775,
-      y: 733,
-      width: 160,
-      height: 16,
-      imageIndex: 9,
-    },
-    {
-      name: "totalAssetslocatedInBangladesh",
-      type: "text",
-      label: "totalAssetslocatedInBangladesh",
-
-      disabled: true,
-      x: 775,
-      y: 750,
-      width: 160,
-      height: 16,
-      imageIndex: 9,
-    },
-    {
-      name: "totalAssetsInBangladeshAndOutsideBangladesh",
-      type: "text",
-      label: "totalAssetsInBangladeshAndOutsideBangladesh",
-
-      disabled: true,
-      x: 775,
-      y: 785,
-      width: 160,
-      height: 16,
-      imageIndex: 9,
-    },
-    {
-      name: "taxpayerName",
-      type: "text",
-      label: "taxpayerName",
-
-      disabled: true,
-      x: 150,
-      y: 905,
-      width: 340,
-      height: 16,
-      imageIndex: 9,
-    },
     {
       name: "locationDescription1",
       type: "text",
-      label: "locationDescription1",
-
+      label: "",
       x: 185,
       y: 130,
       width: 455,
       height: 18,
       imageIndex: 9,
+      isVisible: true,
+    },
+
+    {
+      name: "locationValue1",
+      type: "text",
+      label: "",
+      x: 638,
+      y: 130,
+      width: 135,
+      height: 18,
+      imageIndex: 9,
+      isVisible: true,
+      onBlur() {
+        calculateTotalAssetsInBangladeshAndOutside();
+      },
     },
     {
       name: "locationDescription2",
       type: "text",
-      label: "locationDescription2",
-
+      label: "",
       x: 185,
       y: 148,
       width: 455,
       height: 18,
       imageIndex: 9,
+      isVisible: true,
+    },
+    {
+      name: "locationValue2",
+      type: "text",
+      label: "",
+      x: 638,
+      y: 148,
+      width: 135,
+      height: 18,
+      imageIndex: 9,
+      isVisible: true,
+      onBlur() {
+        calculateTotalAssetsInBangladeshAndOutside();
+      },
     },
     {
       name: "locationDescription3",
       type: "text",
-      label: "locationDescription3",
+      label: "",
 
       x: 185,
       y: 165,
       width: 455,
       height: 18,
       imageIndex: 9,
-    },
-    {
-      name: "locationDescription4",
-      type: "text",
-      label: "locationDescription4",
-
-      x: 185,
-      y: 183,
-      width: 455,
-      height: 18,
-      imageIndex: 9,
-    },
-    {
-      name: "locationDescription5",
-      type: "text",
-      label: "locationDescription5",
-
-      x: 185,
-      y: 202,
-      width: 455,
-      height: 18,
-      imageIndex: 9,
-    },
-    {
-      name: "locationValue1",
-      type: "text",
-      label: "locationValue1",
-
-      x: 638,
-      y: 130,
-      width: 135,
-      height: 18,
-      imageIndex: 9,
-    },
-    {
-      name: "locationValue2",
-      type: "text",
-      label: "locationValue2",
-
-      x: 638,
-      y: 148,
-      width: 135,
-      height: 18,
-      imageIndex: 9,
+      isVisible: true,
     },
     {
       name: "locationValue3",
       type: "text",
-      label: "locationValue3",
-
+      label: "",
       x: 638,
       y: 166,
       width: 135,
       height: 18,
       imageIndex: 9,
+      isVisible: true,
+      onBlur() {
+        calculateTotalAssetsInBangladeshAndOutside();
+      },
+    },
+    {
+      name: "locationDescription4",
+      type: "text",
+      label: "",
+      x: 185,
+      y: 183,
+      width: 455,
+      height: 18,
+      imageIndex: 9,
+      isVisible: true,
     },
     {
       name: "locationValue4",
       type: "text",
-      label: "locationValue4",
-
+      label: "",
       x: 638,
       y: 184,
       width: 135,
       height: 18,
       imageIndex: 9,
+      isVisible: true,
+      onBlur() {
+        calculateTotalAssetsInBangladeshAndOutside();
+      },
     },
+    {
+      name: "locationDescription5",
+      type: "text",
+      label: "",
+      x: 185,
+      y: 202,
+      width: 455,
+      height: 18,
+      imageIndex: 9,
+      isVisible: true,
+    },
+
     {
       name: "locationValue5",
       type: "text",
-      label: "locationValue5",
-
+      label: "",
       x: 638,
       y: 202,
       width: 135,
       height: 18,
       imageIndex: 9,
+      isVisible: true,
+      onBlur() {
+        calculateTotalAssetsInBangladeshAndOutside();
+      },
     },
+
     {
       name: "agriculturalLocationAndDescription1",
       type: "text",
-      label: "agriculturalLocationAndDescription1",
-
+      label: "",
       x: 185,
       y: 272,
       width: 455,
       height: 18,
       imageIndex: 9,
-    },
-    {
-      name: "agriculturalLocationAndDescription2",
-      type: "text",
-      label: "agriculturalLocationAndDescription2",
-
-      x: 185,
-      y: 290,
-      width: 455,
-      height: 18,
-      imageIndex: 9,
-    },
-    {
-      name: "agriculturalLocationAndDescription3",
-      type: "text",
-      label: "agriculturalLocationAndDescription3",
-
-      x: 185,
-      y: 308,
-      width: 455,
-      height: 18,
-      imageIndex: 9,
+      isVisible: true,
     },
     {
       name: "agriculturalLocationValue1",
       type: "text",
-      label: "agriculturalLocationValue1",
-
+      label: "",
       x: 638,
       y: 272,
       width: 135,
       height: 18,
       imageIndex: 9,
+      isVisible: true,
+      onBlur() {
+        calculateTotalAssetsInBangladeshAndOutside();
+      },
+    },
+    {
+      name: "agriculturalLocationAndDescription2",
+      type: "text",
+      label: "",
+      x: 185,
+      y: 290,
+      width: 455,
+      height: 18,
+      imageIndex: 9,
+      isVisible: true,
     },
     {
       name: "agriculturalLocationValue2",
       type: "text",
-      label: "agriculturalLocationValue2",
-
+      label: "",
       x: 638,
       y: 290,
       width: 135,
       height: 18,
       imageIndex: 9,
+      isVisible: true,
+      onBlur() {
+        calculateTotalAssetsInBangladeshAndOutside();
+      },
+    },
+    {
+      name: "agriculturalLocationAndDescription3",
+      type: "text",
+      label: "",
+      x: 185,
+      y: 308,
+      width: 455,
+      height: 18,
+      imageIndex: 9,
+      isVisible: true,
     },
     {
       name: "agriculturalLocationValue3",
       type: "text",
-      label: "agriculturalLocationValue3",
+      label: "",
       x: 638,
       y: 308,
       width: 135,
       height: 18,
       imageIndex: 9,
+      isVisible: true,
+      onBlur() {
+        calculateTotalAssetsInBangladeshAndOutside();
+      },
     },
+
+    {
+      name: "agriculturalProperty",
+      type: "text",
+      label: "",
+      disabled: true,
+      x: 775,
+      y: 237,
+      width: 160,
+      height: 16,
+      imageIndex: 9,
+      isVisible: true,
+    },
+
     {
       name: "shareDebentureUnitCertificate",
       type: "text",
-      label: "shareDebentureUnitCertificate",
-
+      label: "",
       x: 770,
       y: 360,
       width: 170,
       height: 18,
       imageIndex: 9,
+      isVisible: true,
+      onBlur() {
+        calculateTotalAssetsInBangladeshAndOutside();
+      },
     },
+
     {
       name: "bondsGovernment",
       type: "text",
       label: "bondsGovernment",
-
       x: 770,
       y: 378,
       width: 170,
       height: 18,
       imageIndex: 9,
+      isVisible: true,
+      onBlur() {
+        calculateTotalAssetsInBangladeshAndOutside();
+      },
     },
     {
       name: "sanchayapatraSavingsCertificate",
       type: "text",
       label: "sanchayapatraSavingsCertificate",
-
       x: 770,
       y: 396,
       width: 170,
       height: 18,
       imageIndex: 9,
+      isVisible: true,
+      onBlur() {
+        calculateTotalAssetsInBangladeshAndOutside();
+      },
     },
     {
       name: "depositPensionScheme",
       type: "text",
       label: "depositPensionScheme",
-
       x: 770,
       y: 414,
       width: 170,
       height: 18,
       imageIndex: 9,
+      isVisible: true,
+      onBlur() {
+        calculateTotalAssetsInBangladeshAndOutside();
+      },
     },
+
     {
       name: "loansGivenToOthers",
       type: "text",
       label: "loansGivenToOthers",
-
       x: 770,
       y: 432,
       width: 170,
       height: 18,
       imageIndex: 9,
-    },
-    {
-      name: "nidValue",
-      type: "text",
-      label: "nidValue",
-
-      x: 770,
-      y: 450,
-      width: 170,
-      height: 18,
-      imageIndex: 9,
-    },
-    {
-      name: "nid",
-      type: "text",
-      label: "nid",
-
-      x: 625,
-      y: 450,
-      width: 145,
-      height: 18,
-      imageIndex: 9,
+      isVisible: true,
+      onBlur() {
+        calculateTotalAssetsInBangladeshAndOutside();
+      },
     },
     {
       name: "name",
       type: "text",
       label: "name",
-
       x: 250,
       y: 450,
       width: 318,
       height: 18,
       imageIndex: 9,
+      isVisible: true,
+    },
+    {
+      name: "nid",
+      type: "text",
+      label: "nid",
+      x: 625,
+      y: 450,
+      width: 145,
+      height: 18,
+      imageIndex: 9,
+      isVisible: true,
+    },
+    {
+      name: "nidValue",
+      type: "text",
+      label: "nidValue",
+      x: 770,
+      y: 450,
+      width: 170,
+      height: 18,
+      imageIndex: 9,
+      isVisible: true,
+      onBlur() {
+        calculateTotalAssetsInBangladeshAndOutside();
+      },
     },
     {
       name: "savingDeposit",
       type: "text",
       label: "savingDeposit",
-
       x: 770,
       y: 468,
       width: 170,
       height: 18,
       imageIndex: 9,
+      isVisible: true,
+      onBlur() {
+        calculateTotalAssetsInBangladeshAndOutside();
+      },
     },
     {
       name: "providentFund",
@@ -5229,160 +5509,222 @@ const IndividualTaxReturnForm: React.FC = () => {
       width: 170,
       height: 18,
       imageIndex: 9,
+      isVisible: true,
+      onBlur() {
+        calculateTotalAssetsInBangladeshAndOutside();
+      },
     },
     {
-      name: "otherInvestment1",
+      name: "otherInvestmentDesc",
       type: "text",
       label: "otherInvestment1",
-
       x: 370,
       y: 502,
       width: 402,
       height: 18,
       imageIndex: 9,
+      isVisible: true,
     },
     {
-      name: "otherInvestment2",
+      name: "otherInvestmentAmount",
       type: "text",
-      label: "otherInvestment2",
-
+      label: "",
       x: 770,
       y: 502,
       width: 170,
       height: 18,
       imageIndex: 9,
+      isVisible: true,
+      onBlur() {
+        calculateTotalAssetsInBangladeshAndOutside();
+      },
     },
+    {
+      name: "totalFinancialAssets",
+      type: "text",
+      label: "",
+      disabled: true,
+      x: 775,
+      y: 521,
+      width: 160,
+      height: 16,
+      imageIndex: 9,
+      isVisible: true,
+    },
+    // border line
+
+    {
+      name: "motorVehiclesAmount",
+      type: "text",
+      label: "",
+      disabled: true,
+      x: 775,
+      y: 538,
+      width: 160,
+      height: 16,
+      imageIndex: 9,
+      isVisible: true,
+    },
+
     {
       name: "typeOfMotorVehicle1",
       type: "text",
-      label: "typeOfMotorVehicle1",
-
+      label: "",
       x: 185,
       y: 573,
       width: 225,
       height: 18,
       imageIndex: 9,
+      isVisible: true,
     },
-    {
-      name: "typeOfMotorVehicle2",
-      type: "text",
-      label: "typeOfMotorVehicle2",
 
-      x: 185,
-      y: 590,
-      width: 225,
-      height: 18,
-      imageIndex: 9,
-    },
     {
       name: "registrationNumber1",
       type: "text",
-      label: "registrationNumber1",
-
+      label: "",
       x: 410,
       y: 573,
       width: 215,
       height: 18,
       imageIndex: 9,
+      isVisible: true,
     },
-    {
-      name: "registrationNumber2",
-      type: "text",
-      label: "registrationNumber2",
 
-      x: 410,
-      y: 590,
-      width: 215,
-      height: 18,
-      imageIndex: 9,
-    },
     {
       name: "motorValue1",
       type: "text",
       label: "motorValue1",
-
       x: 625,
       y: 573,
       width: 150,
       height: 18,
       imageIndex: 9,
+      isVisible: true,
+      onBlur() {
+        calculateTotalAssetsInBangladeshAndOutside();
+      },
     },
+
+    {
+      name: "typeOfMotorVehicle2",
+      type: "text",
+      label: "typeOfMotorVehicle2",
+      x: 185,
+      y: 590,
+      width: 225,
+      height: 18,
+      imageIndex: 9,
+      isVisible: true,
+    },
+
+    {
+      name: "registrationNumber2",
+      type: "text",
+      label: "registrationNumber2",
+      x: 410,
+      y: 590,
+      width: 215,
+      height: 18,
+      imageIndex: 9,
+      isVisible: true,
+    },
+
     {
       name: "motorValue2",
       type: "text",
       label: "motorValue2",
-
       x: 625,
       y: 590,
       width: 150,
       height: 18,
       imageIndex: 9,
+      isVisible: true,
+      onBlur() {
+        calculateTotalAssetsInBangladeshAndOutside();
+      },
     },
     {
-      name: "ornaments1",
+      name: "ornamentsDesc",
       type: "text",
-      label: "ornaments1",
-
+      label: "",
       x: 420,
       y: 610,
       width: 355,
       height: 18,
       imageIndex: 9,
+      isVisible: true,
     },
-    {
-      name: "ornaments2",
-      type: "text",
-      label: "ornaments2",
 
+    {
+      name: "ornamentsValue",
+      type: "text",
+      label: "",
       x: 770,
       y: 610,
       width: 170,
       height: 18,
       imageIndex: 9,
+      isVisible: true,
+      onBlur() {
+        calculateTotalAssetsInBangladeshAndOutside();
+      },
     },
+
     {
       name: "furnitureAndElectronic",
       type: "text",
       label: "furnitureAndElectronic",
-
       x: 770,
       y: 628,
       width: 170,
       height: 18,
       imageIndex: 9,
+      isVisible: true,
+      onBlur() {
+        calculateTotalAssetsInBangladeshAndOutside();
+      },
     },
-    {
-      name: "othersAssets2",
-      type: "text",
-      label: "othersAssets2",
 
-      x: 770,
-      y: 645,
-      width: 170,
-      height: 18,
-      imageIndex: 9,
-    },
     {
-      name: "othersAssets1",
+      name: "othersAssetsDesc",
       type: "text",
       label: "othersAssets1",
-
       x: 550,
       y: 645,
       width: 220,
       height: 18,
       imageIndex: 9,
+      isVisible: true,
     },
+
+    {
+      name: "othersAssetsValue",
+      type: "text",
+      label: "othersAssets2",
+      x: 770,
+      y: 645,
+      width: 170,
+      height: 18,
+      imageIndex: 9,
+      isVisible: true,
+      onBlur() {
+        calculateTotalAssetsInBangladeshAndOutside();
+      },
+    },
+
     {
       name: "bankBalance",
       type: "text",
       label: "bankBalance",
-
       x: 620,
       y: 680,
       width: 155,
       height: 18,
       imageIndex: 9,
+      isVisible: true,
+      onBlur() {
+        calculateTotalAssetsInBangladeshAndOutside();
+      },
     },
     {
       name: "cashInHand",
@@ -5393,9 +5735,24 @@ const IndividualTaxReturnForm: React.FC = () => {
       width: 155,
       height: 18,
       imageIndex: 9,
+      isVisible: true,
+      onBlur() {
+        calculateTotalAssetsInBangladeshAndOutside();
+      },
     },
     {
-      name: "others2",
+      name: "othersDesc",
+      type: "text",
+      label: "",
+      x: 300,
+      y: 715,
+      width: 320,
+      height: 18,
+      imageIndex: 9,
+      isVisible: true,
+    },
+    {
+      name: "othersValue",
       type: "text",
       label: "others2",
       x: 620,
@@ -5403,17 +5760,35 @@ const IndividualTaxReturnForm: React.FC = () => {
       width: 155,
       height: 18,
       imageIndex: 9,
+      isVisible: true,
+      onBlur() {
+        calculateTotalAssetsInBangladeshAndOutside();
+      },
+    },
+
+    {
+      name: "totalCashInHandsAndFundOutsideBusiness",
+      type: "text",
+      label: "",
+      disabled: true,
+      x: 775,
+      y: 733,
+      width: 160,
+      height: 16,
+      imageIndex: 9,
+      isVisible: true,
     },
     {
-      name: "others1",
+      name: "totalAssetslocatedInBangladesh",
       type: "text",
-      label: "others1",
-
-      x: 300,
-      y: 715,
-      width: 320,
-      height: 18,
+      label: "",
+      disabled: true,
+      x: 775,
+      y: 750,
+      width: 160,
+      height: 16,
       imageIndex: 9,
+      isVisible: true,
     },
     {
       name: "assetOutsideBangladesh",
@@ -5421,10 +5796,29 @@ const IndividualTaxReturnForm: React.FC = () => {
       label: "assetOutsideBangladesh",
       x: 770,
       y: 768,
+      disabled: false,
       width: 170,
       height: 18,
       imageIndex: 9,
+      isVisible: true,
+      onBlur() {
+        calculateTotalAssetsInBangladeshAndOutside();
+      },
     },
+
+    {
+      name: "totalAssetsInBangladeshAndOutsideBangladesh",
+      type: "text",
+      label: "",
+      disabled: true,
+      x: 775,
+      y: 785,
+      width: 160,
+      height: 16,
+      imageIndex: 9,
+      isVisible: true,
+    },
+
     {
       name: "signature",
       type: "signature",
@@ -5434,6 +5828,19 @@ const IndividualTaxReturnForm: React.FC = () => {
       width: 200,
       height: 40,
       imageIndex: 9,
+      isVisible: true,
+    },
+    {
+      name: "taxpayerName",
+      type: "text",
+      label: "taxpayerName",
+      disabled: true,
+      x: 150,
+      y: 905,
+      width: 340,
+      height: 16,
+      imageIndex: 9,
+      isVisible: true,
     },
     {
       name: "humanVarification",
@@ -5444,10 +5851,10 @@ const IndividualTaxReturnForm: React.FC = () => {
       width: 50,
       height: 30,
       imageIndex: 9,
+      isVisible: true,
     },
 
     // Image 11
-
     {
       name: "taxpayerName",
       type: "text",
@@ -5458,54 +5865,55 @@ const IndividualTaxReturnForm: React.FC = () => {
       width: 530,
       height: 16,
       imageIndex: 10,
+      isVisible: true,
     },
     {
       name: "nationalId",
       type: "text",
       label: "",
-
       disabled: true,
       x: 555,
       y: 430,
       width: 335,
       height: 16,
       imageIndex: 10,
+      isVisible: true,
     },
     {
       name: "tin",
       type: "text",
       label: "tin",
-
       disabled: true,
       x: 555,
       y: 475,
       width: 335,
       height: 16,
       imageIndex: 10,
+      isVisible: true,
     },
     {
       name: "circle",
       type: "text",
       label: "",
-
       disabled: true,
       x: 170,
       y: 520,
       width: 225,
       height: 16,
       imageIndex: 10,
+      isVisible: true,
     },
     {
       name: "zone",
       type: "text",
       label: "",
-
       disabled: true,
       x: 555,
       y: 520,
       width: 330,
       height: 16,
       imageIndex: 10,
+      isVisible: true,
     },
     {
       name: "totalIncomeShown",
@@ -5518,6 +5926,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       width: 300,
       height: 16,
       imageIndex: 10,
+      isVisible: true,
     },
     {
       name: "totalTaxPaid",
@@ -5529,13 +5938,13 @@ const IndividualTaxReturnForm: React.FC = () => {
       width: 300,
       height: 16,
       imageIndex: 10,
+      isVisible: true,
     },
   ];
 
   useEffect(() => {
     const updateScale = () => {
       if (containerRef.current && imageRefs.current["0"]) {
-        const containerWidth = containerRef.current.offsetWidth;
         const imageWidth = imageRefs.current["0"].offsetWidth;
         const newScale = imageWidth / 1000; // Assuming 1000px as base width
         setScale(newScale);
@@ -5572,21 +5981,8 @@ const IndividualTaxReturnForm: React.FC = () => {
           ...data,
           userId: "xyz123456",
         };
+
         const result = await createIndividualTaxReturn(createData);
-        const response = await createPayment(
-          createData.total ?? "50",
-          createData.userId
-        );
-
-        // Check if the response is an error before accessing bkashURL
-        if (response instanceof Error) {
-          throw response; // Handle the error case
-        }
-
-        // Navigate to the response URL if available
-        if (response.bkashURL) {
-          window.location.href = response.bkashURL; // Fixed: Assigning URL to window.location.href
-        }
 
         if (result.success) {
           toast({
@@ -5632,43 +6028,57 @@ const IndividualTaxReturnForm: React.FC = () => {
       case "email":
       case "number":
         return (
-          <Controller
-            name={field.name as any}
-            control={control}
-            render={({ field: { onChange, value } }) => {
-              return (
-                <div style={fieldStyle} className="relative overflow-hidden">
-                  <input
-                    onChange={(e) => {
-                      let newValue = e.target.value;
-                      onChange(newValue);
-                    }}
-                    value={value as string}
-                    type={field.type}
-                    className={`w-full h-full absolute border px-2 font-medium ${
-                      !field.disabled
-                        ? "border-sky-300 rounded-none bg-sky-300/10 focus:border-sky-500 focus:ring-0 focus:outline-0 focus:bg-transparent hover:border-sky-500"
-                        : " bg-[#F5F5F5] font-semibold text-[#948C91]"
-                    }  `}
-                    style={{ fontSize: `${14 * scale}px` }}
-                    disabled={field.disabled}
-                    onBlur={(e) => {
-                      if (field?.onBlur) field.onBlur(e.target.value);
-                    }}
-                  />
+          <>
+            {field.isVisible && (
+              <Controller
+                name={field.name as any}
+                control={control}
+                render={({ field: { onChange, value } }) => {
+                  return (
+                    <div
+                      style={fieldStyle}
+                      className="relative overflow-hidden"
+                    >
+                      <input
+                        // onChange={(e) => {}}
+                        defaultValue={value as string}
+                        type={field.type}
+                        className={`w-full h-full absolute border px-2 font-medium ${
+                          !field.disabled
+                            ? (errors as any)[field.name]
+                              ? "border-red-500 bg-red-300/10 focus:border-red-700 focus:ring-0 focus:outline-0 focus:bg-red-300/20 hover:border-red-700"
+                              : "border-sky-300 rounded-none bg-sky-300/10 focus:border-sky-500 focus:ring-0 focus:outline-0 focus:bg-transparent hover:border-sky-500"
+                            : "bg-[#F5F5F5] font-semibold text-[#948C91]"
+                        }`}
+                        style={{ fontSize: `${14 * scale}px` }}
+                        disabled={field.disabled}
+                        onBlur={(e) => {
+                          let newValue = e.target.value;
+                          onChange(newValue);
+                          if (field?.onBlur) field.onBlur(e.target.value);
+                        }}
+                      />
 
-                  {/* Conditional rendering for the required indicator */}
-                  {isRequired && !field.disabled && (
-                    <span className="absolute top-0 right-0 -translate-y-1/2 translate-x-1/2 h-10 w-10 bg-sky-300/70 rotate-45 transform origin-center transition-colors">
-                      <span className="absolute text-white top-[23px] left-[17px] text-lg">
-                        *
-                      </span>
-                    </span>
-                  )}
-                </div>
-              );
-            }}
-          />
+                      {(errors as any)[field.name] && (
+                        <p className="absolute bottom-0 left-0 text-red-500 text-xs mt-1">
+                          {(errors as any)[field.name]?.message as string}
+                        </p>
+                      )}
+
+                      {/* Conditional rendering for the required indicator */}
+                      {isRequired && !field.disabled && (
+                        <span className="absolute top-0 right-0 -translate-y-1/2 translate-x-1/2 h-10 w-10 bg-sky-300/70 rotate-45 transform origin-center transition-colors">
+                          <span className="absolute text-white top-[23px] left-[17px] text-lg">
+                            *
+                          </span>
+                        </span>
+                      )}
+                    </div>
+                  );
+                }}
+              />
+            )}
+          </>
         );
       case "checkbox":
         return (
@@ -5696,6 +6106,7 @@ const IndividualTaxReturnForm: React.FC = () => {
             options={field.options}
             scale={scale}
             disabled={field.disabled}
+            resetFields={field.resetFields}
             required={isRequired}
             label={field.label}
             x={field.x}
@@ -5939,6 +6350,7 @@ const IndividualTaxReturnForm: React.FC = () => {
                       <Button
                         onClick={() => console.log("Save PDF")}
                         className="px-6 py-2 bg-primary text-white font-medium transition duration-300 hover:bg-primary-dark"
+                        type="submit"
                       >
                         <Download className="mr-2 h-5 w-5" />
                         Save PDF
