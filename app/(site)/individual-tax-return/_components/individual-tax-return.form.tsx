@@ -598,6 +598,8 @@ const IndividualTaxReturnForm: React.FC = () => {
     );
 
     setValue("incomeFromEmployment", totalIncomeFromSalary.toFixed(2)); // for the second page
+    setValue("totalIncomeShownInTheReturn", totalIncomeFromSalary.toFixed(2)); // for the 9th page
+    setValue("taxExemptedIncomeAndAllowance", totalExempted.toFixed(2)); // for 9th page
 
     return {
       totalIncome: isNaN(totalIncome) ? 0 : totalIncome,
@@ -697,7 +699,10 @@ const IndividualTaxReturnForm: React.FC = () => {
     setValue("totalGovtEmployment.amount", totalIncome.toFixed(2));
     setValue("totalGovtEmployment.taxExempted", totalTaxExempted.toFixed(2));
     setValue("totalGovtEmployment.taxable", totalTaxable.toFixed(2));
+
     setValue("incomeFromEmployment", totalTaxable.toFixed(2)); // for second page
+    setValue("totalIncomeShownInTheReturn", totalTaxable.toFixed(2)); // for 9th page
+    setValue("taxExemptedIncomeAndAllowance", totalTaxExempted.toFixed(2)); // for 9th page
 
     return {
       totalIncome: isNaN(totalIncome) ? 0 : totalIncome,
@@ -1626,7 +1631,6 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "dateOfSignature",
       type: "date",
       label: "Date of Signature",
-
       x: 538,
       y: 910,
       width: 397,
@@ -1735,6 +1739,7 @@ const IndividualTaxReturnForm: React.FC = () => {
           width: 33,
         },
       ],
+
       resetFields: [
         "basicPayGovtEmployment",
         "arrearPayGovtEmployment",
@@ -1772,6 +1777,8 @@ const IndividualTaxReturnForm: React.FC = () => {
         "exemptedAmountPrivateEmployment",
         "totalIncomeFromSalaryPrivateEmployment",
         "incomeFromEmployment",
+        "totalIncomeShownInTheReturn",
+        "taxExemptedIncomeAndAllowance", // from page 9
       ],
       isVisible: true,
     },
@@ -4646,8 +4653,7 @@ const IndividualTaxReturnForm: React.FC = () => {
     {
       name: "totalIncomeShownInTheReturn",
       type: "text",
-      label: "totalIncomeShownInTheReturn",
-
+      label: "",
       disabled: true,
       x: 775,
       y: 375,
@@ -4659,8 +4665,7 @@ const IndividualTaxReturnForm: React.FC = () => {
     {
       name: "taxExemptedIncomeAndAllowance",
       type: "text",
-      label: "taxExemptedIncomeAndAllowance",
-
+      label: "",
       disabled: true,
       x: 775,
       y: 393,
@@ -4738,7 +4743,6 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "netWealthAtTheLastDateOfThisFinancialYear",
       type: "text",
       label: "netWealthAtTheLastDateOfThisFinancialYear",
-
       disabled: true,
       x: 775,
       y: 552,
@@ -4777,7 +4781,6 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "businessCapitalAmount1",
       type: "text",
       label: "businessCapitalAmount1",
-
       disabled: true,
       x: 640,
       y: 747,
@@ -4803,7 +4806,6 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "directorsShareholdingsInTheCompanies",
       type: "text",
       label: "directorsShareholdingsInTheCompanies",
-
       disabled: true,
       x: 775,
       y: 765,
@@ -4816,7 +4818,6 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "businessCapitalOfPartnershipFirm",
       type: "text",
       label: "businessCapitalOfPartnershipFirm",
-
       disabled: true,
       x: 775,
       y: 852,
@@ -4845,7 +4846,6 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "netWealthLastDateAmount",
       type: "text",
       label: "netWealthLastDateAmount",
-
       disabled:
         watch("netWealthLastDate") === "NO_I_AM_A_NEW_TAXPAYER" ? true : false,
 
@@ -4860,7 +4860,6 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "giftExpense",
       type: "text",
       label: "giftExpense",
-
       x: 772,
       y: 515,
       width: 168,
@@ -4872,7 +4871,6 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "institutionalLiabilities",
       type: "text",
       label: "institutionalLiabilities",
-
       x: 772,
       y: 585,
       width: 168,
