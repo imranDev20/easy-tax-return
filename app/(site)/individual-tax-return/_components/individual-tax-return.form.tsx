@@ -637,6 +637,44 @@ const IndividualTaxReturnForm: React.FC = () => {
  
   
   // Schedule 1
+  const calculateTaxExemptedIncomeAndAllowance = useCallback(() => {
+    const fields = [
+      "exemptedIncomeFromSalary",
+      "exemptedIncomeFromBusiness",
+      "exemptedAgriculturalIncome",
+      "incomeFromProvidentFund",
+      "foreignRemittance",
+      "typeOfTaxExemptedTaxFreeIncomeAmount6",
+      "typeOfTaxExemptedTaxFreeIncomeAmount7",
+    ];
+
+    const total = fields.reduce((sum, field) => {
+      const value = watch(field as keyof IndividualTaxReturnFormInput);
+      const numberValue = parseFloat(value?.toString() || "0");
+      return sum + (isNaN(numberValue) ? 0 : numberValue);
+    }, 0);
+
+    setValue("totalAmount2", total.toFixed(2));
+    setValue("taxExemptedIncomeAndAllowance", total.toFixed(2));
+    return total;
+  },[setValue,watch]);
+  const calculateReceiptOfGiftOtherReceipts =() => {
+    const fields = [
+      "typeOfReceiptsAmount1",
+      "typeOfReceiptsAmount2",
+      "typeOfReceiptsAmount3",
+    ];
+
+    const total = fields.reduce((sum, field) => {
+      const value = watch(field as keyof IndividualTaxReturnFormInput);
+      const numberValue = parseFloat(value?.toString() || "0");
+      return sum + (isNaN(numberValue) ? 0 : numberValue);
+    }, 0);
+
+    setValue("totalAmount3", total.toFixed(2));
+    setValue("receiptOfGiftOtherReceipts", total.toFixed(2));
+    return total;
+  };
   const calculatePrivateEmploymentTotals = useCallback(() => {
     const fields = [
       "basicPayPrivateEmployment",
@@ -690,6 +728,7 @@ const IndividualTaxReturnForm: React.FC = () => {
     const totalIncomeFromSalary = totalIncome - totalExempted;
 
     setValue("exemptedAmountPrivateEmployment", totalExempted.toFixed(2));
+    setValue("exemptedIncomeFromSalary",totalExempted.toFixed(2));
     setValue("totalSalaryReceivedPrivateEmployment", totalIncome.toFixed(2));
     setValue(
       "totalIncomeFromSalaryPrivateEmployment",
@@ -698,12 +737,13 @@ const IndividualTaxReturnForm: React.FC = () => {
 
     setValue("incomeFromEmployment", totalIncomeFromSalary.toFixed(2)); // for the second page
     setValue("totalIncomeShownInTheReturn", totalIncomeFromSalary.toFixed(2)); // for the 9th page
-    setValue("taxExemptedIncomeAndAllowance", totalExempted.toFixed(2)); // for 9th page
+   
     calculateTotalSourceOfFunds();
+    calculateTaxExemptedIncomeAndAllowance();
     return {
       totalIncome: isNaN(totalIncome) ? 0 : totalIncome,
     };
-  }, [watch, setValue,calculateTotalSourceOfFunds]);
+  }, [watch, setValue,calculateTotalSourceOfFunds,  calculateTaxExemptedIncomeAndAllowance]);
 
   const calcualateScheduleOneOtherAllowanceGovtTaxable = () => {
     const incomeAmount = parseFloat(
@@ -797,18 +837,21 @@ const IndividualTaxReturnForm: React.FC = () => {
     // Set the calculated values
     setValue("totalGovtEmployment.amount", totalIncome.toFixed(2));
     setValue("totalGovtEmployment.taxExempted", totalTaxExempted.toFixed(2));
+    setValue("exemptedIncomeFromSalary", totalTaxExempted.toFixed(2));
     setValue("totalGovtEmployment.taxable", totalTaxable.toFixed(2));
-
     setValue("incomeFromEmployment", totalTaxable.toFixed(2)); // for second page
     setValue("totalIncomeShownInTheReturn", totalTaxable.toFixed(2)); // for 9th page
-    setValue("taxExemptedIncomeAndAllowance", totalTaxExempted.toFixed(2)); // for 9th page
+ 
     calculateTotalSourceOfFunds();
+    calculateTaxExemptedIncomeAndAllowance();
     return {
       totalIncome: isNaN(totalIncome) ? 0 : totalIncome,
       totalTaxExempted: isNaN(totalTaxExempted) ? 0 : totalTaxExempted,
       totalTaxable: isNaN(totalTaxable) ? 0 : totalTaxable,
     };
   };
+
+
 
   const calculateScheduleThreeNetProfit = () => {
     const grossProfitFromAgriculture = parseFloat(
@@ -939,9 +982,49 @@ const IndividualTaxReturnForm: React.FC = () => {
       parseNumber(valueOfAnyBenefit) -
       parseNumber(adjustedAdvanceRent) -
       parseNumber(vacancyAllowance);
-
     setValue("totalRentValue", total.toFixed(2));
   };
+
+  const calculateBusinessCapitalDifference = () => {
+    const totalAssetOfBusiness = getValues("totalAssetOfBusiness");
+    const lessBusinessLiabilities = getValues("lessBusinessLiabilities");
+    const businessCapitalAmount = parseFloat(totalAssetOfBusiness?.toString() || "0") - parseFloat(lessBusinessLiabilities?.toString() || "0");
+    setValue("businessCapitalAmount1", businessCapitalAmount.toFixed(2));
+  };
+
+ const calculateDirectorsShareholdingsInTheCompanies = () =>{
+  const fields = [
+    "value1",
+    "value2",
+    "value3",
+  ];
+
+  const total = fields.reduce((sum, field) => {
+    const value = watch(field as keyof IndividualTaxReturnFormInput);
+    const numberValue = parseFloat(value?.toString() || "0");
+    return sum + (isNaN(numberValue) ? 0 : numberValue);
+  }, 0);
+
+  setValue("directorsShareholdingsInTheCompanies", total.toFixed(2));
+  return total;
+ }
+
+ const calculateBusinessCapitalOfPartnershipFirm = () =>{
+  const fields = [
+    "capitalContributed1",
+    "capitalContributed2",
+    "capitalContributed3",
+  ];
+
+  const total = fields.reduce((sum, field) => {
+    const value = watch(field as keyof IndividualTaxReturnFormInput);
+    const numberValue = parseFloat(value?.toString() || "0");
+    return sum + (isNaN(numberValue) ? 0 : numberValue);
+  }, 0);
+
+  setValue("businessCapitalOfPartnershipFirm", total.toFixed(2));
+  return total;
+ }
 
   useEffect(() => {
     const subscription = watch((value, { name, type }) => {
@@ -4537,6 +4620,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "exemptedIncomeFromSalary",
       type: "text",
       label: "exemptedIncomeFromSalary",
+      disabled:true,
       x: 782,
       y: 672,
       width: 157,
@@ -4548,6 +4632,9 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "exemptedIncomeFromBusiness",
       type: "text",
       label: "exemptedIncomeFromBusiness",
+      onBlur:()=>{
+        calculateTaxExemptedIncomeAndAllowance();
+      },
 
       x: 782,
       y: 690,
@@ -4560,6 +4647,9 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "exemptedAgriculturalIncome",
       type: "text",
       label: "exemptedAgriculturalIncome",
+      onBlur:()=>{
+        calculateTaxExemptedIncomeAndAllowance();
+      },
 
       x: 782,
       y: 705,
@@ -4572,6 +4662,9 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "incomeFromProvidentFund",
       type: "text",
       label: "incomeFromProvidentFund",
+      onBlur:()=>{
+        calculateTaxExemptedIncomeAndAllowance();
+      },
 
       x: 782,
       y: 725,
@@ -4584,6 +4677,9 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "foreignRemittance",
       type: "text",
       label: "foreignRemittance",
+      onBlur:()=>{
+        calculateTaxExemptedIncomeAndAllowance();
+      },
 
       x: 782,
       y: 742,
@@ -4608,6 +4704,9 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "typeOfReceiptsAmount1",
       type: "text",
       label: "typeOfReceiptsAmount1",
+      onBlur:()=>{
+        calculateReceiptOfGiftOtherReceipts();
+      },
 
       x: 782,
       y: 872,
@@ -4632,6 +4731,9 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "typeOfReceiptsAmount2",
       type: "text",
       label: "typeOfReceiptsAmount2",
+      onBlur:()=>{
+        calculateReceiptOfGiftOtherReceipts();
+      },
 
       x: 782,
       y: 890,
@@ -4656,7 +4758,9 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "typeOfReceiptsAmount3",
       type: "text",
       label: "typeOfReceiptsAmount3",
-
+      onBlur:()=>{
+        calculateReceiptOfGiftOtherReceipts();
+      },
       x: 782,
       y: 908,
       width: 157,
@@ -4680,7 +4784,9 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "typeOfTaxExemptedTaxFreeIncomeAmount6",
       type: "text",
       label: "typeOfTaxExemptedTaxFreeIncomeAmount6",
-
+      onBlur:()=>{
+        calculateTaxExemptedIncomeAndAllowance();
+      },
       x: 782,
       y: 760,
       width: 158,
@@ -4704,7 +4810,9 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "typeOfTaxExemptedTaxFreeIncomeAmount7",
       type: "text",
       label: "typeOfTaxExemptedTaxFreeIncomeAmount7",
-
+      onBlur:()=>{
+        calculateTaxExemptedIncomeAndAllowance();
+      },
       x: 782,
       y: 778,
       width: 158,
@@ -4779,8 +4887,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "receiptOfGiftOtherReceipts",
       type: "text",
       label: "receiptOfGiftOtherReceipts",
-
-      disabled: false,
+      disabled: true,
       x: 775,
       y: 410,
       width: 160,
@@ -4894,9 +5001,9 @@ const IndividualTaxReturnForm: React.FC = () => {
       isVisible: true,
     },
     {
-      name: "businessCapitalAmount2",
+      name: "businessCapitalAmount1",
       type: "text",
-      label: "businessCapitalAmount2",
+      label: "businessCapitalAmount1",
 
       disabled: true,
       x: 775,
@@ -5025,7 +5132,9 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "totalAssetOfBusiness",
       type: "text",
       label: "totalAssetOfBusiness",
-
+      onBlur: () =>{
+        calculateBusinessCapitalDifference();
+      },
       x: 640,
       y: 710,
       width: 135,
@@ -5037,7 +5146,9 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "lessBusinessLiabilities",
       type: "text",
       label: "lessBusinessLiabilities",
-
+      onBlur: () =>{
+        calculateBusinessCapitalDifference();
+      },
       x: 640,
       y: 728,
       width: 135,
@@ -5122,6 +5233,10 @@ const IndividualTaxReturnForm: React.FC = () => {
       type: "text",
       label: "value1",
 
+      onBlur: ()=>{
+        calculateDirectorsShareholdingsInTheCompanies();
+      },
+
       x: 640,
       y: 800,
       width: 135,
@@ -5133,6 +5248,9 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "value2",
       type: "text",
       label: "value2",
+      onBlur: ()=>{
+        calculateDirectorsShareholdingsInTheCompanies();
+      },
 
       x: 640,
       y: 818,
@@ -5145,6 +5263,9 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "value3",
       type: "text",
       label: "value3",
+      onBlur: ()=>{
+        calculateDirectorsShareholdingsInTheCompanies();
+      },
 
       x: 640,
       y: 834,
@@ -5230,6 +5351,10 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "capitalContributed1",
       type: "text",
       label: "capitalContributed1",
+      onBlur: ()=>{
+        calculateBusinessCapitalOfPartnershipFirm();
+
+      },
 
       x: 640,
       y: 903,
@@ -5242,6 +5367,10 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "capitalContributed2",
       type: "text",
       label: "capitalContributed2",
+      onBlur: ()=>{
+        calculateBusinessCapitalOfPartnershipFirm();
+        
+      },
 
       x: 640,
       y: 922,
@@ -5254,6 +5383,10 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "capitalContributed3",
       type: "text",
       label: "capitalContributed3",
+      onBlur: ()=>{
+        calculateBusinessCapitalOfPartnershipFirm();
+        
+      },
 
       x: 640,
       y: 938,
