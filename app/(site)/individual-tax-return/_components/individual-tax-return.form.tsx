@@ -697,11 +697,7 @@ const IndividualTaxReturnForm: React.FC = () => {
   setValue("incomeFromOtherSources", incomeFromOtherSources.toFixed(2));
 
   calculateTotalIncome();
-  // particulars
-  // amountOfIncome: 
-  // deductionsExpensesExemptedIncome:
-  // netTaxableIncome:
-  // taxDeductedAtSource:
+ 
  }
 
  const calculateTotalIncome = useCallback(() => {
@@ -730,6 +726,37 @@ const IndividualTaxReturnForm: React.FC = () => {
   setValue("totalIncome", total.toFixed(2));
   return total;
 },[setValue,watch]);
+
+ const calculateTaxDeductedCollectedAtSource =() => {
+  const fields = [
+    "interestProfitFromBankFI.taxDeductedAtSource",
+    "incomeFromSavingCertificates.taxDeductedAtSource",
+    "incomeFromSecuritiesDebentures.taxDeductedAtSource",
+    "incomeFromFinancialProductScheme.taxDeductedAtSource",
+    "dividendIncome.taxDeductedAtSource",
+    "capitalGainFromTransferOfProperty.taxDeductedAtSource",
+    "incomeFromBusinessMinTax.taxDeductedAtSource",
+    "workersParticipationFund.taxDeductedAtSource",
+    "incomeFromOtherSourcesMinTax.taxDeductedAtSource",
+    "otherSubjectToMinTax.taxDeductedAtSource",
+    
+    
+  ];
+   // particulars
+  // amountOfIncome: 
+  // deductionsExpensesExemptedIncome:
+  // netTaxableIncome:
+  // taxDeductedAtSource:
+
+  const total = fields.reduce((sum, field) => {
+    const value = watch(field as keyof IndividualTaxReturnFormInput);
+    const numberValue = parseFloat(value?.toString() || "0");
+    return sum + (isNaN(numberValue) ? 0 : numberValue);
+  }, 0);
+
+  setValue("taxDeductedCollectedAtSource.amount", total.toFixed(2));
+  return total;
+};
  
   
   // Schedule 1
@@ -3659,6 +3686,9 @@ const IndividualTaxReturnForm: React.FC = () => {
       type: "number",
       label: "Interest/Profit from Bank/FI  Tax Deduction",
       value: "",
+      onBlur: () => {
+        calculateTaxDeductedCollectedAtSource();
+      },
       x: 828,
       y: 730,
       width: 112,
@@ -3712,7 +3742,9 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "incomeFromSavingCertificates.taxDeductedAtSource",
       type: "number",
       label: "incomeFromSavingCertificatesTax",
-
+      onBlur: () => {
+        calculateTaxDeductedCollectedAtSource();
+      },
       x: 828,
       y: 748,
       width: 112,
@@ -3766,7 +3798,9 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "incomeFromSecuritiesDebentures.taxDeductedAtSource",
       type: "number",
       label: "incomeFromSecuritiesDebenturesTax",
-
+      onBlur: () => {
+        calculateTaxDeductedCollectedAtSource();
+      },
       x: 828,
       y: 766,
       width: 112,
@@ -3821,7 +3855,9 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "incomeFromFinancialProductScheme.taxDeductedAtSource",
       type: "number",
       label: "incomeFromFinancialProductSchemeTax",
-
+      onBlur: () => {
+        calculateTaxDeductedCollectedAtSource();
+      },
       x: 828,
       y: 784,
       width: 112,
@@ -3876,7 +3912,9 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "dividendIncome.taxDeductedAtSource",
       type: "text",
       label: "dividendIncomeTax",
-
+      onBlur: () => {
+        calculateTaxDeductedCollectedAtSource();
+      },
       x: 828,
       y: 800,
       width: 112,
@@ -3929,7 +3967,9 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "capitalGainFromTransferOfProperty.taxDeductedAtSource",
       type: "number",
       label: "capitalGainFromTransferOfPropertyTax",
-
+      onBlur: () => {
+        calculateTaxDeductedCollectedAtSource();
+      },
       x: 828,
       y: 820,
       width: 112,
@@ -3983,7 +4023,9 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "incomeFromBusinessMinTax.taxDeductedAtSource",
       type: "number",
       label: "incomeFromBusinessTax",
-
+      onBlur: () => {
+        calculateTaxDeductedCollectedAtSource();
+      },
       x: 828,
       y: 838,
       width: 112,
@@ -4036,7 +4078,9 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "workersParticipationFund.taxDeductedAtSource",
       type: "number",
       label: "workersParticipationFundTax",
-
+      onBlur: () => {
+        calculateTaxDeductedCollectedAtSource();
+      },
       x: 828,
       y: 856,
       width: 112,
@@ -4090,7 +4134,9 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "incomeFromOtherSourcesMinTax.taxDeductedAtSource",
       type: "text",
       label: "incomeFromOtherSourcesTax",
-
+      onBlur: () => {
+        calculateTaxDeductedCollectedAtSource();
+      },
       x: 828,
       y: 874,
       width: 112,
@@ -4154,7 +4200,9 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "otherSubjectToMinTax.taxDeductedAtSource",
       type: "number",
       label: "customSource.taxDeductedAtSource",
-
+      onBlur: () => {
+        calculateTaxDeductedCollectedAtSource();
+      },
       x: 828,
       y: 890,
       width: 110,
