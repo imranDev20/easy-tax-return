@@ -22,10 +22,9 @@ export default withAuth(
         return NextResponse.redirect(
           new URL(safeCallbackUrl || "/admin", req.url)
         );
+      } else {
+        return NextResponse.redirect(new URL(safeCallbackUrl || "/", req.url));
       }
-      // else {
-      //   return NextResponse.redirect(new URL(safeCallbackUrl || "/", req.url));
-      // }
     }
 
     // Protect admin routes
