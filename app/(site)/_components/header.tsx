@@ -6,6 +6,7 @@ import React, {
   useMemo,
   useCallback,
   useLayoutEffect,
+  useRef,
 } from "react";
 import { Button } from "@/components/ui/button";
 import {
@@ -35,6 +36,8 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { motion } from "framer-motion";
 import Link from "next/link";
+import { useRouter, usePathname } from "next/navigation";
+import Logo from "@/components/logo";
 
 const Path = (props: any) => (
   <motion.path
@@ -84,14 +87,18 @@ export default function Header() {
   const [activeSection, setActiveSection] = useState("home");
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [targetScroll, setTargetScroll] = useState<string | null>(null);
   const { data: session } = useSession();
+  const router = useRouter();
+  const pathname = usePathname();
+  const lastScrollTop = useRef(0);
+  const scrollTimeout = useRef<NodeJS.Timeout | null>(null);
 
   const NAV_OPTIONS = useMemo(
     () => [
       { label: "Home", link: "home" },
-      { label: "Process", link: "process" },
+      { label: "services", link: "services" },
       { label: "About Us", link: "about-us" },
-      { label: "Testimonials", link: "testimonials" },
       { label: "Contact", link: "contact" },
     ],
     []
@@ -99,25 +106,41 @@ export default function Header() {
 
   const handleScroll = useCallback(() => {
     const scrollY = window.pageYOffset;
-    const scrolled = scrollY > 50;
-    setIsScrolled(scrolled);
+    const scrollThreshold = 100; // Increased from 50 to 100
+    const hysteresis = 20; // Add hysteresis
 
-    const sections = NAV_OPTIONS.map((option) =>
-      document.getElementById(option.link)
-    ).filter(Boolean);
+    // Clear the existing timeout
+    if (scrollTimeout.current) {
+      clearTimeout(scrollTimeout.current);
+    }
 
-    for (let i = sections.length - 1; i >= 0; i--) {
-      const section = sections[i];
-      if (section && section.offsetTop <= scrollY + window.innerHeight / 3) {
-        setActiveSection(section.id);
-        break;
+    // Set a new timeout
+    scrollTimeout.current = setTimeout(() => {
+      if (scrollY > scrollThreshold + hysteresis && !isScrolled) {
+        setIsScrolled(true);
+      } else if (scrollY < scrollThreshold - hysteresis && isScrolled) {
+        setIsScrolled(false);
       }
-    }
 
-    if (scrollY < 50) {
-      setActiveSection("home");
-    }
-  }, [NAV_OPTIONS]);
+      const sections = NAV_OPTIONS.map((option) =>
+        document.getElementById(option.link)
+      ).filter(Boolean);
+
+      for (let i = sections.length - 1; i >= 0; i--) {
+        const section = sections[i];
+        if (section && section.offsetTop <= scrollY + window.innerHeight / 3) {
+          setActiveSection(section.id);
+          break;
+        }
+      }
+
+      if (scrollY < scrollThreshold) {
+        setActiveSection("home");
+      }
+
+      lastScrollTop.current = scrollY;
+    }, 10); // 50ms delay
+  }, [NAV_OPTIONS, isScrolled]);
 
   useLayoutEffect(() => {
     handleScroll();
@@ -128,18 +151,23 @@ export default function Header() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, [handleScroll]);
 
-  const handleSmoothScroll = useCallback(
-    (e: React.MouseEvent<HTMLAnchorElement>, targetId: string) => {
+  const handleNavigation = useCallback(
+    (e: React.MouseEvent<HTMLSpanElement>, targetId: string) => {
       e.preventDefault();
+      const isHomePage = pathname === "/";
+
       if (targetId === "home") {
-        window.scrollTo({
-          top: 0,
-          behavior: "smooth",
-        });
-      } else {
+        if (isHomePage) {
+          window.scrollTo({ top: 0, behavior: "smooth" });
+        } else {
+          router.push("/");
+          setTargetScroll("top");
+        }
+        setActiveSection("home");
+      } else if (isHomePage) {
         const targetElement = document.getElementById(targetId);
         if (targetElement) {
-          const offset = 80; // Adjust this value to increase or decrease the space
+          const offset = 80;
           const elementPosition = targetElement.getBoundingClientRect().top;
           const offsetPosition = elementPosition + window.pageYOffset - offset;
 
@@ -148,12 +176,36 @@ export default function Header() {
             behavior: "smooth",
           });
         }
+        setActiveSection(targetId);
+      } else {
+        router.push(`/#${targetId}`);
+        setTargetScroll(targetId);
       }
-      setActiveSection(targetId);
       setIsMobileMenuOpen(false);
     },
-    []
+    [router, pathname]
   );
+
+  useEffect(() => {
+    if (targetScroll) {
+      if (targetScroll === "top") {
+        window.scrollTo({ top: 0, behavior: "instant" });
+      } else {
+        const targetElement = document.getElementById(targetScroll);
+        if (targetElement) {
+          const offset = 80;
+          const elementPosition = targetElement.getBoundingClientRect().top;
+          const offsetPosition = elementPosition + window.pageYOffset - offset;
+
+          window.scrollTo({
+            top: offsetPosition,
+            behavior: "instant",
+          });
+        }
+      }
+      setTargetScroll(null);
+    }
+  }, [targetScroll, pathname]);
 
   const NavLinks = ({ mobile = false }) => (
     <ul
@@ -163,18 +215,19 @@ export default function Header() {
       {NAV_OPTIONS.map((navItem) => (
         <li
           key={navItem.label}
-          className={`mx-4 text-font uppercase hover:text-primary transition-colors
+          className={`mx-4 text-font uppercase hover:text-secondary transition-colors
             ${activeSection === navItem.link ? "text-primary" : ""}`}
         >
-          <a
-            href={`#${navItem.link}`}
-            onClick={(e) => handleSmoothScroll(e, navItem.link)}
-            className={`transition-colors duration-300
-              ${activeSection === navItem.link ? "text-primary" : ""}`}
-            aria-current={activeSection === navItem.link ? "page" : undefined}
-          >
-            {navItem.label}
-          </a>
+          <Link href={`/#${navItem.link}`}>
+            <span
+              onClick={(e) => handleNavigation(e, navItem.link)}
+              className={`transition-colors duration-300
+                ${activeSection === navItem.link ? "text-secondary" : ""}`}
+              aria-current={activeSection === navItem.link ? "page" : undefined}
+            >
+              {navItem.label}
+            </span>
+          </Link>
         </li>
       ))}
     </ul>
@@ -211,15 +264,18 @@ export default function Header() {
             className={`mx-4 text-font uppercase hover:text-primary transition-colors
               ${activeSection === navItem.link ? "text-primary" : ""}`}
           >
-            <a
-              href={`#${navItem.link}`}
-              onClick={(e) => handleSmoothScroll(e, navItem.link)}
-              className={`transition-colors duration-300
-                ${activeSection === navItem.link ? "text-primary" : ""}`}
-              aria-current={activeSection === navItem.link ? "page" : undefined}
-            >
-              {navItem.label}
-            </a>
+            <Link href={`/#${navItem.link}`}>
+              <span
+                onClick={(e) => handleNavigation(e, navItem.link)}
+                className={`transition-colors duration-300
+                  ${activeSection === navItem.link ? "text-primary" : ""}`}
+                aria-current={
+                  activeSection === navItem.link ? "page" : undefined
+                }
+              >
+                {navItem.label}
+              </span>
+            </Link>
           </motion.li>
         ))}
       </motion.ul>
@@ -312,8 +368,8 @@ export default function Header() {
 
   return (
     <header
-      className={`sticky top-0 z-50 transition-all duration-300 ease-in-out
-        ${isScrolled ? "bg-white shadow-md" : "bg-secondary"}`}
+      className={`sticky top-0 z-50 transition-all duration-300 ease-in-out border border-[#DBE1E7]
+        ${isScrolled ? "bg-white shadow-md" : "bg-lightGray"}`}
       role="banner"
     >
       <div className="container mx-auto flex items-center justify-between px-4 md:px-8">
@@ -322,14 +378,15 @@ export default function Header() {
             isScrolled ? "h-[60px] md:h-[65px]" : "h-[72px] md:h-[108px]"
           }`}
         >
-          <span
+          <Link
+            href="/"
             className={`italic font-bold font-sans text-2xl md:text-3xl transition-colors duration-300
             ${isScrolled ? "text-primary" : "text-primary"}`}
             role="heading"
             aria-level={1}
           >
-            e-taxreturn
-          </span>
+            <Logo width={200} height={100} />
+          </Link>
         </div>
         <nav className="hidden md:flex items-center">
           <NavLinks />

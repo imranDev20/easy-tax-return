@@ -54,3 +54,48 @@ export function snakeToNormalText(snakeStr: string) {
     .map((word) => word.charAt(0).toUpperCase() + word.slice(1)) // Capitalize the first letter of each word
     .join(" "); // Join the words with a space
 }
+
+export const toTitleCase = (text: string) => {
+  const smallWords = new Set([
+    "a",
+    "an",
+    "and",
+    "as",
+    "at",
+    "but",
+    "by",
+    "for",
+    "if",
+    "in",
+    "of",
+    "on",
+    "or",
+    "the",
+    "to",
+    "via",
+    "with",
+  ]);
+
+  return text
+    .split(" ")
+    .map((word, index, array) => {
+      // If the word is already in all caps (like CPA), preserve it
+      if (word === word.toUpperCase()) {
+        return word;
+      }
+
+      const lowerWord = word.toLowerCase();
+
+      if (
+        // Always capitalize the first and last word
+        index === 0 ||
+        index === array.length - 1 ||
+        // Don't capitalize small words
+        !smallWords.has(lowerWord)
+      ) {
+        return lowerWord.charAt(0).toUpperCase() + lowerWord.slice(1);
+      }
+      return lowerWord;
+    })
+    .join(" ");
+};

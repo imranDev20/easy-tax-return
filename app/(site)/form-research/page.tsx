@@ -399,7 +399,7 @@ const ResponsiveFormOverlay: React.FC = () => {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      <div className="bg-secondary min-h-screen pb-20">
+      <div className="bg-lightGray min-h-screen pb-20">
         <div className="container mx-auto py-12">
           <h1 className="text-4xl md:text-5xl font-bold text-primary mb-4 font-serif text-center">
             Online Tax Return Form

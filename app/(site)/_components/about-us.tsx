@@ -2,7 +2,9 @@ import React from "react";
 import Image from "next/image";
 import { Check, Phone } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import AboutImage from "@/public/about-us.jpg";
+import AboutImage from "@/public/about-us-5.jpg";
+import SectionSubtitle from "@/components/custom/section-subtitle";
+import SectionTitle from "@/components/custom/section-title";
 
 const AboutUs = () => {
   return (
@@ -32,13 +34,11 @@ const AboutUs = () => {
         </div>
 
         <div className="lg:col-span-7 lg:pl-5 flex flex-col justify-center text-center lg:text-left">
-          <h4 className="text-sm text-primary font-medium uppercase mb-2">
-            ABOUT US
-          </h4>
-          <h2 className="text-2xl sm:text-3xl md:text-[2.5rem] font-bold mb-4 sm:mb-6 leading-tight font-serif">
-            We&apos;re not your typical CPA firm, an outsourced accounting
-            service
-          </h2>
+          <SectionSubtitle subtitle="About Us" />
+          <SectionTitle
+            title="We're not your typical CPA firm, an outsourced accounting
+            service"
+          />
           <p className="text-gray-600 mb-4 sm:mb-6 text-sm sm:text-base">
             Tax services that are customized to enhance your financial strategy
             and minimize tax liabilities. Trust us for tax preparation,
@@ -54,7 +54,7 @@ const AboutUs = () => {
               "We keep your Bookkeeping up-to-date & accurate",
             ].map((item, index) => (
               <li key={index} className="flex items-start lg:items-center">
-                <Check className="text-primary mr-2 sm:mr-3 w-4 h-4 sm:w-5 sm:h-5 mt-1 lg:mt-0 flex-shrink-0" />
+                <Check className="text-secondary mr-2 sm:mr-3 w-4 h-4 sm:w-5 sm:h-5 mt-1 lg:mt-0 flex-shrink-0" />
                 <p className="text-sm sm:text-base text-left">{item}</p>
               </li>
             ))}
@@ -64,7 +64,7 @@ const AboutUs = () => {
             <span className="text-gray-400 mr-0 sm:mr-4 mb-2 sm:mb-0 text-sm sm:text-base">
               Still not confident?
             </span>
-            <Button className="inline-flex items-center text-white px-4 transition duration-300 py-3 sm:py-5 text-sm sm:text-base">
+            <Button className="inline-flex items-center px-4 transition duration-300 py-3 sm:py-5 text-sm sm:text-base">
               <Phone className="mr-2 w-4 h-4 sm:w-5 sm:h-5" />
               CONTACT US
             </Button>

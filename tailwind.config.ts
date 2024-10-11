@@ -66,6 +66,7 @@ const config: Config = {
         },
 
         font: "#121314",
+        lightGray: "#f8f8f8", // New color added here
       },
     },
   },
