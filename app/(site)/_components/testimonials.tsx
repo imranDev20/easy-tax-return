@@ -4,33 +4,37 @@ import React from "react";
 import useEmblaCarousel from "embla-carousel-react";
 import { Star } from "lucide-react";
 import Image from "next/image";
-import TestimonialImage from "@/public/testimonials-person.png";
-import AvatarOne from "@/public/testimonials-img1.jpg";
+import TestimonialImage from "@/public/testimonials-person.jpg";
+import AvatarOne from "@/public/review-avatars/avatar-1.jpg";
+import AvatarTwo from "@/public/review-avatars/avatar-2.jpg";
+import AvatarThree from "@/public/review-avatars/avatar-3.jpg";
+import SectionSubtitle from "@/components/custom/section-subtitle";
+import SectionTitle from "@/components/custom/section-title";
 
 const testimonials = [
   {
     id: 1,
-    name: "Ralph Edwards",
-    location: "New Zealand",
+    name: "Mahmud Rahman",
+    location: "Dhaka",
     rating: 5,
-    text: "I have received excellent customer service at all times. It is true that the staff has had a bug that I had to solve by hand, but in general the attention has been impeccable. I recommend it",
+    text: "I have received excellent customer service at all times. It's true that there was a small issue I had to resolve manually, but overall the attention has been impeccable. I highly recommend their services.",
     avatar: AvatarOne,
   },
   {
     id: 2,
-    name: "Jane Smith",
-    location: "Australia",
+    name: "Pritom Chakraborty",
+    location: "Chittagong",
     rating: 4,
-    text: "The tax return process was smooth and efficient. The team was very helpful in guiding me through the complexities. I'm satisfied with the service.",
-    avatar: AvatarOne,
+    text: "The tax return process was smooth and efficient. The team was very helpful in guiding me through the complexities. I'm satisfied with the service provided.",
+    avatar: AvatarTwo,
   },
   {
     id: 3,
-    name: "John Doe",
-    location: "United States",
+    name: "Abdul Karim",
+    location: "Sylhet",
     rating: 5,
-    text: "Exceptional service! They made filing my taxes a breeze. Their expertise saved me both time and money. Highly recommended!",
-    avatar: AvatarOne,
+    text: "Exceptional service! They made filing my taxes a breeze. Their expertise saved me both time and money. Highly recommended for anyone looking for professional tax assistance!",
+    avatar: AvatarThree,
   },
 ];
 
@@ -44,20 +48,18 @@ const Testimonials: React.FC = () => {
     >
       <div className="grid grid-cols-1 lg:grid-cols-5 gap-8 items-center">
         <div className="lg:col-span-3 lg:pr-8">
-          <h4 className="text-sm text-primary font-medium uppercase mb-2 text-center lg:text-left">
-            TESTIMONIALS
-          </h4>
-          <h2 className="text-2xl md:text-3xl lg:text-[2.5rem] font-bold mb-4 md:mb-6 leading-tight font-serif text-center lg:text-left">
-            Our client&apos;s reviews inspired us the most to improve our
-            services
-          </h2>
+          <div className="text-center md:text-left">
+            <SectionSubtitle subtitle="Testimonials" />
+            <SectionTitle
+              title="Our client's reviews inspired us the most to improve our
+            services"
+            />
+          </div>
+
           <div className="overflow-hidden mt-6 md:mt-10" ref={emblaRef}>
             <div className="flex">
               {testimonials.map((testimonial) => (
-                <div
-                  key={testimonial.id}
-                  className="flex-[0_0_100%] min-w-0 px-4"
-                >
+                <div key={testimonial.id} className="flex-[0_0_100%] min-w-0">
                   <div className="flex justify-center lg:justify-start mb-2">
                     {[...Array(5)].map((_, i) => (
                       <Star

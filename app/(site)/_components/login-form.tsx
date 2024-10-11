@@ -40,7 +40,8 @@ export default function LoginForm({
       const result = await signIn("credentials", {
         email: data.email,
         password: data.password,
-        redirect: false,
+        redirect: true,
+        callbackUrl: callbackUrl,
       });
 
       if (result?.error) {
@@ -61,13 +62,13 @@ export default function LoginForm({
 
   const handleGoogleSignIn = () => {
     startTransition(async () => {
-      await signIn("google", { callbackUrl: "/" });
+      await signIn("google", { callbackUrl: callbackUrl });
     });
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-secondary py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-md w-full space-y-8 bg-white p-10 rounded-lg shadow-md">
+    <div className="min-h-screen flex items-center justify-center bg-grayWhite py-12 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-md w-full space-y-8 bg-white p-10 rounded-lg shadow-md border">
         <div>
           <h2 className="mt-6 text-center text-3xl font-bold text-primary font-sans">
             LOGIN
