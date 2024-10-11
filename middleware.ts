@@ -11,6 +11,7 @@ export default withAuth(
     if (token && (path === "/login" || path === "/register")) {
       // Check if there's a callbackUrl and it's safe to redirect to
       const callbackUrl = searchParams.get("callbackUrl");
+
       const safeCallbackUrl =
         callbackUrl &&
         new URL(callbackUrl, req.url).hostname === req.nextUrl.hostname
@@ -21,9 +22,10 @@ export default withAuth(
         return NextResponse.redirect(
           new URL(safeCallbackUrl || "/admin", req.url)
         );
-      } else {
-        return NextResponse.redirect(new URL(safeCallbackUrl || "/", req.url));
       }
+      // else {
+      //   return NextResponse.redirect(new URL(safeCallbackUrl || "/", req.url));
+      // }
     }
 
     // Protect admin routes
