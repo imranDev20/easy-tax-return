@@ -314,7 +314,6 @@ export const individualTaxReturnSchema = z.object({
   totalLiabilitiesOutsideBusiness: z.string().optional(),
   grossWealth: z.string().optional(),
   businessCapitalAmount1: z.string().optional(),
-  businessCapitalAmount2: z.string().optional(),
   directorsShareholdingsInTheCompanies: z.string().optional(),
   businessCapitalOfPartnershipFirm: z.string().optional(),
 
