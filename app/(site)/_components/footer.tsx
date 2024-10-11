@@ -1,13 +1,14 @@
+import Logo from "@/components/logo";
 import Link from "next/link";
 import { FaFacebookSquare, FaLinkedinIn, FaYoutube } from "react-icons/fa";
 
 export default function Footer() {
   return (
-    <footer className="bg-white text-gray-600 pt-10 pb-6 border-t">
+    <footer className="bg-[#F8F8F8] text-gray-600 pt-10 pb-6 border-t">
       <div className="container mx-auto px-4">
         <div className="flex flex-col items-center md:items-start md:flex-row md:justify-between space-y-8 md:space-y-0">
           <div className="flex flex-col items-center md:items-start space-y-4 text-center md:text-left">
-            <h2 className="text-2xl font-bold text-blue-600">LOGO</h2>
+            <Logo width={200} />
             <p className="text-sm max-w-xs md:max-w-sm">
               Tax services that are customized to enhance your financial
               strategy and minimize tax liabilities. Trust us for tax

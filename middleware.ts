@@ -37,8 +37,9 @@ export default withAuth(
     if (
       path.startsWith("/profile") ||
       path.startsWith("/history") ||
-      path.startsWith("/transactions") ||
-      path.startsWith("/individual-tax-return")
+      path.startsWith("/transactions")
+      // ||
+      // path.startsWith("/individual-tax-return")
     ) {
       if (!token) {
         return NextResponse.redirect(
@@ -72,7 +73,7 @@ export const config = {
     "/profile",
     "/history",
     "/transactions",
-    "/individual-tax-return",
+    // "/individual-tax-return",
     "/login",
     "/register",
   ],
