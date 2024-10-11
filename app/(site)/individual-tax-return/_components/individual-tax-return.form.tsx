@@ -6678,7 +6678,7 @@ const IndividualTaxReturnForm: React.FC = () => {
   );
 
   return (
-    <div className="bg-secondary min-h-screen">
+    <div className="bg-lightGray min-h-screen">
       <div className="container mx-auto py-12">
         <h1 className="text-4xl md:text-5xl font-bold text-primary mb-4 font-serif text-center">
           Online Tax Return Form
@@ -6688,7 +6688,7 @@ const IndividualTaxReturnForm: React.FC = () => {
           guide you through the process step by step.
         </p>
 
-        <div className="bg-white shadow-lg rounded-lg overflow-hidden">
+        <div className="bg-white shadow-lg rounded-lg">
           <div className="p-6">
             <FormProvider {...form}>
               <form onSubmit={handleSubmit(onSubmit)}>
@@ -6697,7 +6697,7 @@ const IndividualTaxReturnForm: React.FC = () => {
                     <div
                       key={index}
                       ref={setImageRef(index)}
-                      className="relative border-2 border-gray-200 rounded-lg mb-8"
+                      className="relative border border-gray-200 mb-8 rounded-lg"
                     >
                       <Image
                         src={image}
@@ -6705,6 +6705,7 @@ const IndividualTaxReturnForm: React.FC = () => {
                         placeholder="blur"
                         alt={`Form Background ${index + 1}`}
                         layout="responsive"
+                        className="rounded-lg"
                       />
                       <div
                         ref={setFormContainerRef(index)}
@@ -6721,6 +6722,7 @@ const IndividualTaxReturnForm: React.FC = () => {
                   {images.map((_, index) => (
                     <button
                       key={index}
+                      type="button"
                       onClick={() => scrollToImage(index)}
                       className={`block mb-2 w-8 h-8 rounded-full ${
                         currentImageIndex === index
@@ -6738,6 +6740,7 @@ const IndividualTaxReturnForm: React.FC = () => {
                     <div className="flex items-center space-x-4">
                       <div className="flex items-center space-x-2">
                         <Button
+                          type="button"
                           variant="outline"
                           size="icon"
                           className="h-8 w-8"
@@ -6761,6 +6764,7 @@ const IndividualTaxReturnForm: React.FC = () => {
                           className="h-8 w-8"
                           disabled={currentImageIndex === images.length - 1}
                           title="Next Page"
+                          type="button"
                           onClick={() => {
                             if (currentImageIndex < images.length - 1) {
                               setCurrentImageIndex(currentImageIndex + 1);
@@ -6769,33 +6773,6 @@ const IndividualTaxReturnForm: React.FC = () => {
                           }}
                         >
                           <ArrowRight className="h-4 w-4" />
-                        </Button>
-                      </div>
-                      <div className="flex items-center space-x-2 border-l border-gray-300 pl-4">
-                        <Button
-                          onClick={() =>
-                            setScale((prev) => Math.max(prev - 0.1, 0.5))
-                          }
-                          variant="outline"
-                          size="icon"
-                          className="h-8 w-8"
-                          title="Zoom Out"
-                        >
-                          <ZoomOut className="h-4 w-4" />
-                        </Button>
-                        <span className="text-sm font-medium">
-                          {Math.round(scale * 100)}%
-                        </span>
-                        <Button
-                          onClick={() =>
-                            setScale((prev) => Math.min(prev + 0.1, 2))
-                          }
-                          variant="outline"
-                          size="icon"
-                          className="h-8 w-8"
-                          title="Zoom In"
-                        >
-                          <ZoomIn className="h-4 w-4" />
                         </Button>
                       </div>
                     </div>
@@ -6810,7 +6787,7 @@ const IndividualTaxReturnForm: React.FC = () => {
                       </Button>
                       <Button
                         onClick={() => console.log("Save PDF")}
-                        className="px-6 py-2 bg-primary text-white font-medium transition duration-300 hover:bg-primary-dark"
+                        className="px-6 py-2 font-medium transition duration-300"
                         type="submit"
                       >
                         <Download className="mr-2 h-5 w-5" />
