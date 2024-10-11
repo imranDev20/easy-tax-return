@@ -369,7 +369,7 @@ export default function Header() {
   return (
     <header
       className={`sticky top-0 z-50 transition-all duration-300 ease-in-out border border-[#DBE1E7]
-        ${isScrolled ? "bg-white shadow-md" : "bg-[#F8F8F8]"}`}
+        ${isScrolled ? "bg-white shadow-md" : "bg-lightGray"}`}
       role="banner"
     >
       <div className="container mx-auto flex items-center justify-between px-4 md:px-8">

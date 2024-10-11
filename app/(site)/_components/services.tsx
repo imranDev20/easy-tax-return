@@ -69,7 +69,7 @@ const vatServiceData = [
 
 export default function Services() {
   return (
-    <section id="services" className="w-full mt-20 py-12 bg-[#F8F8F8]">
+    <section id="services" className="w-full mt-20 py-12 bg-lightGray">
       <div className="text-center container max-w-7xl mx-auto px-4">
         <SectionSubtitle subtitle="Our Services" />
 

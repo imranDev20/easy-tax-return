@@ -4,7 +4,7 @@ import { FaFacebookSquare, FaLinkedinIn, FaYoutube } from "react-icons/fa";
 
 export default function Footer() {
   return (
-    <footer className="bg-[#F8F8F8] text-gray-600 pt-10 pb-6 border-t">
+    <footer className="bg-lightGray text-gray-600 pt-10 pb-6 border-t">
       <div className="container mx-auto px-4">
         <div className="flex flex-col items-center md:items-start md:flex-row md:justify-between space-y-8 md:space-y-0">
           <div className="flex flex-col items-center md:items-start space-y-4 text-center md:text-left">
