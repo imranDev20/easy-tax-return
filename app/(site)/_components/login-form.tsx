@@ -38,26 +38,44 @@ export default function LoginForm({
 
   const onSubmit = (data: LoginFormData) => {
     startTransition(async () => {
-      const result = await signIn("credentials", {
-        email: data.email,
-        password: data.password,
-        redirect: true,
-        callbackUrl: callbackUrl,
-      });
+      try {
+        const result = await signIn("credentials", {
+          email: data.email,
+          password: data.password,
+          redirect: false,
+          callbackUrl: callbackUrl,
+        });
 
-      if (result?.error) {
-        form.setError("root", { message: "Invalid email or password" });
-      } else {
-        // Fetch the current session to get the user role
-        const response = await fetch("/api/auth/session");
-        const session = await response.json();
+        if (result?.error) {
+          form.setError("root", { message: "Invalid email or password" });
+        } else if (result?.url) {
+          router.push(result.url);
+        }
+      } catch (error) {
+        console.error("Login error:", error);
+        form.setError("root", { message: "An unexpected error occurred" });
       }
     });
   };
 
   const handleGoogleSignIn = () => {
     startTransition(async () => {
-      await signIn("google", { callbackUrl: callbackUrl, redirect: true });
+      try {
+        const result = await signIn("google", {
+          callbackUrl: callbackUrl,
+          redirect: false,
+        });
+
+        if (result?.error) {
+          console.error("Google sign-in error:", result.error);
+          form.setError("root", { message: "Google sign-in failed" });
+        } else if (result?.url) {
+          router.push(result.url);
+        }
+      } catch (error) {
+        console.error("Google sign-in error:", error);
+        form.setError("root", { message: "An unexpected error occurred" });
+      }
     });
   };
 
