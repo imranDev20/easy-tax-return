@@ -9,6 +9,7 @@ import { useTransition } from "react";
 import { useForm } from "react-hook-form";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
+
 import {
   Form,
   FormControl,
@@ -50,19 +51,13 @@ export default function LoginForm({
         // Fetch the current session to get the user role
         const response = await fetch("/api/auth/session");
         const session = await response.json();
-
-        if (session?.user?.role === "ADMIN") {
-          router.push("/admin");
-        } else {
-          router.push("/");
-        }
       }
     });
   };
 
   const handleGoogleSignIn = () => {
     startTransition(async () => {
-      await signIn("google", { callbackUrl: callbackUrl });
+      await signIn("google", { callbackUrl: callbackUrl, redirect: true });
     });
   };
 
