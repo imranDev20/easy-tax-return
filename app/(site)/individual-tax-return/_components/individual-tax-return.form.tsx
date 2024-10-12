@@ -60,6 +60,7 @@ import { useRouter } from "next/navigation";
 import CustomCheckbox from "@/components/custom/checkbox";
 import { RepairCollection } from "@prisma/client";
 import { z } from "zod";
+import { NumericFormat } from "react-number-format";
 
 // Define the possible field types
 type FieldType =
@@ -195,7 +196,9 @@ const IndividualTaxReturnForm: React.FC = () => {
 
   const form = useForm<IndividualTaxReturnFormInput>({
     resolver: zodResolver(individualTaxReturnSchema),
-    defaultValues: {},
+    defaultValues: {
+      assessmentYear: "2024-25",
+    },
   });
 
   const {
@@ -451,7 +454,7 @@ const IndividualTaxReturnForm: React.FC = () => {
     const safeTotal = isNaN(total) ? 0 : Math.round(total * 100) / 100;
 
     setValue("totalExpenseIndividualPerson.amount", safeTotal.toFixed(2));
-    setValue("expenseRelatingToLifestyle",safeTotal.toFixed(2));
+    setValue("expenseRelatingToLifestyle", safeTotal.toFixed(2));
     calculateTotalExpenseAndLoss();
     return safeTotal;
   };
@@ -540,37 +543,40 @@ const IndividualTaxReturnForm: React.FC = () => {
     calculateTotalIncome();
     return Math.max(netProfit, 0);
   };
+
   // Image 8 statement of assests
   const calculateGrossWealth = useCallback(() => {
     const fields = [
       "netWealthAtTheLastDateOfThisFinancialYear",
-      "totalLiabilitiesOutsideBusiness",        
+      "totalLiabilitiesOutsideBusiness",
     ];
-  
+
     const total = fields.reduce((sum, field) => {
       const value = watch(field as keyof IndividualTaxReturnFormInput);
       const numberValue = parseFloat(value?.toString() || "0");
       return sum + (isNaN(numberValue) ? 0 : numberValue);
     }, 0);
-  
-    setValue("grossWealth", total.toFixed(2));  
+
+    setValue("grossWealth", total.toFixed(2));
     return total;
-   },[setValue, watch]);
+  }, [setValue, watch]);
+
   const calculateNetWealthLastDateOfThisFinancialYear = useCallback(() => {
-    const sumOfSourceOfFundPreviousYear = getValues("sumOfSourceOfFundAndPreviousYearsNetWealth");
+    const sumOfSourceOfFundPreviousYear = getValues(
+      "sumOfSourceOfFundAndPreviousYearsNetWealth"
+    );
     const totalExpenseAndLoss = getValues("totalExpensesAndLoss");
 
-    const result = parseFloat(sumOfSourceOfFundPreviousYear?.toString() || "0") - parseFloat(totalExpenseAndLoss?.toString() || "0");
+    const result =
+      parseFloat(sumOfSourceOfFundPreviousYear?.toString() || "0") -
+      parseFloat(totalExpenseAndLoss?.toString() || "0");
 
     setValue("netWealthAtTheLastDateOfThisFinancialYear", result.toFixed(2));
     calculateGrossWealth();
+  }, [getValues, setValue, calculateGrossWealth]);
 
-  },[getValues,  setValue,calculateGrossWealth]);
   const calculateSumOfSourceOfFund = useCallback(() => {
-    const fields = [
-      "totalSourceOfFund",
-      "netWealthLastDateAmount"
-    ];
+    const fields = ["totalSourceOfFund", "netWealthLastDateAmount"];
 
     const total = fields.reduce((sum, field) => {
       const value = watch(field as keyof IndividualTaxReturnFormInput);
@@ -581,12 +587,13 @@ const IndividualTaxReturnForm: React.FC = () => {
     setValue("sumOfSourceOfFundAndPreviousYearsNetWealth", total.toFixed(2));
     calculateNetWealthLastDateOfThisFinancialYear();
     return total;
-  },[setValue, watch, calculateNetWealthLastDateOfThisFinancialYear])
+  }, [setValue, watch, calculateNetWealthLastDateOfThisFinancialYear]);
+
   const calculateTotalSourceOfFunds = useCallback(() => {
     const fields = [
       "totalIncomeShownInTheReturn",
       "taxExemptedIncomeAndAllowance",
-      "receiptOfGiftOtherReceipts",    
+      "receiptOfGiftOtherReceipts",
     ];
 
     const total = fields.reduce((sum, field) => {
@@ -598,14 +605,27 @@ const IndividualTaxReturnForm: React.FC = () => {
     setValue("totalSourceOfFund", total.toFixed(2));
     calculateSumOfSourceOfFund();
     return total;
-
-  },[setValue, watch, calculateSumOfSourceOfFund]);
+  }, [setValue, watch, calculateSumOfSourceOfFund]);
 
   const calculateTotalExpenseAndLoss = () => {
+    const fields = ["expenseRelatingToLifestyle", "giftExpense"];
+
+    const total = fields.reduce((sum, field) => {
+      const value = watch(field as keyof IndividualTaxReturnFormInput);
+      const numberValue = parseFloat(value?.toString() || "0");
+      return sum + (isNaN(numberValue) ? 0 : numberValue);
+    }, 0);
+
+    setValue("totalExpensesAndLoss", total.toFixed(2));
+    calculateNetWealthLastDateOfThisFinancialYear();
+    return total;
+  };
+
+  const calculateLiabilitiesOutSideBusiness = () => {
     const fields = [
-      "expenseRelatingToLifestyle",
-      "giftExpense",
-        
+      "institutionalLiabilities",
+      "nonInstitutionalLiabilities",
+      "otherLiabilities",
     ];
 
     const total = fields.reduce((sum, field) => {
@@ -614,151 +634,239 @@ const IndividualTaxReturnForm: React.FC = () => {
       return sum + (isNaN(numberValue) ? 0 : numberValue);
     }, 0);
 
-    setValue("totalExpensesAndLoss", total.toFixed(2));   
-    calculateNetWealthLastDateOfThisFinancialYear() ;
+    setValue("totalLiabilitiesOutsideBusiness", total.toFixed(2));
+    calculateGrossWealth();
     return total;
-  }
+  };
 
- const calculateLiabilitiesOutSideBusiness = () => {
-  const fields = [
-    "institutionalLiabilities",
-    "nonInstitutionalLiabilities",
-    "otherLiabilities",    
-  ];
+  const calculateNetTaxableIncome = () => {
+    const interestProfitFromBankFIAmount = getValues(
+      "interestProfitFromBankFI.amountOfIncome"
+    );
+    const interestProfitFromBankFIDedction = getValues(
+      "interestProfitFromBankFI.deductionsExpensesExemptedIncome"
+    );
+    const interestProfitFromBankFINetTaxable =
+      parseFloat(interestProfitFromBankFIAmount?.toString() || "0") -
+      parseFloat(interestProfitFromBankFIDedction?.toString() || "0");
+    setValue(
+      "interestProfitFromBankFI.netTaxableIncome",
+      interestProfitFromBankFINetTaxable.toFixed(2)
+    );
 
-  const total = fields.reduce((sum, field) => {
-    const value = watch(field as keyof IndividualTaxReturnFormInput);
-    const numberValue = parseFloat(value?.toString() || "0");
-    return sum + (isNaN(numberValue) ? 0 : numberValue);
-  }, 0);
+    const incomeFromSavingCertificatesAmount = getValues(
+      "incomeFromSavingCertificates.amountOfIncome"
+    );
+    const incomeFromSavingCertificatesDedction = getValues(
+      "incomeFromSavingCertificates.deductionsExpensesExemptedIncome"
+    );
+    const incomeFromSavingCertificatesNetTaxable =
+      parseFloat(incomeFromSavingCertificatesAmount?.toString() || "0") -
+      parseFloat(incomeFromSavingCertificatesDedction?.toString() || "0");
+    setValue(
+      "incomeFromSavingCertificates.netTaxableIncome",
+      incomeFromSavingCertificatesNetTaxable.toFixed(2)
+    );
 
-  setValue("totalLiabilitiesOutsideBusiness", total.toFixed(2));  
-  calculateGrossWealth();
-  return total;
- }
+    const incomeFromSecuritiesDebenturesAmount = getValues(
+      "incomeFromSecuritiesDebentures.amountOfIncome"
+    );
+    const incomeFromSecuritiesDebenturesDedction = getValues(
+      "incomeFromSecuritiesDebentures.deductionsExpensesExemptedIncome"
+    );
+    const incomeFromSecuritiesDebenturesNetTaxable =
+      parseFloat(incomeFromSecuritiesDebenturesAmount?.toString() || "0") -
+      parseFloat(incomeFromSecuritiesDebenturesDedction?.toString() || "0");
+    setValue(
+      "incomeFromSecuritiesDebentures.netTaxableIncome",
+      incomeFromSecuritiesDebenturesNetTaxable.toFixed(2)
+    );
 
- const calculateNetTaxableIncome = () => {
-  const interestProfitFromBankFIAmount = getValues("interestProfitFromBankFI.amountOfIncome");
-  const interestProfitFromBankFIDedction = getValues("interestProfitFromBankFI.deductionsExpensesExemptedIncome");
-  const interestProfitFromBankFINetTaxable = parseFloat(interestProfitFromBankFIAmount?.toString() || "0") -parseFloat(interestProfitFromBankFIDedction?.toString() || "0")  
-  setValue("interestProfitFromBankFI.netTaxableIncome" ,interestProfitFromBankFINetTaxable.toFixed(2));
+    const incomeFromFinancialProductSchemeAmount = getValues(
+      "incomeFromFinancialProductScheme.amountOfIncome"
+    );
+    const incomeFromFinancialProductSchemeDedction = getValues(
+      "incomeFromFinancialProductScheme.deductionsExpensesExemptedIncome"
+    );
+    const incomeFromFinancialProductSchemeNetTaxable =
+      parseFloat(incomeFromFinancialProductSchemeAmount?.toString() || "0") -
+      parseFloat(incomeFromFinancialProductSchemeDedction?.toString() || "0");
+    setValue(
+      "incomeFromFinancialProductScheme.netTaxableIncome",
+      incomeFromFinancialProductSchemeNetTaxable.toFixed(2)
+    );
 
-  const incomeFromSavingCertificatesAmount = getValues("incomeFromSavingCertificates.amountOfIncome");
-  const incomeFromSavingCertificatesDedction = getValues("incomeFromSavingCertificates.deductionsExpensesExemptedIncome");
-  const incomeFromSavingCertificatesNetTaxable = parseFloat(incomeFromSavingCertificatesAmount?.toString() || "0") - parseFloat(incomeFromSavingCertificatesDedction?.toString() || "0")  
-  setValue("incomeFromSavingCertificates.netTaxableIncome" ,incomeFromSavingCertificatesNetTaxable.toFixed(2));
+    const dividendIncomeAmount = getValues("dividendIncome.amountOfIncome");
+    const dividendIncomeDedction = getValues(
+      "dividendIncome.deductionsExpensesExemptedIncome"
+    );
+    const dividendIncomeNetTaxable =
+      parseFloat(dividendIncomeAmount?.toString() || "0") -
+      parseFloat(dividendIncomeDedction?.toString() || "0");
+    setValue(
+      "dividendIncome.netTaxableIncome",
+      dividendIncomeNetTaxable.toFixed(2)
+    );
 
-  const incomeFromSecuritiesDebenturesAmount = getValues("incomeFromSecuritiesDebentures.amountOfIncome");
-  const incomeFromSecuritiesDebenturesDedction = getValues("incomeFromSecuritiesDebentures.deductionsExpensesExemptedIncome");
-  const incomeFromSecuritiesDebenturesNetTaxable = parseFloat(incomeFromSecuritiesDebenturesAmount?.toString() || "0") - parseFloat(incomeFromSecuritiesDebenturesDedction?.toString() || "0")  
-  setValue("incomeFromSecuritiesDebentures.netTaxableIncome" ,incomeFromSecuritiesDebenturesNetTaxable.toFixed(2));
+    const incomeFromFinancialAssets =
+      interestProfitFromBankFINetTaxable +
+      incomeFromSavingCertificatesNetTaxable +
+      incomeFromSecuritiesDebenturesNetTaxable +
+      incomeFromFinancialProductSchemeNetTaxable +
+      dividendIncomeNetTaxable;
 
-  const incomeFromFinancialProductSchemeAmount = getValues("incomeFromFinancialProductScheme.amountOfIncome");
-  const incomeFromFinancialProductSchemeDedction = getValues("incomeFromFinancialProductScheme.deductionsExpensesExemptedIncome");
-  const incomeFromFinancialProductSchemeNetTaxable = parseFloat(incomeFromFinancialProductSchemeAmount?.toString() || "0") - parseFloat(incomeFromFinancialProductSchemeDedction?.toString() || "0")  
-  setValue("incomeFromFinancialProductScheme.netTaxableIncome" ,incomeFromFinancialProductSchemeNetTaxable.toFixed(2));
+    setValue("incomeFromFinancialAssets", incomeFromFinancialAssets.toFixed(2));
 
-  const dividendIncomeAmount = getValues("dividendIncome.amountOfIncome");
-  const dividendIncomeDedction = getValues("dividendIncome.deductionsExpensesExemptedIncome");
-  const dividendIncomeNetTaxable = parseFloat(dividendIncomeAmount?.toString() || "0") - parseFloat(dividendIncomeDedction?.toString() || "0")  
-  setValue("dividendIncome.netTaxableIncome" ,dividendIncomeNetTaxable.toFixed(2));
+    const capitalGainFromTransferOfPropertyAmount = getValues(
+      "capitalGainFromTransferOfProperty.amountOfIncome"
+    );
+    const capitalGainFromTransferOfPropertyDedction = getValues(
+      "capitalGainFromTransferOfProperty.deductionsExpensesExemptedIncome"
+    );
+    const capitalGainFromTransferOfPropertyNetTaxable =
+      parseFloat(capitalGainFromTransferOfPropertyAmount?.toString() || "0") -
+      parseFloat(capitalGainFromTransferOfPropertyDedction?.toString() || "0");
 
-  const incomeFromFinancialAssets =  interestProfitFromBankFINetTaxable + incomeFromSavingCertificatesNetTaxable + incomeFromSecuritiesDebenturesNetTaxable + incomeFromFinancialProductSchemeNetTaxable + dividendIncomeNetTaxable ;
-  setValue("incomeFromFinancialAssets", incomeFromFinancialAssets.toFixed(2));
+    setValue(
+      "capitalGainFromTransferOfProperty.netTaxableIncome",
+      capitalGainFromTransferOfPropertyNetTaxable.toFixed(2)
+    );
+    setValue(
+      "incomeFromCapitalGains",
+      capitalGainFromTransferOfPropertyNetTaxable.toFixed(2)
+    );
 
-  const capitalGainFromTransferOfPropertyAmount = getValues("capitalGainFromTransferOfProperty.amountOfIncome");
-  const capitalGainFromTransferOfPropertyDedction = getValues("capitalGainFromTransferOfProperty.deductionsExpensesExemptedIncome");
-  const capitalGainFromTransferOfPropertyNetTaxable = parseFloat(capitalGainFromTransferOfPropertyAmount?.toString() || "0") - parseFloat(capitalGainFromTransferOfPropertyDedction?.toString() || "0")  
-  setValue("capitalGainFromTransferOfProperty.netTaxableIncome" ,capitalGainFromTransferOfPropertyNetTaxable.toFixed(2));
-  setValue("incomeFromCapitalGains" ,capitalGainFromTransferOfPropertyNetTaxable.toFixed(2));
+    const incomeFromBusinessMinTaxAmount = getValues(
+      "incomeFromBusinessMinTax.amountOfIncome"
+    );
+    const incomeFromBusinessMinTaxDedction = getValues(
+      "incomeFromBusinessMinTax.deductionsExpensesExemptedIncome"
+    );
+    const incomeFromBusinessMinTaxNetTaxable =
+      parseFloat(incomeFromBusinessMinTaxAmount?.toString() || "0") -
+      parseFloat(incomeFromBusinessMinTaxDedction?.toString() || "0");
 
-  const incomeFromBusinessMinTaxAmount = getValues("incomeFromBusinessMinTax.amountOfIncome");
-  const incomeFromBusinessMinTaxDedction = getValues("incomeFromBusinessMinTax.deductionsExpensesExemptedIncome");
-  const incomeFromBusinessMinTaxNetTaxable = parseFloat(incomeFromBusinessMinTaxAmount?.toString() || "0") - parseFloat(incomeFromBusinessMinTaxDedction?.toString() || "0")  
-  setValue("incomeFromBusinessMinTax.netTaxableIncome" ,incomeFromBusinessMinTaxNetTaxable.toFixed(2));
-  setValue("incomeFromBusinessMinimum",incomeFromBusinessMinTaxNetTaxable.toFixed(2));
+    setValue(
+      "incomeFromBusinessMinTax.netTaxableIncome",
+      incomeFromBusinessMinTaxNetTaxable.toFixed(2)
+    );
+    setValue(
+      "incomeFromBusinessMinimum",
+      incomeFromBusinessMinTaxNetTaxable.toFixed(2)
+    );
 
-  const workersParticipationFundAmount = getValues("workersParticipationFund.amountOfIncome");
-  const workersParticipationFundDedction = getValues("workersParticipationFund.deductionsExpensesExemptedIncome");
-  const workersParticipationFundNetTaxable = parseFloat(workersParticipationFundAmount?.toString() || "0") - parseFloat(workersParticipationFundDedction?.toString() || "0")  
-  setValue("workersParticipationFund.netTaxableIncome", workersParticipationFundNetTaxable.toFixed(2));
+    const workersParticipationFundAmount = getValues(
+      "workersParticipationFund.amountOfIncome"
+    );
+    const workersParticipationFundDedction = getValues(
+      "workersParticipationFund.deductionsExpensesExemptedIncome"
+    );
+    const workersParticipationFundNetTaxable =
+      parseFloat(workersParticipationFundAmount?.toString() || "0") -
+      parseFloat(workersParticipationFundDedction?.toString() || "0");
 
-  const incomeFromOtherSourcesMinTaxAmount = getValues("incomeFromOtherSourcesMinTax.amountOfIncome");
-  const incomeFromOtherSourcesMinTaxDedction = getValues("incomeFromOtherSourcesMinTax.deductionsExpensesExemptedIncome");
-  const incomeFromOtherSourcesMinTaxNetTaxable = parseFloat(incomeFromOtherSourcesMinTaxAmount?.toString() || "0") - parseFloat(incomeFromOtherSourcesMinTaxDedction?.toString() || "0")  
-  setValue("incomeFromOtherSourcesMinTax.netTaxableIncome", incomeFromOtherSourcesMinTaxNetTaxable.toFixed(2));
+    setValue(
+      "workersParticipationFund.netTaxableIncome",
+      workersParticipationFundNetTaxable.toFixed(2)
+    );
 
-  const otherSubjectToMinTaxAmount = getValues("otherSubjectToMinTax.amountOfIncome");
-  const otherSubjectToMinTaxDedction = getValues("otherSubjectToMinTax.deductionsExpensesExemptedIncome");
-  const otherSubjectToMinTaxNetTaxable = parseFloat(otherSubjectToMinTaxAmount?.toString() || "0") - parseFloat(otherSubjectToMinTaxDedction?.toString() || "0")  
-  setValue("otherSubjectToMinTax.netTaxableIncome", otherSubjectToMinTaxNetTaxable.toFixed(2));
+    const incomeFromOtherSourcesMinTaxAmount = getValues(
+      "incomeFromOtherSourcesMinTax.amountOfIncome"
+    );
+    const incomeFromOtherSourcesMinTaxDedction = getValues(
+      "incomeFromOtherSourcesMinTax.deductionsExpensesExemptedIncome"
+    );
+    const incomeFromOtherSourcesMinTaxNetTaxable =
+      parseFloat(incomeFromOtherSourcesMinTaxAmount?.toString() || "0") -
+      parseFloat(incomeFromOtherSourcesMinTaxDedction?.toString() || "0");
 
-  const incomeFromOtherSources = workersParticipationFundNetTaxable +  incomeFromOtherSourcesMinTaxNetTaxable +  otherSubjectToMinTaxNetTaxable;
-  setValue("incomeFromOtherSources", incomeFromOtherSources.toFixed(2));
+    setValue(
+      "incomeFromOtherSourcesMinTax.netTaxableIncome",
+      incomeFromOtherSourcesMinTaxNetTaxable.toFixed(2)
+    );
 
-  calculateTotalIncome();
- 
- }
+    const otherSubjectToMinTaxAmount = getValues(
+      "otherSubjectToMinTax.amountOfIncome"
+    );
+    const otherSubjectToMinTaxDedction = getValues(
+      "otherSubjectToMinTax.deductionsExpensesExemptedIncome"
+    );
+    const otherSubjectToMinTaxNetTaxable =
+      parseFloat(otherSubjectToMinTaxAmount?.toString() || "0") -
+      parseFloat(otherSubjectToMinTaxDedction?.toString() || "0");
 
- const calculateTotalIncome = useCallback(() => {
-  const fields = [
-    "incomeFromEmployment",
-    "taxpayersShareAmount",
-    "netProfitFromAgriculture",
-    "incomeFishFarmingAmount",
-    "incomeFromBusiness",
-    "incomeFromBusinessMinimum",
-    "incomeFromCapitalGains",
-    "incomeFromFinancialAssets",
-    "incomeFromOtherSources",
-    "shareOfIncomeFromAOP",
-    "incomeOfMinor",
-    "taxableIncomeFromAbroad",
-    
-  ];
+    setValue(
+      "otherSubjectToMinTax.netTaxableIncome",
+      otherSubjectToMinTaxNetTaxable.toFixed(2)
+    );
 
-  const total = fields.reduce((sum, field) => {
-    const value = watch(field as keyof IndividualTaxReturnFormInput);
-    const numberValue = parseFloat(value?.toString() || "0");
-    return sum + (isNaN(numberValue) ? 0 : numberValue);
-  }, 0);
+    const incomeFromOtherSources =
+      workersParticipationFundNetTaxable +
+      incomeFromOtherSourcesMinTaxNetTaxable +
+      otherSubjectToMinTaxNetTaxable;
+    setValue("incomeFromOtherSources", incomeFromOtherSources.toFixed(2));
 
-  setValue("totalIncome", total.toFixed(2));
-  return total;
-},[setValue,watch]);
+    calculateTotalIncome();
+  };
 
- const calculateTaxDeductedCollectedAtSource =() => {
-  const fields = [
-    "interestProfitFromBankFI.taxDeductedAtSource",
-    "incomeFromSavingCertificates.taxDeductedAtSource",
-    "incomeFromSecuritiesDebentures.taxDeductedAtSource",
-    "incomeFromFinancialProductScheme.taxDeductedAtSource",
-    "dividendIncome.taxDeductedAtSource",
-    "capitalGainFromTransferOfProperty.taxDeductedAtSource",
-    "incomeFromBusinessMinTax.taxDeductedAtSource",
-    "workersParticipationFund.taxDeductedAtSource",
-    "incomeFromOtherSourcesMinTax.taxDeductedAtSource",
-    "otherSubjectToMinTax.taxDeductedAtSource",
-    
-    
-  ];
-   // particulars
-  // amountOfIncome: 
-  // deductionsExpensesExemptedIncome:
-  // netTaxableIncome:
-  // taxDeductedAtSource:
+  const calculateTotalIncome = useCallback(() => {
+    const fields = [
+      "incomeFromEmployment",
+      "taxpayersShareAmount",
+      "netProfitFromAgriculture",
+      "incomeFishFarmingAmount",
+      "incomeFromBusiness",
+      "incomeFromBusinessMinimum",
+      "incomeFromCapitalGains",
+      "incomeFromFinancialAssets",
+      "incomeFromOtherSources",
+      "shareOfIncomeFromAOP",
+      "incomeOfMinor",
+      "taxableIncomeFromAbroad",
+    ];
 
-  const total = fields.reduce((sum, field) => {
-    const value = watch(field as keyof IndividualTaxReturnFormInput);
-    const numberValue = parseFloat(value?.toString() || "0");
-    return sum + (isNaN(numberValue) ? 0 : numberValue);
-  }, 0);
+    const total = fields.reduce((sum, field) => {
+      const value = watch(field as keyof IndividualTaxReturnFormInput);
+      const numberValue = parseFloat(value?.toString() || "0");
+      return sum + (isNaN(numberValue) ? 0 : numberValue);
+    }, 0);
 
-  setValue("taxDeductedCollectedAtSource.amount", total.toFixed(2));
-  return total;
-};
- 
-  
+    setValue("totalIncome", total.toFixed(2));
+    setValue("totalIncomeShown", total.toFixed(2));
+    setValue("totalIncomeShownInTheReturn", total.toFixed(2));
+
+    return total;
+  }, [setValue, watch]);
+
+  const calculateTaxDeductedCollectedAtSource = () => {
+    const fields = [
+      "interestProfitFromBankFI.taxDeductedAtSource",
+      "incomeFromSavingCertificates.taxDeductedAtSource",
+      "incomeFromSecuritiesDebentures.taxDeductedAtSource",
+      "incomeFromFinancialProductScheme.taxDeductedAtSource",
+      "dividendIncome.taxDeductedAtSource",
+      "capitalGainFromTransferOfProperty.taxDeductedAtSource",
+      "incomeFromBusinessMinTax.taxDeductedAtSource",
+      "workersParticipationFund.taxDeductedAtSource",
+      "incomeFromOtherSourcesMinTax.taxDeductedAtSource",
+      "otherSubjectToMinTax.taxDeductedAtSource",
+    ];
+    // particulars
+    // amountOfIncome:
+    // deductionsExpensesExemptedIncome:
+    // netTaxableIncome:
+    // taxDeductedAtSource:
+
+    const total = fields.reduce((sum, field) => {
+      const value = watch(field as keyof IndividualTaxReturnFormInput);
+      const numberValue = parseFloat(value?.toString() || "0");
+      return sum + (isNaN(numberValue) ? 0 : numberValue);
+    }, 0);
+
+    setValue("taxDeductedCollectedAtSource.amount", total.toFixed(2));
+    return total;
+  };
+
   // Schedule 1
   const calculateTaxExemptedIncomeAndAllowance = useCallback(() => {
     const fields = [
@@ -780,8 +888,8 @@ const IndividualTaxReturnForm: React.FC = () => {
     setValue("totalAmount2", total.toFixed(2));
     setValue("taxExemptedIncomeAndAllowance", total.toFixed(2));
     return total;
-  },[setValue,watch]);
-  const calculateReceiptOfGiftOtherReceipts =() => {
+  }, [setValue, watch]);
+  const calculateReceiptOfGiftOtherReceipts = () => {
     const fields = [
       "typeOfReceiptsAmount1",
       "typeOfReceiptsAmount2",
@@ -798,6 +906,7 @@ const IndividualTaxReturnForm: React.FC = () => {
     setValue("receiptOfGiftOtherReceipts", total.toFixed(2));
     return total;
   };
+
   const calculatePrivateEmploymentTotals = useCallback(() => {
     const fields = [
       "basicPayPrivateEmployment",
@@ -851,7 +960,7 @@ const IndividualTaxReturnForm: React.FC = () => {
     const totalIncomeFromSalary = totalIncome - totalExempted;
 
     setValue("exemptedAmountPrivateEmployment", totalExempted.toFixed(2));
-    setValue("exemptedIncomeFromSalary",totalExempted.toFixed(2));
+    setValue("exemptedIncomeFromSalary", totalExempted.toFixed(2));
     setValue("totalSalaryReceivedPrivateEmployment", totalIncome.toFixed(2));
     setValue(
       "totalIncomeFromSalaryPrivateEmployment",
@@ -859,15 +968,21 @@ const IndividualTaxReturnForm: React.FC = () => {
     );
 
     setValue("incomeFromEmployment", totalIncomeFromSalary.toFixed(2)); // for the second page
-    setValue("totalIncomeShownInTheReturn", totalIncomeFromSalary.toFixed(2)); // for the 9th page
-   
+
     calculateTotalSourceOfFunds();
     calculateTaxExemptedIncomeAndAllowance();
     calculateTotalIncome();
+
     return {
       totalIncome: isNaN(totalIncome) ? 0 : totalIncome,
     };
-  }, [watch, setValue,calculateTotalSourceOfFunds,  calculateTaxExemptedIncomeAndAllowance,calculateTotalIncome]);
+  }, [
+    watch,
+    setValue,
+    calculateTotalSourceOfFunds,
+    calculateTaxExemptedIncomeAndAllowance,
+    calculateTotalIncome,
+  ]);
 
   const calcualateScheduleOneOtherAllowanceGovtTaxable = () => {
     const incomeAmount = parseFloat(
@@ -882,7 +997,7 @@ const IndividualTaxReturnForm: React.FC = () => {
 
     return result;
   };
-  
+
   const calculateScheduleOneGovtTotals = () => {
     const taxExemptedFields = [
       "specialAllowanceGovtEmployment",
@@ -964,19 +1079,17 @@ const IndividualTaxReturnForm: React.FC = () => {
     setValue("exemptedIncomeFromSalary", totalTaxExempted.toFixed(2));
     setValue("totalGovtEmployment.taxable", totalTaxable.toFixed(2));
     setValue("incomeFromEmployment", totalTaxable.toFixed(2)); // for second page
-    setValue("totalIncomeShownInTheReturn", totalTaxable.toFixed(2)); // for 9th page
- 
+
     calculateTotalSourceOfFunds();
     calculateTaxExemptedIncomeAndAllowance();
     calculateTotalIncome();
+
     return {
       totalIncome: isNaN(totalIncome) ? 0 : totalIncome,
       totalTaxExempted: isNaN(totalTaxExempted) ? 0 : totalTaxExempted,
       totalTaxable: isNaN(totalTaxable) ? 0 : totalTaxable,
     };
   };
-
-
 
   const calculateScheduleThreeNetProfit = () => {
     const grossProfitFromAgriculture = parseFloat(
@@ -1115,43 +1228,41 @@ const IndividualTaxReturnForm: React.FC = () => {
   const calculateBusinessCapitalDifference = () => {
     const totalAssetOfBusiness = getValues("totalAssetOfBusiness");
     const lessBusinessLiabilities = getValues("lessBusinessLiabilities");
-    const businessCapitalAmount = parseFloat(totalAssetOfBusiness?.toString() || "0") - parseFloat(lessBusinessLiabilities?.toString() || "0");
+    const businessCapitalAmount =
+      parseFloat(totalAssetOfBusiness?.toString() || "0") -
+      parseFloat(lessBusinessLiabilities?.toString() || "0");
     setValue("businessCapitalAmount1", businessCapitalAmount.toFixed(2));
   };
 
- const calculateDirectorsShareholdingsInTheCompanies = () =>{
-  const fields = [
-    "value1",
-    "value2",
-    "value3",
-  ];
+  const calculateDirectorsShareholdingsInTheCompanies = () => {
+    const fields = ["value1", "value2", "value3"];
 
-  const total = fields.reduce((sum, field) => {
-    const value = watch(field as keyof IndividualTaxReturnFormInput);
-    const numberValue = parseFloat(value?.toString() || "0");
-    return sum + (isNaN(numberValue) ? 0 : numberValue);
-  }, 0);
+    const total = fields.reduce((sum, field) => {
+      const value = watch(field as keyof IndividualTaxReturnFormInput);
+      const numberValue = parseFloat(value?.toString() || "0");
+      return sum + (isNaN(numberValue) ? 0 : numberValue);
+    }, 0);
 
-  setValue("directorsShareholdingsInTheCompanies", total.toFixed(2));
-  return total;
- }
+    setValue("directorsShareholdingsInTheCompanies", total.toFixed(2));
+    return total;
+  };
 
- const calculateBusinessCapitalOfPartnershipFirm = () =>{
-  const fields = [
-    "capitalContributed1",
-    "capitalContributed2",
-    "capitalContributed3",
-  ];
+  const calculateBusinessCapitalOfPartnershipFirm = () => {
+    const fields = [
+      "capitalContributed1",
+      "capitalContributed2",
+      "capitalContributed3",
+    ];
 
-  const total = fields.reduce((sum, field) => {
-    const value = watch(field as keyof IndividualTaxReturnFormInput);
-    const numberValue = parseFloat(value?.toString() || "0");
-    return sum + (isNaN(numberValue) ? 0 : numberValue);
-  }, 0);
+    const total = fields.reduce((sum, field) => {
+      const value = watch(field as keyof IndividualTaxReturnFormInput);
+      const numberValue = parseFloat(value?.toString() || "0");
+      return sum + (isNaN(numberValue) ? 0 : numberValue);
+    }, 0);
 
-  setValue("businessCapitalOfPartnershipFirm", total.toFixed(2));
-  return total;
- }
+    setValue("businessCapitalOfPartnershipFirm", total.toFixed(2));
+    return total;
+  };
 
   useEffect(() => {
     const subscription = watch((value, { name, type }) => {
@@ -1178,8 +1289,6 @@ const IndividualTaxReturnForm: React.FC = () => {
 
     return () => subscription.unsubscribe();
   }, [watch, setValue, calculatePrivateEmploymentTotals]);
-
- 
 
   const formFields: FormField[] = [
     // Image 1
@@ -4148,7 +4257,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "otherSubjectToMinTax.particulars",
       type: "text",
       label: "customSource.particulars",
-      
+
       x: 135,
       y: 890,
       width: 355,
@@ -4829,7 +4938,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "exemptedIncomeFromSalary",
       type: "text",
       label: "exemptedIncomeFromSalary",
-      disabled:true,
+      disabled: true,
       x: 782,
       y: 672,
       width: 157,
@@ -4841,7 +4950,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "exemptedIncomeFromBusiness",
       type: "text",
       label: "exemptedIncomeFromBusiness",
-      onBlur:()=>{
+      onBlur: () => {
         calculateTaxExemptedIncomeAndAllowance();
       },
 
@@ -4856,7 +4965,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "exemptedAgriculturalIncome",
       type: "text",
       label: "exemptedAgriculturalIncome",
-      onBlur:()=>{
+      onBlur: () => {
         calculateTaxExemptedIncomeAndAllowance();
       },
 
@@ -4871,7 +4980,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "incomeFromProvidentFund",
       type: "text",
       label: "incomeFromProvidentFund",
-      onBlur:()=>{
+      onBlur: () => {
         calculateTaxExemptedIncomeAndAllowance();
       },
 
@@ -4886,7 +4995,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "foreignRemittance",
       type: "text",
       label: "foreignRemittance",
-      onBlur:()=>{
+      onBlur: () => {
         calculateTaxExemptedIncomeAndAllowance();
       },
 
@@ -4913,7 +5022,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "typeOfReceiptsAmount1",
       type: "text",
       label: "typeOfReceiptsAmount1",
-      onBlur:()=>{
+      onBlur: () => {
         calculateReceiptOfGiftOtherReceipts();
       },
 
@@ -4940,7 +5049,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "typeOfReceiptsAmount2",
       type: "text",
       label: "typeOfReceiptsAmount2",
-      onBlur:()=>{
+      onBlur: () => {
         calculateReceiptOfGiftOtherReceipts();
       },
 
@@ -4967,7 +5076,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "typeOfReceiptsAmount3",
       type: "text",
       label: "typeOfReceiptsAmount3",
-      onBlur:()=>{
+      onBlur: () => {
         calculateReceiptOfGiftOtherReceipts();
       },
       x: 782,
@@ -4993,7 +5102,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "typeOfTaxExemptedTaxFreeIncomeAmount6",
       type: "text",
       label: "typeOfTaxExemptedTaxFreeIncomeAmount6",
-      onBlur:()=>{
+      onBlur: () => {
         calculateTaxExemptedIncomeAndAllowance();
       },
       x: 782,
@@ -5019,7 +5128,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "typeOfTaxExemptedTaxFreeIncomeAmount7",
       type: "text",
       label: "typeOfTaxExemptedTaxFreeIncomeAmount7",
-      onBlur:()=>{
+      onBlur: () => {
         calculateTaxExemptedIncomeAndAllowance();
       },
       x: 782,
@@ -5105,7 +5214,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       isVisible: true,
       onBlur: () => {
         calculateTotalSourceOfFunds();
-      }
+      },
     },
     {
       name: "totalSourceOfFund",
@@ -5268,9 +5377,9 @@ const IndividualTaxReturnForm: React.FC = () => {
       label: "netWealthLastDateAmount",
       disabled:
         watch("netWealthLastDate") === "NO_I_AM_A_NEW_TAXPAYER" ? true : false,
-        onBlur: () =>  {
-          calculateSumOfSourceOfFund();
-        },
+      onBlur: () => {
+        calculateSumOfSourceOfFund();
+      },
 
       x: 772,
       y: 445,
@@ -5341,7 +5450,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "totalAssetOfBusiness",
       type: "text",
       label: "totalAssetOfBusiness",
-      onBlur: () =>{
+      onBlur: () => {
         calculateBusinessCapitalDifference();
       },
       x: 640,
@@ -5355,7 +5464,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "lessBusinessLiabilities",
       type: "text",
       label: "lessBusinessLiabilities",
-      onBlur: () =>{
+      onBlur: () => {
         calculateBusinessCapitalDifference();
       },
       x: 640,
@@ -5442,7 +5551,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       type: "text",
       label: "value1",
 
-      onBlur: ()=>{
+      onBlur: () => {
         calculateDirectorsShareholdingsInTheCompanies();
       },
 
@@ -5457,7 +5566,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "value2",
       type: "text",
       label: "value2",
-      onBlur: ()=>{
+      onBlur: () => {
         calculateDirectorsShareholdingsInTheCompanies();
       },
 
@@ -5472,7 +5581,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "value3",
       type: "text",
       label: "value3",
-      onBlur: ()=>{
+      onBlur: () => {
         calculateDirectorsShareholdingsInTheCompanies();
       },
 
@@ -5560,9 +5669,8 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "capitalContributed1",
       type: "text",
       label: "capitalContributed1",
-      onBlur: ()=>{
+      onBlur: () => {
         calculateBusinessCapitalOfPartnershipFirm();
-
       },
 
       x: 640,
@@ -5576,9 +5684,8 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "capitalContributed2",
       type: "text",
       label: "capitalContributed2",
-      onBlur: ()=>{
+      onBlur: () => {
         calculateBusinessCapitalOfPartnershipFirm();
-        
       },
 
       x: 640,
@@ -5592,9 +5699,8 @@ const IndividualTaxReturnForm: React.FC = () => {
       name: "capitalContributed3",
       type: "text",
       label: "capitalContributed3",
-      onBlur: ()=>{
+      onBlur: () => {
         calculateBusinessCapitalOfPartnershipFirm();
-        
       },
 
       x: 640,
@@ -6494,28 +6600,31 @@ const IndividualTaxReturnForm: React.FC = () => {
               <Controller
                 name={field.name as any}
                 control={control}
-                render={({ field: { onChange, value } }) => {
+                render={({ field: { value, onBlur } }) => {
                   return (
                     <div
                       style={fieldStyle}
                       className="relative overflow-hidden"
                     >
-                      <input
-                        // onChange={(e) => {}}
-                        defaultValue={value as string}
-                        type={field.type}
+                      <NumericFormat
+                        value={value as string}
+                        thousandSeparator={true}
+                        thousandsGroupStyle="lakh"
+                        decimalScale={2}
+                        fixedDecimalScale={true}
                         className={`w-full h-full absolute border px-2 font-medium ${
                           !field.disabled
                             ? (errors as any)[field.name]
                               ? "border-red-500 bg-red-300/10 focus:border-red-700 focus:ring-0 focus:outline-0 focus:bg-red-300/20 hover:border-red-700"
                               : "border-sky-300 rounded-none bg-sky-300/10 focus:border-sky-500 focus:ring-0 focus:outline-0 focus:bg-transparent hover:border-sky-500"
-                            : "bg-[#F5F5F5] font-semibold text-[#948C91]"
+                            : "bg-[#F5F5F5] font-medium text-[#948C91]"
                         }`}
                         style={{ fontSize: `${14 * scale}px` }}
                         disabled={field.disabled}
+                        allowNegative={false}
+                        customInput={CustomInput}
                         onBlur={(e) => {
-                          let newValue = e.target.value;
-                          onChange(newValue);
+                          onBlur();
                           if (field?.onBlur) field.onBlur(e.target.value);
                         }}
                       />
@@ -6817,3 +6926,24 @@ const IndividualTaxReturnForm: React.FC = () => {
   );
 };
 export default IndividualTaxReturnForm;
+
+// Custom input component
+const CustomInput = React.forwardRef<
+  HTMLInputElement,
+  React.InputHTMLAttributes<HTMLInputElement>
+>((props, ref) => {
+  const { onBlur, ...rest } = props;
+  return (
+    <input
+      {...rest}
+      ref={ref}
+      onBlur={(e) => {
+        if (onBlur) {
+          onBlur(e);
+        }
+      }}
+    />
+  );
+});
+
+CustomInput.displayName = "CustomInput";
