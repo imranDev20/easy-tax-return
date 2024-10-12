@@ -21,7 +21,7 @@ import {
 import CustomDatePicker from "@/components/custom/date-picker";
 import SignatureField from "@/components/custom/signature";
 import { Button } from "@/components/ui/button";
-import { isFieldRequired, snakeToNormalText } from "@/lib/utils";
+import { debounce, isFieldRequired, snakeToNormalText } from "@/lib/utils";
 import "flatpickr/dist/themes/airbnb.css";
 import {
   ArrowLeft,
@@ -81,9 +81,11 @@ const images = [
 const IndividualTaxReturnForm: React.FC = () => {
   const [scale, setScale] = useState(1);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const [targetImageIndex, setTargetImageIndex] = useState(0);
   const containerRef = useRef<HTMLDivElement | null>(null);
   const imageRefs = useRef<(HTMLDivElement | null)[]>([]);
   const formContainerRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const [lastScrolledIndex, setLastScrolledIndex] = useState(0);
 
   const [isPending, startTransition] = useTransition();
   const { toast } = useToast();
@@ -128,28 +130,45 @@ const IndividualTaxReturnForm: React.FC = () => {
     return () => subscription.unsubscribe();
   }, [watch, setValue, calculatePrivateEmploymentTotals]);
 
-  useEffect(() => {
-    const updateScale = () => {
-      if (containerRef.current && imageRefs.current["0"]) {
-        const imageWidth = imageRefs.current["0"].offsetWidth;
-        const newScale = imageWidth / 1000; // Assuming 1000px as base width
-        setScale(newScale);
-      }
-    };
+  const updateScale = useCallback(() => {
+    if (containerRef.current && imageRefs.current[0]) {
+      const imageWidth = imageRefs.current[0].offsetWidth;
+      const newScale = imageWidth / 1000; // Assuming 1000px as base width
+      setScale(newScale);
+    }
+  }, []);
 
-    const handleScroll = () => {
+  const debouncedScrollToImage = useCallback(
+    debounce((index: number) => {
+      imageRefs.current[index]?.scrollIntoView({ behavior: "smooth" });
+    }, 300),
+    []
+  );
+
+  const handleScroll = useCallback(
+    debounce(() => {
       const scrollPosition = window.scrollY + window.innerHeight / 2;
+      const bufferZone = window.innerHeight * 0.1;
+
       imageRefs.current.forEach((ref, index) => {
-        if (
-          ref &&
-          ref.offsetTop <= scrollPosition &&
-          ref.offsetTop + ref.offsetHeight > scrollPosition
-        ) {
-          setCurrentImageIndex(index);
+        if (ref) {
+          const topBoundary = ref.offsetTop + bufferZone;
+          const bottomBoundary = ref.offsetTop + ref.offsetHeight - bufferZone;
+
+          if (scrollPosition > topBoundary && scrollPosition < bottomBoundary) {
+            setCurrentImageIndex(index);
+            if (index !== lastScrolledIndex) {
+              setTargetImageIndex(index);
+              setLastScrolledIndex(index);
+            }
+          }
         }
       });
-    };
+    }, 100),
+    [lastScrolledIndex]
+  );
 
+  useEffect(() => {
     updateScale();
     window.addEventListener("resize", updateScale);
     window.addEventListener("scroll", handleScroll);
@@ -157,7 +176,80 @@ const IndividualTaxReturnForm: React.FC = () => {
       window.removeEventListener("resize", updateScale);
       window.removeEventListener("scroll", handleScroll);
     };
-  }, []);
+  }, [updateScale, handleScroll]);
+
+  useEffect(() => {
+    if (targetImageIndex !== lastScrolledIndex) {
+      debouncedScrollToImage(targetImageIndex);
+      setLastScrolledIndex(targetImageIndex);
+    }
+  }, [targetImageIndex, lastScrolledIndex, debouncedScrollToImage]);
+
+  const setImageRef = useCallback(
+    (index: number) => (el: HTMLDivElement | null) => {
+      imageRefs.current[index] = el;
+    },
+    []
+  );
+
+  const setFormContainerRef = useCallback(
+    (index: number) => (el: HTMLDivElement | null) => {
+      formContainerRefs.current[index] = el;
+    },
+    []
+  );
+
+  const handleNavigation = useCallback(
+    (direction: "prev" | "next") => {
+      setTargetImageIndex((prevIndex) => {
+        const newIndex =
+          direction === "prev"
+            ? Math.max(0, prevIndex - 1)
+            : Math.min(images.length - 1, prevIndex + 1);
+        if (newIndex !== prevIndex) {
+          setLastScrolledIndex(newIndex);
+          debouncedScrollToImage(newIndex);
+        }
+        return newIndex;
+      });
+    },
+    [images.length, debouncedScrollToImage]
+  );
+
+  const onSubmit: SubmitHandler<IndividualTaxReturnFormInput> = (data) => {
+    // Handle form submission
+    startTransition(async () => {
+      try {
+        const createData = {
+          ...data,
+          userId: "xyz123456",
+        };
+
+        const result = await createIndividualTaxReturn(createData);
+
+        if (result.success) {
+          toast({
+            title: "Success",
+            description: result.message,
+            variant: "success",
+          });
+          router.push("/admin");
+        } else {
+          toast({
+            title: "Error",
+            description: result.message,
+            variant: "destructive",
+          });
+        }
+      } catch (error) {
+        toast({
+          title: "Error",
+          description: "An unknown error occurred",
+          variant: "destructive",
+        });
+      }
+    });
+  };
 
   const renderField = (field: FormField, imageIndex: number) => {
     if (field.imageIndex !== imageIndex) return null;
@@ -368,60 +460,6 @@ const IndividualTaxReturnForm: React.FC = () => {
     }
   };
 
-  const scrollToImage = (index: number) => {
-    setCurrentImageIndex(index);
-    imageRefs.current[index]?.scrollIntoView({ behavior: "smooth" });
-  };
-
-  const setImageRef = useCallback(
-    (index: number) => (el: HTMLDivElement | null) => {
-      imageRefs.current[index] = el;
-    },
-    []
-  );
-
-  const setFormContainerRef = useCallback(
-    (index: number) => (el: HTMLDivElement | null) => {
-      formContainerRefs.current[index] = el;
-    },
-    []
-  );
-
-  const onSubmit: SubmitHandler<IndividualTaxReturnFormInput> = (data) => {
-    // Handle form submission
-    startTransition(async () => {
-      try {
-        const createData = {
-          ...data,
-          userId: "xyz123456",
-        };
-
-        const result = await createIndividualTaxReturn(createData);
-
-        if (result.success) {
-          toast({
-            title: "Success",
-            description: result.message,
-            variant: "success",
-          });
-          router.push("/admin");
-        } else {
-          toast({
-            title: "Error",
-            description: result.message,
-            variant: "destructive",
-          });
-        }
-      } catch (error) {
-        toast({
-          title: "Error",
-          description: "An unknown error occurred",
-          variant: "destructive",
-        });
-      }
-    });
-  };
-
   return (
     <div className="bg-lightGray min-h-screen">
       <div className="container mx-auto py-12">
@@ -468,7 +506,7 @@ const IndividualTaxReturnForm: React.FC = () => {
                     <button
                       key={index}
                       type="button"
-                      onClick={() => scrollToImage(index)}
+                      onClick={() => setTargetImageIndex(index)}
                       className={`block mb-2 w-8 h-8 rounded-full ${
                         currentImageIndex === index
                           ? "bg-primary text-white"
@@ -489,33 +527,24 @@ const IndividualTaxReturnForm: React.FC = () => {
                           variant="outline"
                           size="icon"
                           className="h-8 w-8"
-                          disabled={currentImageIndex === 0}
+                          disabled={targetImageIndex === 0}
                           title="Previous Page"
-                          onClick={() => {
-                            if (currentImageIndex > 0) {
-                              setCurrentImageIndex(currentImageIndex - 1);
-                              scrollToImage(currentImageIndex - 1);
-                            }
-                          }}
+                          onClick={() => handleNavigation("prev")}
                         >
                           <ArrowLeft className="h-4 w-4" />
                         </Button>
                         <span className="text-sm font-medium">
-                          Page {currentImageIndex + 1} of {images.length}
+                          Page {targetImageIndex + 1} of {images.length}
                         </span>
+
                         <Button
                           variant="outline"
                           size="icon"
                           className="h-8 w-8"
-                          disabled={currentImageIndex === images.length - 1}
+                          disabled={targetImageIndex === images.length - 1}
                           title="Next Page"
                           type="button"
-                          onClick={() => {
-                            if (currentImageIndex < images.length - 1) {
-                              setCurrentImageIndex(currentImageIndex + 1);
-                              scrollToImage(currentImageIndex + 1);
-                            }
-                          }}
+                          onClick={() => handleNavigation("next")}
                         >
                           <ArrowRight className="h-4 w-4" />
                         </Button>
