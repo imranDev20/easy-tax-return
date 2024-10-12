@@ -1646,7 +1646,7 @@ const IndividualTaxReturnForm: React.FC = () => {
 
     {
       name: "incomeFromEmployment",
-      type: "text",
+      type: "number",
       label: "",
       disabled: true,
       x: 774,
@@ -1670,7 +1670,7 @@ const IndividualTaxReturnForm: React.FC = () => {
     },
     {
       name: "netProfitFromAgriculture", // this is income from agriculture
-      type: "text",
+      type: "number",
       label: "",
       disabled: true,
       x: 774,
@@ -1797,7 +1797,7 @@ const IndividualTaxReturnForm: React.FC = () => {
     },
     {
       name: "totalIncome",
-      type: "text",
+      type: "number",
       label: "totalIncome",
       disabled: true,
       x: 774,
@@ -3155,7 +3155,7 @@ const IndividualTaxReturnForm: React.FC = () => {
 
     {
       name: "adjustedAdvanceRent",
-      type: "text",
+      type: "number",
       label: "adjustedAdvanceRent",
       x: 750,
       y: 300,
@@ -3173,7 +3173,7 @@ const IndividualTaxReturnForm: React.FC = () => {
 
     {
       name: "vacancyAllowance",
-      type: "text",
+      type: "number",
       label: "vacancyAllowance",
       x: 750,
       y: 320,
@@ -3228,7 +3228,7 @@ const IndividualTaxReturnForm: React.FC = () => {
     {
       name: "repairCollectionAmount",
       label: "repairCollectionAmount",
-      type: "text",
+      type: "number",
       disabled: true,
       x: 753,
       y: 378,
@@ -3245,7 +3245,7 @@ const IndividualTaxReturnForm: React.FC = () => {
 
     {
       name: "municipalOrLocalTax",
-      type: "text",
+      type: "number",
       label: "municipalOrLocalTax",
       x: 751,
       y: 397,
@@ -3262,7 +3262,7 @@ const IndividualTaxReturnForm: React.FC = () => {
 
     {
       name: "landRevenue",
-      type: "text",
+      type: "number",
       label: "landRevenue",
       x: 751,
       y: 417,
@@ -3279,7 +3279,7 @@ const IndividualTaxReturnForm: React.FC = () => {
 
     {
       name: "interestMortgageCapitalCharge",
-      type: "text",
+      type: "number",
       label: "interestMortgageCapitalCharge",
       x: 751,
       y: 435,
@@ -3296,7 +3296,7 @@ const IndividualTaxReturnForm: React.FC = () => {
 
     {
       name: "insurancePremiumPaid",
-      type: "text",
+      type: "number",
       label: "insurancePremiumPaid",
       x: 751,
       y: 470,
@@ -3313,7 +3313,7 @@ const IndividualTaxReturnForm: React.FC = () => {
 
     {
       name: "others",
-      type: "text",
+      type: "number",
       label: "others",
       x: 751,
       y: 490,
@@ -3329,7 +3329,7 @@ const IndividualTaxReturnForm: React.FC = () => {
     },
     {
       name: "totalAdmissibleDeduction",
-      type: "text",
+      type: "number",
       label: "totalAdmissibleDeduction",
       disabled: true,
       x: 845,
@@ -3341,7 +3341,7 @@ const IndividualTaxReturnForm: React.FC = () => {
     },
     {
       name: "netIncome",
-      type: "text",
+      type: "number",
       label: "netIncome",
       disabled: true,
       x: 845,
@@ -3369,7 +3369,7 @@ const IndividualTaxReturnForm: React.FC = () => {
 
     {
       name: "taxpayersShareAmount",
-      type: "text",
+      type: "number",
       label: "taxpayersShareAmount",
       disabled: true,
       x: 845,
@@ -3382,7 +3382,7 @@ const IndividualTaxReturnForm: React.FC = () => {
 
     {
       name: "taxDeductedSourceFromIncomeRent",
-      type: "text",
+      type: "number",
       label: "taxDeductedSourceFromIncomeRent",
       x: 845,
       y: 570,
@@ -5179,7 +5179,7 @@ const IndividualTaxReturnForm: React.FC = () => {
     },
     {
       name: "totalIncomeShownInTheReturn",
-      type: "text",
+      type: "number",
       label: "",
       disabled: true,
       x: 775,
@@ -5191,7 +5191,7 @@ const IndividualTaxReturnForm: React.FC = () => {
     },
     {
       name: "taxExemptedIncomeAndAllowance",
-      type: "text",
+      type: "number",
       label: "",
       disabled: true,
       x: 775,
@@ -5203,7 +5203,7 @@ const IndividualTaxReturnForm: React.FC = () => {
     },
     {
       name: "receiptOfGiftOtherReceipts",
-      type: "text",
+      type: "number",
       label: "receiptOfGiftOtherReceipts",
       disabled: true,
       x: 775,
@@ -5218,7 +5218,7 @@ const IndividualTaxReturnForm: React.FC = () => {
     },
     {
       name: "totalSourceOfFund",
-      type: "text",
+      type: "number",
       label: "totalSourceOfFund",
 
       disabled: true,
@@ -5231,7 +5231,7 @@ const IndividualTaxReturnForm: React.FC = () => {
     },
     {
       name: "sumOfSourceOfFundAndPreviousYearsNetWealth",
-      type: "text",
+      type: "number",
       label: "sumOfSourceOfFundAndPreviousYearsNetWealth",
 
       disabled: true,
@@ -5244,7 +5244,7 @@ const IndividualTaxReturnForm: React.FC = () => {
     },
     {
       name: "expenseRelatingToLifestyle",
-      type: "text",
+      type: "number",
       label: "expenseRelatingToLifestyle",
 
       disabled: true,
@@ -5256,8 +5256,22 @@ const IndividualTaxReturnForm: React.FC = () => {
       isVisible: true,
     },
     {
-      name: "totalExpensesAndLoss",
+      name: "giftExpense",
       type: "text",
+      label: "giftExpense",
+      onBlur: () => {
+        calculateTotalExpenseAndLoss();
+      },
+      x: 772,
+      y: 515,
+      width: 168,
+      height: 18,
+      imageIndex: 8,
+      isVisible: true,
+    },
+    {
+      name: "totalExpensesAndLoss",
+      type: "number",
       label: "totalExpensesAndLoss",
 
       disabled: true,
@@ -5270,7 +5284,7 @@ const IndividualTaxReturnForm: React.FC = () => {
     },
     {
       name: "netWealthAtTheLastDateOfThisFinancialYear",
-      type: "text",
+      type: "number",
       label: "netWealthAtTheLastDateOfThisFinancialYear",
       disabled: true,
       x: 775,
@@ -5282,7 +5296,7 @@ const IndividualTaxReturnForm: React.FC = () => {
     },
     {
       name: "totalLiabilitiesOutsideBusiness",
-      type: "text",
+      type: "number",
       label: "totalLiabilitiesOutsideBusiness",
 
       disabled: true,
@@ -5295,9 +5309,8 @@ const IndividualTaxReturnForm: React.FC = () => {
     },
     {
       name: "grossWealth",
-      type: "text",
-      label: "grossWealth",
-
+      type: "number",
+      label: "",
       disabled: true,
       x: 775,
       y: 658,
@@ -5308,8 +5321,8 @@ const IndividualTaxReturnForm: React.FC = () => {
     },
     {
       name: "businessCapitalAmount1",
-      type: "text",
-      label: "businessCapitalAmount1",
+      type: "number",
+      label: "",
       disabled: true,
       x: 640,
       y: 747,
@@ -5319,10 +5332,9 @@ const IndividualTaxReturnForm: React.FC = () => {
       isVisible: true,
     },
     {
-      name: "businessCapitalAmount1",
+      name: "businessCapitalAmount1", // need change here, possible duplicated field
       type: "text",
-      label: "businessCapitalAmount1",
-
+      label: "",
       disabled: true,
       x: 775,
       y: 747,
@@ -5388,20 +5400,7 @@ const IndividualTaxReturnForm: React.FC = () => {
       imageIndex: 8,
       isVisible: true,
     },
-    {
-      name: "giftExpense",
-      type: "text",
-      label: "giftExpense",
-      onBlur: () => {
-        calculateTotalExpenseAndLoss();
-      },
-      x: 772,
-      y: 515,
-      width: 168,
-      height: 18,
-      imageIndex: 8,
-      isVisible: true,
-    },
+
     {
       name: "institutionalLiabilities",
       type: "text",
@@ -6484,7 +6483,7 @@ const IndividualTaxReturnForm: React.FC = () => {
     },
     {
       name: "totalIncomeShown",
-      type: "text",
+      type: "number",
       label: "",
 
       disabled: true,
@@ -6588,11 +6587,43 @@ const IndividualTaxReturnForm: React.FC = () => {
 
     const isRequired = isFieldRequired(individualTaxReturnSchema, field.name);
 
-    // console.log(watch("tranportFacilityPrivateVehicleCC"));
-
     switch (field.type) {
       case "text":
       case "email":
+        return (
+          <>
+            {field.isVisible && (
+              <Controller
+                name={field.name as any}
+                control={control}
+                render={({ field: { onChange, value, onBlur } }) => (
+                  <div style={fieldStyle} className="relative overflow-hidden">
+                    <input
+                      type={field.type}
+                      value={value as string}
+                      onChange={(e) => onChange(e.target.value)}
+                      onBlur={(e) => {
+                        onBlur();
+                        if (field?.onBlur) field.onBlur(e.target.value);
+                      }}
+                      className={`w-full h-full absolute border px-2 font-medium ${
+                        !field.disabled
+                          ? (errors as any)[field.name]
+                            ? "border-red-500 bg-red-300/10 focus:border-red-700 focus:ring-0 focus:outline-0 focus:bg-red-300/20 hover:border-red-700"
+                            : "border-sky-300 rounded-none bg-sky-300/10 focus:border-sky-500 focus:ring-0 focus:outline-0 focus:bg-transparent hover:border-sky-500"
+                          : "bg-[#F5F5F5] font-medium text-[#948C91]"
+                      }`}
+                      style={{ fontSize: `${14 * scale}px` }}
+                      disabled={field.disabled}
+                    />
+                    {renderErrorAndRequiredIndicator(field, errors, isRequired)}
+                  </div>
+                )}
+              />
+            )}
+          </>
+        );
+
       case "number":
         return (
           <>
@@ -6600,56 +6631,41 @@ const IndividualTaxReturnForm: React.FC = () => {
               <Controller
                 name={field.name as any}
                 control={control}
-                render={({ field: { value, onBlur } }) => {
-                  return (
-                    <div
-                      style={fieldStyle}
-                      className="relative overflow-hidden"
-                    >
-                      <NumericFormat
-                        value={value as string}
-                        thousandSeparator={true}
-                        thousandsGroupStyle="lakh"
-                        decimalScale={2}
-                        fixedDecimalScale={true}
-                        className={`w-full h-full absolute border px-2 font-medium ${
-                          !field.disabled
-                            ? (errors as any)[field.name]
-                              ? "border-red-500 bg-red-300/10 focus:border-red-700 focus:ring-0 focus:outline-0 focus:bg-red-300/20 hover:border-red-700"
-                              : "border-sky-300 rounded-none bg-sky-300/10 focus:border-sky-500 focus:ring-0 focus:outline-0 focus:bg-transparent hover:border-sky-500"
-                            : "bg-[#F5F5F5] font-medium text-[#948C91]"
-                        }`}
-                        style={{ fontSize: `${14 * scale}px` }}
-                        disabled={field.disabled}
-                        allowNegative={false}
-                        customInput={CustomInput}
-                        onBlur={(e) => {
-                          onBlur();
-                          if (field?.onBlur) field.onBlur(e.target.value);
-                        }}
-                      />
-
-                      {(errors as any)[field.name] && (
-                        <p className="absolute bottom-0 left-0 text-red-500 text-xs mt-1">
-                          {(errors as any)[field.name]?.message as string}
-                        </p>
-                      )}
-
-                      {/* Conditional rendering for the required indicator */}
-                      {isRequired && !field.disabled && (
-                        <span className="absolute top-0 right-0 -translate-y-1/2 translate-x-1/2 h-10 w-10 bg-sky-300/70 rotate-45 transform origin-center transition-colors">
-                          <span className="absolute text-white top-[23px] left-[17px] text-lg">
-                            *
-                          </span>
-                        </span>
-                      )}
-                    </div>
-                  );
-                }}
+                render={({ field: { onChange, value, onBlur } }) => (
+                  <div style={fieldStyle} className="relative overflow-hidden">
+                    <NumericFormat
+                      value={value as string}
+                      thousandSeparator={true}
+                      thousandsGroupStyle="lakh"
+                      decimalScale={2}
+                      fixedDecimalScale={true}
+                      className={`w-full h-full absolute border px-2 font-medium ${
+                        !field.disabled
+                          ? (errors as any)[field.name]
+                            ? "border-red-500 bg-red-300/10 focus:border-red-700 focus:ring-0 focus:outline-0 focus:bg-red-300/20 hover:border-red-700"
+                            : "border-sky-300 rounded-none bg-sky-300/10 focus:border-sky-500 focus:ring-0 focus:outline-0 focus:bg-transparent hover:border-sky-500"
+                          : "bg-[#F5F5F5] font-medium text-[#948C91]"
+                      }`}
+                      style={{ fontSize: `${14 * scale}px` }}
+                      disabled={field.disabled}
+                      allowNegative={false}
+                      customInput={CustomInput}
+                      onValueChange={(values) => {
+                        onChange(values.value);
+                      }}
+                      onBlur={(e) => {
+                        onBlur();
+                        if (field?.onBlur) field.onBlur(e.target.value);
+                      }}
+                    />
+                    {renderErrorAndRequiredIndicator(field, errors, isRequired)}
+                  </div>
+                )}
               />
             )}
           </>
         );
+
       case "checkbox":
         return (
           <CustomCheckbox
@@ -6947,3 +6963,25 @@ const CustomInput = React.forwardRef<
 });
 
 CustomInput.displayName = "CustomInput";
+
+// Helper function to render error and required indicator
+const renderErrorAndRequiredIndicator = (
+  field: FormField,
+  errors: any,
+  isRequired: boolean
+) => (
+  <>
+    {(errors as any)[field.name] && (
+      <p className="absolute bottom-0 left-0 text-red-500 text-xs mt-1">
+        {(errors as any)[field.name]?.message as string}
+      </p>
+    )}
+    {isRequired && !field.disabled && (
+      <span className="absolute top-0 right-0 -translate-y-1/2 translate-x-1/2 h-10 w-10 bg-sky-300/70 rotate-45 transform origin-center transition-colors">
+        <span className="absolute text-white top-[23px] left-[17px] text-lg">
+          *
+        </span>
+      </span>
+    )}
+  </>
+);
