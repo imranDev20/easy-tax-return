@@ -216,14 +216,26 @@ export default function Header() {
         <li
           key={navItem.label}
           className={`mx-4 text-font uppercase hover:text-secondary transition-colors
-            ${activeSection === navItem.link ? "text-primary" : ""}`}
+            ${
+              activeSection === navItem.link && pathname === "/"
+                ? "text-primary"
+                : ""
+            }`}
         >
           <Link href={`/#${navItem.link}`}>
             <span
               onClick={(e) => handleNavigation(e, navItem.link)}
               className={`transition-colors duration-300
-                ${activeSection === navItem.link ? "text-secondary" : ""}`}
-              aria-current={activeSection === navItem.link ? "page" : undefined}
+                ${
+                  activeSection === navItem.link && pathname === "/"
+                    ? "text-secondary"
+                    : ""
+                }`}
+              aria-current={
+                activeSection === navItem.link && pathname === "/"
+                  ? "page"
+                  : undefined
+              }
             >
               {navItem.label}
             </span>
