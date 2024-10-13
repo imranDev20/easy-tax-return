@@ -74,7 +74,7 @@ export const generatePDF = async (
         fieldContainer.style.overflow = "hidden";
 
         const valueElement = document.createElement("span");
-        valueElement.style.fontSize = "14px";
+        valueElement.style.fontSize = "13px";
         valueElement.style.lineHeight = "1";
         valueElement.style.paddingLeft = "5px";
         valueElement.style.paddingRight = "5px";
@@ -109,7 +109,7 @@ export const generatePDF = async (
     document.body.appendChild(formContainer);
 
     const canvas = await html2canvas(formContainer, {
-      scale: 2,
+      scale: 3,
       useCORS: true,
       allowTaint: true,
     });
@@ -119,7 +119,6 @@ export const generatePDF = async (
       pdf.addPage();
     }
     pdf.addImage(imgData, "PNG", 0, 0, 595, 842);
-
     document.body.removeChild(formContainer);
   }
 
