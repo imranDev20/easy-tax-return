@@ -1,106 +1,198 @@
+"use client";
+
+import React from "react";
+import { useRouter, usePathname } from "next/navigation";
 import Logo from "@/components/logo";
 import Link from "next/link";
 import { FaFacebookSquare, FaLinkedinIn, FaYoutube } from "react-icons/fa";
+import { Mail, MapPin, Phone } from "lucide-react";
+
+const HERO_CARD_OPTIONS = [
+  {
+    label: "Individual Tax Return",
+    href: "/individual-tax-return",
+  },
+  {
+    label: "Company Income Tax",
+    href: "company-income-tax",
+  },
+  {
+    label: "VAT Related Services",
+    href: "vat-related-services",
+  },
+  {
+    label: "Consult with Tax Expert",
+    href: "contact",
+  },
+];
 
 export default function Footer() {
+  const currentYear = new Date().getFullYear();
+  const router = useRouter();
+  const pathname = usePathname();
+
+  const scrollToSection = (sectionId: string) => {
+    if (pathname !== "/") {
+      router.push(`/#${sectionId}`);
+    } else {
+      const targetElement = document.getElementById(sectionId);
+      if (targetElement) {
+        const offset = 80;
+        const elementPosition = targetElement.getBoundingClientRect().top;
+        const offsetPosition = elementPosition + window.scrollY - offset;
+
+        window.scrollTo({
+          top: offsetPosition,
+          behavior: "smooth",
+        });
+      }
+    }
+  };
+
   return (
     <footer className="bg-lightGray text-gray-600 pt-10 pb-6 border-t">
       <div className="container mx-auto px-4">
-        <div className="flex flex-col items-center md:items-start md:flex-row md:justify-between space-y-8 md:space-y-0">
-          <div className="flex flex-col items-center md:items-start space-y-4 text-center md:text-left">
-            <Logo width={200} />
-            <p className="text-sm max-w-xs md:max-w-sm">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-10 gap-8">
+          <div className="col-span-3">
+            <Logo width={200} className="mx-auto md:mx-0 mb-4" />
+            <p className="text-sm text-center md:text-left">
               Tax services that are customized to enhance your financial
               strategy and minimize tax liabilities. Trust us for tax
-              preparation, planning, and filing needs to thrive in today&lsquo;s
+              preparation, planning, and filing needs to thrive in today's
               competitive market.
             </p>
-            <div className="flex space-x-4 text-blue-600">
-              <Link href="#" aria-label="Facebook">
-                <FaFacebookSquare size={24} />
-              </Link>
-              <Link href="#" aria-label="LinkedIn">
-                <FaLinkedinIn size={24} />
-              </Link>
-              <Link href="#" aria-label="YouTube">
-                <FaYoutube size={24} />
-              </Link>
-            </div>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 text-center md:text-left">
-            <div>
-              <h4 className="font-semibold text-lg mb-2">Office</h4>
-              <p className="text-sm">
-                1206, Madani Avenue, 100 Feet Road,
-                <br />
-                Vatara, Dhaka-1217
-                <br />
-                Bangladesh
-              </p>
-            </div>
+          <div className="col-span-2">
+            <h4 className="font-semibold text-lg mb-4 text-center md:text-left">
+              Services
+            </h4>
+            <ul className="text-sm space-y-2">
+              {HERO_CARD_OPTIONS.map((option, index) => (
+                <li key={option.href} className="text-center md:text-left">
+                  {index === 0 ? (
+                    <Link
+                      href={option.href}
+                      className="hover:underline hover:text-primary"
+                    >
+                      {option.label}
+                    </Link>
+                  ) : (
+                    <button
+                      className="hover:underline hover:text-primary text-center md:text-left w-full"
+                      onClick={() => scrollToSection(option.href)}
+                    >
+                      {option.label}
+                    </button>
+                  )}
+                </li>
+              ))}
+            </ul>
+          </div>
 
-            <div>
-              <h4 className="font-semibold text-lg mb-2">Working Hours</h4>
-              <p className="text-sm">
-                Sun-Thu: 9 AM - 6 PM
-                <br />
-                Saturday: 9 AM - 4 PM
-                <br />
-                Friday: Closed
-              </p>
-            </div>
+          <div className="col-span-2">
+            <h4 className="font-semibold text-lg mb-4 text-center md:text-left">
+              Quick Links
+            </h4>
+            <ul className="text-sm space-y-2">
+              {["Home", "Services", "Privacy Policy", "Terms & Conditions"].map(
+                (item) => (
+                  <li key={item} className="text-center md:text-left">
+                    {item === "Services" ? (
+                      <button
+                        onClick={() => scrollToSection("services")}
+                        className="hover:underline hover:text-primary text-left w-full"
+                      >
+                        {item}
+                      </button>
+                    ) : (
+                      <Link
+                        href={
+                          item === "Home"
+                            ? "/"
+                            : `/${item
+                                .toLowerCase()
+                                .replace(/ & /g, "-")
+                                .replace(/ /g, "-")}`
+                        }
+                        className="hover:underline hover:text-primary"
+                      >
+                        {item}
+                      </Link>
+                    )}
+                  </li>
+                )
+              )}
+            </ul>
+          </div>
 
-            <div>
-              <h4 className="font-semibold text-lg mb-2">Contact</h4>
-              <p className="text-sm">
-                <Link
-                  href="mailto:info.easytax2024@gmail.com"
-                  className="hover:underline hover:text-primary"
-                >
+          <div className="col-span-3">
+            <h4 className="font-semibold text-lg mb-4 text-center md:text-left">
+              Contact
+            </h4>
+            <div className="text-sm space-y-3">
+              <Link
+                href="mailto:info.easytax2024@gmail.com"
+                className="hover:text-primary flex items-center justify-center md:justify-start space-x-2 group"
+              >
+                <Mail
+                  size={18}
+                  className="text-gray-400 group-hover:text-primary"
+                />
+                <span className="hover:underline">
                   info.easytax2024@gmail.com
-                </Link>
-                <br />
-                <Link
-                  href="tel:+8801773870749"
-                  className="hover:underline hover:text-primary"
-                >
-                  +880 1773-870749
-                </Link>
-              </p>
-            </div>
+                </span>
+              </Link>
 
-            <div>
-              <h4 className="font-semibold text-lg mb-2">
-                Individual Tax Return
-              </h4>
-              <p className="text-sm">
-                (2024 - 2025)
-                <br />
-                (2023 - 2024)
-              </p>
-            </div>
-            <div>
-              <h4 className="font-semibold text-lg mb-2">Firm Tax Return</h4>
-              <p className="text-sm">
-                (2024 - 2025)
-                <br />
-                (2023 - 2024)
-              </p>
-            </div>
-            <div>
-              <h4 className="font-semibold text-lg mb-2">Company Tax Return</h4>
-              <p className="text-sm">
-                (2024 - 2025)
-                <br />
-                (2023 - 2024)
-              </p>
+              <Link
+                href="tel:+8801773870749"
+                className="hover:text-primary flex items-center justify-center md:justify-start space-x-2 group"
+              >
+                <Phone
+                  size={18}
+                  className="text-gray-400 group-hover:text-primary"
+                />
+                <span className="hover:underline">+880 1773-870749</span>
+              </Link>
+
+              <div className="flex items-center md:items-start justify-center md:justify-start space-x-2">
+                <MapPin
+                  size={18}
+                  className="text-gray-400 mt-1 flex-shrink-0"
+                />
+                <p className="text-center md:text-left">
+                  1206, Madani Avenue, 100 Feet Road, Vatara, Dhaka-1217,
+                  Bangladesh
+                </p>
+              </div>
             </div>
           </div>
         </div>
 
-        <div className="border-t mt-8 pt-6 text-sm text-gray-500 text-center">
-          Copyright ©2024 eTaxReturn.com.bd All rights reserved
+        <div className="border-t mt-8 pt-6 text-sm text-gray-500">
+          <div className="flex flex-col sm:flex-row justify-between items-center">
+            <div className="mb-4 sm:mb-0">
+              Copyright ©{currentYear}{" "}
+              <Link href="/" className="hover:underline">
+                easytaxreturn.com.bd
+              </Link>
+              . All rights reserved
+            </div>
+            <div className="flex space-x-4">
+              {[FaFacebookSquare, FaLinkedinIn, FaYoutube].map(
+                (Icon, index) => (
+                  <Link
+                    key={index}
+                    href="#"
+                    aria-label={["Facebook", "LinkedIn", "YouTube"][index]}
+                    className="hover:text-secondary"
+                  >
+                    <Icon size={24} />
+                  </Link>
+                )
+              )}
+            </div>
+          </div>
         </div>
       </div>
     </footer>

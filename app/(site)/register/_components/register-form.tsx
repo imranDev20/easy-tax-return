@@ -4,8 +4,8 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Mail, Lock, User } from "lucide-react";
-import { useTransition } from "react";
+import { Mail, Lock, User, Phone, Eye, EyeOff } from "lucide-react";
+import { useTransition, useState } from "react";
 import { useForm } from "react-hook-form";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
@@ -22,6 +22,35 @@ import { useToast } from "@/hooks/use-toast";
 import { Loader2 } from "lucide-react";
 import { registerUser } from "../../actions";
 
+const PasswordInput = ({
+  field,
+  placeholder,
+}: {
+  field: any;
+  placeholder: string;
+}) => {
+  const [showPassword, setShowPassword] = useState(false);
+
+  return (
+    <div className="relative">
+      <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+      <Input
+        {...field}
+        type={showPassword ? "text" : "password"}
+        placeholder={placeholder}
+        className="pl-10 pr-10 py-2"
+      />
+      <button
+        type="button"
+        onClick={() => setShowPassword(!showPassword)}
+        className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400"
+      >
+        {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+      </button>
+    </div>
+  );
+};
+
 export default function RegisterForm(): JSX.Element {
   const [isPending, startTransition] = useTransition();
   const router = useRouter();
@@ -32,6 +61,7 @@ export default function RegisterForm(): JSX.Element {
     defaultValues: {
       name: "",
       email: "",
+      phone: "",
       password: "",
       confirmPassword: "",
     },
@@ -83,27 +113,30 @@ export default function RegisterForm(): JSX.Element {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-lightGray border py-12 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen flex items-center justify-center bg-lightGray py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-md w-full space-y-8 bg-white p-10 rounded-lg shadow-md">
         <div>
-          <h2 className="mt-6 text-center text-3xl font-bold text-primary">
+          <h2 className="text-center text-3xl font-bold text-primary">
             Create Your Account
           </h2>
+          <p className="mt-2 text-center text-sm text-gray-600">
+            Join us and start your journey
+          </p>
         </div>
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
             <FormField
               control={form.control}
               name="name"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Name</FormLabel>
+                  <FormLabel>Full Name</FormLabel>
                   <FormControl>
                     <div className="relative">
                       <User className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
                       <Input
                         {...field}
-                        placeholder="Full name"
+                        placeholder="John Doe"
                         className="pl-10 py-2"
                       />
                     </div>
@@ -112,19 +145,20 @@ export default function RegisterForm(): JSX.Element {
                 </FormItem>
               )}
             />
+
             <FormField
               control={form.control}
               name="email"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Email</FormLabel>
+                  <FormLabel>Email Address</FormLabel>
                   <FormControl>
                     <div className="relative">
                       <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
                       <Input
                         {...field}
                         type="email"
-                        placeholder="Email address"
+                        placeholder="you@example.com"
                         className="pl-10 py-2"
                       />
                     </div>
@@ -133,6 +167,28 @@ export default function RegisterForm(): JSX.Element {
                 </FormItem>
               )}
             />
+
+            <FormField
+              control={form.control}
+              name="phone"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Phone Number</FormLabel>
+                  <FormControl>
+                    <div className="relative">
+                      <Phone className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+                      <Input
+                        {...field}
+                        placeholder="+880 1XXX-XXXXXX"
+                        className="pl-10 py-2"
+                      />
+                    </div>
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
             <FormField
               control={form.control}
               name="password"
@@ -140,20 +196,13 @@ export default function RegisterForm(): JSX.Element {
                 <FormItem>
                   <FormLabel>Password</FormLabel>
                   <FormControl>
-                    <div className="relative">
-                      <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
-                      <Input
-                        {...field}
-                        type="password"
-                        placeholder="Password"
-                        className="pl-10 py-2"
-                      />
-                    </div>
+                    <PasswordInput field={field} placeholder="••••••••" />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
             />
+
             <FormField
               control={form.control}
               name="confirmPassword"
@@ -161,15 +210,7 @@ export default function RegisterForm(): JSX.Element {
                 <FormItem>
                   <FormLabel>Confirm Password</FormLabel>
                   <FormControl>
-                    <div className="relative">
-                      <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
-                      <Input
-                        {...field}
-                        type="password"
-                        placeholder="Confirm password"
-                        className="pl-10 py-2"
-                      />
-                    </div>
+                    <PasswordInput field={field} placeholder="••••••••" />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -183,7 +224,7 @@ export default function RegisterForm(): JSX.Element {
                   Registering...
                 </>
               ) : (
-                "Register"
+                "Create Account"
               )}
             </Button>
           </form>

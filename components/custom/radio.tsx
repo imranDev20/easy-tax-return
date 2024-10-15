@@ -154,9 +154,9 @@ function RadioGroup<TFieldValues extends FieldValues>({
               {label}
             </label>
           )}
-          {options.map((option) => (
+          {options.map((option, index) => (
             <CustomRadio
-              key={option.value}
+              key={index}
               label={option.label}
               checked={value === option.value}
               onChange={(newValue) => {
