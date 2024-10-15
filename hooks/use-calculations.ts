@@ -633,6 +633,7 @@ export const useCalculations = (
 
     setValue("totalIncome", total.toFixed(2));
     setValue("totalIncomeShown", total.toFixed(2));
+    calculateTax();
     setValue("totalIncomeShownInTheReturn", total.toFixed(2));
 
     return total;
@@ -727,10 +728,14 @@ export const useCalculations = (
 
     for (const field of fields) {
       const fieldValue = watch(field);
+      console.log(fieldValue);
       if (fieldValue && typeof fieldValue === "string") {
         const amount = parseFloat(fieldValue);
+        
         if (!isNaN(amount)) {
           totalIncome += amount;
+         
+          
         }
       }
     }
@@ -758,6 +763,8 @@ export const useCalculations = (
 
     const totalExempted = Math.round(Math.min(totalIncome / 3, 450000));
     const totalIncomeFromSalary = totalIncome - totalExempted;
+    console.log(totalIncomeFromSalary);
+    
 
     setValue("exemptedAmountPrivateEmployment", totalExempted.toFixed(2));
     setValue("exemptedIncomeFromSalary", totalExempted.toFixed(2));
@@ -1063,6 +1070,89 @@ export const useCalculations = (
     setValue("businessCapitalOfPartnershipFirm", total.toFixed(2));
     return total;
   };
+
+
+
+function calculateTax() {
+    // Step 1: Determine tax-free threshold
+    let tax = 0;
+    let totalIncome = parseFloat(getValues("totalIncomeShown")?.toString()|| "0");
+   
+    if(watch("residentialStatus") === "RESIDENT") {
+      const threshold = getThreshold();
+      let taxableIncome = Math.max(0, totalIncome - threshold);
+    
+      // Step 3: Apply tax rates
+   
+      
+      if (taxableIncome > 0) {
+          tax += Math.min(taxableIncome, 100000) * 0.05;
+          taxableIncome -= 100000;
+      }
+      if (taxableIncome > 0) {
+          tax += Math.min(taxableIncome, 400000) * 0.10;
+          taxableIncome -= 400000;
+      }
+      if (taxableIncome > 0) {
+          tax += Math.min(taxableIncome, 500000) * 0.15;
+          taxableIncome -= 500000;
+      }
+      if (taxableIncome > 0) {
+          tax += Math.min(taxableIncome, 500000) * 0.20;
+          taxableIncome -= 500000;
+      }
+      if (taxableIncome > 0) {
+          tax += taxableIncome * 0.25;
+      }
+
+    
+    }
+
+    if(watch("residentialStatus") === "NON_RESIDENT") {
+      tax += totalIncome * 0.30;
+    }
+    
+    // Step 2: Calculate taxable income
+ 
+    
+   setValue("grossTaxOnTaxableIncome", tax.toFixed(2));
+}
+
+// Update the TaxCategory type to match the actual categories
+type TaxCategory = "GAZETTED_WAR_WOUNDED_FREEDOM_FIGHTER" | "FEMALE" | "AGED_65_OR_MORE" | "DISABLED_PERSON" | "NONE" | "THIRD_GENDER" | undefined;
+
+type ResidentialStatus = "RESIDENT" | "NON_RESIDENT" | undefined;
+
+
+function getThreshold(): number {
+  const category: TaxCategory = watch("specialBenefits");
+  const residentialStatus: ResidentialStatus = watch("residentialStatus");
+  const parentOfDisabledPerson = watch("isParentOfDisabledPerson");
+
+  if (category === "NONE" && residentialStatus === "RESIDENT") {
+    return 350000;
+  }
+
+  if((category === "FEMALE" || category === "AGED_65_OR_MORE") && residentialStatus === "RESIDENT") {
+    return 400000;
+  }
+  if((category === "THIRD_GENDER" || category === "DISABLED_PERSON") && residentialStatus === "RESIDENT") {
+    return 475000;
+  }
+  if(category === "GAZETTED_WAR_WOUNDED_FREEDOM_FIGHTER" && residentialStatus === "RESIDENT") {
+    return 500000;
+  }
+  if(parentOfDisabledPerson === true && residentialStatus === "RESIDENT") {
+    return 500000;
+  }
+
+  return 0;
+
+}
+
+// Example usage:
+// const threshold: number = getThreshold();
+// console.log(`Tax-free threshold: ${threshold}`);
 
   return {
     calculateTotalAssetsInBangladeshAndOutside,

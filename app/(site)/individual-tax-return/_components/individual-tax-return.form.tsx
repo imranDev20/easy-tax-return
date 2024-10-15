@@ -478,11 +478,11 @@ const IndividualTaxReturnForm: React.FC = () => {
                       disabled={field.disabled}
                       allowNegative={false}
                       customInput={CustomInput}
-                      // onValueChange={(values) => {
-                      //   onChange(values.value);
-                      // }}
+                      onValueChange={(values) => {
+                        onChange(values.value);
+                      }}
                       onBlur={(e) => {
-                        onChange(e.target.value);
+                        // onChange(e.target.value);
                         if (field?.onBlur) field.onBlur(e.target.value);
                       }}
                     />
