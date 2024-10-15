@@ -58,7 +58,7 @@ export default function Footer() {
             <p className="text-sm text-center md:text-left">
               Tax services that are customized to enhance your financial
               strategy and minimize tax liabilities. Trust us for tax
-              preparation, planning, and filing needs to thrive in today's
+              preparation, planning, and filing needs to thrive in today&apos;s
               competitive market.
             </p>
           </div>
