@@ -40,3 +40,9 @@
     @apply bg-background text-foreground;
   }
 }
+
+@layer base {
+  img {
+    display: initial;
+  }
+}
