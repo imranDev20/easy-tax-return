@@ -50,6 +50,7 @@ interface BaseFormField {
   width: number;
   height: number;
   isVisible?: boolean;
+  isShowInPDF?: boolean;
   imageIndex: number;
 }
 

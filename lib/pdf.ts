@@ -59,44 +59,88 @@ export const generatePDF = async (
     formFields
       .filter(
         (field) =>
-          field.imageIndex === i && field.isVisible && field.type === "text"
+          field.imageIndex === i &&
+          field.isVisible &&
+          field.isShowInPDF !== false &&
+          field.type !== "select"
       )
       .forEach((field) => {
-        const fieldContainer = document.createElement("div");
-        fieldContainer.style.position = "absolute";
-        fieldContainer.style.left = `${field.x / 10}%`;
-        fieldContainer.style.top = `${field.y / 10}%`;
-        fieldContainer.style.width = `${field.width / 10}%`;
-        fieldContainer.style.height = `${field.height / 10}%`;
-        fieldContainer.style.display = "flex";
-        fieldContainer.style.alignItems = "center";
-        fieldContainer.style.justifyContent = "flex-start";
-        fieldContainer.style.overflow = "hidden";
+        if (field.type === "radio") {
+          const value =
+            formData[field.name as keyof IndividualTaxReturnFormInput];
+          field.options?.forEach((option) => {
+            const radioContainer = document.createElement("div");
+            radioContainer.style.position = "absolute";
+            radioContainer.style.left = `${option.x / 10}%`;
+            radioContainer.style.top = `${option.y / 10}%`;
+            radioContainer.style.width = `${option.width / 10}%`;
+            radioContainer.style.height = `${option.height / 10}%`;
+            radioContainer.style.display = "flex";
+            radioContainer.style.alignItems = "center";
+            radioContainer.style.justifyContent = "center";
 
-        const valueElement = document.createElement("span");
-        valueElement.style.fontSize = "13px";
-        valueElement.style.lineHeight = "1";
-        valueElement.style.paddingLeft = "5px";
-        valueElement.style.paddingRight = "5px";
-        valueElement.style.whiteSpace = "nowrap";
-        valueElement.style.overflow = "hidden";
-        valueElement.style.textOverflow = "ellipsis";
+            if (value === option.value) {
+              const svg = document.createElementNS(
+                "http://www.w3.org/2000/svg",
+                "svg"
+              );
+              svg.setAttribute("viewBox", "0 0 150 150");
+              svg.style.width = "80%";
+              svg.style.height = "80%";
 
-        const value =
-          formData[field.name as keyof IndividualTaxReturnFormInput];
+              const path = document.createElementNS(
+                "http://www.w3.org/2000/svg",
+                "path"
+              );
+              path.setAttribute(
+                "d",
+                "M39.323,124.635c-1.979-0.026-10.5-12.115-18.951-26.871L5,70.939l3.987-3.778c2.19-2.076,8.072-3.772,13.083-3.772h9.097 l4.576,13.658l4.577,13.665l36.4-37.755c20.019-20.764,43.139-41.175,51.394-45.353L143.106,0L112.84,32.579 C96.206,50.495,73.66,78.551,62.752,94.916C51.845,111.282,41.302,124.654,39.323,124.635z"
+              );
+              path.setAttribute("fill", "black");
 
-        if (field.type === "number" && value) {
-          valueElement.textContent = numericFormatter(value.toString(), {
-            thousandSeparator: true,
-            decimalScale: 2,
-            fixedDecimalScale: true,
+              svg.appendChild(path);
+              radioContainer.appendChild(svg);
+            }
+
+            fieldsContainer.appendChild(radioContainer);
           });
         } else {
-          valueElement.textContent = value?.toString() || "";
-        }
+          const fieldContainer = document.createElement("div");
+          fieldContainer.style.position = "absolute";
+          fieldContainer.style.left = `${field.x / 10}%`;
+          fieldContainer.style.top = `${field.y / 10}%`;
+          fieldContainer.style.width = `${field.width / 10}%`;
+          fieldContainer.style.height = `${field.height / 10}%`;
+          fieldContainer.style.display = "flex";
+          fieldContainer.style.alignItems = "center";
+          fieldContainer.style.justifyContent = "flex-start";
+          fieldContainer.style.overflow = "hidden";
 
-        fieldContainer.appendChild(valueElement);
-        fieldsContainer.appendChild(fieldContainer);
+          const valueElement = document.createElement("span");
+          valueElement.style.fontSize = "12px";
+          valueElement.style.lineHeight = "1";
+          valueElement.style.paddingLeft = "5px";
+          valueElement.style.paddingRight = "5px";
+          valueElement.style.whiteSpace = "nowrap";
+          valueElement.style.overflow = "hidden";
+          valueElement.style.textOverflow = "ellipsis";
+
+          const value =
+            formData[field.name as keyof IndividualTaxReturnFormInput];
+
+          if (field.type === "number" && value) {
+            valueElement.textContent = numericFormatter(value.toString(), {
+              thousandSeparator: true,
+              decimalScale: 2,
+              fixedDecimalScale: true,
+            });
+          } else {
+            valueElement.textContent = value?.toString() || "";
+          }
+
+          fieldContainer.appendChild(valueElement);
+          fieldsContainer.appendChild(fieldContainer);
+        }
       });
 
     imageContainer.appendChild(fieldsContainer);

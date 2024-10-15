@@ -28,6 +28,7 @@ import {
   ArrowRight,
   ChevronUp,
   Download,
+  Loader2,
   Menu,
   Save,
   ZoomIn,
@@ -98,8 +99,8 @@ export const createDebugOverlay = (
   images.forEach((image: Image, i: number) => {
     const formContainer: HTMLDivElement = document.createElement("div");
     formContainer.style.position = "relative";
-    formContainer.style.width = "595px"; // A4 width in pixels at 72 dpi
-    formContainer.style.height = "842px"; // A4 height in pixels at 72 dpi
+    formContainer.style.width = "595px";
+    formContainer.style.height = "842px";
     formContainer.style.marginBottom = "20px";
 
     const imageContainer: HTMLDivElement = document.createElement("div");
@@ -124,43 +125,92 @@ export const createDebugOverlay = (
     formFields
       .filter((field: FormField) => field.imageIndex === i && field.isVisible)
       .forEach((field: FormField) => {
-        const fieldContainer: HTMLDivElement = document.createElement("div");
-        fieldContainer.style.position = "absolute";
-        fieldContainer.style.left = `${field.x / 10}%`;
-        fieldContainer.style.top = `${field.y / 10}%`;
-        fieldContainer.style.width = `${field.width / 10}%`;
-        fieldContainer.style.height = `${field.height / 10}%`;
-        fieldContainer.style.border = "1px solid red";
-        fieldContainer.style.backgroundColor = "rgba(255, 0, 0, 0.1)";
+        if (field.type === "radio") {
+          const value =
+            formData[field.name as keyof IndividualTaxReturnFormInput];
+          field.options?.forEach((option) => {
+            const radioContainer: HTMLDivElement =
+              document.createElement("div");
+            radioContainer.style.position = "absolute";
+            radioContainer.style.left = `${option.x / 10}%`;
+            radioContainer.style.top = `${option.y / 10}%`;
+            radioContainer.style.width = `${option.width / 10}%`;
+            radioContainer.style.height = `${option.height / 10}%`;
+            radioContainer.style.border = "1px solid red";
+            radioContainer.style.backgroundColor = "rgba(255, 0, 0, 0.1)";
 
-        const fieldElement: HTMLInputElement = document.createElement("input");
-        fieldElement.style.position = "absolute";
-        fieldElement.style.left = "0";
-        fieldElement.style.top = "0";
-        fieldElement.style.width = "100%";
-        fieldElement.style.height = "100%";
-        fieldElement.style.fontSize = "14px";
-        fieldElement.style.fontFamily = "Arial, sans-serif";
-        fieldElement.style.padding = "0px";
-        fieldElement.style.border = "none";
-        fieldElement.style.background = "transparent";
-        fieldElement.style.overflow = "hidden";
+            if (value === option.value) {
+              const svg: SVGElement = document.createElementNS(
+                "http://www.w3.org/2000/svg",
+                "svg"
+              );
+              svg.setAttribute("viewBox", "0 0 150 150");
+              svg.style.width = "80%";
+              svg.style.height = "80%";
+              svg.style.position = "absolute";
+              svg.style.top = "10%";
+              svg.style.left = "10%";
 
-        const value =
-          formData[field.name as keyof IndividualTaxReturnFormInput];
+              const path: SVGPathElement = document.createElementNS(
+                "http://www.w3.org/2000/svg",
+                "path"
+              );
+              path.setAttribute(
+                "d",
+                "M39.323,124.635c-1.979-0.026-10.5-12.115-18.951-26.871L5,70.939l3.987-3.778c2.19-2.076,8.072-3.772,13.083-3.772h9.097 l4.576,13.658l4.577,13.665l36.4-37.755c20.019-20.764,43.139-41.175,51.394-45.353L143.106,0L112.84,32.579 C96.206,50.495,73.66,78.551,62.752,94.916C51.845,111.282,41.302,124.654,39.323,124.635z"
+              );
+              path.setAttribute("fill", "black");
 
-        if (field.type === "number" && value !== undefined && value !== null) {
-          fieldElement.value = numericFormatter(value.toString(), {
-            thousandSeparator: true,
-            decimalScale: 2,
-            fixedDecimalScale: true,
+              svg.appendChild(path);
+              radioContainer.appendChild(svg);
+            }
+
+            fieldsContainer.appendChild(radioContainer);
           });
         } else {
-          fieldElement.value = value?.toString() || "";
-        }
+          const fieldContainer: HTMLDivElement = document.createElement("div");
+          fieldContainer.style.position = "absolute";
+          fieldContainer.style.left = `${field.x / 10}%`;
+          fieldContainer.style.top = `${field.y / 10}%`;
+          fieldContainer.style.width = `${field.width / 10}%`;
+          fieldContainer.style.height = `${field.height / 10}%`;
+          fieldContainer.style.border = "1px solid red";
+          fieldContainer.style.backgroundColor = "rgba(255, 0, 0, 0.1)";
 
-        fieldContainer.appendChild(fieldElement);
-        fieldsContainer.appendChild(fieldContainer);
+          const fieldElement: HTMLInputElement =
+            document.createElement("input");
+          fieldElement.style.position = "absolute";
+          fieldElement.style.left = "0";
+          fieldElement.style.top = "0";
+          fieldElement.style.width = "100%";
+          fieldElement.style.height = "100%";
+          fieldElement.style.fontSize = "14px";
+          fieldElement.style.fontFamily = "Arial, sans-serif";
+          fieldElement.style.padding = "0px";
+          fieldElement.style.border = "none";
+          fieldElement.style.background = "transparent";
+          fieldElement.style.overflow = "hidden";
+
+          const value =
+            formData[field.name as keyof IndividualTaxReturnFormInput];
+
+          if (
+            field.type === "number" &&
+            value !== undefined &&
+            value !== null
+          ) {
+            fieldElement.value = numericFormatter(value.toString(), {
+              thousandSeparator: true,
+              decimalScale: 2,
+              fixedDecimalScale: true,
+            });
+          } else {
+            fieldElement.value = value?.toString() || "";
+          }
+
+          fieldContainer.appendChild(fieldElement);
+          fieldsContainer.appendChild(fieldContainer);
+        }
       });
 
     imageContainer.appendChild(fieldsContainer);
@@ -201,7 +251,7 @@ const IndividualTaxReturnForm: React.FC = () => {
 
   useEffect(() => {
     // This effect will run when the component mounts
-    const debugMode = false; // Set this to true when you want to debug
+    const debugMode = true; // Set this to true when you want to debug
 
     if (debugMode) {
       // Assuming you have access to your form data, fields, and images here
@@ -343,13 +393,14 @@ const IndividualTaxReturnForm: React.FC = () => {
   const onSubmit: SubmitHandler<IndividualTaxReturnFormInput> = async (
     data
   ) => {
-    try {
-      await generatePDF(images, formFields, data);
-
-      console.log(data);
-    } catch (error) {
-      console.error("Error generating PDF:", error);
-    }
+    startTransition(async () => {
+      try {
+        await generatePDF(images, formFields, data);
+        console.log(data);
+      } catch (error) {
+        console.error("Error generating PDF:", error);
+      }
+    });
   };
 
   const renderField = (field: FormField, imageIndex: number) => {
@@ -682,10 +733,17 @@ const IndividualTaxReturnForm: React.FC = () => {
                       </Button>
                       <Button
                         type="submit"
-                        className="px-6 py-2 font-medium transition duration-300"
+                        disabled={isPending}
+                        className="w-full"
                       >
-                        <Download className="mr-2 h-5 w-5" />
-                        <span>Save PDF</span>
+                        {isPending ? (
+                          <>
+                            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                            Generating PDF...
+                          </>
+                        ) : (
+                          "Save PDF"
+                        )}
                       </Button>
                     </div>
                   </div>

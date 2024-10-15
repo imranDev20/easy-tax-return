@@ -97,7 +97,16 @@ export default function Header() {
   const NAV_OPTIONS = useMemo(
     () => [
       { label: "Home", link: "home" },
-      { label: "services", link: "services" },
+      {
+        label: "Services",
+        link: "services",
+        subItems: [
+          { label: "Individual Tax Return", link: "individual-tax-return" },
+          { label: "Company Tax Return", link: "company-tax-return" },
+          { label: "Partnership Tax Return", link: "partnership-tax-return" },
+          { label: "Trust Tax Return", link: "trust-tax-return" },
+        ],
+      },
       { label: "About Us", link: "about-us" },
       { label: "Contact", link: "contact" },
     ],
