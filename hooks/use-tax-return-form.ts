@@ -193,6 +193,10 @@ export const useTaxReturnForm = () => {
       taxSurchargePaid: { amount: "0", comment: "" },
       interestPaid: { amount: "0", comment: "" },
       totalExpenseIndividualPerson: { amount: "0", comment: "" },
+
+      taxRebate: "5000",
+      netTaxRebate: "4500",
+      minimumTaxAmount: "3000",
     },
   });
 
