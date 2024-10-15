@@ -90,10 +90,11 @@ export const individualTaxReturnSchema = z.object({
   environmentalSurcharge: z.string().optional(),
   delayInterest: z.string().optional(),
   calculate: z.nativeEnum(CalculationType),
-  grossTaxOnTaxableIncome:  z.string(),
-  taxRebate: z.string(),
-  netTaxRebate: z.string(),
-  minimumTaxAmount: z.string(),
+
+  grossTaxOnTaxableIncome: z.string().optional(),
+  taxRebate: z.string().optional(),
+  netTaxRebate: z.string().optional(),
+  minimumTaxAmount: z.string().optional(),
 
   // Image 3
   taxDeductedOrCollected: z.string().optional(),
