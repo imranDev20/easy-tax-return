@@ -46,8 +46,8 @@ enum NetWealthLastDate {
 }
 
 enum CalculationType {
-  Calculate
-  ReCalculate
+  CALCULATE
+  RECALCULATE
 }
 
 enum IncomeFromEmployment {

@@ -97,7 +97,16 @@ export default function Header() {
   const NAV_OPTIONS = useMemo(
     () => [
       { label: "Home", link: "home" },
-      { label: "services", link: "services" },
+      {
+        label: "Services",
+        link: "services",
+        subItems: [
+          { label: "Individual Tax Return", link: "individual-tax-return" },
+          { label: "Company Tax Return", link: "company-tax-return" },
+          { label: "Partnership Tax Return", link: "partnership-tax-return" },
+          { label: "Trust Tax Return", link: "trust-tax-return" },
+        ],
+      },
       { label: "About Us", link: "about-us" },
       { label: "Contact", link: "contact" },
     ],
@@ -216,14 +225,26 @@ export default function Header() {
         <li
           key={navItem.label}
           className={`mx-4 text-font uppercase hover:text-secondary transition-colors
-            ${activeSection === navItem.link ? "text-primary" : ""}`}
+            ${
+              activeSection === navItem.link && pathname === "/"
+                ? "text-primary"
+                : ""
+            }`}
         >
           <Link href={`/#${navItem.link}`}>
             <span
               onClick={(e) => handleNavigation(e, navItem.link)}
               className={`transition-colors duration-300
-                ${activeSection === navItem.link ? "text-secondary" : ""}`}
-              aria-current={activeSection === navItem.link ? "page" : undefined}
+                ${
+                  activeSection === navItem.link && pathname === "/"
+                    ? "text-secondary"
+                    : ""
+                }`}
+              aria-current={
+                activeSection === navItem.link && pathname === "/"
+                  ? "page"
+                  : undefined
+              }
             >
               {navItem.label}
             </span>

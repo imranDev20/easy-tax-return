@@ -39,6 +39,7 @@ export const individualTaxReturnSchema = z.object({
   tin: z.string().min(1, "TIN is required"),
   circle: z.string().min(1, "Circle is required"),
   zone: z.string().min(1, "Zone is required"),
+  assessmentYear: z.string(),
   residentialStatus: z.enum(["RESIDENT", "NON_RESIDENT"]),
   specialBenefits: z
     .enum([
@@ -89,6 +90,10 @@ export const individualTaxReturnSchema = z.object({
   environmentalSurcharge: z.string().optional(),
   delayInterest: z.string().optional(),
   calculate: z.nativeEnum(CalculationType),
+  grossTaxOnTaxableIncome:  z.string(),
+  taxRebate: z.string(),
+  netTaxRebate: z.string(),
+  minimumTaxAmount: z.string(),
 
   // Image 3
   taxDeductedOrCollected: z.string().optional(),
