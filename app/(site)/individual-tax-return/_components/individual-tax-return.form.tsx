@@ -7,6 +7,7 @@ import Image from "next/image";
 import React, {
   useCallback,
   useEffect,
+  useMemo,
   useRef,
   useState,
   useTransition,
@@ -247,7 +248,8 @@ const IndividualTaxReturnForm: React.FC = () => {
     formState: { errors, isDirty },
   } = form;
 
-  const { calculatePrivateEmploymentTotals, calculateTaxPayable } = calculations;
+  const { calculatePrivateEmploymentTotals, calculateTaxPayable } =
+    calculations;
 
   useEffect(() => {
     // This effect will run when the component mounts
@@ -267,7 +269,7 @@ const IndividualTaxReturnForm: React.FC = () => {
         debugOverlay.remove();
       }
     };
-  }, []);
+  }, [form, formFields]);
 
   useEffect(() => {
     const subscription = watch((value, { name, type }) => {
@@ -279,18 +281,16 @@ const IndividualTaxReturnForm: React.FC = () => {
         }
       }
 
-      if(name === "minimumTax") {
-        if(value.minimumTax ==="DHAKA_CHATTOGRAM_CITY_CORPORATION_AREA"){
+      if (name === "minimumTax") {
+        if (value.minimumTax === "DHAKA_CHATTOGRAM_CITY_CORPORATION_AREA") {
           setValue("minimumTaxAmount", "5000.00");
           calculateTaxPayable();
-
         }
-        if(value.minimumTax === "OTHER_CITY_CORPORATION_AREA") {
+        if (value.minimumTax === "OTHER_CITY_CORPORATION_AREA") {
           setValue("minimumTaxAmount", "4000.00");
-          calculateTaxPayable(); 
-
+          calculateTaxPayable();
         }
-        if(value.minimumTax === "OTHER_AREA") {
+        if (value.minimumTax === "OTHER_AREA") {
           setValue("minimumTaxAmount", "3000.00");
           calculateTaxPayable();
         }
@@ -310,7 +310,7 @@ const IndividualTaxReturnForm: React.FC = () => {
     });
 
     return () => subscription.unsubscribe();
-  }, [watch, setValue, calculatePrivateEmploymentTotals]);
+  }, [watch, setValue, calculatePrivateEmploymentTotals, calculateTaxPayable]);
 
   const updateScale = useCallback(() => {
     if (containerRef.current && imageRefs.current[0]) {
@@ -320,35 +320,50 @@ const IndividualTaxReturnForm: React.FC = () => {
     }
   }, []);
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const debouncedScrollToImage = useCallback(
     debounce((index: number) => {
       imageRefs.current[index]?.scrollIntoView({ behavior: "smooth" });
     }, 500),
-    []
+    [imageRefs]
   );
 
-  const handleScroll = useCallback(
-    debounce(() => {
-      const scrollPosition = window.scrollY + window.innerHeight / 2;
-      const bufferZone = window.innerHeight * 0.1;
+  const debouncedHandleScroll = useMemo(
+    () =>
+      debounce(() => {
+        const scrollPosition = window.scrollY + window.innerHeight / 2;
+        const bufferZone = window.innerHeight * 0.1;
 
-      imageRefs.current.forEach((ref, index) => {
-        if (ref) {
-          const topBoundary = ref.offsetTop + bufferZone;
-          const bottomBoundary = ref.offsetTop + ref.offsetHeight - bufferZone;
+        imageRefs.current.forEach((ref, index) => {
+          if (ref) {
+            const topBoundary = ref.offsetTop + bufferZone;
+            const bottomBoundary =
+              ref.offsetTop + ref.offsetHeight - bufferZone;
 
-          if (scrollPosition > topBoundary && scrollPosition < bottomBoundary) {
-            setCurrentImageIndex(index);
-            if (index !== lastScrolledIndex) {
-              setTargetImageIndex(index);
-              setLastScrolledIndex(index);
+            if (
+              scrollPosition > topBoundary &&
+              scrollPosition < bottomBoundary
+            ) {
+              setCurrentImageIndex(index);
+              if (index !== lastScrolledIndex) {
+                setTargetImageIndex(index);
+                setLastScrolledIndex(index);
+              }
             }
           }
-        }
-      });
-    }, 100),
-    [lastScrolledIndex]
+        });
+      }, 100),
+    [
+      lastScrolledIndex,
+      setCurrentImageIndex,
+      setTargetImageIndex,
+      setLastScrolledIndex,
+    ]
   );
+
+  const handleScroll = useCallback(() => {
+    debouncedHandleScroll();
+  }, [debouncedHandleScroll]);
 
   useEffect(() => {
     const checkMobile = () => {
@@ -404,7 +419,7 @@ const IndividualTaxReturnForm: React.FC = () => {
         return newIndex;
       });
     },
-    [images.length, debouncedScrollToImage]
+    [debouncedScrollToImage]
   );
 
   const onSubmit: SubmitHandler<IndividualTaxReturnFormInput> = async (
