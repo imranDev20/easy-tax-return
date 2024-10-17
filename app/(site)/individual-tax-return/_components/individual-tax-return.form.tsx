@@ -247,7 +247,7 @@ const IndividualTaxReturnForm: React.FC = () => {
     formState: { errors, isDirty },
   } = form;
 
-  const { calculatePrivateEmploymentTotals } = calculations;
+  const { calculatePrivateEmploymentTotals, calculateTaxPayable } = calculations;
 
   useEffect(() => {
     // This effect will run when the component mounts
@@ -276,6 +276,23 @@ const IndividualTaxReturnForm: React.FC = () => {
           setValue("netWealthSurchargeAmount", "0.0");
         } else {
           setValue("netWealthSurchargeAmount", undefined);
+        }
+      }
+
+      if(name === "minimumTax") {
+        if(value.minimumTax ==="DHAKA_CHATTOGRAM_CITY_CORPORATION_AREA"){
+          setValue("minimumTaxAmount", "5000.00");
+          calculateTaxPayable();
+
+        }
+        if(value.minimumTax === "OTHER_CITY_CORPORATION_AREA") {
+          setValue("minimumTaxAmount", "4000.00");
+          calculateTaxPayable(); 
+
+        }
+        if(value.minimumTax === "OTHER_AREA") {
+          setValue("minimumTaxAmount", "3000.00");
+          calculateTaxPayable();
         }
       }
 
