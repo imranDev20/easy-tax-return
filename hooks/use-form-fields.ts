@@ -4095,6 +4095,22 @@ export const useFormFields = (
       isVisible: true,
     },
     {
+      name: "netWealthLastDateAmount",
+      type: "number",
+      label: "netWealthLastDateAmount",
+      disabled:
+        watch("netWealthLastDate") === "NO_I_AM_A_NEW_TAXPAYER" ? true : false,
+      onBlur: () => {
+        calculateSumOfSourceOfFund();
+      },
+      x: 772,
+      y: 445,
+      width: 168,
+      height: 18,
+      imageIndex: 8,
+      isVisible: true,
+    },
+    {
       name: "sumOfSourceOfFundAndPreviousYearsNetWealth",
       type: "number",
       label: "sumOfSourceOfFundAndPreviousYearsNetWealth",
@@ -4249,43 +4265,13 @@ export const useFormFields = (
     },
     {
       name: "directorsShareholdingsInTheCompanies",
-      type: "text",
+      type: "number",
       label: "directorsShareholdingsInTheCompanies",
       disabled: true,
       x: 775,
       y: 765,
       width: 160,
       height: 16,
-      imageIndex: 8,
-      isVisible: true,
-    },
-    {
-      name: "businessCapitalOfPartnershipFirm",
-      type: "text",
-      label: "businessCapitalOfPartnershipFirm",
-      disabled: true,
-      x: 775,
-      y: 852,
-      width: 160,
-      height: 16,
-      imageIndex: 8,
-      isVisible: true,
-    },
-
-    {
-      name: "netWealthLastDateAmount",
-      type: "text",
-      label: "netWealthLastDateAmount",
-      disabled:
-        watch("netWealthLastDate") === "NO_I_AM_A_NEW_TAXPAYER" ? true : false,
-      onBlur: () => {
-        calculateSumOfSourceOfFund();
-      },
-
-      x: 772,
-      y: 445,
-      width: 168,
-      height: 18,
       imageIndex: 8,
       isVisible: true,
     },
@@ -4318,11 +4304,11 @@ export const useFormFields = (
       imageIndex: 8,
       isVisible: true,
     },
-    {
-      name: "companyName1",
-      type: "text",
-      label: "companyName1",
 
+    {
+      name: "directorsShareholdingCompanyName1",
+      type: "text",
+      label: "",
       x: 185,
       y: 800,
       width: 320,
@@ -4331,34 +4317,9 @@ export const useFormFields = (
       isVisible: true,
     },
     {
-      name: "companyName2",
-      type: "text",
-      label: "companyName2",
-
-      x: 185,
-      y: 818,
-      width: 320,
-      height: 18,
-      imageIndex: 8,
-      isVisible: true,
-    },
-    {
-      name: "companyName3",
-      type: "text",
-      label: "companyName3",
-
-      x: 185,
-      y: 834,
-      width: 320,
-      height: 18,
-      imageIndex: 8,
-      isVisible: true,
-    },
-    {
-      name: "noOfShare1",
+      name: "directorsShareholdingNoOfShare1",
       type: "text",
       label: "noOfShare1",
-
       x: 505,
       y: 800,
       width: 135,
@@ -4367,10 +4328,34 @@ export const useFormFields = (
       isVisible: true,
     },
     {
-      name: "noOfShare2",
+      name: "directorsShareholdingCompanyValue1",
+      type: "number",
+      label: "",
+      onBlur: () => {
+        calculateDirectorsShareholdingsInTheCompanies();
+      },
+      x: 640,
+      y: 800,
+      width: 135,
+      height: 18,
+      imageIndex: 8,
+      isVisible: true,
+    },
+    {
+      name: "directorsShareholdingCompanyName2",
       type: "text",
-      label: "noOfShare2",
-
+      label: "",
+      x: 185,
+      y: 818,
+      width: 320,
+      height: 18,
+      imageIndex: 8,
+      isVisible: true,
+    },
+    {
+      name: "directorsShareholdingNoOfShare2",
+      type: "text",
+      label: "",
       x: 505,
       y: 818,
       width: 135,
@@ -4379,10 +4364,36 @@ export const useFormFields = (
       isVisible: true,
     },
     {
-      name: "noOfShare3",
+      name: "directorsShareholdingCompanyValue2",
+      type: "number",
+      label: "",
+      onBlur: () => {
+        calculateDirectorsShareholdingsInTheCompanies();
+      },
+      x: 640,
+      y: 818,
+      width: 135,
+      height: 18,
+      imageIndex: 8,
+      isVisible: true,
+    },
+
+    {
+      name: "directorsShareholdingCompanyName3",
+      type: "text",
+      label: "",
+      x: 185,
+      y: 834,
+      width: 320,
+      height: 18,
+      imageIndex: 8,
+      isVisible: true,
+    },
+
+    {
+      name: "directorsShareholdingNoOfShare3",
       type: "text",
       label: "noOfShare3",
-
       x: 505,
       y: 834,
       width: 135,
@@ -4390,39 +4401,9 @@ export const useFormFields = (
       imageIndex: 8,
       isVisible: true,
     },
-    {
-      name: "value1",
-      type: "number",
-      label: "",
 
-      onBlur: () => {
-        calculateDirectorsShareholdingsInTheCompanies();
-      },
-
-      x: 640,
-      y: 800,
-      width: 135,
-      height: 18,
-      imageIndex: 8,
-      isVisible: true,
-    },
     {
-      name: "value2",
-      type: "number",
-      label: "",
-      onBlur: () => {
-        calculateDirectorsShareholdingsInTheCompanies();
-      },
-
-      x: 640,
-      y: 818,
-      width: 135,
-      height: 18,
-      imageIndex: 8,
-      isVisible: true,
-    },
-    {
-      name: "value3",
+      name: "directorsShareholdingCompanyValue3",
       type: "number",
       label: "",
       onBlur: () => {
@@ -4433,13 +4414,26 @@ export const useFormFields = (
       y: 834,
       width: 135,
       height: 18,
+      imageIndex: 8,
+      isVisible: true,
+    },
+
+    {
+      name: "businessCapitalOfPartnershipFirm",
+      type: "number",
+      label: "",
+      disabled: true,
+      x: 775,
+      y: 852,
+      width: 160,
+      height: 16,
       imageIndex: 8,
       isVisible: true,
     },
     {
       name: "nameOfPartnershipFirm1",
       type: "text",
-      label: "nameOfPartnershipFirm1",
+      label: "",
       x: 185,
       y: 903,
       width: 320,
@@ -4447,39 +4441,39 @@ export const useFormFields = (
       imageIndex: 8,
       isVisible: true,
     },
-    {
-      name: "nameOfPartnershipFirm2",
-      type: "text",
-      label: "nameOfPartnershipFirm2",
-
-      x: 185,
-      y: 922,
-      width: 320,
-      height: 18,
-      imageIndex: 8,
-      isVisible: true,
-    },
-    {
-      name: "nameOfPartnershipFirm3",
-      type: "text",
-      label: "nameOfPartnershipFirm3",
-
-      x: 185,
-      y: 938,
-      width: 320,
-      height: 18,
-      imageIndex: 8,
-      isVisible: true,
-    },
-
     {
       name: "shareOfProfit1",
       type: "text",
-      label: "shareOfProfit1",
-
+      label: "",
       x: 505,
       y: 903,
       width: 135,
+      height: 18,
+      imageIndex: 8,
+      isVisible: true,
+    },
+    {
+      name: "capitalContributed1",
+      type: "number",
+      label: "",
+      onBlur: () => {
+        calculateBusinessCapitalOfPartnershipFirm();
+      },
+      x: 640,
+      y: 903,
+      width: 135,
+      height: 18,
+      imageIndex: 8,
+      isVisible: true,
+    },
+
+    {
+      name: "nameOfPartnershipFirm2",
+      type: "text",
+      label: "",
+      x: 185,
+      y: 922,
+      width: 320,
       height: 18,
       imageIndex: 8,
       isVisible: true,
@@ -4488,7 +4482,6 @@ export const useFormFields = (
       name: "shareOfProfit2",
       type: "text",
       label: "shareOfProfit2",
-
       x: 505,
       y: 922,
       width: 135,
@@ -4496,11 +4489,39 @@ export const useFormFields = (
       imageIndex: 8,
       isVisible: true,
     },
+
+    {
+      name: "capitalContributed2",
+      type: "number",
+      label: "capitalContributed2",
+      onBlur: () => {
+        calculateBusinessCapitalOfPartnershipFirm();
+      },
+      x: 640,
+      y: 922,
+      width: 135,
+      height: 18,
+      imageIndex: 8,
+      isVisible: true,
+    },
+
+    {
+      name: "nameOfPartnershipFirm3",
+      type: "text",
+      label: "",
+
+      x: 185,
+      y: 938,
+      width: 320,
+      height: 18,
+      imageIndex: 8,
+      isVisible: true,
+    },
+
     {
       name: "shareOfProfit3",
       type: "text",
       label: "shareOfProfit3",
-
       x: 505,
       y: 938,
       width: 135,
@@ -4508,44 +4529,14 @@ export const useFormFields = (
       imageIndex: 8,
       isVisible: true,
     },
-    {
-      name: "capitalContributed1",
-      type: "text",
-      label: "capitalContributed1",
-      onBlur: () => {
-        calculateBusinessCapitalOfPartnershipFirm();
-      },
 
-      x: 640,
-      y: 903,
-      width: 135,
-      height: 18,
-      imageIndex: 8,
-      isVisible: true,
-    },
-    {
-      name: "capitalContributed2",
-      type: "text",
-      label: "capitalContributed2",
-      onBlur: () => {
-        calculateBusinessCapitalOfPartnershipFirm();
-      },
-
-      x: 640,
-      y: 922,
-      width: 135,
-      height: 18,
-      imageIndex: 8,
-      isVisible: true,
-    },
     {
       name: "capitalContributed3",
-      type: "text",
+      type: "number",
       label: "capitalContributed3",
       onBlur: () => {
         calculateBusinessCapitalOfPartnershipFirm();
       },
-
       x: 640,
       y: 938,
       width: 135,
@@ -4559,7 +4550,7 @@ export const useFormFields = (
 
     {
       name: "nonAgriculturalPropertyLandHouseProperty",
-      type: "text",
+      type: "number",
       label: "",
       disabled: true,
       x: 775,
@@ -4571,7 +4562,7 @@ export const useFormFields = (
     },
 
     {
-      name: "locationDescription1",
+      name: "nonAgriculturalLocationDescription1",
       type: "text",
       label: "",
       x: 185,
@@ -4583,7 +4574,7 @@ export const useFormFields = (
     },
 
     {
-      name: "locationValue1",
+      name: "nonAgriculturalValue1",
       type: "number",
       label: "",
       x: 638,
@@ -4597,7 +4588,7 @@ export const useFormFields = (
       },
     },
     {
-      name: "locationDescription2",
+      name: "nonAgriculturalLocationDescription2",
       type: "text",
       label: "",
       x: 185,
@@ -4608,7 +4599,7 @@ export const useFormFields = (
       isVisible: true,
     },
     {
-      name: "locationValue2",
+      name: "nonAgriculturalValue2",
       type: "number",
       label: "",
       x: 638,
@@ -4622,7 +4613,7 @@ export const useFormFields = (
       },
     },
     {
-      name: "locationDescription3",
+      name: "nonAgriculturalLocationDescription3",
       type: "text",
       label: "",
 
@@ -4634,7 +4625,7 @@ export const useFormFields = (
       isVisible: true,
     },
     {
-      name: "locationValue3",
+      name: "nonAgriculturalValue3",
       type: "number",
       label: "",
       x: 638,
@@ -4648,7 +4639,7 @@ export const useFormFields = (
       },
     },
     {
-      name: "locationDescription4",
+      name: "nonAgriculturalLocationDescription4",
       type: "text",
       label: "",
       x: 185,
@@ -4659,7 +4650,7 @@ export const useFormFields = (
       isVisible: true,
     },
     {
-      name: "locationValue4",
+      name: "nonAgriculturalValue4",
       type: "number",
       label: "",
       x: 638,
@@ -4673,7 +4664,7 @@ export const useFormFields = (
       },
     },
     {
-      name: "locationDescription5",
+      name: "nonAgriculturalLocationDescription5",
       type: "text",
       label: "",
       x: 185,
@@ -4685,7 +4676,7 @@ export const useFormFields = (
     },
 
     {
-      name: "locationValue5",
+      name: "nonAgriculturalValue5",
       type: "number",
       label: "",
       x: 638,
@@ -4697,6 +4688,19 @@ export const useFormFields = (
       onBlur() {
         calculateTotalAssetsInBangladeshAndOutside();
       },
+    },
+
+    {
+      name: "agriculturalProperty",
+      type: "number",
+      label: "",
+      disabled: true,
+      x: 775,
+      y: 237,
+      width: 160,
+      height: 16,
+      imageIndex: 9,
+      isVisible: true,
     },
 
     {
@@ -4712,7 +4716,7 @@ export const useFormFields = (
     },
     {
       name: "agriculturalLocationValue1",
-      type: "text",
+      type: "number",
       label: "",
       x: 638,
       y: 272,
@@ -4737,7 +4741,7 @@ export const useFormFields = (
     },
     {
       name: "agriculturalLocationValue2",
-      type: "text",
+      type: "number",
       label: "",
       x: 638,
       y: 290,
@@ -4762,7 +4766,7 @@ export const useFormFields = (
     },
     {
       name: "agriculturalLocationValue3",
-      type: "text",
+      type: "number",
       label: "",
       x: 638,
       y: 308,
@@ -4776,21 +4780,8 @@ export const useFormFields = (
     },
 
     {
-      name: "agriculturalProperty",
-      type: "text",
-      label: "",
-      disabled: true,
-      x: 775,
-      y: 237,
-      width: 160,
-      height: 16,
-      imageIndex: 9,
-      isVisible: true,
-    },
-
-    {
       name: "shareDebentureUnitCertificate",
-      type: "text",
+      type: "number",
       label: "",
       x: 770,
       y: 360,
@@ -4805,8 +4796,8 @@ export const useFormFields = (
 
     {
       name: "bondsGovernment",
-      type: "text",
-      label: "bondsGovernment",
+      type: "number",
+      label: "",
       x: 770,
       y: 378,
       width: 170,
@@ -4819,8 +4810,8 @@ export const useFormFields = (
     },
     {
       name: "sanchayapatraSavingsCertificate",
-      type: "text",
-      label: "sanchayapatraSavingsCertificate",
+      type: "number",
+      label: "",
       x: 770,
       y: 396,
       width: 170,
@@ -4834,7 +4825,7 @@ export const useFormFields = (
     {
       name: "depositPensionScheme",
       type: "text",
-      label: "depositPensionScheme",
+      label: "",
       x: 770,
       y: 414,
       width: 170,
@@ -4849,7 +4840,7 @@ export const useFormFields = (
     {
       name: "loansGivenToOthers",
       type: "text",
-      label: "loansGivenToOthers",
+      label: "",
       x: 770,
       y: 432,
       width: 170,
@@ -4863,7 +4854,7 @@ export const useFormFields = (
     {
       name: "name",
       type: "text",
-      label: "name",
+      label: "",
       x: 250,
       y: 450,
       width: 318,
@@ -4874,7 +4865,7 @@ export const useFormFields = (
     {
       name: "nid",
       type: "text",
-      label: "nid",
+      label: "",
       x: 625,
       y: 450,
       width: 145,
@@ -4884,8 +4875,8 @@ export const useFormFields = (
     },
     {
       name: "nidValue",
-      type: "text",
-      label: "nidValue",
+      type: "number",
+      label: "",
       x: 770,
       y: 450,
       width: 170,
@@ -4898,7 +4889,7 @@ export const useFormFields = (
     },
     {
       name: "savingDeposit",
-      type: "text",
+      type: "number",
       label: "savingDeposit",
       x: 770,
       y: 468,
@@ -4912,7 +4903,7 @@ export const useFormFields = (
     },
     {
       name: "providentFund",
-      type: "text",
+      type: "number",
       label: "providentFund",
       x: 770,
       y: 484,
@@ -4926,7 +4917,7 @@ export const useFormFields = (
     },
     {
       name: "otherInvestmentDesc",
-      type: "text",
+      type: "number",
       label: "otherInvestment1",
       x: 370,
       y: 502,
@@ -4937,7 +4928,7 @@ export const useFormFields = (
     },
     {
       name: "otherInvestmentAmount",
-      type: "text",
+      type: "number",
       label: "",
       x: 770,
       y: 502,
@@ -4951,7 +4942,7 @@ export const useFormFields = (
     },
     {
       name: "totalFinancialAssets",
-      type: "text",
+      type: "number",
       label: "",
       disabled: true,
       x: 775,
@@ -4965,7 +4956,7 @@ export const useFormFields = (
 
     {
       name: "motorVehiclesAmount",
-      type: "text",
+      type: "number",
       label: "",
       disabled: true,
       x: 775,
@@ -5002,7 +4993,7 @@ export const useFormFields = (
 
     {
       name: "motorValue1",
-      type: "text",
+      type: "number",
       label: "motorValue1",
       x: 625,
       y: 573,
@@ -5041,7 +5032,7 @@ export const useFormFields = (
 
     {
       name: "motorValue2",
-      type: "text",
+      type: "number",
       label: "motorValue2",
       x: 625,
       y: 590,
@@ -5067,7 +5058,7 @@ export const useFormFields = (
 
     {
       name: "ornamentsValue",
-      type: "text",
+      type: "number",
       label: "",
       x: 770,
       y: 610,
@@ -5082,7 +5073,7 @@ export const useFormFields = (
 
     {
       name: "furnitureAndElectronic",
-      type: "text",
+      type: "number",
       label: "furnitureAndElectronic",
       x: 770,
       y: 628,
@@ -5097,7 +5088,7 @@ export const useFormFields = (
 
     {
       name: "othersAssetsDesc",
-      type: "text",
+      type: "number",
       label: "othersAssets1",
       x: 550,
       y: 645,
@@ -5109,8 +5100,8 @@ export const useFormFields = (
 
     {
       name: "othersAssetsValue",
-      type: "text",
-      label: "othersAssets2",
+      type: "number",
+      label: "",
       x: 770,
       y: 645,
       width: 170,
