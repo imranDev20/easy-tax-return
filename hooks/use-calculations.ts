@@ -6,12 +6,163 @@ import {
 import { IndividualTaxReturnFormInput } from "@/app/(site)/individual-tax-return/schema";
 import { RepairCollection } from "@prisma/client";
 import { useCallback } from "react";
+import { FormFieldName } from "@/types/tax-return-form";
 
 export const useCalculations = (
   watch: UseFormWatch<IndividualTaxReturnFormInput>,
   setValue: UseFormSetValue<IndividualTaxReturnFormInput>,
   getValues: UseFormGetValues<IndividualTaxReturnFormInput>
 ) => {
+  const calculateTotalNonAgriculturalAssets = () => {
+    const fields: FormFieldName[] = [
+      "nonAgriculturalValue1",
+      "nonAgriculturalValue2",
+      "nonAgriculturalValue3",
+      "nonAgriculturalValue4",
+      "nonAgriculturalValue5",
+    ];
+
+    const total = fields.reduce((sum, field) => {
+      const value = watch(field as keyof IndividualTaxReturnFormInput);
+      const numberValue = parseFloat(value?.toString() || "0");
+
+      // Guard against NaN and return the current sum if the value is not a valid number
+      if (isNaN(numberValue)) {
+        console.warn(`Invalid value for ${field}: ${value}`);
+        return sum;
+      }
+
+      // Ensure we're adding a positive number (or zero)
+      return sum + Math.max(0, numberValue);
+    }, 0);
+
+    // Ensure the final total is not NaN, and round to 2 decimal places
+    const safeTotal = isNaN(total) ? 0 : Math.round(total * 100) / 100;
+
+    // Assuming you have a field for the total location value
+    setValue("nonAgriculturalPropertyLandHouseProperty", safeTotal.toFixed(2));
+
+    return safeTotal;
+  };
+
+  const calculateTotalAgriculturalAssets = () => {
+    const fields: FormFieldName[] = [
+      "agriculturalLocationValue1",
+      "agriculturalLocationValue2",
+      "agriculturalLocationValue3",
+    ];
+
+    const total = fields.reduce((sum, field) => {
+      const value = watch(field as keyof IndividualTaxReturnFormInput);
+      const numberValue = parseFloat(value?.toString() || "0");
+
+      // Guard against NaN and return the current sum if the value is not a valid number
+      if (isNaN(numberValue)) {
+        console.warn(`Invalid value for ${field}: ${value}`);
+        return sum;
+      }
+
+      // Ensure we're adding a positive number (or zero)
+      return sum + Math.max(0, numberValue);
+    }, 0);
+
+    // Ensure the final total is not NaN, and round to 2 decimal places
+    const safeTotal = isNaN(total) ? 0 : Math.round(total * 100) / 100;
+
+    // Assuming you have a field for the total agricultural location value
+    setValue("agriculturalProperty", safeTotal.toFixed(2));
+    return safeTotal;
+  };
+
+  const calculateTotalFinancialAssets = () => {
+    const fields: FormFieldName[] = [
+      "shareDebentureUnitCertificate",
+      "bondsGovernment",
+      "sanchayapatraSavingsCertificate",
+      "depositPensionScheme",
+      "loansGivenToOthers",
+      "nidValue",
+      "savingDeposit",
+      "providentFund",
+      "otherInvestmentAmount",
+    ];
+
+    const total = fields.reduce((sum, field) => {
+      const value = watch(field as keyof IndividualTaxReturnFormInput);
+      const numberValue = parseFloat(value?.toString() || "0");
+
+      // Guard against NaN and return the current sum if the value is not a valid number
+      if (isNaN(numberValue)) {
+        console.warn(`Invalid value for ${field}: ${value}`);
+        return sum;
+      }
+
+      // Ensure we're adding a positive number (or zero)
+      return sum + Math.max(0, numberValue);
+    }, 0);
+
+    // Ensure the final total is not NaN, and round to 2 decimal places
+    const safeTotal = isNaN(total) ? 0 : Math.round(total * 100) / 100;
+
+    // Assuming you have a field for the total financial assets
+    setValue("totalFinancialAssets", safeTotal.toFixed(2));
+    return safeTotal;
+  };
+
+  const calculateTotalMotorValue = () => {
+    const fields: FormFieldName[] = ["motorValue1", "motorValue2"];
+
+    const total = fields.reduce((sum, field) => {
+      const value = watch(field as keyof IndividualTaxReturnFormInput);
+      const numberValue = parseFloat(value?.toString() || "0");
+
+      // Guard against NaN and return the current sum if the value is not a valid number
+      if (isNaN(numberValue)) {
+        console.warn(`Invalid value for ${field}: ${value}`);
+        return sum;
+      }
+
+      // Ensure we're adding a positive number (or zero)
+      return sum + Math.max(0, numberValue);
+    }, 0);
+
+    // Ensure the final total is not NaN, and round to 2 decimal places
+    const safeTotal = isNaN(total) ? 0 : Math.round(total * 100) / 100;
+
+    // Assuming you have a field for the total motor value
+    setValue("motorVehiclesAmount", safeTotal.toFixed(2));
+    return safeTotal;
+  };
+
+  const calculateTotalCashInHandAndFund = () => {
+    const fields: FormFieldName[] = [
+      "bankBalance",
+      "cashInHand",
+      "othersValue",
+    ];
+
+    const total = fields.reduce((sum, field) => {
+      const value = watch(field as keyof IndividualTaxReturnFormInput);
+      const numberValue = parseFloat(value?.toString() || "0");
+
+      // Guard against NaN and return the current sum if the value is not a valid number
+      if (isNaN(numberValue)) {
+        console.warn(`Invalid value for ${field}: ${value}`);
+        return sum;
+      }
+
+      // Ensure we're adding a positive number (or zero)
+      return sum + Math.max(0, numberValue);
+    }, 0);
+
+    // Ensure the final total is not NaN, and round to 2 decimal places
+    const safeTotal = isNaN(total) ? 0 : Math.round(total * 100) / 100;
+
+    // Assuming you have a field for the total cash in hand and fund outside business
+    setValue("totalCashInHandsAndFundOutsideBusiness", safeTotal.toFixed(2));
+    return safeTotal;
+  };
+
   const calculateTotalAssetsInBangladeshAndOutside = () => {
     const nonAgriculturalProperty = calculateTotalNonAgriculturalAssets();
     const agriculturalProperty = calculateTotalAgriculturalAssets();
@@ -19,7 +170,7 @@ export const useCalculations = (
     const totalMotorValue = calculateTotalMotorValue();
     const totalCashInHandAndFund = calculateTotalCashInHandAndFund();
 
-    const fields = [
+    const fields: FormFieldName[] = [
       "ornamentsValue",
       "furnitureAndElectronic",
       "othersAssetsValue",
@@ -72,155 +223,9 @@ export const useCalculations = (
     };
   };
 
-  const calculateTotalCashInHandAndFund = () => {
-    const fields = ["bankBalance", "cashInHand", "othersValue"];
-
-    const total = fields.reduce((sum, field) => {
-      const value = watch(field as keyof IndividualTaxReturnFormInput);
-      const numberValue = parseFloat(value?.toString() || "0");
-
-      // Guard against NaN and return the current sum if the value is not a valid number
-      if (isNaN(numberValue)) {
-        console.warn(`Invalid value for ${field}: ${value}`);
-        return sum;
-      }
-
-      // Ensure we're adding a positive number (or zero)
-      return sum + Math.max(0, numberValue);
-    }, 0);
-
-    // Ensure the final total is not NaN, and round to 2 decimal places
-    const safeTotal = isNaN(total) ? 0 : Math.round(total * 100) / 100;
-
-    // Assuming you have a field for the total cash in hand and fund outside business
-    setValue("totalCashInHandsAndFundOutsideBusiness", safeTotal.toFixed(2));
-    return safeTotal;
-  };
-
-  const calculateTotalMotorValue = () => {
-    const fields = ["motorValue1", "motorValue2"];
-
-    const total = fields.reduce((sum, field) => {
-      const value = watch(field as keyof IndividualTaxReturnFormInput);
-      const numberValue = parseFloat(value?.toString() || "0");
-
-      // Guard against NaN and return the current sum if the value is not a valid number
-      if (isNaN(numberValue)) {
-        console.warn(`Invalid value for ${field}: ${value}`);
-        return sum;
-      }
-
-      // Ensure we're adding a positive number (or zero)
-      return sum + Math.max(0, numberValue);
-    }, 0);
-
-    // Ensure the final total is not NaN, and round to 2 decimal places
-    const safeTotal = isNaN(total) ? 0 : Math.round(total * 100) / 100;
-
-    // Assuming you have a field for the total motor value
-    setValue("motorVehiclesAmount", safeTotal.toFixed(2));
-    return safeTotal;
-  };
-
-  const calculateTotalFinancialAssets = () => {
-    const fields = [
-      "shareDebentureUnitCertificate",
-      "bondsGovernment",
-      "sanchayapatraSavingsCertificate",
-      "depositPensionScheme",
-      "loansGivenToOthers",
-      "nidValue",
-      "savingDeposit",
-      "providentFund",
-      "otherInvestmentAmount",
-    ];
-
-    const total = fields.reduce((sum, field) => {
-      const value = watch(field as keyof IndividualTaxReturnFormInput);
-      const numberValue = parseFloat(value?.toString() || "0");
-
-      // Guard against NaN and return the current sum if the value is not a valid number
-      if (isNaN(numberValue)) {
-        console.warn(`Invalid value for ${field}: ${value}`);
-        return sum;
-      }
-
-      // Ensure we're adding a positive number (or zero)
-      return sum + Math.max(0, numberValue);
-    }, 0);
-
-    // Ensure the final total is not NaN, and round to 2 decimal places
-    const safeTotal = isNaN(total) ? 0 : Math.round(total * 100) / 100;
-
-    // Assuming you have a field for the total financial assets
-    setValue("totalFinancialAssets", safeTotal.toFixed(2));
-    return safeTotal;
-  };
-
-  const calculateTotalAgriculturalAssets = () => {
-    const fields = [
-      "agriculturalLocationValue1",
-      "agriculturalLocationValue2",
-      "agriculturalLocationValue3",
-    ];
-
-    const total = fields.reduce((sum, field) => {
-      const value = watch(field as keyof IndividualTaxReturnFormInput);
-      const numberValue = parseFloat(value?.toString() || "0");
-
-      // Guard against NaN and return the current sum if the value is not a valid number
-      if (isNaN(numberValue)) {
-        console.warn(`Invalid value for ${field}: ${value}`);
-        return sum;
-      }
-
-      // Ensure we're adding a positive number (or zero)
-      return sum + Math.max(0, numberValue);
-    }, 0);
-
-    // Ensure the final total is not NaN, and round to 2 decimal places
-    const safeTotal = isNaN(total) ? 0 : Math.round(total * 100) / 100;
-
-    // Assuming you have a field for the total agricultural location value
-    setValue("agriculturalProperty", safeTotal.toFixed(2));
-    return safeTotal;
-  };
-
-  const calculateTotalNonAgriculturalAssets = () => {
-    const fields = [
-      "locationValue1",
-      "locationValue2",
-      "locationValue3",
-      "locationValue4",
-      "locationValue5",
-    ];
-
-    const total = fields.reduce((sum, field) => {
-      const value = watch(field as keyof IndividualTaxReturnFormInput);
-      const numberValue = parseFloat(value?.toString() || "0");
-
-      // Guard against NaN and return the current sum if the value is not a valid number
-      if (isNaN(numberValue)) {
-        console.warn(`Invalid value for ${field}: ${value}`);
-        return sum;
-      }
-
-      // Ensure we're adding a positive number (or zero)
-      return sum + Math.max(0, numberValue);
-    }, 0);
-
-    // Ensure the final total is not NaN, and round to 2 decimal places
-    const safeTotal = isNaN(total) ? 0 : Math.round(total * 100) / 100;
-
-    // Assuming you have a field for the total location value
-    setValue("nonAgriculturalPropertyLandHouseProperty", safeTotal.toFixed(2));
-
-    return safeTotal;
-  };
-
   // individual person expense
   const calculateTotalExpenseIndividualPerson = () => {
-    const fields = [
+    const fields: FormFieldName[] = [
       "expensesForFood",
       "housingExpense",
       "personalTransportationExpenses",
@@ -259,32 +264,32 @@ export const useCalculations = (
     return safeTotal;
   };
 
-  // rebate
-  const calculateTotalAllowableInvestmentContribution = () => {
-    const fields = [
-      "lifeInsurancePremium",
-      "contributionToDeposit",
-      "investmentInGovernmentSecuritiesDetails",
-      "investmentInGovernmentSecuritiesAmount",
-      "investmentInSecurities",
-      "contributionToProvidentFund",
-      "selfAndEmployersContribution",
-      "contributionToSuperAnnuationFund",
-      "contributionToBenevolentFund",
-      "contributionToZakatFundAmount",
-      "othersRebateAmount",
-    ];
+  const calculateTotalAmountPayable = useCallback(() => {
+    let taxPayable = parseFloat(getValues("taxPayable")?.toString() || "0");
+    let netWealthSurcharge = parseFloat(
+      getValues("netWealthSurchargeAmount")?.toString() || "0"
+    );
+    let environmentalSurcharge = parseFloat(
+      getValues("environmentalSurcharge")?.toString() || "0"
+    );
+    let delayInterest = parseFloat(
+      getValues("delayInterest")?.toString() || "0"
+    );
+    let totalAmountPayable =
+      taxPayable + netWealthSurcharge + environmentalSurcharge + delayInterest;
+    setValue("totalAmountPayable", totalAmountPayable.toFixed(2));
+    setValue("totalTaxPaid", totalAmountPayable.toFixed(2));
+  }, [getValues, setValue]);
 
-    const total = fields.reduce((sum, field) => {
-      const value = watch(field as keyof IndividualTaxReturnFormInput);
-      const numberValue = parseFloat(value?.toString() || "0");
-      return sum + (isNaN(numberValue) ? 0 : numberValue);
-    }, 0);
-
-    setValue("totalAllowableInvestmentContribution", total.toFixed(2));
-    calculateTaxRebate();
-    return total;
-  };
+  const calculateTaxPayable = useCallback(() => {
+    let netTaxRebate = parseFloat(getValues("netTaxRebate")?.toString() || "0");
+    let minimumTaxAmount = parseFloat(
+      getValues("minimumTaxAmount")?.toString() || "0"
+    );
+    let taxPayable = Math.max(0, netTaxRebate, minimumTaxAmount);
+    setValue("taxPayable", taxPayable.toFixed(2));
+    calculateTotalAmountPayable();
+  }, [getValues, setValue, calculateTotalAmountPayable]);
 
   // Schedule 4
   const calculateSummaryOfBalanceSheet = () => {
@@ -323,6 +328,155 @@ export const useCalculations = (
     return 0;
   };
 
+  const getThreshold = useCallback(
+    (
+      category: TaxCategory,
+      isParentOfDisabledPerson: boolean | undefined
+    ): number => {
+      if (category === "NONE" && !isParentOfDisabledPerson) return 350000;
+      if (category === "FEMALE" || category === "AGED_65_OR_MORE")
+        return 400000;
+      if (category === "THIRD_GENDER" || category === "DISABLED_PERSON")
+        return 475000;
+      if (
+        category === "GAZETTED_WAR_WOUNDED_FREEDOM_FIGHTER" ||
+        isParentOfDisabledPerson
+      )
+        return 500000;
+      return 350000; // Default case
+    },
+    []
+  );
+
+  const calculateTax = useCallback(
+    (
+      totalIncome: number,
+      category: TaxCategory,
+      residentialStatus: ResidentialStatus,
+      isParentOfDisabledPerson: boolean | undefined
+    ): number => {
+      if (residentialStatus === "NON_RESIDENT") {
+        return totalIncome * 0.3; // 30% flat rate for non-residents
+      }
+
+      if (residentialStatus !== "RESIDENT") {
+        return 0; // Handle undefined case
+      }
+
+      const threshold = getThreshold(category, isParentOfDisabledPerson);
+      let taxableIncome = Math.max(0, totalIncome - threshold);
+      let tax = 0;
+
+      const slabs: [number, number][] = [
+        [100000, 0.05],
+        [400000, 0.1],
+        [500000, 0.15],
+        [500000, 0.2],
+      ];
+
+      for (const [slabAmount, rate] of slabs) {
+        if (taxableIncome <= 0) break;
+        const taxableAmountInSlab = Math.min(taxableIncome, slabAmount);
+        tax += taxableAmountInSlab * rate;
+        taxableIncome -= slabAmount;
+      }
+
+      // For any remaining income above the defined slabs
+      if (taxableIncome > 0) {
+        tax += taxableIncome * 0.25;
+      }
+
+      return Math.round(tax); // Rounding to the nearest integer
+    },
+    [getThreshold]
+  );
+
+  const calculateNetTaxRebate = useCallback(() => {
+    let grossTaxableIncome = parseFloat(
+      getValues("grossTaxOnTaxableIncome")?.toString() || "0"
+    );
+    let taxRebate = parseFloat(getValues("taxRebate")?.toString() || "0");
+    let netTaxRebate = grossTaxableIncome - taxRebate;
+    setValue("netTaxRebate", netTaxRebate.toFixed(2));
+    calculateTaxPayable();
+  }, [getValues, setValue, calculateTaxPayable]);
+
+  const calculateTaxRebate = useCallback(() => {
+    let totalIncomeShown =
+      parseFloat(getValues("totalIncomeShown")?.toString() || "0") * 0.03;
+    let totalAllowableInvestment =
+      parseFloat(
+        getValues("totalAllowableInvestmentContribution")?.toString() || "0"
+      ) * 0.15;
+    let taka = 1000000;
+    let taxRebate = Math.round(
+      Math.min(totalIncomeShown, totalAllowableInvestment, taka)
+    );
+    setValue("taxRebate", taxRebate.toFixed(2));
+    calculateNetTaxRebate();
+  }, [getValues, setValue, calculateNetTaxRebate]);
+
+  // Function to be used with react-hook-form
+  const calculateTaxForm = useCallback(() => {
+    const totalIncome = parseFloat(
+      getValues("totalIncomeShown")?.toString() || "0"
+    );
+    const category: TaxCategory = watch("specialBenefits");
+    const residentialStatus: ResidentialStatus = watch("residentialStatus");
+    const isParentOfDisabledPerson: boolean | undefined = watch(
+      "isParentOfDisabledPerson"
+    );
+
+    const tax = calculateTax(
+      totalIncome,
+      category,
+      residentialStatus,
+      isParentOfDisabledPerson
+    );
+
+    setValue("grossTaxOnTaxableIncome", tax.toFixed(2));
+    calculateTaxRebate();
+    calculateNetTaxRebate();
+  }, [
+    getValues,
+    watch,
+    setValue,
+    calculateTax,
+    calculateTaxRebate,
+    calculateNetTaxRebate,
+  ]);
+
+  const calculateTotalIncome = useCallback(() => {
+    const fields: FormFieldName[] = [
+      "incomeFromEmployment",
+      "taxpayersShareAmount",
+      "netProfitFromAgriculture",
+      "incomeFishFarmingAmount",
+      "incomeFromBusiness",
+      "incomeFromBusinessMinimum",
+      "incomeFromCapitalGains",
+      "incomeFromFinancialAssets",
+      "incomeFromOtherSources",
+      "shareOfIncomeFromAOP",
+      "incomeOfMinor",
+      "taxableIncomeFromAbroad",
+    ];
+
+    const total = fields.reduce((sum, field) => {
+      const value = watch(field as keyof IndividualTaxReturnFormInput);
+      const numberValue = parseFloat(value?.toString() || "0");
+      return sum + (isNaN(numberValue) ? 0 : numberValue);
+    }, 0);
+
+    setValue("totalIncome", total.toFixed(2));
+    setValue("totalIncomeShown", total.toFixed(2));
+    calculateTaxForm();
+    calculateTaxRebate();
+    setValue("totalIncomeShownInTheReturn", total.toFixed(2));
+
+    return total;
+  }, [setValue, watch, calculateTaxForm, calculateTaxRebate]);
+
   const calculateNetProfitFromBusinessIncome = (): number => {
     calculateSummaryOfBalanceSheet();
 
@@ -345,9 +499,381 @@ export const useCalculations = (
     return Math.max(netProfit, 0);
   };
 
+  const calculateLiabilitiesOutSideBusiness = () => {
+    const fields: FormFieldName[] = [
+      "institutionalLiabilities",
+      "nonInstitutionalLiabilities",
+      "otherLiabilities",
+    ];
+
+    const total = fields.reduce((sum, field) => {
+      const value = watch(field as keyof IndividualTaxReturnFormInput);
+      const numberValue = parseFloat(value?.toString() || "0");
+      return sum + (isNaN(numberValue) ? 0 : numberValue);
+    }, 0);
+
+    setValue("totalLiabilitiesOutsideBusiness", total.toFixed(2));
+    calculateGrossWealth();
+    return total;
+  };
+
+  const calculateTaxDeductedCollectedAtSource = () => {
+    const fields: FormFieldName[] = [
+      "interestProfitFromBankFI.taxDeductedAtSource",
+      "incomeFromSavingCertificates.taxDeductedAtSource",
+      "incomeFromSecuritiesDebentures.taxDeductedAtSource",
+      "incomeFromFinancialProductScheme.taxDeductedAtSource",
+      "dividendIncome.taxDeductedAtSource",
+      "capitalGainFromTransferOfProperty.taxDeductedAtSource",
+      "incomeFromBusinessMinTax.taxDeductedAtSource",
+      "workersParticipationFund.taxDeductedAtSource",
+      "incomeFromOtherSourcesMinTax.taxDeductedAtSource",
+      "otherSubjectToMinTax.taxDeductedAtSource",
+    ];
+    // particulars
+    // amountOfIncome:
+    // deductionsExpensesExemptedIncome:
+    // netTaxableIncome:
+    // taxDeductedAtSource:
+
+    const total = fields.reduce((sum, field) => {
+      const value = watch(field as keyof IndividualTaxReturnFormInput);
+      const numberValue = parseFloat(value?.toString() || "0");
+      return sum + (isNaN(numberValue) ? 0 : numberValue);
+    }, 0);
+
+    setValue("taxDeductedCollectedAtSource.amount", total.toFixed(2));
+    return total;
+  };
+
+  const calculateReceiptOfGiftOtherReceipts = () => {
+    const fields: FormFieldName[] = [
+      "typeOfReceiptsAmount1",
+      "typeOfReceiptsAmount2",
+      "typeOfReceiptsAmount3",
+    ];
+
+    const total = fields.reduce((sum, field) => {
+      const value = watch(field as keyof IndividualTaxReturnFormInput);
+      const numberValue = parseFloat(value?.toString() || "0");
+      return sum + (isNaN(numberValue) ? 0 : numberValue);
+    }, 0);
+
+    setValue("totalAmount3", total.toFixed(2));
+    setValue("receiptOfGiftOtherReceipts", total.toFixed(2));
+    return total;
+  };
+
+  const calcualateScheduleOneOtherAllowanceGovtTaxable = () => {
+    const incomeAmount = parseFloat(
+      watch("otherAllowanceGovtEmployment.amount") || "0"
+    );
+    const taxExempted = parseFloat(
+      watch("otherAllowanceGovtEmployment.taxExempted") || "0"
+    );
+
+    const result = incomeAmount - taxExempted;
+    setValue("otherAllowanceGovtEmployment.taxable", result.toFixed(2));
+
+    return result;
+  };
+
+  const calculateScheduleThreeNetProfit = () => {
+    const grossProfitFromAgriculture = parseFloat(
+      watch("grossProfitFromAgriculture") || "0"
+    );
+    const generalExpensesSellingExpenses = parseFloat(
+      watch("generalExpensesSellingExpenses") || "0"
+    );
+
+    // Handle NaN cases
+    const safeGrossProfit = isNaN(grossProfitFromAgriculture)
+      ? 0
+      : grossProfitFromAgriculture;
+    const safeGeneralExpensesSellingExpenses = isNaN(
+      generalExpensesSellingExpenses
+    )
+      ? 0
+      : generalExpensesSellingExpenses;
+
+    const netProfitFromAgriculture =
+      safeGrossProfit - safeGeneralExpensesSellingExpenses;
+
+    // Ensure the result is not NaN before setting the value
+    const safeNetProfit = isNaN(netProfitFromAgriculture)
+      ? 0
+      : netProfitFromAgriculture;
+
+    setValue("netProfitFromAgriculture", safeNetProfit.toFixed(2));
+    calculateTotalIncome();
+    return safeNetProfit;
+  };
+
+  const calculateTotalAdmissibleDeduction = () => {
+    const fields: FormFieldName[] = [
+      "repairCollectionAmount",
+      "municipalOrLocalTax",
+      "landRevenue",
+      "interestMortgageCapitalCharge",
+      "insurancePremiumPaid",
+      "others",
+    ];
+
+    const total = fields.reduce((sum, field) => {
+      const value = watch(field as keyof IndividualTaxReturnFormInput);
+      const numberValue = parseFloat(value?.toString() || "0");
+      return sum + (isNaN(numberValue) ? 0 : numberValue);
+    }, 0);
+
+    setValue("totalAdmissibleDeduction", total.toFixed(2));
+    return total;
+  };
+
+  const calculateRepairCollectionAmount = (
+    repairCollectionType?: RepairCollection
+  ) => {
+    const watchedRepairCollection = watch("repairCollectionProperty");
+    const effectiveRepairCollection =
+      repairCollectionType || watchedRepairCollection;
+    const totalRentValue = parseFloat(watch("totalRentValue") || "0");
+
+    let calculatedAmount = 0;
+
+    switch (effectiveRepairCollection) {
+      case "COMMERCIAL_PROPERTY":
+        calculatedAmount = totalRentValue * 0.3;
+        break;
+      case "NON_COMMERCIAL":
+      case "RESIDENTIAL_PROPERTY":
+      case "MIXED_PROPERTY":
+        calculatedAmount = totalRentValue * 0.25;
+        break;
+      default:
+        calculatedAmount = 0;
+    }
+
+    setValue("repairCollectionAmount", calculatedAmount.toFixed(2));
+  };
+
+  const calculateTotalRentValue = () => {
+    const parseNumber = (value: string | undefined): number => {
+      if (value === undefined) return 0;
+      const parsed = parseFloat(value);
+      return isNaN(parsed) ? 0 : parsed;
+    };
+
+    const rentReceivedOrAnnualValue = watch("rentReceivedOrAnnualValue");
+    const advanceRentReceived = watch("advanceRentReceived");
+    const valueOfAnyBenefit = watch("valueOfAnyBenefit");
+    const adjustedAdvanceRent = watch("adjustedAdvanceRent");
+    const vacancyAllowance = watch("vacancyAllowance");
+
+    const total =
+      parseNumber(rentReceivedOrAnnualValue) +
+      parseNumber(advanceRentReceived) +
+      parseNumber(valueOfAnyBenefit) -
+      parseNumber(adjustedAdvanceRent) -
+      parseNumber(vacancyAllowance);
+    setValue("totalRentValue", total.toFixed(2));
+  };
+
+  const calculateBusinessCapitalDifference = () => {
+    const totalAssetOfBusiness = getValues("totalAssetOfBusiness");
+    const lessBusinessLiabilities = getValues("lessBusinessLiabilities");
+    const businessCapitalAmount =
+      parseFloat(totalAssetOfBusiness?.toString() || "0") -
+      parseFloat(lessBusinessLiabilities?.toString() || "0");
+    setValue("businessCapitalAmount1", businessCapitalAmount.toFixed(2));
+  };
+
+  const calculateDirectorsShareholdingsInTheCompanies = () => {
+    const fields: FormFieldName[] = [
+      "directorsShareholdingCompanyValue1",
+      "directorsShareholdingCompanyValue2",
+      "directorsShareholdingCompanyValue3",
+    ];
+
+    const total = fields.reduce((sum, field) => {
+      const value = watch(field as keyof IndividualTaxReturnFormInput);
+      const numberValue = parseFloat(value?.toString() || "0");
+      return sum + (isNaN(numberValue) ? 0 : numberValue);
+    }, 0);
+
+    setValue("directorsShareholdingsInTheCompanies", total.toFixed(2));
+    return total;
+  };
+
+  const calculateBusinessCapitalOfPartnershipFirm = () => {
+    const fields: FormFieldName[] = [
+      "capitalContributed1",
+      "capitalContributed2",
+      "capitalContributed3",
+    ];
+
+    const total = fields.reduce((sum, field) => {
+      const value = watch(field as keyof IndividualTaxReturnFormInput);
+      const numberValue = parseFloat(value?.toString() || "0");
+      return sum + (isNaN(numberValue) ? 0 : numberValue);
+    }, 0);
+
+    setValue("businessCapitalOfPartnershipFirm", total.toFixed(2));
+    return total;
+  };
+
+  const calculateScheduleOneNetIncome = () => {
+    const totalRentValue = parseFloat(watch("totalRentValue") || "0");
+    const totalAdmissibleDeduction = parseFloat(
+      watch("totalAdmissibleDeduction") || "0"
+    );
+
+    const netIncome = totalRentValue - totalAdmissibleDeduction;
+
+    // Set the calculated net income in the form
+    setValue("netIncome", netIncome.toFixed(2));
+    return netIncome;
+  };
+
+  const calculateTaxPayersShare = () => {
+    const netIncome = parseFloat(watch("netIncome") || "0");
+    const taxpayersSharePercentage = parseFloat(
+      watch("taxpayersSharePercentage") || "0"
+    );
+
+    // Handle NaN cases
+    const safeNetIncome = isNaN(netIncome) ? 0 : netIncome;
+    const safeTaxpayersSharePercentage = isNaN(taxpayersSharePercentage)
+      ? 0
+      : taxpayersSharePercentage;
+
+    const result = safeNetIncome * (safeTaxpayersSharePercentage / 100);
+
+    // Ensure the result is not NaN before setting the value
+    const safeResult = isNaN(result) ? 0 : result;
+
+    setValue("taxpayersShareAmount", safeResult.toFixed(2));
+    calculateTotalIncome();
+    return safeResult;
+  };
+
+  // Schedule 1
+  const calculateTaxExemptedIncomeAndAllowance = useCallback(() => {
+    const fields: FormFieldName[] = [
+      "exemptedIncomeFromSalary",
+      "exemptedIncomeFromBusiness",
+      "exemptedAgriculturalIncome",
+      "incomeFromProvidentFund",
+      "foreignRemittance",
+      "typeOfTaxExemptedTaxFreeIncomeAmount6",
+      "typeOfTaxExemptedTaxFreeIncomeAmount7",
+    ];
+
+    const total = fields.reduce((sum, field) => {
+      const value = watch(field as keyof IndividualTaxReturnFormInput);
+      const numberValue = parseFloat(value?.toString() || "0");
+      return sum + (isNaN(numberValue) ? 0 : numberValue);
+    }, 0);
+
+    setValue("totalAmount2", total.toFixed(2));
+    setValue("taxExemptedIncomeAndAllowance", total.toFixed(2));
+    return total;
+  }, [setValue, watch]);
+
+  const calculateScheduleOneGovtTotals = () => {
+    const taxExemptedFields = [
+      "specialAllowanceGovtEmployment",
+      "houseRentAllowanceGovtEmployment",
+      "medicalAllowanceGovtEmployment",
+      "conveyanceAllowanceGovtEmployment",
+      "allowanceForSupportStaffGovtEmployment",
+      "leaveAllowanceGovtEmployment",
+      "honorariumRewardGovtEmployment",
+      "banglaNoboborshoAllowancesGovtEmployment",
+      "overtimeAllowanceGovtEmployment",
+      "interestAccruedProvidentFundGovtEmployment",
+      "lumpGrantGovtEmployment",
+      "gratuityGovtEmployment",
+    ] as const;
+
+    const taxableFields = [
+      "basicPayGovtEmployment",
+      "arrearPayGovtEmployment",
+      "festivalAllowanceGovtEmployment",
+    ] as const;
+
+    let totalIncome = 0;
+    let totalTaxExempted = 0;
+    let totalTaxable = 0;
+
+    // Calculate total income and tax exempted
+    for (const field of taxExemptedFields) {
+      const fieldValue = watch(field);
+      if (
+        fieldValue &&
+        typeof fieldValue === "object" &&
+        "amount" in fieldValue
+      ) {
+        const amount = parseFloat(fieldValue.amount || "0");
+        if (!isNaN(amount)) {
+          totalIncome += amount;
+          totalTaxExempted += amount;
+        }
+      }
+    }
+
+    // Calculate taxable income and add to total income
+    for (const field of taxableFields) {
+      const fieldValue = watch(field);
+      if (
+        fieldValue &&
+        typeof fieldValue === "object" &&
+        "amount" in fieldValue
+      ) {
+        const amount = parseFloat(fieldValue.amount || "0");
+        if (!isNaN(amount)) {
+          totalIncome += amount;
+          totalTaxable += amount;
+        }
+      }
+    }
+
+    // Handle otherAllowanceGovtEmployment separately
+    const otherAllowance = watch("otherAllowanceGovtEmployment");
+    if (
+      otherAllowance &&
+      typeof otherAllowance === "object" &&
+      "amount" in otherAllowance &&
+      "taxExempted" in otherAllowance
+    ) {
+      const amount = parseFloat(otherAllowance.amount || "0");
+      const taxExempted = parseFloat(otherAllowance.taxExempted || "0");
+      if (!isNaN(amount) && !isNaN(taxExempted)) {
+        totalIncome += amount;
+        totalTaxExempted += taxExempted;
+        totalTaxable += amount - taxExempted;
+      }
+    }
+
+    // Set the calculated values
+    setValue("totalGovtEmployment.amount", totalIncome.toFixed(2));
+    setValue("totalGovtEmployment.taxExempted", totalTaxExempted.toFixed(2));
+    setValue("exemptedIncomeFromSalary", totalTaxExempted.toFixed(2));
+    setValue("totalGovtEmployment.taxable", totalTaxable.toFixed(2));
+    setValue("incomeFromEmployment", totalTaxable.toFixed(2)); // for second page
+
+    calculateTotalSourceOfFunds();
+    calculateTaxExemptedIncomeAndAllowance();
+    calculateTotalIncome();
+
+    return {
+      totalIncome: isNaN(totalIncome) ? 0 : totalIncome,
+      totalTaxExempted: isNaN(totalTaxExempted) ? 0 : totalTaxExempted,
+      totalTaxable: isNaN(totalTaxable) ? 0 : totalTaxable,
+    };
+  };
+
   // Image 8 statement of assests
   const calculateGrossWealth = useCallback(() => {
-    const fields = [
+    const fields: FormFieldName[] = [
       "netWealthAtTheLastDateOfThisFinancialYear",
       "totalLiabilitiesOutsideBusiness",
     ];
@@ -377,7 +903,10 @@ export const useCalculations = (
   }, [getValues, setValue, calculateGrossWealth]);
 
   const calculateSumOfSourceOfFund = useCallback(() => {
-    const fields = ["totalSourceOfFund", "netWealthLastDateAmount"];
+    const fields: FormFieldName[] = [
+      "totalSourceOfFund",
+      "netWealthLastDateAmount",
+    ];
 
     const total = fields.reduce((sum, field) => {
       const value = watch(field as keyof IndividualTaxReturnFormInput);
@@ -391,7 +920,7 @@ export const useCalculations = (
   }, [setValue, watch, calculateNetWealthLastDateOfThisFinancialYear]);
 
   const calculateTotalSourceOfFunds = useCallback(() => {
-    const fields = [
+    const fields: FormFieldName[] = [
       "totalIncomeShownInTheReturn",
       "taxExemptedIncomeAndAllowance",
       "receiptOfGiftOtherReceipts",
@@ -408,8 +937,119 @@ export const useCalculations = (
     return total;
   }, [setValue, watch, calculateSumOfSourceOfFund]);
 
+  const calculatePrivateEmploymentTotals = useCallback(() => {
+    const fields: FormFieldName[] = [
+      "basicPayPrivateEmployment",
+      "allowancesPrivateEmployment",
+      "advanceArrearSalaryPrivateEmployment",
+      "gratuityAnnuityPensionOrSimilarBenefitPrivateEmployment",
+      "perquisitesPrivateEmployment",
+      "receiptInLieuOfOrInAdditionToSalaryOrWagesPrivateEmployment",
+      "incomeFromEmployeeShareSchemePrivateEmployment",
+      "accommodationFacilityPrivateEmployment",
+      "transportFacilityPrivateEmployment",
+      "anyOtherFacilityProvidedByEmployerPrivateEmployment",
+      "employerContributionToRecognizedProvidentFundPrivateEmployment",
+      "otherIfAnyPrivateEmployment",
+    ] as const;
+
+    let totalIncome = 0;
+
+    for (const field of fields) {
+      const fieldValue = watch(field as keyof IndividualTaxReturnFormInput);
+
+      console.log(fieldValue);
+      if (fieldValue && typeof fieldValue === "string") {
+        const amount = parseFloat(fieldValue);
+
+        if (!isNaN(amount)) {
+          totalIncome += amount;
+        }
+      }
+    }
+
+    // Handle transport facility checkbox and vehicle CC
+    const transportFacilityChecked = watch("transporFacilityPrivateCheck");
+    const vehicleCC = watch("tranportFacilityPrivateVehicleCC");
+
+    if (vehicleCC && transportFacilityChecked) {
+      const transportAmount = vehicleCC === "LT_EQ_2500" ? 120000 : 300000;
+      const currentTransportIncome = parseFloat(
+        watch("transportFacilityPrivateEmployment") || "0"
+      );
+
+      if (currentTransportIncome) {
+        totalIncome = totalIncome - currentTransportIncome;
+      }
+      totalIncome += transportAmount;
+
+      setValue(
+        "transportFacilityPrivateEmployment",
+        transportAmount.toFixed(2)
+      );
+    }
+
+    const totalExempted = Math.round(Math.min(totalIncome / 3, 450000));
+    const totalIncomeFromSalary = totalIncome - totalExempted;
+    console.log(totalIncomeFromSalary);
+
+    setValue("exemptedAmountPrivateEmployment", totalExempted.toFixed(2));
+    setValue("exemptedIncomeFromSalary", totalExempted.toFixed(2));
+    setValue("totalSalaryReceivedPrivateEmployment", totalIncome.toFixed(2));
+    setValue(
+      "totalIncomeFromSalaryPrivateEmployment",
+      totalIncomeFromSalary.toFixed(2)
+    );
+
+    setValue("incomeFromEmployment", totalIncomeFromSalary.toFixed(2)); // for the second page
+
+    calculateTotalSourceOfFunds();
+    calculateTaxExemptedIncomeAndAllowance();
+    calculateTotalIncome();
+
+    return {
+      totalIncome: isNaN(totalIncome) ? 0 : totalIncome,
+    };
+  }, [
+    watch,
+    setValue,
+    calculateTotalSourceOfFunds,
+    calculateTaxExemptedIncomeAndAllowance,
+    calculateTotalIncome,
+  ]);
+
+  // rebate
+  const calculateTotalAllowableInvestmentContribution = () => {
+    const fields: FormFieldName[] = [
+      "lifeInsurancePremium",
+      "contributionToDeposit",
+      "investmentInGovernmentSecuritiesDetails",
+      "investmentInGovernmentSecuritiesAmount",
+      "investmentInSecurities",
+      "contributionToProvidentFund",
+      "selfAndEmployersContribution",
+      "contributionToSuperAnnuationFund",
+      "contributionToBenevolentFund",
+      "contributionToZakatFundAmount",
+      "othersRebateAmount",
+    ];
+
+    const total = fields.reduce((sum, field) => {
+      const value = watch(field as keyof IndividualTaxReturnFormInput);
+      const numberValue = parseFloat(value?.toString() || "0");
+      return sum + (isNaN(numberValue) ? 0 : numberValue);
+    }, 0);
+
+    setValue("totalAllowableInvestmentContribution", total.toFixed(2));
+    calculateTaxRebate();
+    return total;
+  };
+
   const calculateTotalExpenseAndLoss = () => {
-    const fields = ["expenseRelatingToLifestyle", "giftExpense"];
+    const fields: FormFieldName[] = [
+      "expenseRelatingToLifestyle",
+      "giftExpense",
+    ];
 
     const total = fields.reduce((sum, field) => {
       const value = watch(field as keyof IndividualTaxReturnFormInput);
@@ -419,24 +1059,6 @@ export const useCalculations = (
 
     setValue("totalExpensesAndLoss", total.toFixed(2));
     calculateNetWealthLastDateOfThisFinancialYear();
-    return total;
-  };
-
-  const calculateLiabilitiesOutSideBusiness = () => {
-    const fields = [
-      "institutionalLiabilities",
-      "nonInstitutionalLiabilities",
-      "otherLiabilities",
-    ];
-
-    const total = fields.reduce((sum, field) => {
-      const value = watch(field as keyof IndividualTaxReturnFormInput);
-      const numberValue = parseFloat(value?.toString() || "0");
-      return sum + (isNaN(numberValue) ? 0 : numberValue);
-    }, 0);
-
-    setValue("totalLiabilitiesOutsideBusiness", total.toFixed(2));
-    calculateGrossWealth();
     return total;
   };
 
@@ -610,566 +1232,15 @@ export const useCalculations = (
     calculateTotalIncome();
   };
 
-  const calculateTotalIncome = useCallback(() => {
-    const fields = [
-      "incomeFromEmployment",
-      "taxpayersShareAmount",
-      "netProfitFromAgriculture",
-      "incomeFishFarmingAmount",
-      "incomeFromBusiness",
-      "incomeFromBusinessMinimum",
-      "incomeFromCapitalGains",
-      "incomeFromFinancialAssets",
-      "incomeFromOtherSources",
-      "shareOfIncomeFromAOP",
-      "incomeOfMinor",
-      "taxableIncomeFromAbroad",
-    ];
-
-    const total = fields.reduce((sum, field) => {
-      const value = watch(field as keyof IndividualTaxReturnFormInput);
-      const numberValue = parseFloat(value?.toString() || "0");
-      return sum + (isNaN(numberValue) ? 0 : numberValue);
-    }, 0);
-
-    setValue("totalIncome", total.toFixed(2));
-    setValue("totalIncomeShown", total.toFixed(2));
-    calculateTaxForm();
-    calculateTaxRebate();
-    setValue("totalIncomeShownInTheReturn", total.toFixed(2));
-
-    return total;
-  }, [setValue, watch]);
-
-  const calculateTaxDeductedCollectedAtSource = () => {
-    const fields = [
-      "interestProfitFromBankFI.taxDeductedAtSource",
-      "incomeFromSavingCertificates.taxDeductedAtSource",
-      "incomeFromSecuritiesDebentures.taxDeductedAtSource",
-      "incomeFromFinancialProductScheme.taxDeductedAtSource",
-      "dividendIncome.taxDeductedAtSource",
-      "capitalGainFromTransferOfProperty.taxDeductedAtSource",
-      "incomeFromBusinessMinTax.taxDeductedAtSource",
-      "workersParticipationFund.taxDeductedAtSource",
-      "incomeFromOtherSourcesMinTax.taxDeductedAtSource",
-      "otherSubjectToMinTax.taxDeductedAtSource",
-    ];
-    // particulars
-    // amountOfIncome:
-    // deductionsExpensesExemptedIncome:
-    // netTaxableIncome:
-    // taxDeductedAtSource:
-
-    const total = fields.reduce((sum, field) => {
-      const value = watch(field as keyof IndividualTaxReturnFormInput);
-      const numberValue = parseFloat(value?.toString() || "0");
-      return sum + (isNaN(numberValue) ? 0 : numberValue);
-    }, 0);
-
-    setValue("taxDeductedCollectedAtSource.amount", total.toFixed(2));
-    return total;
-  };
-
-  // Schedule 1
-  const calculateTaxExemptedIncomeAndAllowance = useCallback(() => {
-    const fields = [
-      "exemptedIncomeFromSalary",
-      "exemptedIncomeFromBusiness",
-      "exemptedAgriculturalIncome",
-      "incomeFromProvidentFund",
-      "foreignRemittance",
-      "typeOfTaxExemptedTaxFreeIncomeAmount6",
-      "typeOfTaxExemptedTaxFreeIncomeAmount7",
-    ];
-
-    const total = fields.reduce((sum, field) => {
-      const value = watch(field as keyof IndividualTaxReturnFormInput);
-      const numberValue = parseFloat(value?.toString() || "0");
-      return sum + (isNaN(numberValue) ? 0 : numberValue);
-    }, 0);
-
-    setValue("totalAmount2", total.toFixed(2));
-    setValue("taxExemptedIncomeAndAllowance", total.toFixed(2));
-    return total;
-  }, [setValue, watch]);
-  const calculateReceiptOfGiftOtherReceipts = () => {
-    const fields = [
-      "typeOfReceiptsAmount1",
-      "typeOfReceiptsAmount2",
-      "typeOfReceiptsAmount3",
-    ];
-
-    const total = fields.reduce((sum, field) => {
-      const value = watch(field as keyof IndividualTaxReturnFormInput);
-      const numberValue = parseFloat(value?.toString() || "0");
-      return sum + (isNaN(numberValue) ? 0 : numberValue);
-    }, 0);
-
-    setValue("totalAmount3", total.toFixed(2));
-    setValue("receiptOfGiftOtherReceipts", total.toFixed(2));
-    return total;
-  };
-
-  const calculatePrivateEmploymentTotals = useCallback(() => {
-    const fields = [
-      "basicPayPrivateEmployment",
-      "allowancesPrivateEmployment",
-      "advanceArrearSalaryPrivateEmployment",
-      "gratuityAnnuityPensionOrSimilarBenefitPrivateEmployment",
-      "perquisitesPrivateEmployment",
-      "receiptInLieuOfOrInAdditionToSalaryOrWagesPrivateEmployment",
-      "incomeFromEmployeeShareSchemePrivateEmployment",
-      "accommodationFacilityPrivateEmployment",
-      "transportFacilityPrivateEmployment",
-      "anyOtherFacilityProvidedByEmployerPrivateEmployment",
-      "employerContributionToRecognizedProvidentFundPrivateEmployment",
-      "otherIfAnyPrivateEmployment",
-    ] as const;
-
-    let totalIncome = 0;
-
-    for (const field of fields) {
-      const fieldValue = watch(field);
-      console.log(fieldValue);
-      if (fieldValue && typeof fieldValue === "string") {
-        const amount = parseFloat(fieldValue);
-        
-        if (!isNaN(amount)) {
-          totalIncome += amount;
-         
-          
-        }
-      }
-    }
-
-    // Handle transport facility checkbox and vehicle CC
-    const transportFacilityChecked = watch("transporFacilityPrivateCheck");
-    const vehicleCC = watch("tranportFacilityPrivateVehicleCC");
-
-    if (vehicleCC && transportFacilityChecked) {
-      const transportAmount = vehicleCC === "LT_EQ_2500" ? 120000 : 300000;
-      const currentTransportIncome = parseFloat(
-        watch("transportFacilityPrivateEmployment") || "0"
-      );
-
-      if (currentTransportIncome) {
-        totalIncome = totalIncome - currentTransportIncome;
-      }
-      totalIncome += transportAmount;
-
-      setValue(
-        "transportFacilityPrivateEmployment",
-        transportAmount.toFixed(2)
-      );
-    }
-
-    const totalExempted = Math.round(Math.min(totalIncome / 3, 450000));
-    const totalIncomeFromSalary = totalIncome - totalExempted;
-    console.log(totalIncomeFromSalary);
-    
-
-    setValue("exemptedAmountPrivateEmployment", totalExempted.toFixed(2));
-    setValue("exemptedIncomeFromSalary", totalExempted.toFixed(2));
-    setValue("totalSalaryReceivedPrivateEmployment", totalIncome.toFixed(2));
-    setValue(
-      "totalIncomeFromSalaryPrivateEmployment",
-      totalIncomeFromSalary.toFixed(2)
-    );
-
-    setValue("incomeFromEmployment", totalIncomeFromSalary.toFixed(2)); // for the second page
-
-    calculateTotalSourceOfFunds();
-    calculateTaxExemptedIncomeAndAllowance();
-    calculateTotalIncome();
-
-    return {
-      totalIncome: isNaN(totalIncome) ? 0 : totalIncome,
-    };
-  }, [
-    watch,
-    setValue,
-    calculateTotalSourceOfFunds,
-    calculateTaxExemptedIncomeAndAllowance,
-    calculateTotalIncome,
-  ]);
-
-  const calcualateScheduleOneOtherAllowanceGovtTaxable = () => {
-    const incomeAmount = parseFloat(
-      watch("otherAllowanceGovtEmployment.amount") || "0"
-    );
-    const taxExempted = parseFloat(
-      watch("otherAllowanceGovtEmployment.taxExempted") || "0"
-    );
-
-    const result = incomeAmount - taxExempted;
-    setValue("otherAllowanceGovtEmployment.taxable", result.toFixed(2));
-
-    return result;
-  };
-
-  const calculateScheduleOneGovtTotals = () => {
-    const taxExemptedFields = [
-      "specialAllowanceGovtEmployment",
-      "houseRentAllowanceGovtEmployment",
-      "medicalAllowanceGovtEmployment",
-      "conveyanceAllowanceGovtEmployment",
-      "allowanceForSupportStaffGovtEmployment",
-      "leaveAllowanceGovtEmployment",
-      "honorariumRewardGovtEmployment",
-      "banglaNoboborshoAllowancesGovtEmployment",
-      "overtimeAllowanceGovtEmployment",
-      "interestAccruedProvidentFundGovtEmployment",
-      "lumpGrantGovtEmployment",
-      "gratuityGovtEmployment",
-    ] as const;
-
-    const taxableFields = [
-      "basicPayGovtEmployment",
-      "arrearPayGovtEmployment",
-      "festivalAllowanceGovtEmployment",
-    ] as const;
-
-    let totalIncome = 0;
-    let totalTaxExempted = 0;
-    let totalTaxable = 0;
-
-    // Calculate total income and tax exempted
-    for (const field of taxExemptedFields) {
-      const fieldValue = watch(field);
-      if (
-        fieldValue &&
-        typeof fieldValue === "object" &&
-        "amount" in fieldValue
-      ) {
-        const amount = parseFloat(fieldValue.amount || "0");
-        if (!isNaN(amount)) {
-          totalIncome += amount;
-          totalTaxExempted += amount;
-        }
-      }
-    }
-
-    // Calculate taxable income and add to total income
-    for (const field of taxableFields) {
-      const fieldValue = watch(field);
-      if (
-        fieldValue &&
-        typeof fieldValue === "object" &&
-        "amount" in fieldValue
-      ) {
-        const amount = parseFloat(fieldValue.amount || "0");
-        if (!isNaN(amount)) {
-          totalIncome += amount;
-          totalTaxable += amount;
-        }
-      }
-    }
-
-    // Handle otherAllowanceGovtEmployment separately
-    const otherAllowance = watch("otherAllowanceGovtEmployment");
-    if (
-      otherAllowance &&
-      typeof otherAllowance === "object" &&
-      "amount" in otherAllowance &&
-      "taxExempted" in otherAllowance
-    ) {
-      const amount = parseFloat(otherAllowance.amount || "0");
-      const taxExempted = parseFloat(otherAllowance.taxExempted || "0");
-      if (!isNaN(amount) && !isNaN(taxExempted)) {
-        totalIncome += amount;
-        totalTaxExempted += taxExempted;
-        totalTaxable += amount - taxExempted;
-      }
-    }
-
-    // Set the calculated values
-    setValue("totalGovtEmployment.amount", totalIncome.toFixed(2));
-    setValue("totalGovtEmployment.taxExempted", totalTaxExempted.toFixed(2));
-    setValue("exemptedIncomeFromSalary", totalTaxExempted.toFixed(2));
-    setValue("totalGovtEmployment.taxable", totalTaxable.toFixed(2));
-    setValue("incomeFromEmployment", totalTaxable.toFixed(2)); // for second page
-
-    calculateTotalSourceOfFunds();
-    calculateTaxExemptedIncomeAndAllowance();
-    calculateTotalIncome();
-
-    return {
-      totalIncome: isNaN(totalIncome) ? 0 : totalIncome,
-      totalTaxExempted: isNaN(totalTaxExempted) ? 0 : totalTaxExempted,
-      totalTaxable: isNaN(totalTaxable) ? 0 : totalTaxable,
-    };
-  };
-
-  const calculateScheduleThreeNetProfit = () => {
-    const grossProfitFromAgriculture = parseFloat(
-      watch("grossProfitFromAgriculture") || "0"
-    );
-    const generalExpensesSellingExpenses = parseFloat(
-      watch("generalExpensesSellingExpenses") || "0"
-    );
-
-    // Handle NaN cases
-    const safeGrossProfit = isNaN(grossProfitFromAgriculture)
-      ? 0
-      : grossProfitFromAgriculture;
-    const safeGeneralExpensesSellingExpenses = isNaN(
-      generalExpensesSellingExpenses
-    )
-      ? 0
-      : generalExpensesSellingExpenses;
-
-    const netProfitFromAgriculture =
-      safeGrossProfit - safeGeneralExpensesSellingExpenses;
-
-    // Ensure the result is not NaN before setting the value
-    const safeNetProfit = isNaN(netProfitFromAgriculture)
-      ? 0
-      : netProfitFromAgriculture;
-
-    setValue("netProfitFromAgriculture", safeNetProfit.toFixed(2));
-    calculateTotalIncome();
-    return safeNetProfit;
-  };
-
-  const calculateTaxPayersShare = () => {
-    const netIncome = parseFloat(watch("netIncome") || "0");
-    const taxpayersSharePercentage = parseFloat(
-      watch("taxpayersSharePercentage") || "0"
-    );
-
-    // Handle NaN cases
-    const safeNetIncome = isNaN(netIncome) ? 0 : netIncome;
-    const safeTaxpayersSharePercentage = isNaN(taxpayersSharePercentage)
-      ? 0
-      : taxpayersSharePercentage;
-
-    const result = safeNetIncome * (safeTaxpayersSharePercentage / 100);
-
-    // Ensure the result is not NaN before setting the value
-    const safeResult = isNaN(result) ? 0 : result;
-
-    setValue("taxpayersShareAmount", safeResult.toFixed(2));
-    calculateTotalIncome();
-    return safeResult;
-  };
-
-  const calculateScheduleOneNetIncome = () => {
-    const totalRentValue = parseFloat(watch("totalRentValue") || "0");
-    const totalAdmissibleDeduction = parseFloat(
-      watch("totalAdmissibleDeduction") || "0"
-    );
-
-    const netIncome = totalRentValue - totalAdmissibleDeduction;
-
-    // Set the calculated net income in the form
-    setValue("netIncome", netIncome.toFixed(2));
-    return netIncome;
-  };
-
-  const calculateTotalAdmissibleDeduction = () => {
-    const fields = [
-      "repairCollectionAmount",
-      "municipalOrLocalTax",
-      "landRevenue",
-      "interestMortgageCapitalCharge",
-      "insurancePremiumPaid",
-      "others",
-    ];
-
-    const total = fields.reduce((sum, field) => {
-      const value = watch(field as keyof IndividualTaxReturnFormInput);
-      const numberValue = parseFloat(value?.toString() || "0");
-      return sum + (isNaN(numberValue) ? 0 : numberValue);
-    }, 0);
-
-    setValue("totalAdmissibleDeduction", total.toFixed(2));
-    return total;
-  };
-
-  const calculateRepairCollectionAmount = (
-    repairCollectionType?: RepairCollection
-  ) => {
-    const watchedRepairCollection = watch("repairCollectionProperty");
-    const effectiveRepairCollection =
-      repairCollectionType || watchedRepairCollection;
-    const totalRentValue = parseFloat(watch("totalRentValue") || "0");
-
-    let calculatedAmount = 0;
-
-    switch (effectiveRepairCollection) {
-      case "COMMERCIAL_PROPERTY":
-        calculatedAmount = totalRentValue * 0.3;
-        break;
-      case "NON_COMMERCIAL":
-      case "RESIDENTIAL_PROPERTY":
-      case "MIXED_PROPERTY":
-        calculatedAmount = totalRentValue * 0.25;
-        break;
-      default:
-        calculatedAmount = 0;
-    }
-
-    setValue("repairCollectionAmount", calculatedAmount.toFixed(2));
-  };
-
-  const calculateTotalRentValue = () => {
-    const parseNumber = (value: string | undefined): number => {
-      if (value === undefined) return 0;
-      const parsed = parseFloat(value);
-      return isNaN(parsed) ? 0 : parsed;
-    };
-
-    const rentReceivedOrAnnualValue = watch("rentReceivedOrAnnualValue");
-    const advanceRentReceived = watch("advanceRentReceived");
-    const valueOfAnyBenefit = watch("valueOfAnyBenefit");
-    const adjustedAdvanceRent = watch("adjustedAdvanceRent");
-    const vacancyAllowance = watch("vacancyAllowance");
-
-    const total =
-      parseNumber(rentReceivedOrAnnualValue) +
-      parseNumber(advanceRentReceived) +
-      parseNumber(valueOfAnyBenefit) -
-      parseNumber(adjustedAdvanceRent) -
-      parseNumber(vacancyAllowance);
-    setValue("totalRentValue", total.toFixed(2));
-  };
-
-  const calculateBusinessCapitalDifference = () => {
-    const totalAssetOfBusiness = getValues("totalAssetOfBusiness");
-    const lessBusinessLiabilities = getValues("lessBusinessLiabilities");
-    const businessCapitalAmount =
-      parseFloat(totalAssetOfBusiness?.toString() || "0") -
-      parseFloat(lessBusinessLiabilities?.toString() || "0");
-    setValue("businessCapitalAmount1", businessCapitalAmount.toFixed(2));
-  };
-
-  const calculateDirectorsShareholdingsInTheCompanies = () => {
-    const fields = ["value1", "value2", "value3"];
-
-    const total = fields.reduce((sum, field) => {
-      const value = watch(field as keyof IndividualTaxReturnFormInput);
-      const numberValue = parseFloat(value?.toString() || "0");
-      return sum + (isNaN(numberValue) ? 0 : numberValue);
-    }, 0);
-
-    setValue("directorsShareholdingsInTheCompanies", total.toFixed(2));
-    return total;
-  };
-
-  const calculateBusinessCapitalOfPartnershipFirm = () => {
-    const fields = [
-      "capitalContributed1",
-      "capitalContributed2",
-      "capitalContributed3",
-    ];
-
-    const total = fields.reduce((sum, field) => {
-      const value = watch(field as keyof IndividualTaxReturnFormInput);
-      const numberValue = parseFloat(value?.toString() || "0");
-      return sum + (isNaN(numberValue) ? 0 : numberValue);
-    }, 0);
-
-    setValue("businessCapitalOfPartnershipFirm", total.toFixed(2));
-    return total;
-  };
-
-
-
-  type TaxCategory = "GAZETTED_WAR_WOUNDED_FREEDOM_FIGHTER" | "FEMALE" | "AGED_65_OR_MORE" | "DISABLED_PERSON" | "NONE" | "THIRD_GENDER" | undefined;
-type ResidentialStatus = "RESIDENT" | "NON_RESIDENT" | undefined;
-
-function getThreshold(category: TaxCategory, isParentOfDisabledPerson: boolean | undefined): number {
-  if (category === "NONE" && !isParentOfDisabledPerson) return 350000;
-  if (category === "FEMALE" || category === "AGED_65_OR_MORE") return 400000;
-  if (category === "THIRD_GENDER" || category === "DISABLED_PERSON") return 475000;
-  if (category === "GAZETTED_WAR_WOUNDED_FREEDOM_FIGHTER" || isParentOfDisabledPerson) return 500000;
-  return 350000; // Default case
-}
-
-function calculateTax(totalIncome: number, category: TaxCategory, residentialStatus: ResidentialStatus, isParentOfDisabledPerson: boolean | undefined): number {
-  if (residentialStatus === "NON_RESIDENT") {
-      return totalIncome * 0.3; // 30% flat rate for non-residents
-  }
-
-  if (residentialStatus !== "RESIDENT") {
-      return 0; // Handle undefined case
-  }
-
-  const threshold = getThreshold(category, isParentOfDisabledPerson);
-  let taxableIncome = Math.max(0, totalIncome - threshold);
-  let tax = 0;
-
-  const slabs: [number, number][] = [
-      [100000, 0.05],
-      [400000, 0.10],
-      [500000, 0.15],
-      [500000, 0.20]
-  ];
-
-  for (const [slabAmount, rate] of slabs) {
-      if (taxableIncome <= 0) break;
-      const taxableAmountInSlab = Math.min(taxableIncome, slabAmount);
-      tax += taxableAmountInSlab * rate;
-      taxableIncome -= slabAmount;
-  }
-
-  // For any remaining income above the defined slabs
-  if (taxableIncome > 0) {
-      tax += taxableIncome * 0.25;
-  }
-
-  return Math.round(tax); // Rounding to the nearest integer
-}
-
-// Function to be used with react-hook-form
-function calculateTaxForm(): void {
-  const totalIncome = parseFloat(getValues("totalIncomeShown")?.toString() || "0");
-  const category: TaxCategory = watch("specialBenefits");
-  const residentialStatus: ResidentialStatus = watch("residentialStatus");
-  const isParentOfDisabledPerson: boolean | undefined = watch("isParentOfDisabledPerson");
-  
-  const tax = calculateTax(totalIncome, category, residentialStatus, isParentOfDisabledPerson);
-  setValue("grossTaxOnTaxableIncome", tax.toFixed(2));
-  calculateTaxRebate();
-  calculateNetTaxRebate();
-}
-
-function calculateTaxRebate() {
-  let totalIncomeShown = parseFloat(getValues("totalIncomeShown")?.toString() || "0") * 0.03;
-  let totalAllowableInvestment = parseFloat(getValues("totalAllowableInvestmentContribution")?.toString() || "0") * 0.15;
-  let taka = 1000000;
-  let taxRebate = Math.round(Math.min(totalIncomeShown,totalAllowableInvestment,taka));
-  setValue("taxRebate", taxRebate.toFixed(2));
-  calculateNetTaxRebate();
-
-}
-
-function calculateNetTaxRebate() {
-  let grossTaxableIncome = parseFloat(getValues("grossTaxOnTaxableIncome")?.toString() || "0");
-  let taxRebate = parseFloat(getValues("taxRebate")?.toString() || "0");
-  let netTaxRebate = grossTaxableIncome - taxRebate;
-  setValue("netTaxRebate", netTaxRebate.toFixed(2));
-  calculateTaxPayable();
-}
-
-function calculateTaxPayable() {
-  let netTaxRebate = parseFloat(getValues("netTaxRebate")?.toString() || "0");
-  let minimumTaxAmount =  parseFloat(getValues("minimumTaxAmount")?.toString() || "0");
-  let taxPayable = Math.max(0, netTaxRebate,minimumTaxAmount);
-  setValue("taxPayable", taxPayable.toFixed(2));
-  calculateTotalAmountPayable();
-
-}
-
-function calculateTotalAmountPayable() {
-  let taxPayable = parseFloat(getValues("taxPayable")?.toString() || "0");
-  let netWealthSurcharge  = parseFloat(getValues("netWealthSurchargeAmount")?.toString() || "0");
-  let environmentalSurcharge = parseFloat(getValues("environmentalSurcharge")?.toString() || "0");
-  let delayInterest = parseFloat(getValues("delayInterest")?.toString() || "0");
-  let totalAmountPayable = taxPayable + netWealthSurcharge + environmentalSurcharge + delayInterest;
-  setValue("totalAmountPayable", totalAmountPayable.toFixed(2));
-  setValue("totalTaxPaid", totalAmountPayable.toFixed(2));
-}
+  type TaxCategory =
+    | "GAZETTED_WAR_WOUNDED_FREEDOM_FIGHTER"
+    | "FEMALE"
+    | "AGED_65_OR_MORE"
+    | "DISABLED_PERSON"
+    | "NONE"
+    | "THIRD_GENDER"
+    | undefined;
+  type ResidentialStatus = "RESIDENT" | "NON_RESIDENT" | undefined;
 
   return {
     calculateTaxPayable,

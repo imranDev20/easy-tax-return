@@ -651,17 +651,6 @@ const IndividualTaxReturnForm: React.FC = () => {
   return (
     <div className="bg-lightGray min-h-screen">
       <div className="container mx-auto py-12">
-        {!allImagesLoaded && (
-          <div className="fixed inset-0 bg-white bg-opacity-75 z-50 flex items-center justify-center">
-            <div className="text-center">
-              <Loader2 className="w-20  h-20 animate-spin text-primary mx-auto" />
-              <p className="mt-2 text-lg font-semibold text-gray-700">
-                Loading form...
-              </p>
-            </div>
-          </div>
-        )}
-
         <h1 className="text-4xl md:text-5xl font-bold text-primary mb-4 font-serif text-center">
           Online Tax Return Form
         </h1>

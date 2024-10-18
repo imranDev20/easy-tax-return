@@ -5331,7 +5331,7 @@ export const useFormFields = (
     },
     {
       name: "totalTaxPaid",
-      type: "text",
+      type: "number",
       label: "",
       disabled: true,
       x: 410,
