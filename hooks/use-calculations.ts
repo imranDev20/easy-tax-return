@@ -282,6 +282,7 @@ export const useCalculations = (
     }, 0);
 
     setValue("totalAllowableInvestmentContribution", total.toFixed(2));
+    calculateTaxRebate();
     return total;
   };
 
@@ -633,7 +634,8 @@ export const useCalculations = (
 
     setValue("totalIncome", total.toFixed(2));
     setValue("totalIncomeShown", total.toFixed(2));
-    calculateTax();
+    calculateTaxForm();
+    calculateTaxRebate();
     setValue("totalIncomeShownInTheReturn", total.toFixed(2));
 
     return total;
@@ -1073,88 +1075,105 @@ export const useCalculations = (
 
 
 
-function calculateTax() {
-    // Step 1: Determine tax-free threshold
-    let tax = 0;
-    let totalIncome = parseFloat(getValues("totalIncomeShown")?.toString()|| "0");
-   
-    if(watch("residentialStatus") === "RESIDENT") {
-      const threshold = getThreshold();
-      let taxableIncome = Math.max(0, totalIncome - threshold);
-    
-      // Step 3: Apply tax rates
-   
-      
-      if (taxableIncome > 0) {
-          tax += Math.min(taxableIncome, 100000) * 0.05;
-          taxableIncome -= 100000;
-      }
-      if (taxableIncome > 0) {
-          tax += Math.min(taxableIncome, 400000) * 0.10;
-          taxableIncome -= 400000;
-      }
-      if (taxableIncome > 0) {
-          tax += Math.min(taxableIncome, 500000) * 0.15;
-          taxableIncome -= 500000;
-      }
-      if (taxableIncome > 0) {
-          tax += Math.min(taxableIncome, 500000) * 0.20;
-          taxableIncome -= 500000;
-      }
-      if (taxableIncome > 0) {
-          tax += taxableIncome * 0.25;
-      }
-
-    
-    }
-
-    if(watch("residentialStatus") === "NON_RESIDENT") {
-      tax += totalIncome * 0.30;
-    }
-    
-    // Step 2: Calculate taxable income
- 
-    
-   setValue("grossTaxOnTaxableIncome", tax.toFixed(2));
-}
-
-// Update the TaxCategory type to match the actual categories
-type TaxCategory = "GAZETTED_WAR_WOUNDED_FREEDOM_FIGHTER" | "FEMALE" | "AGED_65_OR_MORE" | "DISABLED_PERSON" | "NONE" | "THIRD_GENDER" | undefined;
-
+  type TaxCategory = "GAZETTED_WAR_WOUNDED_FREEDOM_FIGHTER" | "FEMALE" | "AGED_65_OR_MORE" | "DISABLED_PERSON" | "NONE" | "THIRD_GENDER" | undefined;
 type ResidentialStatus = "RESIDENT" | "NON_RESIDENT" | undefined;
 
+function getThreshold(category: TaxCategory, isParentOfDisabledPerson: boolean | undefined): number {
+  if (category === "NONE" && !isParentOfDisabledPerson) return 350000;
+  if (category === "FEMALE" || category === "AGED_65_OR_MORE") return 400000;
+  if (category === "THIRD_GENDER" || category === "DISABLED_PERSON") return 475000;
+  if (category === "GAZETTED_WAR_WOUNDED_FREEDOM_FIGHTER" || isParentOfDisabledPerson) return 500000;
+  return 350000; // Default case
+}
 
-function getThreshold(): number {
+function calculateTax(totalIncome: number, category: TaxCategory, residentialStatus: ResidentialStatus, isParentOfDisabledPerson: boolean | undefined): number {
+  if (residentialStatus === "NON_RESIDENT") {
+      return totalIncome * 0.3; // 30% flat rate for non-residents
+  }
+
+  if (residentialStatus !== "RESIDENT") {
+      return 0; // Handle undefined case
+  }
+
+  const threshold = getThreshold(category, isParentOfDisabledPerson);
+  let taxableIncome = Math.max(0, totalIncome - threshold);
+  let tax = 0;
+
+  const slabs: [number, number][] = [
+      [100000, 0.05],
+      [400000, 0.10],
+      [500000, 0.15],
+      [500000, 0.20]
+  ];
+
+  for (const [slabAmount, rate] of slabs) {
+      if (taxableIncome <= 0) break;
+      const taxableAmountInSlab = Math.min(taxableIncome, slabAmount);
+      tax += taxableAmountInSlab * rate;
+      taxableIncome -= slabAmount;
+  }
+
+  // For any remaining income above the defined slabs
+  if (taxableIncome > 0) {
+      tax += taxableIncome * 0.25;
+  }
+
+  return Math.round(tax); // Rounding to the nearest integer
+}
+
+// Function to be used with react-hook-form
+function calculateTaxForm(): void {
+  const totalIncome = parseFloat(getValues("totalIncomeShown")?.toString() || "0");
   const category: TaxCategory = watch("specialBenefits");
   const residentialStatus: ResidentialStatus = watch("residentialStatus");
-  const parentOfDisabledPerson = watch("isParentOfDisabledPerson");
+  const isParentOfDisabledPerson: boolean | undefined = watch("isParentOfDisabledPerson");
+  
+  const tax = calculateTax(totalIncome, category, residentialStatus, isParentOfDisabledPerson);
+  setValue("grossTaxOnTaxableIncome", tax.toFixed(2));
+  calculateTaxRebate();
+  calculateNetTaxRebate();
+}
 
-  if (category === "NONE" && residentialStatus === "RESIDENT") {
-    return 350000;
-  }
-
-  if((category === "FEMALE" || category === "AGED_65_OR_MORE") && residentialStatus === "RESIDENT") {
-    return 400000;
-  }
-  if((category === "THIRD_GENDER" || category === "DISABLED_PERSON") && residentialStatus === "RESIDENT") {
-    return 475000;
-  }
-  if(category === "GAZETTED_WAR_WOUNDED_FREEDOM_FIGHTER" && residentialStatus === "RESIDENT") {
-    return 500000;
-  }
-  if(parentOfDisabledPerson === true && residentialStatus === "RESIDENT") {
-    return 500000;
-  }
-
-  return 0;
+function calculateTaxRebate() {
+  let totalIncomeShown = parseFloat(getValues("totalIncomeShown")?.toString() || "0") * 0.03;
+  let totalAllowableInvestment = parseFloat(getValues("totalAllowableInvestmentContribution")?.toString() || "0") * 0.15;
+  let taka = 1000000;
+  let taxRebate = Math.round(Math.min(totalIncomeShown,totalAllowableInvestment,taka));
+  setValue("taxRebate", taxRebate.toFixed(2));
+  calculateNetTaxRebate();
 
 }
 
-// Example usage:
-// const threshold: number = getThreshold();
-// console.log(`Tax-free threshold: ${threshold}`);
+function calculateNetTaxRebate() {
+  let grossTaxableIncome = parseFloat(getValues("grossTaxOnTaxableIncome")?.toString() || "0");
+  let taxRebate = parseFloat(getValues("taxRebate")?.toString() || "0");
+  let netTaxRebate = grossTaxableIncome - taxRebate;
+  setValue("netTaxRebate", netTaxRebate.toFixed(2));
+  calculateTaxPayable();
+}
+
+function calculateTaxPayable() {
+  let netTaxRebate = parseFloat(getValues("netTaxRebate")?.toString() || "0");
+  let minimumTaxAmount =  parseFloat(getValues("minimumTaxAmount")?.toString() || "0");
+  let taxPayable = Math.max(0, netTaxRebate,minimumTaxAmount);
+  setValue("taxPayable", taxPayable.toFixed(2));
+  calculateTotalAmountPayable();
+
+}
+
+function calculateTotalAmountPayable() {
+  let taxPayable = parseFloat(getValues("taxPayable")?.toString() || "0");
+  let netWealthSurcharge  = parseFloat(getValues("netWealthSurchargeAmount")?.toString() || "0");
+  let environmentalSurcharge = parseFloat(getValues("environmentalSurcharge")?.toString() || "0");
+  let delayInterest = parseFloat(getValues("delayInterest")?.toString() || "0");
+  let totalAmountPayable = taxPayable + netWealthSurcharge + environmentalSurcharge + delayInterest;
+  setValue("totalAmountPayable", totalAmountPayable.toFixed(2));
+  setValue("totalTaxPaid", totalAmountPayable.toFixed(2));
+}
 
   return {
+    calculateTaxPayable,
+    calculateTotalAmountPayable,
     calculateTotalAssetsInBangladeshAndOutside,
     calculateTotalCashInHandAndFund,
     calculateTotalMotorValue,
@@ -1188,5 +1207,6 @@ function getThreshold(): number {
     calculateBusinessCapitalDifference,
     calculateDirectorsShareholdingsInTheCompanies,
     calculateBusinessCapitalOfPartnershipFirm,
+    calculateTax,
   };
 };

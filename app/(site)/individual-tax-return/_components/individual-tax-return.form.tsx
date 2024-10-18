@@ -2,21 +2,16 @@
 
 import { RadioGroup } from "@/components/custom/radio";
 import CustomSelect from "@/components/custom/select";
-import { zodResolver } from "@hookform/resolvers/zod";
 import Image from "next/image";
 import React, {
   useCallback,
   useEffect,
+  useMemo,
   useRef,
   useState,
   useTransition,
 } from "react";
-import {
-  Controller,
-  FormProvider,
-  SubmitHandler,
-  useForm,
-} from "react-hook-form";
+import { Controller, FormProvider, SubmitHandler } from "react-hook-form";
 
 import CustomDatePicker from "@/components/custom/date-picker";
 import SignatureField from "@/components/custom/signature";
@@ -61,8 +56,6 @@ import { createIndividualTaxReturn, createPayment } from "../actions";
 import { useToast } from "@/hooks/use-toast";
 import { useRouter } from "next/navigation";
 import CustomCheckbox from "@/components/custom/checkbox";
-import { RepairCollection } from "@prisma/client";
-import { z } from "zod";
 import { NumericFormat, numericFormatter } from "react-number-format";
 import { FormField } from "@/types/tax-return-form";
 import { useTaxReturnForm } from "@/hooks/use-tax-return-form";
@@ -227,6 +220,17 @@ const IndividualTaxReturnForm: React.FC = () => {
   const imageRefs = useRef<(HTMLDivElement | null)[]>([]);
   const formContainerRefs = useRef<(HTMLDivElement | null)[]>([]);
   const [lastScrolledIndex, setLastScrolledIndex] = useState(0);
+  const [loadedImages, setLoadedImages] = useState<boolean[]>(
+    new Array(images.length).fill(false)
+  );
+
+  const handleImageLoad = (index: number) => {
+    setLoadedImages((prev) => {
+      const newLoadedImages = [...prev];
+      newLoadedImages[index] = true;
+      return newLoadedImages;
+    });
+  };
 
   const [isMobile, setIsMobile] = useState(false);
   const [isScrollspyOpen, setIsScrollspyOpen] = useState(false);
@@ -247,7 +251,8 @@ const IndividualTaxReturnForm: React.FC = () => {
     formState: { errors, isDirty },
   } = form;
 
-  const { calculatePrivateEmploymentTotals } = calculations;
+  const { calculatePrivateEmploymentTotals, calculateTaxPayable } =
+    calculations;
 
   useEffect(() => {
     // This effect will run when the component mounts
@@ -267,7 +272,7 @@ const IndividualTaxReturnForm: React.FC = () => {
         debugOverlay.remove();
       }
     };
-  }, []);
+  }, [form, formFields]);
 
   useEffect(() => {
     const subscription = watch((value, { name, type }) => {
@@ -276,6 +281,21 @@ const IndividualTaxReturnForm: React.FC = () => {
           setValue("netWealthSurchargeAmount", "0.0");
         } else {
           setValue("netWealthSurchargeAmount", undefined);
+        }
+      }
+
+      if (name === "minimumTax") {
+        if (value.minimumTax === "DHAKA_CHATTOGRAM_CITY_CORPORATION_AREA") {
+          setValue("minimumTaxAmount", "5000.00");
+          calculateTaxPayable();
+        }
+        if (value.minimumTax === "OTHER_CITY_CORPORATION_AREA") {
+          setValue("minimumTaxAmount", "4000.00");
+          calculateTaxPayable();
+        }
+        if (value.minimumTax === "OTHER_AREA") {
+          setValue("minimumTaxAmount", "3000.00");
+          calculateTaxPayable();
         }
       }
 
@@ -293,7 +313,7 @@ const IndividualTaxReturnForm: React.FC = () => {
     });
 
     return () => subscription.unsubscribe();
-  }, [watch, setValue, calculatePrivateEmploymentTotals]);
+  }, [watch, setValue, calculatePrivateEmploymentTotals, calculateTaxPayable]);
 
   const updateScale = useCallback(() => {
     if (containerRef.current && imageRefs.current[0]) {
@@ -303,35 +323,50 @@ const IndividualTaxReturnForm: React.FC = () => {
     }
   }, []);
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const debouncedScrollToImage = useCallback(
     debounce((index: number) => {
       imageRefs.current[index]?.scrollIntoView({ behavior: "smooth" });
     }, 500),
-    []
+    [imageRefs]
   );
 
-  const handleScroll = useCallback(
-    debounce(() => {
-      const scrollPosition = window.scrollY + window.innerHeight / 2;
-      const bufferZone = window.innerHeight * 0.1;
+  const debouncedHandleScroll = useMemo(
+    () =>
+      debounce(() => {
+        const scrollPosition = window.scrollY + window.innerHeight / 2;
+        const bufferZone = window.innerHeight * 0.1;
 
-      imageRefs.current.forEach((ref, index) => {
-        if (ref) {
-          const topBoundary = ref.offsetTop + bufferZone;
-          const bottomBoundary = ref.offsetTop + ref.offsetHeight - bufferZone;
+        imageRefs.current.forEach((ref, index) => {
+          if (ref) {
+            const topBoundary = ref.offsetTop + bufferZone;
+            const bottomBoundary =
+              ref.offsetTop + ref.offsetHeight - bufferZone;
 
-          if (scrollPosition > topBoundary && scrollPosition < bottomBoundary) {
-            setCurrentImageIndex(index);
-            if (index !== lastScrolledIndex) {
-              setTargetImageIndex(index);
-              setLastScrolledIndex(index);
+            if (
+              scrollPosition > topBoundary &&
+              scrollPosition < bottomBoundary
+            ) {
+              setCurrentImageIndex(index);
+              if (index !== lastScrolledIndex) {
+                setTargetImageIndex(index);
+                setLastScrolledIndex(index);
+              }
             }
           }
-        }
-      });
-    }, 100),
-    [lastScrolledIndex]
+        });
+      }, 100),
+    [
+      lastScrolledIndex,
+      setCurrentImageIndex,
+      setTargetImageIndex,
+      setLastScrolledIndex,
+    ]
   );
+
+  const handleScroll = useCallback(() => {
+    debouncedHandleScroll();
+  }, [debouncedHandleScroll]);
 
   useEffect(() => {
     const checkMobile = () => {
@@ -387,7 +422,7 @@ const IndividualTaxReturnForm: React.FC = () => {
         return newIndex;
       });
     },
-    [images.length, debouncedScrollToImage]
+    [debouncedScrollToImage]
   );
 
   const onSubmit: SubmitHandler<IndividualTaxReturnFormInput> = async (
@@ -404,7 +439,7 @@ const IndividualTaxReturnForm: React.FC = () => {
   };
 
   const renderField = (field: FormField, imageIndex: number) => {
-    if (field.imageIndex !== imageIndex) return null;
+    if (field.imageIndex !== imageIndex || !field.isVisible) return null;
 
     const fieldStyle = {
       position: "absolute" as const,
@@ -611,9 +646,22 @@ const IndividualTaxReturnForm: React.FC = () => {
     }
   };
 
+  const allImagesLoaded = loadedImages.every((loaded) => loaded);
+
   return (
     <div className="bg-lightGray min-h-screen">
       <div className="container mx-auto py-12">
+        {!allImagesLoaded && (
+          <div className="fixed inset-0 bg-white bg-opacity-75 z-50 flex items-center justify-center">
+            <div className="text-center">
+              <Loader2 className="w-20  h-20 animate-spin text-primary mx-auto" />
+              <p className="mt-2 text-lg font-semibold text-gray-700">
+                Loading form...
+              </p>
+            </div>
+          </div>
+        )}
+
         <h1 className="text-4xl md:text-5xl font-bold text-primary mb-4 font-serif text-center">
           Online Tax Return Form
         </h1>
@@ -633,20 +681,32 @@ const IndividualTaxReturnForm: React.FC = () => {
                       ref={setImageRef(index)}
                       className="relative border border-gray-200 mb-8 rounded-lg"
                     >
-                      <Image
-                        src={image}
-                        loading="lazy"
-                        placeholder="blur"
-                        alt={`Form Background ${index + 1}`}
-                        layout="responsive"
-                        className="rounded-lg"
-                      />
-                      <div
-                        ref={setFormContainerRef(index)}
-                        className="absolute top-0 left-0 w-full h-full"
-                      >
-                        {formFields.map((field) => renderField(field, index))}
+                      <div className="relative">
+                        {!loadedImages[index] && (
+                          <div className="absolute inset-0 flex items-center justify-center bg-gray-200 rounded-lg">
+                            <Loader2 className="w-20 h-20 animate-spin text-primary" />
+                          </div>
+                        )}
+                        <Image
+                          src={image}
+                          loading="lazy"
+                          placeholder="blur"
+                          alt={`Form Background ${index + 1}`}
+                          layout="responsive"
+                          className={`rounded-lg transition-opacity duration-300 ${
+                            loadedImages[index] ? "opacity-100" : "opacity-0"
+                          }`}
+                          onLoad={() => handleImageLoad(index)}
+                        />
                       </div>
+                      {loadedImages[index] && (
+                        <div
+                          ref={setFormContainerRef(index)}
+                          className="absolute top-0 left-0 w-full h-full"
+                        >
+                          {formFields.map((field) => renderField(field, index))}
+                        </div>
+                      )}
                     </div>
                   ))}
                 </div>
@@ -724,16 +784,8 @@ const IndividualTaxReturnForm: React.FC = () => {
 
                     <div className="flex items-center space-x-4">
                       <Button
-                        onClick={() => console.log("Save for later")}
-                        variant="outline"
-                        className="px-4 py-2 text-primary border-primary hover:bg-primary hover:text-white transition-colors duration-300 font-medium"
-                      >
-                        <Save className="mr-2 h-4 w-4" />
-                        <span>Save for Later</span>
-                      </Button>
-                      <Button
                         type="submit"
-                        disabled={isPending}
+                        disabled={isPending || !allImagesLoaded}
                         className="w-full"
                       >
                         {isPending ? (
@@ -741,6 +793,8 @@ const IndividualTaxReturnForm: React.FC = () => {
                             <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                             Generating PDF...
                           </>
+                        ) : !allImagesLoaded ? (
+                          "Loading Form..."
                         ) : (
                           "Save PDF"
                         )}
