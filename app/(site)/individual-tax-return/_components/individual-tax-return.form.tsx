@@ -465,7 +465,7 @@ const IndividualTaxReturnForm: React.FC = () => {
                     <input
                       type={field.type}
                       value={value as string}
-                      onBlur={(e) => {
+                      onChange={(e) => {
                         onChange(e.target.value);
                         if (field?.onBlur) field.onBlur(e.target.value);
                       }}

@@ -334,6 +334,7 @@ export const useCalculations = (
       isParentOfDisabledPerson: boolean | undefined
     ): number => {
       if (category === "NONE" && !isParentOfDisabledPerson) return 350000;
+
       if (category === "FEMALE" || category === "AGED_65_OR_MORE")
         return 400000;
       if (category === "THIRD_GENDER" || category === "DISABLED_PERSON")
@@ -395,7 +396,9 @@ export const useCalculations = (
     let grossTaxableIncome = parseFloat(
       getValues("grossTaxOnTaxableIncome")?.toString() || "0"
     );
+
     let taxRebate = parseFloat(getValues("taxRebate")?.toString() || "0");
+
     let netTaxRebate = grossTaxableIncome - taxRebate;
     setValue("netTaxRebate", netTaxRebate.toFixed(2));
     calculateTaxPayable();
@@ -421,7 +424,9 @@ export const useCalculations = (
     const totalIncome = parseFloat(
       getValues("totalIncomeShown")?.toString() || "0"
     );
+
     const category: TaxCategory = watch("specialBenefits");
+
     const residentialStatus: ResidentialStatus = watch("residentialStatus");
     const isParentOfDisabledPerson: boolean | undefined = watch(
       "isParentOfDisabledPerson"
@@ -559,7 +564,7 @@ export const useCalculations = (
       return sum + (isNaN(numberValue) ? 0 : numberValue);
     }, 0);
 
-    setValue("totalAmount3", total.toFixed(2));
+    setValue("totalOtherReceiptsAndSources", total.toFixed(2));
     setValue("receiptOfGiftOtherReceipts", total.toFixed(2));
     return total;
   };
@@ -773,7 +778,7 @@ export const useCalculations = (
       return sum + (isNaN(numberValue) ? 0 : numberValue);
     }, 0);
 
-    setValue("totalAmount2", total.toFixed(2));
+    setValue("taxFreeIncomeTotal", total.toFixed(2));
     setValue("taxExemptedIncomeAndAllowance", total.toFixed(2));
     return total;
   }, [setValue, watch]);
