@@ -3759,32 +3759,6 @@ export const useFormFields = (
     },
 
     {
-      name: "totalAmount2",
-      type: "text",
-      label: "totalAmount2",
-
-      disabled: true,
-      x: 785,
-      y: 798,
-      width: 150,
-      height: 16,
-      imageIndex: 7,
-      isVisible: true,
-    },
-    {
-      name: "totalAmount3",
-      type: "text",
-      label: "totalAmount3",
-      disabled: true,
-      x: 785,
-      y: 928,
-      width: 150,
-      height: 16,
-      imageIndex: 7,
-      isVisible: true,
-    },
-
-    {
       name: "exemptedIncomeFromSalary",
       type: "text",
       label: "exemptedIncomeFromSalary",
@@ -3820,7 +3794,7 @@ export const useFormFields = (
       },
 
       x: 782,
-      y: 705,
+      y: 708,
       width: 157,
       height: 19,
       imageIndex: 7,
@@ -3844,7 +3818,7 @@ export const useFormFields = (
     {
       name: "foreignRemittance",
       type: "number",
-      label: "foreignRemittance",
+      label: "",
       onBlur: () => {
         calculateTaxExemptedIncomeAndAllowance();
       },
@@ -3856,91 +3830,11 @@ export const useFormFields = (
       imageIndex: 7,
       isVisible: true,
     },
-    {
-      name: "typeOfReceipts1",
-      type: "text",
-      label: "typeOfReceipts1",
 
-      x: 138,
-      y: 872,
-      width: 642,
-      height: 19,
-      imageIndex: 7,
-      isVisible: true,
-    },
-    {
-      name: "typeOfReceiptsAmount1",
-      type: "number",
-      label: "typeOfReceiptsAmount1",
-      onBlur: () => {
-        calculateReceiptOfGiftOtherReceipts();
-      },
-
-      x: 782,
-      y: 872,
-      width: 157,
-      height: 19,
-      imageIndex: 7,
-      isVisible: true,
-    },
-    {
-      name: "typeOfReceipts2",
-      type: "text",
-      label: "typeOfReceipts2",
-
-      x: 138,
-      y: 890,
-      width: 642,
-      height: 19,
-      imageIndex: 7,
-      isVisible: true,
-    },
-    {
-      name: "typeOfReceiptsAmount2",
-      type: "number",
-      label: "typeOfReceiptsAmount2",
-      onBlur: () => {
-        calculateReceiptOfGiftOtherReceipts();
-      },
-
-      x: 782,
-      y: 890,
-      width: 157,
-      height: 19,
-      imageIndex: 7,
-      isVisible: true,
-    },
-    {
-      name: "typeOfReceipts3",
-      type: "text",
-      label: "typeOfReceipts3",
-
-      x: 138,
-      y: 908,
-      width: 642,
-      height: 19,
-      imageIndex: 7,
-      isVisible: true,
-    },
-    {
-      name: "typeOfReceiptsAmount3",
-      type: "number",
-      label: "typeOfReceiptsAmount3",
-      onBlur: () => {
-        calculateReceiptOfGiftOtherReceipts();
-      },
-      x: 782,
-      y: 908,
-      width: 157,
-      height: 19,
-      imageIndex: 7,
-      isVisible: true,
-    },
     {
       name: "typeOfTaxExemptedTaxFreeIncome6",
       type: "text",
       label: "typeOfTaxExemptedTaxFreeIncome6",
-
       x: 138,
       y: 760,
       width: 645,
@@ -3985,6 +3879,108 @@ export const useFormFields = (
       y: 778,
       width: 158,
       height: 19,
+      imageIndex: 7,
+      isVisible: true,
+    },
+
+    {
+      name: "taxFreeIncomeTotal",
+      type: "number",
+      label: "",
+      disabled: true,
+      x: 785,
+      y: 798,
+      width: 150,
+      height: 16,
+      imageIndex: 7,
+      isVisible: true,
+    },
+
+    {
+      name: "typeOfReceipts1",
+      type: "text",
+      label: "",
+      x: 138,
+      y: 872,
+      width: 642,
+      height: 19,
+      imageIndex: 7,
+      isVisible: true,
+    },
+    {
+      name: "typeOfReceiptsAmount1",
+      type: "number",
+      label: "",
+      onBlur: () => {
+        calculateReceiptOfGiftOtherReceipts();
+      },
+      x: 782,
+      y: 872,
+      width: 157,
+      height: 19,
+      imageIndex: 7,
+      isVisible: true,
+    },
+    {
+      name: "typeOfReceipts2",
+      type: "text",
+      label: "",
+      x: 138,
+      y: 890,
+      width: 642,
+      height: 19,
+      imageIndex: 7,
+      isVisible: true,
+    },
+    {
+      name: "typeOfReceiptsAmount2",
+      type: "number",
+      label: "",
+      onBlur: () => {
+        calculateReceiptOfGiftOtherReceipts();
+      },
+      x: 782,
+      y: 890,
+      width: 157,
+      height: 19,
+      imageIndex: 7,
+      isVisible: true,
+    },
+    {
+      name: "typeOfReceipts3",
+      type: "text",
+      label: "",
+      x: 138,
+      y: 908,
+      width: 642,
+      height: 19,
+      imageIndex: 7,
+      isVisible: true,
+    },
+    {
+      name: "typeOfReceiptsAmount3",
+      type: "number",
+      label: "",
+      onBlur: () => {
+        calculateReceiptOfGiftOtherReceipts();
+      },
+      x: 782,
+      y: 908,
+      width: 157,
+      height: 19,
+      imageIndex: 7,
+      isVisible: true,
+    },
+
+    {
+      name: "totalOtherReceiptsAndSources",
+      type: "number",
+      label: "",
+      disabled: true,
+      x: 785,
+      y: 928,
+      width: 150,
+      height: 16,
       imageIndex: 7,
       isVisible: true,
     },
@@ -4824,7 +4820,7 @@ export const useFormFields = (
     },
     {
       name: "depositPensionScheme",
-      type: "text",
+      type: "number",
       label: "",
       x: 770,
       y: 414,
@@ -4839,7 +4835,7 @@ export const useFormFields = (
 
     {
       name: "loansGivenToOthers",
-      type: "text",
+      type: "number",
       label: "",
       x: 770,
       y: 432,
@@ -5115,7 +5111,7 @@ export const useFormFields = (
 
     {
       name: "bankBalance",
-      type: "text",
+      type: "number",
       label: "bankBalance",
       x: 620,
       y: 680,
@@ -5129,7 +5125,7 @@ export const useFormFields = (
     },
     {
       name: "cashInHand",
-      type: "text",
+      type: "number",
       label: "cashInHand",
       x: 620,
       y: 698,
@@ -5154,7 +5150,7 @@ export const useFormFields = (
     },
     {
       name: "othersValue",
-      type: "text",
+      type: "number",
       label: "others2",
       x: 620,
       y: 715,
@@ -5169,7 +5165,7 @@ export const useFormFields = (
 
     {
       name: "totalCashInHandsAndFundOutsideBusiness",
-      type: "text",
+      type: "number",
       label: "",
       disabled: true,
       x: 775,
@@ -5181,7 +5177,7 @@ export const useFormFields = (
     },
     {
       name: "totalAssetslocatedInBangladesh",
-      type: "text",
+      type: "number",
       label: "",
       disabled: true,
       x: 775,
@@ -5193,7 +5189,7 @@ export const useFormFields = (
     },
     {
       name: "assetOutsideBangladesh",
-      type: "text",
+      type: "number",
       label: "assetOutsideBangladesh",
       x: 770,
       y: 768,
@@ -5209,7 +5205,7 @@ export const useFormFields = (
 
     {
       name: "totalAssetsInBangladeshAndOutsideBangladesh",
-      type: "text",
+      type: "number",
       label: "",
       disabled: true,
       x: 775,
@@ -5331,7 +5327,7 @@ export const useFormFields = (
     },
     {
       name: "totalTaxPaid",
-      type: "text",
+      type: "number",
       label: "",
       disabled: true,
       x: 410,

@@ -278,8 +278,8 @@ export const individualTaxReturnSchema = z.object({
   typeOfTaxExemptedTaxFreeIncome7: z.string().optional(),
   typeOfTaxExemptedTaxFreeIncomeAmount6: z.string().optional(),
   typeOfTaxExemptedTaxFreeIncomeAmount7: z.string().optional(),
-  totalAmount2: z.string().optional(),
-  totalAmount3: z.string().optional(),
+  taxFreeIncomeTotal: z.string().optional(),
+  totalOtherReceiptsAndSources: z.string().optional(),
 
   // Image 8
   netWealthLastDate: z.nativeEnum(NetWealthLastDate),

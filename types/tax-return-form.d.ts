@@ -38,8 +38,10 @@ type NestedKeys<T, Prefix extends string = ""> = T extends z.ZodType
     }[keyof T & (string | number)]
   : never;
 
+export type FormFieldName = NestedKeys<IndividualTaxReturnFormInput>;
+
 interface BaseFormField {
-  name: NestedKeys<IndividualTaxReturnFormInput>;
+  name: FormFieldName;
   type: FieldType;
   label: string;
   x: number;
