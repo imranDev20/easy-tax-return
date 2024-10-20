@@ -41,6 +41,7 @@ export const individualTaxReturnSchema = z.object({
   zone: z.string().min(1, "Zone is required"),
   assessmentYear: z.string(),
   residentialStatus: z.enum(["RESIDENT", "NON_RESIDENT"]),
+  assesseeStatus: z.enum(["INDIVIDUAL", "FIRM","HINDU_UNDEVIDED_FAMILY", "OTHERS"]),
   specialBenefits: z
     .enum([
       "NONE",
