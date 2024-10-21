@@ -36,6 +36,20 @@ const incomeFromCapitalGainsSchema = z.object({
   taxableAmount: z.string().nullable().optional(),
 });
 
+const financialAssetsSchema = z.object({
+  description:z.string().optional(),
+  balance: z.string().nullable().optional(),
+  interestProfit: z.string().nullable().optional(),
+  sourceTax: z.string().nullable().optional(),
+
+});
+
+const calculationOfRebateAmount = z.object({
+  totalAmount : z.string().nullable().optional(),
+  rebate: z.string().nullable().optional(),
+  applicableRebate:z.string().nullable().optional()
+});
+
 // Define the Zod schema
 export const individualTaxReturnSchema = z.object({
   userId: z.string().optional(),
@@ -248,10 +262,40 @@ export const individualTaxReturnSchema = z.object({
   otherSubjectToMinTax: incomeItemSchema,
 
   // Image 7
+  shonchoyparta: financialAssetsSchema,
+  profitFromShoychoyparta2: financialAssetsSchema,
+  profitFromShoychoyparta3: financialAssetsSchema,
+  profitFromShoychoyparta4: financialAssetsSchema,
+  profitFromShoychoyparta5: financialAssetsSchema,
+  profitFromShoychoyparta6: financialAssetsSchema,
+  profitFromShoychoyparta7: financialAssetsSchema,
+  profitFromShoychoyparta8: financialAssetsSchema,
+  profitFromShoychoyparta9: financialAssetsSchema,
+  profitFromShoychoyparta10: financialAssetsSchema,
+  profitFromShoychoypartaTotal: financialAssetsSchema,
+
+  interestFromSecurities: financialAssetsSchema,
+  profitInterestFromGovtSecurities2: financialAssetsSchema,
+  profitInterestFromGovtSecurities3: financialAssetsSchema,
+  profitInterestFromGovtSecurities4: financialAssetsSchema,
+  profitInterestFromGovtSecurities5: financialAssetsSchema,
+  profitInterestFromGovtSecurities6: financialAssetsSchema,
+  profitInterestFromGovtSecurities7: financialAssetsSchema,
+  profitInterestFromGovtSecurities8: financialAssetsSchema,
+  profitInterestFromGovtSecurities9: financialAssetsSchema,
+  profitInterestFromGovtSecurities10: financialAssetsSchema,
+  profitInterestFromGovtSecuritiesTotal: financialAssetsSchema,
+
+
+
+
+
+
+  // Image 8
   lifeInsurancePremium: z.string().optional(),
   contributionToDeposit: z.string().optional(),
   investmentInGovernmentSecuritiesDetails: z.string().optional(),
-  investmentInGovernmentSecuritiesAmount: z.string().optional(),
+  investmentInSecuritiesListed: z.string().optional(),
   investmentInSecurities: z.string().optional(),
   contributionToProvidentFund: z.string().optional(),
   selfAndEmployersContribution: z.string().optional(),
@@ -261,11 +305,18 @@ export const individualTaxReturnSchema = z.object({
   contributionToZakatFundAmount: z.string().optional(),
   othersRebateDetails: z.string().optional(),
   othersRebateAmount: z.string().optional(),
+  othersIfAny: z.string().optional(),
+  amountOfTaxRebate: z.string().optional(),
 
   totalAllowableInvestmentContribution: z.string().optional(),
   taxOnIncomeFromPoultryHatcheriesFishFarming: z.string().optional(),
 
-  // Image 8
+  totalIncomeRebateTable: calculationOfRebateAmount,
+  totalAllowableInvestmentRebateTable: calculationOfRebateAmount,
+  taka1000000: calculationOfRebateAmount,
+  applicableRebate:calculationOfRebateAmount,
+
+  // Image 9
   expensesForFood: personalExpenseSchema,
   housingExpense: personalExpenseSchema,
   personalTransportationExpenses: personalExpenseSchema,
@@ -297,7 +348,7 @@ export const individualTaxReturnSchema = z.object({
   taxFreeIncomeTotal: z.string().optional(),
   totalOtherReceiptsAndSources: z.string().optional(),
 
-  // Image 8
+  // Image 9
   netWealthLastDate: z.nativeEnum(NetWealthLastDate),
   netWealthLastDateAmount: z.string().optional(),
   giftExpense: z.string().optional(),
@@ -339,7 +390,7 @@ export const individualTaxReturnSchema = z.object({
   directorsShareholdingsInTheCompanies: z.string().optional(),
   businessCapitalOfPartnershipFirm: z.string().optional(),
 
-  // Image 9
+  // Image 10
   nonAgriculturalPropertyLandHouseProperty: z.string().optional(),
 
   nonAgriculturalLocationDescription1: z.string().optional(),
@@ -397,7 +448,7 @@ export const individualTaxReturnSchema = z.object({
   totalAssetsInBangladeshAndOutsideBangladesh: z.string().optional(),
   humanVarification: z.string(),
 
-  // Image 10
+  // Image 11
   totalIncomeShown: z.string().optional(),
   totalTaxPaid: z.string().optional(),
 });
