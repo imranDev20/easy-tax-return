@@ -1,9 +1,4 @@
-import {
-  Cog,
-  LayoutGrid,
-  ShoppingCart,
-  Users
-} from "lucide-react";
+import { LayoutDashboard, FileText, Users } from "lucide-react";
 
 type Submenu = {
   href: string;
@@ -33,25 +28,35 @@ export function getMenuList(pathname: string): Group[] {
           href: "/",
           label: "Dashboard",
           active: pathname === "/admin",
-          icon: LayoutGrid,
+          icon: LayoutDashboard,
           submenus: [],
         },
       ],
     },
 
     {
-      groupLabel: "Management",
+      groupLabel: "",
       menus: [
         {
           href: "/tax-returns",
           label: "Tax Returns",
           active: pathname.includes("/tax-returns"),
-          icon: ShoppingCart,
+          icon: FileText,
           submenus: [],
-        },              
+        },
       ],
     },
-
-    
+    {
+      groupLabel: "",
+      menus: [
+        {
+          href: "/users",
+          label: "Users",
+          active: pathname.includes("/users"),
+          icon: Users,
+          submenus: [],
+        },
+      ],
+    },
   ];
 }
