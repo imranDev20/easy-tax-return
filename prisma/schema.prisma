@@ -71,16 +71,18 @@ enum TransportCCType {
 }
 
 model User {
-  id            String    @id @default(cuid())
+  id            String           @id @default(cuid())
   name          String?
-  email         String?   @unique
+  email         String?          @unique
   emailVerified DateTime?
   image         String?
   password      String?
-  role          Role      @default(USER)
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
+  role          Role             @default(USER)
   accounts      Account[]
+  orders        Order[] // Add this line
+  individualTax IndividualTaxes? // Add this line
+  createdAt     DateTime         @default(now())
+  updatedAt     DateTime         @updatedAt
 }
 
 model Account {
@@ -104,8 +106,9 @@ model Account {
 
 model IndividualTaxes {
   id                                                             String               @id @default(cuid())
-  userId                                                         String
-  // Image 1
+  userId                                                         String               @unique
+  user                                                           User                 @relation(fields: [userId], references: [id])
+  order                                                          Order? // Add this line
   taxpayerName                                                   String
   nationalId                                                     String
   tin                                                            String
@@ -371,13 +374,28 @@ model IndividualTaxes {
   updatedAt                                                      DateTime             @updatedAt
 }
 
-model Payment {
-  id        String   @id @default(cuid())
-  userId    String // user id from firebase
-  amount    Float?
-  trxID     String?
-  paymentID String?
-  date      String?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+enum PaymentMethod {
+  BKASH
+  NAGAD
+  UPAY
+  SURECASH
+  MKASH
+  ROCKET
+  BANK_TRANSFER
+  OTHERS
+}
+
+model Order {
+  id                String           @id @default(cuid())
+  userId            String
+  user              User             @relation(fields: [userId], references: [id])
+  individualTaxesId String?          @unique
+  individualTaxes   IndividualTaxes? @relation(fields: [individualTaxesId], references: [id])
+  amount            Float?
+  paymentMethod     PaymentMethod?
+  transactionID     String?
+  paymentID         String?
+  date              String?
+  createdAt         DateTime         @default(now())
+  updatedAt         DateTime         @updatedAt
 }
