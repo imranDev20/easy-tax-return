@@ -2399,7 +2399,7 @@ export const useFormFields = (
       label: "",
 
       x: 318,
-      y: 169,
+      y: 173,
       width: 590,
       height: 21,
       imageIndex: 5,
@@ -2410,7 +2410,7 @@ export const useFormFields = (
       type: "text",
       label: "",
       x: 318,
-      y: 192,
+      y: 196,
       width: 590,
       height: 21,
       imageIndex: 5,
@@ -2421,7 +2421,7 @@ export const useFormFields = (
       type: "text",
       label: "",
       x: 318,
-      y: 213,
+      y: 218,
       width: 590,
       height: 21,
       imageIndex: 5,
@@ -2432,7 +2432,18 @@ export const useFormFields = (
       type: "number",
       label: "",
       x: 703,
-      y: 285,
+      y: 302,
+      width: 205,
+      height: 18,
+      imageIndex: 5,
+      isVisible: true,
+    },
+    {
+      name: "purchase",
+      type: "number",
+      label: "",
+      x: 703,
+      y: 320,
       width: 205,
       height: 18,
       imageIndex: 5,
@@ -2443,13 +2454,11 @@ export const useFormFields = (
       type: "number",
       label: "",
       x: 703,
-      y: 303,
+      y: 338,
       width: 205,
       height: 18,
       imageIndex: 5,
-      onBlur() {
-        calculateNetProfitFromBusinessIncome();
-      },
+      disabled:true,
       isVisible: true,
     },
     {
@@ -2457,7 +2466,7 @@ export const useFormFields = (
       type: "number",
       label: "",
       x: 703,
-      y: 320,
+      y: 355,
       width: 205,
       height: 18,
       imageIndex: 5,
@@ -2471,7 +2480,7 @@ export const useFormFields = (
       type: "number",
       label: "",
       x: 703,
-      y: 338,
+      y: 372,
       width: 205,
       height: 18,
       imageIndex: 5,
@@ -2486,7 +2495,7 @@ export const useFormFields = (
       label: "",
       disabled: true,
       x: 702,
-      y: 358,
+      y: 392,
       width: 205,
       height: 15,
       imageIndex: 5,
@@ -2499,7 +2508,7 @@ export const useFormFields = (
       label: "",
       disabled: false,
       x: 702,
-      y: 425,
+      y: 472,
       width: 200,
       height: 16,
       imageIndex: 5,
@@ -2513,7 +2522,7 @@ export const useFormFields = (
       type: "number",
       label: "inventories",
       x: 700,
-      y: 442,
+      y: 488,
       width: 205,
       height: 18,
       imageIndex: 5,
@@ -2527,7 +2536,7 @@ export const useFormFields = (
       type: "number",
       label: "",
       x: 700,
-      y: 460,
+      y: 506,
       width: 205,
       height: 18,
       imageIndex: 5,
@@ -2542,7 +2551,7 @@ export const useFormFields = (
       type: "number",
       label: "",
       x: 700,
-      y: 477,
+      y: 524,
       width: 205,
       height: 18,
       imageIndex: 5,
@@ -2558,9 +2567,9 @@ export const useFormFields = (
       label: "totalAssets",
       disabled: true,
       x: 702,
-      y: 495,
+      y: 542,
       width: 200,
-      height: 15,
+      height: 17,
       imageIndex: 5,
       isVisible: true,
     },
@@ -2569,7 +2578,7 @@ export const useFormFields = (
       type: "number",
       label: "openingCapital",
       x: 700,
-      y: 512,
+      y: 560,
       width: 205,
       height: 18,
       imageIndex: 5,
@@ -2584,7 +2593,7 @@ export const useFormFields = (
       label: "",
       disabled: true,
       x: 702,
-      y: 530,
+      y: 578,
       width: 200,
       height: 15,
       imageIndex: 5,
@@ -2595,7 +2604,7 @@ export const useFormFields = (
       type: "number",
       label: "",
       x: 700,
-      y: 548,
+      y: 594,
       width: 205,
       height: 18,
       imageIndex: 5,
@@ -2610,7 +2619,7 @@ export const useFormFields = (
       label: "",
       disabled: true,
       x: 702,
-      y: 565,
+      y: 614,
       width: 200,
       height: 15,
       imageIndex: 5,
@@ -2621,7 +2630,7 @@ export const useFormFields = (
       type: "number",
       label: "liabilities",
       x: 700,
-      y: 583,
+      y: 630,
       width: 205,
       height: 18,
       imageIndex: 5,
@@ -2637,585 +2646,875 @@ export const useFormFields = (
 
       disabled: true,
       x: 702,
-      y: 602,
+      y: 648,
       width: 200,
-      height: 15,
+      height: 17,
       imageIndex: 5,
       isVisible: true,
     },
+    {
+      name: "incomeFromShareTransferListedCompany.capitalGain",
+      type: "number",
+      label: "",
+
+      disabled: false,
+      x: 475,
+      y: 788,
+      width: 142,
+      height: 35,
+      imageIndex: 5,
+      isVisible: true,
+    },
+    {
+      name: "incomeFromShareTransferListedCompany.exemptedAmount",
+      type: "number",
+      label: "",
+
+      disabled: false,
+      x: 618,
+      y: 788,
+      width: 144,
+      height: 35,
+      imageIndex: 5,
+      isVisible: true,
+    },
+    {
+      name: "incomeFromShareTransferListedCompany.taxableAmount",
+      type: "number",
+      label: "",
+
+      disabled: true,
+      x: 765,
+      y: 788,
+      width: 143,
+      height: 34,
+      imageIndex: 5,
+      isVisible: true,
+    },
+    {
+      name: "incomeFromCapitalGain2.description",
+      type: "text",
+      label: "",
+
+      disabled: false,
+      x: 182,
+      y: 822,
+      width: 290,
+      height: 17,
+      imageIndex: 5,
+      isVisible: true,
+    },
+    {
+      name: "incomeFromCapitalGain2.capitalGain",
+      type: "number",
+      label: "",
+
+      disabled: false,
+      x: 475,
+      y: 822,
+      width: 142,
+      height: 17,
+      imageIndex: 5,
+      isVisible: true,
+    },
+    {
+      name: "incomeFromCapitalGain2.exemptedAmount",
+      type: "number",
+      label: "",
+
+      disabled: false,
+      x: 618,
+      y: 822,
+      width: 144,
+      height: 17,
+      imageIndex: 5,
+      isVisible: true,
+    },
+    {
+      name: "incomeFromCapitalGain2.taxableAmount",
+      type: "number",
+      label: "",
+
+      disabled: true,
+      x: 765,
+      y: 822,
+      width: 142,
+      height: 17,
+      imageIndex: 5,
+      isVisible: true,
+    },
+    {
+      name: "incomeFromCapitalGain3.description",
+      type: "text",
+      label: "",
+
+      disabled: false,
+      x: 182,
+      y: 840,
+      width: 290,
+      height: 17,
+      imageIndex: 5,
+      isVisible: true,
+    },
+    {
+      name: "incomeFromCapitalGain3.capitalGain",
+      type: "number",
+      label: "",
+
+      disabled: false,
+      x: 475,
+      y: 840,
+      width: 142,
+      height: 17,
+      imageIndex: 5,
+      isVisible: true,
+    },
+    {
+      name: "incomeFromCapitalGain3.exemptedAmount",
+      type: "number",
+      label: "",
+
+      disabled: false,
+      x: 618,
+      y: 840,
+      width: 144,
+      height: 17,
+      imageIndex: 5,
+      isVisible: true,
+    },
+    {
+      name: "incomeFromCapitalGain3.taxableAmount",
+      type: "number",
+      label: "",
+
+      disabled: true,
+      x: 765,
+      y: 840,
+      width: 142,
+      height: 17,
+      imageIndex: 5,
+      isVisible: true,
+    },
+    {
+      name: "incomeFromCapitalGain4.description",
+      type: "text",
+      label: "",
+
+      disabled: false,
+      x: 182,
+      y: 858,
+      width: 290,
+      height: 17,
+      imageIndex: 5,
+      isVisible: true,
+    },
+    {
+      name: "incomeFromCapitalGain4.capitalGain",
+      type: "number",
+      label: "",
+
+      disabled: false,
+      x: 475,
+      y: 858,
+      width: 142,
+      height: 17,
+      imageIndex: 5,
+      isVisible: true,
+    },
+    {
+      name: "incomeFromCapitalGain4.exemptedAmount",
+      type: "number",
+      label: "",
+
+      disabled: false,
+      x: 618,
+      y: 858,
+      width: 144,
+      height: 17,
+      imageIndex: 5,
+      isVisible: true,
+    },
+    {
+      name: "incomeFromCapitalGain4.taxableAmount",
+      type: "number",
+      label: "",
+
+      disabled: true,
+      x: 765,
+      y: 858,
+      width: 142,
+      height: 17,
+      imageIndex: 5,
+      isVisible: true,
+    },
+    {
+      name: "incomeFromCapitalGain5.description",
+      type: "text",
+      label: "",
+
+      disabled: false,
+      x: 182,
+      y: 876,
+      width: 290,
+      height: 17,
+      imageIndex: 5,
+      isVisible: true,
+    },
+    {
+      name: "incomeFromCapitalGain5.capitalGain",
+      type: "number",
+      label: "",
+
+      disabled: false,
+      x: 475,
+      y: 876,
+      width: 142,
+      height: 17,
+      imageIndex: 5,
+      isVisible: true,
+    },
+    {
+      name: "incomeFromCapitalGain5.exemptedAmount",
+      type: "number",
+      label: "",
+
+      disabled: false,
+      x: 618,
+      y: 876,
+      width: 144,
+      height: 17,
+      imageIndex: 5,
+      isVisible: true,
+    },
+    {
+      name: "incomeFromCapitalGain5.taxableAmount",
+      type: "number",
+      label: "",
+
+      disabled: true,
+      x: 765,
+      y: 876,
+      width: 142,
+      height: 17,
+      imageIndex: 5,
+      isVisible: true,
+    },
+    {
+      name: "incomeFromCapitaGainsTotal.capitalGain",
+      type: "number",
+      label: "",
+
+      disabled: true,
+      x: 475,
+      y: 894,
+      width: 142,
+      height: 17,
+      imageIndex: 5,
+      isVisible: true,
+    },
+    {
+      name: "incomeFromCapitaGainsTotal.exemptedAmount",
+      type: "number",
+      label: "",
+
+      disabled: true,
+      x: 618,
+      y: 894,
+      width: 144,
+      height: 17,
+      imageIndex: 5,
+      isVisible: true,
+    },
+    {
+      name: "incomeFromCapitaGainsTotal.taxableAmount",
+      type: "number",
+      label: "",
+
+      disabled: true,
+      x: 765,
+      y: 894,
+      width: 142,
+      height: 17,
+      imageIndex: 5,
+      isVisible: true,
+    },
+    
+   
+    
+
 
     // statement of income subject to minimum tax .........................................
-    {
-      name: "interestProfitFromBankFI.amountOfIncome",
-      type: "number",
-      label: "",
-      onBlur: () => {
-        calculateNetTaxableIncome();
-      },
-      x: 490,
-      y: 730,
-      width: 115,
-      height: 18,
-      imageIndex: 5,
-      isVisible: true,
-    },
-    {
-      name: "interestProfitFromBankFI.deductionsExpensesExemptedIncome",
-      type: "number",
-      label: "",
-      onBlur: () => {
-        calculateNetTaxableIncome();
-      },
-      x: 605,
-      y: 730,
-      width: 115,
-      height: 18,
-      imageIndex: 5,
-      isVisible: true,
-    },
-    {
-      name: "interestProfitFromBankFI.netTaxableIncome",
-      type: "number",
-      label: "",
-      disabled: true,
-      x: 720,
-      y: 732,
-      width: 105,
-      height: 15,
-      imageIndex: 5,
-      isVisible: true,
-    },
-    {
-      name: "interestProfitFromBankFI.taxDeductedAtSource",
-      type: "number",
-      label: "",
-      value: "",
-      onBlur: () => {
-        calculateTaxDeductedCollectedAtSource();
-      },
-      x: 828,
-      y: 730,
-      width: 112,
-      height: 18,
-      imageIndex: 5,
-      isVisible: true,
-    },
-    {
-      name: "incomeFromSavingCertificates.amountOfIncome",
-      type: "number",
-      label: "",
-      onBlur: () => {
-        calculateNetTaxableIncome();
-      },
+    // {
+    //   name: "interestProfitFromBankFI.amountOfIncome",
+    //   type: "number",
+    //   label: "",
+    //   onBlur: () => {
+    //     calculateNetTaxableIncome();
+    //   },
+    //   x: 490,
+    //   y: 730,
+    //   width: 115,
+    //   height: 18,
+    //   imageIndex: 5,
+    //   isVisible: true,
+    // },
+    // {
+    //   name: "interestProfitFromBankFI.deductionsExpensesExemptedIncome",
+    //   type: "number",
+    //   label: "",
+    //   onBlur: () => {
+    //     calculateNetTaxableIncome();
+    //   },
+    //   x: 605,
+    //   y: 730,
+    //   width: 115,
+    //   height: 18,
+    //   imageIndex: 5,
+    //   isVisible: true,
+    // },
+    // {
+    //   name: "interestProfitFromBankFI.netTaxableIncome",
+    //   type: "number",
+    //   label: "",
+    //   disabled: true,
+    //   x: 720,
+    //   y: 732,
+    //   width: 105,
+    //   height: 15,
+    //   imageIndex: 5,
+    //   isVisible: true,
+    // },
+    // {
+    //   name: "interestProfitFromBankFI.taxDeductedAtSource",
+    //   type: "number",
+    //   label: "",
+    //   value: "",
+    //   onBlur: () => {
+    //     calculateTaxDeductedCollectedAtSource();
+    //   },
+    //   x: 828,
+    //   y: 730,
+    //   width: 112,
+    //   height: 18,
+    //   imageIndex: 5,
+    //   isVisible: true,
+    // },
+    // {
+    //   name: "incomeFromSavingCertificates.amountOfIncome",
+    //   type: "number",
+    //   label: "",
+    //   onBlur: () => {
+    //     calculateNetTaxableIncome();
+    //   },
 
-      x: 490,
-      y: 750,
-      width: 115,
-      height: 18,
-      imageIndex: 5,
-      isVisible: true,
-    },
-    {
-      name: "incomeFromSavingCertificates.deductionsExpensesExemptedIncome",
-      type: "number",
-      label: "incomeFromSavingCertificatesDeductions",
-      onBlur: () => {
-        calculateNetTaxableIncome();
-      },
-      x: 605,
-      y: 748,
-      width: 115,
-      height: 18,
-      imageIndex: 5,
-      isVisible: true,
-    },
-    {
-      name: "incomeFromSavingCertificates.netTaxableIncome",
-      type: "number",
-      label: "incomeFromSavingCertificatesNetTaxableIncome",
+    //   x: 490,
+    //   y: 750,
+    //   width: 115,
+    //   height: 18,
+    //   imageIndex: 5,
+    //   isVisible: true,
+    // },
+    // {
+    //   name: "incomeFromSavingCertificates.deductionsExpensesExemptedIncome",
+    //   type: "number",
+    //   label: "incomeFromSavingCertificatesDeductions",
+    //   onBlur: () => {
+    //     calculateNetTaxableIncome();
+    //   },
+    //   x: 605,
+    //   y: 748,
+    //   width: 115,
+    //   height: 18,
+    //   imageIndex: 5,
+    //   isVisible: true,
+    // },
+    // {
+    //   name: "incomeFromSavingCertificates.netTaxableIncome",
+    //   type: "number",
+    //   label: "incomeFromSavingCertificatesNetTaxableIncome",
 
-      disabled: true,
-      x: 720,
-      y: 750,
-      width: 105,
-      height: 15,
-      imageIndex: 5,
-      isVisible: true,
-    },
-    {
-      name: "incomeFromSavingCertificates.taxDeductedAtSource",
-      type: "number",
-      label: "incomeFromSavingCertificatesTax",
-      onBlur: () => {
-        calculateTaxDeductedCollectedAtSource();
-      },
-      x: 828,
-      y: 748,
-      width: 112,
-      height: 18,
-      imageIndex: 5,
-      isVisible: true,
-    },
-    {
-      name: "incomeFromSecuritiesDebentures.amountOfIncome",
-      type: "number",
-      label: "incomeFromSecuritiesDebenturesAmount",
-      onBlur: () => {
-        calculateNetTaxableIncome();
-      },
-      x: 490,
-      y: 765,
-      width: 115,
-      height: 18,
-      imageIndex: 5,
-      isVisible: true,
-    },
-    {
-      name: "incomeFromSecuritiesDebentures.deductionsExpensesExemptedIncome",
-      type: "number",
-      label: "incomeFromSecuritiesDebenturesDeductions",
-      onBlur: () => {
-        calculateNetTaxableIncome();
-      },
-      x: 605,
-      y: 766,
-      width: 115,
-      height: 18,
-      imageIndex: 5,
-      isVisible: true,
-    },
+    //   disabled: true,
+    //   x: 720,
+    //   y: 750,
+    //   width: 105,
+    //   height: 15,
+    //   imageIndex: 5,
+    //   isVisible: true,
+    // },
+    // {
+    //   name: "incomeFromSavingCertificates.taxDeductedAtSource",
+    //   type: "number",
+    //   label: "incomeFromSavingCertificatesTax",
+    //   onBlur: () => {
+    //     calculateTaxDeductedCollectedAtSource();
+    //   },
+    //   x: 828,
+    //   y: 748,
+    //   width: 112,
+    //   height: 18,
+    //   imageIndex: 5,
+    //   isVisible: true,
+    // },
+    // {
+    //   name: "incomeFromSecuritiesDebentures.amountOfIncome",
+    //   type: "number",
+    //   label: "incomeFromSecuritiesDebenturesAmount",
+    //   onBlur: () => {
+    //     calculateNetTaxableIncome();
+    //   },
+    //   x: 490,
+    //   y: 765,
+    //   width: 115,
+    //   height: 18,
+    //   imageIndex: 5,
+    //   isVisible: true,
+    // },
+    // {
+    //   name: "incomeFromSecuritiesDebentures.deductionsExpensesExemptedIncome",
+    //   type: "number",
+    //   label: "incomeFromSecuritiesDebenturesDeductions",
+    //   onBlur: () => {
+    //     calculateNetTaxableIncome();
+    //   },
+    //   x: 605,
+    //   y: 766,
+    //   width: 115,
+    //   height: 18,
+    //   imageIndex: 5,
+    //   isVisible: true,
+    // },
 
-    {
-      name: "incomeFromSecuritiesDebentures.netTaxableIncome",
-      type: "number",
-      label: "incomeFromSavingCertificatesNetTaxableIncome",
+    // {
+    //   name: "incomeFromSecuritiesDebentures.netTaxableIncome",
+    //   type: "number",
+    //   label: "incomeFromSavingCertificatesNetTaxableIncome",
 
-      disabled: true,
-      x: 720,
-      y: 768,
-      width: 105,
-      height: 15,
-      imageIndex: 5,
-      isVisible: true,
-    },
-    {
-      name: "incomeFromSecuritiesDebentures.taxDeductedAtSource",
-      type: "number",
-      label: "incomeFromSecuritiesDebenturesTax",
-      onBlur: () => {
-        calculateTaxDeductedCollectedAtSource();
-      },
-      x: 828,
-      y: 766,
-      width: 112,
-      height: 18,
-      imageIndex: 5,
-      isVisible: true,
-    },
-    {
-      name: "incomeFromFinancialProductScheme.amountOfIncome",
-      type: "number",
-      label: "incomeFromFinancialProductSchemeAmount",
-      onBlur: () => {
-        calculateNetTaxableIncome();
-      },
+    //   disabled: true,
+    //   x: 720,
+    //   y: 768,
+    //   width: 105,
+    //   height: 15,
+    //   imageIndex: 5,
+    //   isVisible: true,
+    // },
+    // {
+    //   name: "incomeFromSecuritiesDebentures.taxDeductedAtSource",
+    //   type: "number",
+    //   label: "incomeFromSecuritiesDebenturesTax",
+    //   onBlur: () => {
+    //     calculateTaxDeductedCollectedAtSource();
+    //   },
+    //   x: 828,
+    //   y: 766,
+    //   width: 112,
+    //   height: 18,
+    //   imageIndex: 5,
+    //   isVisible: true,
+    // },
+    // {
+    //   name: "incomeFromFinancialProductScheme.amountOfIncome",
+    //   type: "number",
+    //   label: "incomeFromFinancialProductSchemeAmount",
+    //   onBlur: () => {
+    //     calculateNetTaxableIncome();
+    //   },
 
-      x: 490,
-      y: 785,
-      width: 115,
-      height: 18,
-      imageIndex: 5,
-      isVisible: true,
-    },
-    {
-      name: "incomeFromFinancialProductScheme.deductionsExpensesExemptedIncome",
-      type: "number",
-      label: "incomeFromFinancialProductSchemeDeductions",
-      onBlur: () => {
-        calculateNetTaxableIncome();
-      },
+    //   x: 490,
+    //   y: 785,
+    //   width: 115,
+    //   height: 18,
+    //   imageIndex: 5,
+    //   isVisible: true,
+    // },
+    // {
+    //   name: "incomeFromFinancialProductScheme.deductionsExpensesExemptedIncome",
+    //   type: "number",
+    //   label: "incomeFromFinancialProductSchemeDeductions",
+    //   onBlur: () => {
+    //     calculateNetTaxableIncome();
+    //   },
 
-      x: 605,
-      y: 784,
-      width: 115,
-      height: 18,
-      imageIndex: 5,
-      isVisible: true,
-    },
-    {
-      name: "incomeFromFinancialProductScheme.netTaxableIncome",
-      type: "number",
-      label: "incomeFromFinancialProductSchemeNetTaxableIncome",
+    //   x: 605,
+    //   y: 784,
+    //   width: 115,
+    //   height: 18,
+    //   imageIndex: 5,
+    //   isVisible: true,
+    // },
+    // {
+    //   name: "incomeFromFinancialProductScheme.netTaxableIncome",
+    //   type: "number",
+    //   label: "incomeFromFinancialProductSchemeNetTaxableIncome",
 
-      disabled: true,
-      x: 720,
-      y: 785,
-      width: 105,
-      height: 15,
-      imageIndex: 5,
-      isVisible: true,
-    },
-    {
-      name: "incomeFromFinancialProductScheme.taxDeductedAtSource",
-      type: "number",
-      label: "incomeFromFinancialProductSchemeTax",
-      onBlur: () => {
-        calculateTaxDeductedCollectedAtSource();
-      },
-      x: 828,
-      y: 784,
-      width: 112,
-      height: 18,
-      imageIndex: 5,
-      isVisible: true,
-    },
-    {
-      name: "dividendIncome.amountOfIncome",
-      type: "number",
-      label: "dividendIncomeAmount",
-      onBlur: () => {
-        calculateNetTaxableIncome();
-      },
+    //   disabled: true,
+    //   x: 720,
+    //   y: 785,
+    //   width: 105,
+    //   height: 15,
+    //   imageIndex: 5,
+    //   isVisible: true,
+    // },
+    // {
+    //   name: "incomeFromFinancialProductScheme.taxDeductedAtSource",
+    //   type: "number",
+    //   label: "incomeFromFinancialProductSchemeTax",
+    //   onBlur: () => {
+    //     calculateTaxDeductedCollectedAtSource();
+    //   },
+    //   x: 828,
+    //   y: 784,
+    //   width: 112,
+    //   height: 18,
+    //   imageIndex: 5,
+    //   isVisible: true,
+    // },
+    // {
+    //   name: "dividendIncome.amountOfIncome",
+    //   type: "number",
+    //   label: "dividendIncomeAmount",
+    //   onBlur: () => {
+    //     calculateNetTaxableIncome();
+    //   },
 
-      x: 490,
-      y: 800,
-      width: 115,
-      height: 18,
-      imageIndex: 5,
-      isVisible: true,
-    },
-    {
-      name: "dividendIncome.deductionsExpensesExemptedIncome",
-      type: "number",
-      label: "dividendIncomeDeductions",
-      onBlur: () => {
-        calculateNetTaxableIncome();
-      },
+    //   x: 490,
+    //   y: 800,
+    //   width: 115,
+    //   height: 18,
+    //   imageIndex: 5,
+    //   isVisible: true,
+    // },
+    // {
+    //   name: "dividendIncome.deductionsExpensesExemptedIncome",
+    //   type: "number",
+    //   label: "dividendIncomeDeductions",
+    //   onBlur: () => {
+    //     calculateNetTaxableIncome();
+    //   },
 
-      x: 605,
-      y: 802,
-      width: 115,
-      height: 18,
-      imageIndex: 5,
-      isVisible: true,
-    },
-    {
-      name: "dividendIncome.netTaxableIncome",
-      type: "number",
-      label: "dividendIncomeNetTaxableIncome",
+    //   x: 605,
+    //   y: 802,
+    //   width: 115,
+    //   height: 18,
+    //   imageIndex: 5,
+    //   isVisible: true,
+    // },
+    // {
+    //   name: "dividendIncome.netTaxableIncome",
+    //   type: "number",
+    //   label: "dividendIncomeNetTaxableIncome",
 
-      disabled: true,
-      x: 720,
-      y: 803,
-      width: 105,
-      height: 15,
-      imageIndex: 5,
-      isVisible: true,
-    },
-    {
-      name: "dividendIncome.taxDeductedAtSource",
-      type: "text",
-      label: "dividendIncomeTax",
-      onBlur: () => {
-        calculateTaxDeductedCollectedAtSource();
-      },
-      x: 828,
-      y: 800,
-      width: 112,
-      height: 18,
-      imageIndex: 5,
-      isVisible: true,
-    },
-    {
-      name: "capitalGainFromTransferOfProperty.amountOfIncome",
-      type: "number",
-      label: "capitalGainFromTransferOfPropertyAmount",
-      onBlur: () => {
-        calculateNetTaxableIncome();
-      },
-      x: 490,
-      y: 820,
-      width: 115,
-      height: 18,
-      imageIndex: 5,
-      isVisible: true,
-    },
-    {
-      name: "capitalGainFromTransferOfProperty.deductionsExpensesExemptedIncome",
-      type: "number",
-      label: "capitalGainFromTransferOfPropertyDeductions",
-      onBlur: () => {
-        calculateNetTaxableIncome();
-      },
-      x: 605,
-      y: 820,
-      width: 115,
-      height: 18,
-      imageIndex: 5,
-      isVisible: true,
-    },
-    {
-      name: "capitalGainFromTransferOfProperty.netTaxableIncome",
-      type: "number",
-      label: "capitalGainFromTransferofPropertyNetTaxableIncome",
+    //   disabled: true,
+    //   x: 720,
+    //   y: 803,
+    //   width: 105,
+    //   height: 15,
+    //   imageIndex: 5,
+    //   isVisible: true,
+    // },
+    // {
+    //   name: "dividendIncome.taxDeductedAtSource",
+    //   type: "text",
+    //   label: "dividendIncomeTax",
+    //   onBlur: () => {
+    //     calculateTaxDeductedCollectedAtSource();
+    //   },
+    //   x: 828,
+    //   y: 800,
+    //   width: 112,
+    //   height: 18,
+    //   imageIndex: 5,
+    //   isVisible: true,
+    // },
+    // {
+    //   name: "capitalGainFromTransferOfProperty.amountOfIncome",
+    //   type: "number",
+    //   label: "capitalGainFromTransferOfPropertyAmount",
+    //   onBlur: () => {
+    //     calculateNetTaxableIncome();
+    //   },
+    //   x: 490,
+    //   y: 820,
+    //   width: 115,
+    //   height: 18,
+    //   imageIndex: 5,
+    //   isVisible: true,
+    // },
+    // {
+    //   name: "capitalGainFromTransferOfProperty.deductionsExpensesExemptedIncome",
+    //   type: "number",
+    //   label: "capitalGainFromTransferOfPropertyDeductions",
+    //   onBlur: () => {
+    //     calculateNetTaxableIncome();
+    //   },
+    //   x: 605,
+    //   y: 820,
+    //   width: 115,
+    //   height: 18,
+    //   imageIndex: 5,
+    //   isVisible: true,
+    // },
+    // {
+    //   name: "capitalGainFromTransferOfProperty.netTaxableIncome",
+    //   type: "number",
+    //   label: "capitalGainFromTransferofPropertyNetTaxableIncome",
 
-      disabled: true,
-      x: 720,
-      y: 820,
-      width: 105,
-      height: 15,
-      imageIndex: 5,
-      isVisible: true,
-    },
-    {
-      name: "capitalGainFromTransferOfProperty.taxDeductedAtSource",
-      type: "number",
-      label: "capitalGainFromTransferOfPropertyTax",
-      onBlur: () => {
-        calculateTaxDeductedCollectedAtSource();
-      },
-      x: 828,
-      y: 820,
-      width: 112,
-      height: 18,
-      imageIndex: 5,
-      isVisible: true,
-    },
-    {
-      name: "incomeFromBusinessMinTax.amountOfIncome",
-      type: "number",
-      label: "incomeFromBusinessAmount",
-      onBlur: () => {
-        calculateNetTaxableIncome();
-      },
-      x: 490,
-      y: 838,
-      width: 115,
-      height: 18,
-      imageIndex: 5,
-      isVisible: true,
-    },
-    {
-      name: "incomeFromBusinessMinTax.deductionsExpensesExemptedIncome",
-      type: "number",
-      label: "incomeFromBusinessDeductions",
-      onBlur: () => {
-        calculateNetTaxableIncome();
-      },
-      x: 605,
-      y: 838,
-      width: 115,
-      height: 18,
-      imageIndex: 5,
-      isVisible: true,
-    },
-    {
-      name: "incomeFromBusinessMinTax.netTaxableIncome",
-      type: "number",
-      label: "incomeFromBusinessNetTaxableIncome",
+    //   disabled: true,
+    //   x: 720,
+    //   y: 820,
+    //   width: 105,
+    //   height: 15,
+    //   imageIndex: 5,
+    //   isVisible: true,
+    // },
+    // {
+    //   name: "capitalGainFromTransferOfProperty.taxDeductedAtSource",
+    //   type: "number",
+    //   label: "capitalGainFromTransferOfPropertyTax",
+    //   onBlur: () => {
+    //     calculateTaxDeductedCollectedAtSource();
+    //   },
+    //   x: 828,
+    //   y: 820,
+    //   width: 112,
+    //   height: 18,
+    //   imageIndex: 5,
+    //   isVisible: true,
+    // },
+    // {
+    //   name: "incomeFromBusinessMinTax.amountOfIncome",
+    //   type: "number",
+    //   label: "incomeFromBusinessAmount",
+    //   onBlur: () => {
+    //     calculateNetTaxableIncome();
+    //   },
+    //   x: 490,
+    //   y: 838,
+    //   width: 115,
+    //   height: 18,
+    //   imageIndex: 5,
+    //   isVisible: true,
+    // },
+    // {
+    //   name: "incomeFromBusinessMinTax.deductionsExpensesExemptedIncome",
+    //   type: "number",
+    //   label: "incomeFromBusinessDeductions",
+    //   onBlur: () => {
+    //     calculateNetTaxableIncome();
+    //   },
+    //   x: 605,
+    //   y: 838,
+    //   width: 115,
+    //   height: 18,
+    //   imageIndex: 5,
+    //   isVisible: true,
+    // },
+    // {
+    //   name: "incomeFromBusinessMinTax.netTaxableIncome",
+    //   type: "number",
+    //   label: "incomeFromBusinessNetTaxableIncome",
 
-      disabled: true,
-      x: 720,
-      y: 840,
-      width: 105,
-      height: 15,
-      imageIndex: 5,
-      isVisible: true,
-    },
+    //   disabled: true,
+    //   x: 720,
+    //   y: 840,
+    //   width: 105,
+    //   height: 15,
+    //   imageIndex: 5,
+    //   isVisible: true,
+    // },
 
-    {
-      name: "incomeFromBusinessMinTax.taxDeductedAtSource",
-      type: "number",
-      label: "incomeFromBusinessTax",
-      onBlur: () => {
-        calculateTaxDeductedCollectedAtSource();
-      },
-      x: 828,
-      y: 838,
-      width: 112,
-      height: 18,
-      imageIndex: 5,
-      isVisible: true,
-    },
-    {
-      name: "workersParticipationFund.amountOfIncome",
-      type: "number",
-      label: "workersParticipationFundAmount",
-      onBlur: () => {
-        calculateNetTaxableIncome();
-      },
-      x: 490,
-      y: 856,
-      width: 115,
-      height: 18,
-      imageIndex: 5,
-      isVisible: true,
-    },
-    {
-      name: "workersParticipationFund.deductionsExpensesExemptedIncome",
-      type: "number",
-      label: "workersParticipationFundDeductions",
-      onBlur: () => {
-        calculateNetTaxableIncome();
-      },
-      x: 605,
-      y: 856,
-      width: 115,
-      height: 18,
-      imageIndex: 5,
-      isVisible: true,
-    },
-    {
-      name: "workersParticipationFund.netTaxableIncome",
-      type: "number",
-      label: "workersParticinationFundNetTaxableIncome",
+    // {
+    //   name: "incomeFromBusinessMinTax.taxDeductedAtSource",
+    //   type: "number",
+    //   label: "incomeFromBusinessTax",
+    //   onBlur: () => {
+    //     calculateTaxDeductedCollectedAtSource();
+    //   },
+    //   x: 828,
+    //   y: 838,
+    //   width: 112,
+    //   height: 18,
+    //   imageIndex: 5,
+    //   isVisible: true,
+    // },
+    // {
+    //   name: "workersParticipationFund.amountOfIncome",
+    //   type: "number",
+    //   label: "workersParticipationFundAmount",
+    //   onBlur: () => {
+    //     calculateNetTaxableIncome();
+    //   },
+    //   x: 490,
+    //   y: 856,
+    //   width: 115,
+    //   height: 18,
+    //   imageIndex: 5,
+    //   isVisible: true,
+    // },
+    // {
+    //   name: "workersParticipationFund.deductionsExpensesExemptedIncome",
+    //   type: "number",
+    //   label: "workersParticipationFundDeductions",
+    //   onBlur: () => {
+    //     calculateNetTaxableIncome();
+    //   },
+    //   x: 605,
+    //   y: 856,
+    //   width: 115,
+    //   height: 18,
+    //   imageIndex: 5,
+    //   isVisible: true,
+    // },
+    // {
+    //   name: "workersParticipationFund.netTaxableIncome",
+    //   type: "number",
+    //   label: "workersParticinationFundNetTaxableIncome",
 
-      disabled: true,
-      x: 720,
-      y: 856,
-      width: 105,
-      height: 15,
-      imageIndex: 5,
-      isVisible: true,
-    },
-    {
-      name: "workersParticipationFund.taxDeductedAtSource",
-      type: "number",
-      label: "workersParticipationFundTax",
-      onBlur: () => {
-        calculateTaxDeductedCollectedAtSource();
-      },
-      x: 828,
-      y: 856,
-      width: 112,
-      height: 18,
-      imageIndex: 5,
-      isVisible: true,
-    },
-    {
-      name: "incomeFromOtherSourcesMinTax.amountOfIncome",
-      type: "number",
-      label: "incomeFromOtherSourcesAmount",
-      onBlur: () => {
-        calculateNetTaxableIncome();
-      },
+    //   disabled: true,
+    //   x: 720,
+    //   y: 856,
+    //   width: 105,
+    //   height: 15,
+    //   imageIndex: 5,
+    //   isVisible: true,
+    // },
+    // {
+    //   name: "workersParticipationFund.taxDeductedAtSource",
+    //   type: "number",
+    //   label: "workersParticipationFundTax",
+    //   onBlur: () => {
+    //     calculateTaxDeductedCollectedAtSource();
+    //   },
+    //   x: 828,
+    //   y: 856,
+    //   width: 112,
+    //   height: 18,
+    //   imageIndex: 5,
+    //   isVisible: true,
+    // },
+    // {
+    //   name: "incomeFromOtherSourcesMinTax.amountOfIncome",
+    //   type: "number",
+    //   label: "incomeFromOtherSourcesAmount",
+    //   onBlur: () => {
+    //     calculateNetTaxableIncome();
+    //   },
 
-      x: 490,
-      y: 873,
-      width: 115,
-      height: 18,
-      imageIndex: 5,
-      isVisible: true,
-    },
-    {
-      name: "incomeFromOtherSourcesMinTax.deductionsExpensesExemptedIncome",
-      type: "number",
-      label: "incomeFromOtherSourcesDeductions",
-      onBlur: () => {
-        calculateNetTaxableIncome();
-      },
-      x: 605,
-      y: 872,
-      width: 115,
-      height: 18,
-      imageIndex: 5,
-      isVisible: true,
-    },
-    {
-      name: "incomeFromOtherSourcesMinTax.netTaxableIncome",
-      type: "number",
-      label: "incomeFromOtherSourcesNetTaxableIncome",
+    //   x: 490,
+    //   y: 873,
+    //   width: 115,
+    //   height: 18,
+    //   imageIndex: 5,
+    //   isVisible: true,
+    // },
+    // {
+    //   name: "incomeFromOtherSourcesMinTax.deductionsExpensesExemptedIncome",
+    //   type: "number",
+    //   label: "incomeFromOtherSourcesDeductions",
+    //   onBlur: () => {
+    //     calculateNetTaxableIncome();
+    //   },
+    //   x: 605,
+    //   y: 872,
+    //   width: 115,
+    //   height: 18,
+    //   imageIndex: 5,
+    //   isVisible: true,
+    // },
+    // {
+    //   name: "incomeFromOtherSourcesMinTax.netTaxableIncome",
+    //   type: "number",
+    //   label: "incomeFromOtherSourcesNetTaxableIncome",
 
-      disabled: true,
-      x: 720,
-      y: 875,
-      width: 105,
-      height: 15,
-      imageIndex: 5,
-      isVisible: true,
-    },
-    {
-      name: "incomeFromOtherSourcesMinTax.taxDeductedAtSource",
-      type: "text",
-      label: "incomeFromOtherSourcesTax",
-      onBlur: () => {
-        calculateTaxDeductedCollectedAtSource();
-      },
-      x: 828,
-      y: 874,
-      width: 112,
-      height: 18,
-      imageIndex: 5,
-      isVisible: true,
-    },
-    {
-      name: "otherSubjectToMinTax.particulars",
-      type: "text",
-      label: "customSource.particulars",
+    //   disabled: true,
+    //   x: 720,
+    //   y: 875,
+    //   width: 105,
+    //   height: 15,
+    //   imageIndex: 5,
+    //   isVisible: true,
+    // },
+    // {
+    //   name: "incomeFromOtherSourcesMinTax.taxDeductedAtSource",
+    //   type: "text",
+    //   label: "incomeFromOtherSourcesTax",
+    //   onBlur: () => {
+    //     calculateTaxDeductedCollectedAtSource();
+    //   },
+    //   x: 828,
+    //   y: 874,
+    //   width: 112,
+    //   height: 18,
+    //   imageIndex: 5,
+    //   isVisible: true,
+    // },
+    // {
+    //   name: "otherSubjectToMinTax.particulars",
+    //   type: "text",
+    //   label: "customSource.particulars",
 
-      x: 135,
-      y: 890,
-      width: 355,
-      height: 18,
-      imageIndex: 5,
-      isVisible: true,
-    },
-    {
-      name: "otherSubjectToMinTax.amountOfIncome",
-      type: "number",
-      label: "customSource.amountOfIncome",
-      onBlur: () => {
-        calculateNetTaxableIncome();
-      },
-      x: 490,
-      y: 890,
-      width: 112,
-      height: 18,
-      imageIndex: 5,
-      isVisible: true,
-    },
-    {
-      name: "otherSubjectToMinTax.deductionsExpensesExemptedIncome",
-      type: "number",
-      label: "customSource.deductionsExpensesExemptedIncome",
-      onBlur: () => {
-        calculateNetTaxableIncome();
-      },
-      x: 605,
-      y: 890,
-      width: 112,
-      height: 18,
-      imageIndex: 5,
-      isVisible: true,
-    },
-    {
-      name: "otherSubjectToMinTax.netTaxableIncome",
-      type: "number",
-      label: "customSource.netTaxableIncome",
-      disabled: true,
-      x: 718,
-      y: 890,
-      width: 108,
-      height: 18,
-      imageIndex: 5,
-      isVisible: true,
-    },
-    {
-      name: "otherSubjectToMinTax.taxDeductedAtSource",
-      type: "number",
-      label: "customSource.taxDeductedAtSource",
-      onBlur: () => {
-        calculateTaxDeductedCollectedAtSource();
-      },
-      x: 828,
-      y: 890,
-      width: 110,
-      height: 18,
-      imageIndex: 5,
-      isVisible: true,
-    },
+    //   x: 135,
+    //   y: 890,
+    //   width: 355,
+    //   height: 18,
+    //   imageIndex: 5,
+    //   isVisible: true,
+    // },
+    // {
+    //   name: "otherSubjectToMinTax.amountOfIncome",
+    //   type: "number",
+    //   label: "customSource.amountOfIncome",
+    //   onBlur: () => {
+    //     calculateNetTaxableIncome();
+    //   },
+    //   x: 490,
+    //   y: 890,
+    //   width: 112,
+    //   height: 18,
+    //   imageIndex: 5,
+    //   isVisible: true,
+    // },
+    // {
+    //   name: "otherSubjectToMinTax.deductionsExpensesExemptedIncome",
+    //   type: "number",
+    //   label: "customSource.deductionsExpensesExemptedIncome",
+    //   onBlur: () => {
+    //     calculateNetTaxableIncome();
+    //   },
+    //   x: 605,
+    //   y: 890,
+    //   width: 112,
+    //   height: 18,
+    //   imageIndex: 5,
+    //   isVisible: true,
+    // },
+    // {
+    //   name: "otherSubjectToMinTax.netTaxableIncome",
+    //   type: "number",
+    //   label: "customSource.netTaxableIncome",
+    //   disabled: true,
+    //   x: 718,
+    //   y: 890,
+    //   width: 108,
+    //   height: 18,
+    //   imageIndex: 5,
+    //   isVisible: true,
+    // },
+    // {
+    //   name: "otherSubjectToMinTax.taxDeductedAtSource",
+    //   type: "number",
+    //   label: "customSource.taxDeductedAtSource",
+    //   onBlur: () => {
+    //     calculateTaxDeductedCollectedAtSource();
+    //   },
+    //   x: 828,
+    //   y: 890,
+    //   width: 110,
+    //   height: 18,
+    //   imageIndex: 5,
+    //   isVisible: true,
+    // },
 
-    // Image 7
+    // Image 8
 
     {
       name: "taxpayerName",
@@ -3226,7 +3525,7 @@ export const useFormFields = (
       y: 125,
       width: 570,
       height: 18,
-      imageIndex: 6,
+      imageIndex: 7,
       isVisible: true,
     },
     {
@@ -3238,7 +3537,7 @@ export const useFormFields = (
       y: 125,
       width: 265,
       height: 18,
-      imageIndex: 6,
+      imageIndex: 7,
       isVisible: true,
     },
     {
@@ -3249,7 +3548,7 @@ export const useFormFields = (
       y: 195,
       width: 145,
       height: 18,
-      imageIndex: 6,
+      imageIndex: 7,
       onBlur() {
         calculateTotalAllowableInvestmentContribution();
       },
@@ -3263,7 +3562,7 @@ export const useFormFields = (
       y: 215,
       width: 145,
       height: 18,
-      imageIndex: 6,
+      imageIndex: 7,
       onBlur() {
         calculateTotalAllowableInvestmentContribution();
       },
@@ -3277,7 +3576,7 @@ export const useFormFields = (
       y: 248,
       width: 305,
       height: 18,
-      imageIndex: 6,
+      imageIndex: 7,
       onBlur() {
         calculateTotalAllowableInvestmentContribution();
       },
@@ -3291,7 +3590,7 @@ export const useFormFields = (
       y: 232,
       width: 145,
       height: 35,
-      imageIndex: 6,
+      imageIndex: 7,
       onBlur() {
         calculateTotalAllowableInvestmentContribution();
       },
@@ -3305,7 +3604,7 @@ export const useFormFields = (
       y: 265,
       width: 145,
       height: 20,
-      imageIndex: 6,
+      imageIndex: 7,
       onBlur() {
         calculateTotalAllowableInvestmentContribution();
       },
@@ -3319,7 +3618,7 @@ export const useFormFields = (
       y: 284,
       width: 145,
       height: 20,
-      imageIndex: 6,
+      imageIndex: 7,
       onBlur() {
         calculateTotalAllowableInvestmentContribution();
       },
@@ -3333,7 +3632,7 @@ export const useFormFields = (
       y: 306,
       width: 145,
       height: 20,
-      imageIndex: 6,
+      imageIndex: 7,
       onBlur() {
         calculateTotalAllowableInvestmentContribution();
       },
@@ -3347,7 +3646,7 @@ export const useFormFields = (
       y: 324,
       width: 145,
       height: 20,
-      imageIndex: 6,
+      imageIndex: 7,
       onBlur() {
         calculateTotalAllowableInvestmentContribution();
       },
@@ -3361,7 +3660,7 @@ export const useFormFields = (
       y: 344,
       width: 145,
       height: 20,
-      imageIndex: 6,
+      imageIndex: 7,
       onBlur() {
         calculateTotalAllowableInvestmentContribution();
       },
@@ -3375,7 +3674,7 @@ export const useFormFields = (
       y: 364,
       width: 415,
       height: 20,
-      imageIndex: 6,
+      imageIndex: 7,
       onBlur() {
         calculateTotalAllowableInvestmentContribution();
       },
@@ -3390,7 +3689,7 @@ export const useFormFields = (
       y: 364,
       width: 145,
       height: 20,
-      imageIndex: 6,
+      imageIndex: 7,
       onBlur() {
         calculateTotalAllowableInvestmentContribution();
       },
@@ -3404,7 +3703,7 @@ export const useFormFields = (
       y: 382,
       width: 400,
       height: 20,
-      imageIndex: 6,
+      imageIndex: 7,
       onBlur() {
         calculateTotalAllowableInvestmentContribution();
       },
@@ -3419,7 +3718,7 @@ export const useFormFields = (
       y: 382,
       width: 145,
       height: 20,
-      imageIndex: 6,
+      imageIndex: 7,
       onBlur() {
         calculateTotalAllowableInvestmentContribution();
       },
@@ -3435,7 +3734,7 @@ export const useFormFields = (
       y: 405,
       width: 140,
       height: 15,
-      imageIndex: 6,
+      imageIndex: 7,
       isVisible: true,
     },
 
@@ -3448,11 +3747,11 @@ export const useFormFields = (
       y: 915,
       width: 200,
       height: 18,
-      imageIndex: 6,
+      imageIndex: 7,
       isVisible: true,
     },
 
-    // Image 8
+    // Image 9
     // 45 inputs
     {
       name: "taxpayerName",
@@ -3463,7 +3762,7 @@ export const useFormFields = (
       y: 135,
       width: 570,
       height: 20,
-      imageIndex: 7,
+      imageIndex: 8,
       isVisible: true,
     },
 
@@ -3476,7 +3775,7 @@ export const useFormFields = (
       y: 135,
       width: 265,
       height: 20,
-      imageIndex: 7,
+      imageIndex: 8,
       isVisible: true,
     },
 
@@ -3488,7 +3787,7 @@ export const useFormFields = (
       y: 205,
       width: 135,
       height: 20,
-      imageIndex: 7,
+      imageIndex: 8,
       onBlur() {
         calculateTotalExpenseIndividualPerson();
       },
@@ -3503,7 +3802,7 @@ export const useFormFields = (
       y: 205,
       width: 208,
       height: 20,
-      imageIndex: 7,
+      imageIndex: 8,
       isVisible: true,
     },
     {
@@ -3514,7 +3813,7 @@ export const useFormFields = (
       y: 225,
       width: 135,
       height: 17,
-      imageIndex: 7,
+      imageIndex: 8,
       onBlur() {
         calculateTotalExpenseIndividualPerson();
       },
@@ -3528,7 +3827,7 @@ export const useFormFields = (
       y: 225,
       width: 208,
       height: 17,
-      imageIndex: 7,
+      imageIndex: 8,
       isVisible: true,
     },
     {
@@ -3539,7 +3838,7 @@ export const useFormFields = (
       y: 242,
       width: 135,
       height: 17,
-      imageIndex: 7,
+      imageIndex: 8,
       onBlur() {
         calculateTotalExpenseIndividualPerson();
       },
@@ -3553,7 +3852,7 @@ export const useFormFields = (
       y: 242,
       width: 208,
       height: 17,
-      imageIndex: 7,
+      imageIndex: 8,
       isVisible: true,
     },
     {
@@ -3564,7 +3863,7 @@ export const useFormFields = (
       y: 260,
       width: 135,
       height: 32,
-      imageIndex: 7,
+      imageIndex: 8,
       onBlur() {
         calculateTotalExpenseIndividualPerson();
       },
@@ -3579,7 +3878,7 @@ export const useFormFields = (
       y: 260,
       width: 208,
       height: 32,
-      imageIndex: 7,
+      imageIndex: 8,
       isVisible: true,
     },
     {
@@ -3590,7 +3889,7 @@ export const useFormFields = (
       y: 292,
       width: 135,
       height: 17,
-      imageIndex: 7,
+      imageIndex: 8,
       onBlur() {
         calculateTotalExpenseIndividualPerson();
       },
@@ -3605,7 +3904,7 @@ export const useFormFields = (
       y: 292,
       width: 208,
       height: 17,
-      imageIndex: 7,
+      imageIndex: 8,
       isVisible: true,
     },
     {
@@ -3616,7 +3915,7 @@ export const useFormFields = (
       y: 311,
       width: 135,
       height: 32,
-      imageIndex: 7,
+      imageIndex: 8,
       onBlur() {
         calculateTotalExpenseIndividualPerson();
       },
@@ -3630,7 +3929,7 @@ export const useFormFields = (
       y: 311,
       width: 208,
       height: 32,
-      imageIndex: 7,
+      imageIndex: 8,
       isVisible: true,
     },
     {
@@ -3641,7 +3940,7 @@ export const useFormFields = (
       y: 345,
       width: 135,
       height: 17,
-      imageIndex: 7,
+      imageIndex: 8,
       onBlur() {
         calculateTotalExpenseIndividualPerson();
       },
@@ -3655,7 +3954,7 @@ export const useFormFields = (
       y: 345,
       width: 208,
       height: 17,
-      imageIndex: 7,
+      imageIndex: 8,
       isVisible: true,
     },
 
@@ -3668,7 +3967,7 @@ export const useFormFields = (
       y: 362,
       width: 135,
       height: 32,
-      imageIndex: 7,
+      imageIndex: 8,
       onBlur() {
         calculateTotalExpenseIndividualPerson();
       },
@@ -3682,7 +3981,7 @@ export const useFormFields = (
       y: 362,
       width: 208,
       height: 32,
-      imageIndex: 7,
+      imageIndex: 8,
       isVisible: true,
     },
 
@@ -3695,7 +3994,7 @@ export const useFormFields = (
       y: 395,
       width: 135,
       height: 18,
-      imageIndex: 7,
+      imageIndex: 8,
       isVisible: true,
     },
 
@@ -3708,7 +4007,7 @@ export const useFormFields = (
       y: 395,
       width: 208,
       height: 19,
-      imageIndex: 7,
+      imageIndex: 8,
       isVisible: true,
     },
 
@@ -3720,7 +4019,7 @@ export const useFormFields = (
       y: 412,
       width: 138,
       height: 35,
-      imageIndex: 7,
+      imageIndex: 8,
       onBlur() {
         calculateTotalExpenseIndividualPerson();
       },
@@ -3735,7 +4034,7 @@ export const useFormFields = (
       y: 412,
       width: 208,
       height: 35,
-      imageIndex: 7,
+      imageIndex: 8,
       isVisible: true,
     },
     {
@@ -3746,7 +4045,7 @@ export const useFormFields = (
       y: 445,
       width: 138,
       height: 35,
-      imageIndex: 7,
+      imageIndex: 8,
       onBlur() {
         calculateTotalExpenseIndividualPerson();
       },
@@ -3761,7 +4060,7 @@ export const useFormFields = (
       y: 445,
       width: 208,
       height: 35,
-      imageIndex: 7,
+      imageIndex: 8,
       isVisible: true,
     },
 
@@ -3774,7 +4073,7 @@ export const useFormFields = (
       y: 480,
       width: 135,
       height: 17,
-      imageIndex: 7,
+      imageIndex: 8,
       isVisible: true,
     },
 
@@ -3786,7 +4085,7 @@ export const useFormFields = (
       y: 480,
       width: 208,
       height: 17,
-      imageIndex: 7,
+      imageIndex: 8,
       isVisible: true,
     },
 
@@ -3799,7 +4098,7 @@ export const useFormFields = (
       y: 595,
       width: 345,
       height: 20,
-      imageIndex: 7,
+      imageIndex: 8,
       isVisible: true,
     },
 
@@ -3812,7 +4111,7 @@ export const useFormFields = (
       y: 672,
       width: 157,
       height: 19,
-      imageIndex: 7,
+      imageIndex: 8,
       isVisible: true,
     },
     {
@@ -3827,7 +4126,7 @@ export const useFormFields = (
       y: 690,
       width: 157,
       height: 19,
-      imageIndex: 7,
+      imageIndex: 8,
       isVisible: true,
     },
     {
@@ -3842,7 +4141,7 @@ export const useFormFields = (
       y: 708,
       width: 157,
       height: 19,
-      imageIndex: 7,
+      imageIndex: 8,
       isVisible: true,
     },
     {
@@ -3857,7 +4156,7 @@ export const useFormFields = (
       y: 725,
       width: 157,
       height: 19,
-      imageIndex: 7,
+      imageIndex: 8,
       isVisible: true,
     },
     {
@@ -3872,7 +4171,7 @@ export const useFormFields = (
       y: 742,
       width: 157,
       height: 19,
-      imageIndex: 7,
+      imageIndex: 8,
       isVisible: true,
     },
 
@@ -3884,7 +4183,7 @@ export const useFormFields = (
       y: 760,
       width: 645,
       height: 19,
-      imageIndex: 7,
+      imageIndex: 8,
       isVisible: true,
     },
     {
@@ -3898,7 +4197,7 @@ export const useFormFields = (
       y: 760,
       width: 158,
       height: 19,
-      imageIndex: 7,
+      imageIndex: 8,
       isVisible: true,
     },
     {
@@ -3910,7 +4209,7 @@ export const useFormFields = (
       y: 778,
       width: 645,
       height: 19,
-      imageIndex: 7,
+      imageIndex: 8,
       isVisible: true,
     },
     {
@@ -3924,7 +4223,7 @@ export const useFormFields = (
       y: 778,
       width: 158,
       height: 19,
-      imageIndex: 7,
+      imageIndex: 8,
       isVisible: true,
     },
 
@@ -3937,7 +4236,7 @@ export const useFormFields = (
       y: 798,
       width: 150,
       height: 16,
-      imageIndex: 7,
+      imageIndex: 8,
       isVisible: true,
     },
 
@@ -3949,7 +4248,7 @@ export const useFormFields = (
       y: 872,
       width: 642,
       height: 19,
-      imageIndex: 7,
+      imageIndex: 8,
       isVisible: true,
     },
     {
@@ -3963,7 +4262,7 @@ export const useFormFields = (
       y: 872,
       width: 157,
       height: 19,
-      imageIndex: 7,
+      imageIndex: 8,
       isVisible: true,
     },
     {
@@ -3974,7 +4273,7 @@ export const useFormFields = (
       y: 890,
       width: 642,
       height: 19,
-      imageIndex: 7,
+      imageIndex: 8,
       isVisible: true,
     },
     {
@@ -3988,7 +4287,7 @@ export const useFormFields = (
       y: 890,
       width: 157,
       height: 19,
-      imageIndex: 7,
+      imageIndex: 8,
       isVisible: true,
     },
     {
@@ -3999,7 +4298,7 @@ export const useFormFields = (
       y: 908,
       width: 642,
       height: 19,
-      imageIndex: 7,
+      imageIndex: 8,
       isVisible: true,
     },
     {
@@ -4013,7 +4312,7 @@ export const useFormFields = (
       y: 908,
       width: 157,
       height: 19,
-      imageIndex: 7,
+      imageIndex: 8,
       isVisible: true,
     },
 
@@ -4026,7 +4325,7 @@ export const useFormFields = (
       y: 928,
       width: 150,
       height: 16,
-      imageIndex: 7,
+      imageIndex: 8,
       isVisible: true,
     },
 
@@ -4038,11 +4337,11 @@ export const useFormFields = (
       y: 540,
       width: 200,
       height: 40,
-      imageIndex: 7,
+      imageIndex: 8,
       isVisible: true,
     },
 
-    // Image 9
+    // Image 10
     // input 42
     {
       name: "taxpayerName",
@@ -4053,7 +4352,7 @@ export const useFormFields = (
       disabled: true,
       width: 570,
       height: 20,
-      imageIndex: 8,
+      imageIndex: 9,
       isVisible: true,
     },
     {
@@ -4065,7 +4364,7 @@ export const useFormFields = (
       y: 300,
       width: 265,
       height: 20,
-      imageIndex: 8,
+      imageIndex: 9,
       isVisible: true,
     },
     {
@@ -4077,7 +4376,7 @@ export const useFormFields = (
       y: 375,
       width: 160,
       height: 16,
-      imageIndex: 8,
+      imageIndex: 9,
       isVisible: true,
     },
     {
@@ -4089,7 +4388,7 @@ export const useFormFields = (
       y: 393,
       width: 160,
       height: 16,
-      imageIndex: 8,
+      imageIndex: 9,
       isVisible: true,
     },
     {
@@ -4101,7 +4400,7 @@ export const useFormFields = (
       y: 410,
       width: 160,
       height: 16,
-      imageIndex: 8,
+      imageIndex: 9,
       isVisible: true,
       onBlur: () => {
         calculateTotalSourceOfFunds();
@@ -4116,7 +4415,7 @@ export const useFormFields = (
       y: 428,
       width: 160,
       height: 16,
-      imageIndex: 8,
+      imageIndex: 9,
       isVisible: true,
     },
     {
@@ -4132,7 +4431,7 @@ export const useFormFields = (
       y: 445,
       width: 194,
       height: 18,
-      imageIndex: 8,
+      imageIndex: 9,
       isVisible: true,
     },
     {
@@ -4148,7 +4447,7 @@ export const useFormFields = (
       y: 445,
       width: 168,
       height: 18,
-      imageIndex: 8,
+      imageIndex: 9,
       isVisible: true,
     },
     {
@@ -4160,7 +4459,7 @@ export const useFormFields = (
       y: 463,
       width: 160,
       height: 16,
-      imageIndex: 8,
+      imageIndex: 9,
       isVisible: true,
     },
     {
@@ -4172,7 +4471,7 @@ export const useFormFields = (
       y: 498,
       width: 160,
       height: 16,
-      imageIndex: 8,
+      imageIndex: 9,
       isVisible: true,
     },
     {
@@ -4186,7 +4485,7 @@ export const useFormFields = (
       y: 515,
       width: 168,
       height: 18,
-      imageIndex: 8,
+      imageIndex: 9,
       isVisible: true,
     },
     {
@@ -4198,7 +4497,7 @@ export const useFormFields = (
       y: 535,
       width: 160,
       height: 16,
-      imageIndex: 8,
+      imageIndex: 9,
       isVisible: true,
     },
     {
@@ -4210,7 +4509,7 @@ export const useFormFields = (
       y: 552,
       width: 160,
       height: 16,
-      imageIndex: 8,
+      imageIndex: 9,
       isVisible: true,
     },
 
@@ -4225,7 +4524,7 @@ export const useFormFields = (
       y: 585,
       width: 168,
       height: 18,
-      imageIndex: 8,
+      imageIndex: 9,
       isVisible: true,
     },
     {
@@ -4239,7 +4538,7 @@ export const useFormFields = (
       y: 605,
       width: 168,
       height: 18,
-      imageIndex: 8,
+      imageIndex: 9,
       isVisible: true,
     },
     {
@@ -4253,7 +4552,7 @@ export const useFormFields = (
       y: 620,
       width: 168,
       height: 18,
-      imageIndex: 8,
+      imageIndex: 9,
       isVisible: true,
     },
     {
@@ -4265,7 +4564,7 @@ export const useFormFields = (
       y: 640,
       width: 160,
       height: 16,
-      imageIndex: 8,
+      imageIndex: 9,
       isVisible: true,
     },
     {
@@ -4277,7 +4576,7 @@ export const useFormFields = (
       y: 658,
       width: 160,
       height: 16,
-      imageIndex: 8,
+      imageIndex: 9,
       isVisible: true,
     },
     {
@@ -4289,7 +4588,7 @@ export const useFormFields = (
       y: 747,
       width: 130,
       height: 16,
-      imageIndex: 8,
+      imageIndex: 9,
       isVisible: true,
     },
     {
@@ -4301,7 +4600,7 @@ export const useFormFields = (
       y: 747,
       width: 160,
       height: 16,
-      imageIndex: 8,
+      imageIndex: 9,
       isVisible: true,
     },
     {
@@ -4313,7 +4612,7 @@ export const useFormFields = (
       y: 765,
       width: 160,
       height: 16,
-      imageIndex: 8,
+      imageIndex: 9,
       isVisible: true,
     },
 
@@ -4328,7 +4627,7 @@ export const useFormFields = (
       y: 710,
       width: 135,
       height: 18,
-      imageIndex: 8,
+      imageIndex: 9,
       isVisible: true,
     },
     {
@@ -4342,7 +4641,7 @@ export const useFormFields = (
       y: 728,
       width: 135,
       height: 18,
-      imageIndex: 8,
+      imageIndex: 9,
       isVisible: true,
     },
 
@@ -4354,7 +4653,7 @@ export const useFormFields = (
       y: 800,
       width: 320,
       height: 18,
-      imageIndex: 8,
+      imageIndex: 9,
       isVisible: true,
     },
     {
@@ -4365,7 +4664,7 @@ export const useFormFields = (
       y: 800,
       width: 135,
       height: 18,
-      imageIndex: 8,
+      imageIndex: 9,
       isVisible: true,
     },
     {
@@ -4379,7 +4678,7 @@ export const useFormFields = (
       y: 800,
       width: 135,
       height: 18,
-      imageIndex: 8,
+      imageIndex: 9,
       isVisible: true,
     },
     {
@@ -4390,7 +4689,7 @@ export const useFormFields = (
       y: 818,
       width: 320,
       height: 18,
-      imageIndex: 8,
+      imageIndex: 9,
       isVisible: true,
     },
     {
@@ -4401,7 +4700,7 @@ export const useFormFields = (
       y: 818,
       width: 135,
       height: 18,
-      imageIndex: 8,
+      imageIndex: 9,
       isVisible: true,
     },
     {
@@ -4415,7 +4714,7 @@ export const useFormFields = (
       y: 818,
       width: 135,
       height: 18,
-      imageIndex: 8,
+      imageIndex: 9,
       isVisible: true,
     },
 
@@ -4427,7 +4726,7 @@ export const useFormFields = (
       y: 834,
       width: 320,
       height: 18,
-      imageIndex: 8,
+      imageIndex: 9,
       isVisible: true,
     },
 
@@ -4439,7 +4738,7 @@ export const useFormFields = (
       y: 834,
       width: 135,
       height: 18,
-      imageIndex: 8,
+      imageIndex: 9,
       isVisible: true,
     },
 
@@ -4455,7 +4754,7 @@ export const useFormFields = (
       y: 834,
       width: 135,
       height: 18,
-      imageIndex: 8,
+      imageIndex: 9,
       isVisible: true,
     },
 
@@ -4468,7 +4767,7 @@ export const useFormFields = (
       y: 852,
       width: 160,
       height: 16,
-      imageIndex: 8,
+      imageIndex: 9,
       isVisible: true,
     },
     {
@@ -4479,7 +4778,7 @@ export const useFormFields = (
       y: 903,
       width: 320,
       height: 18,
-      imageIndex: 8,
+      imageIndex: 9,
       isVisible: true,
     },
     {
@@ -4490,7 +4789,7 @@ export const useFormFields = (
       y: 903,
       width: 135,
       height: 18,
-      imageIndex: 8,
+      imageIndex: 9,
       isVisible: true,
     },
     {
@@ -4504,7 +4803,7 @@ export const useFormFields = (
       y: 903,
       width: 135,
       height: 18,
-      imageIndex: 8,
+      imageIndex: 9,
       isVisible: true,
     },
 
@@ -4516,7 +4815,7 @@ export const useFormFields = (
       y: 922,
       width: 320,
       height: 18,
-      imageIndex: 8,
+      imageIndex: 9,
       isVisible: true,
     },
     {
@@ -4527,7 +4826,7 @@ export const useFormFields = (
       y: 922,
       width: 135,
       height: 18,
-      imageIndex: 8,
+      imageIndex: 9,
       isVisible: true,
     },
 
@@ -4542,7 +4841,7 @@ export const useFormFields = (
       y: 922,
       width: 135,
       height: 18,
-      imageIndex: 8,
+      imageIndex: 9,
       isVisible: true,
     },
 
@@ -4555,7 +4854,7 @@ export const useFormFields = (
       y: 938,
       width: 320,
       height: 18,
-      imageIndex: 8,
+      imageIndex: 9,
       isVisible: true,
     },
 
@@ -4567,7 +4866,7 @@ export const useFormFields = (
       y: 938,
       width: 135,
       height: 18,
-      imageIndex: 8,
+      imageIndex: 9,
       isVisible: true,
     },
 
@@ -4582,11 +4881,11 @@ export const useFormFields = (
       y: 938,
       width: 135,
       height: 18,
-      imageIndex: 8,
+      imageIndex: 9,
       isVisible: true,
     },
 
-    // Image 10
+    // Image 11
     // inputs 54
 
     {
@@ -4598,7 +4897,7 @@ export const useFormFields = (
       y: 85,
       width: 160,
       height: 25,
-      imageIndex: 9,
+      imageIndex: 10,
       isVisible: true,
     },
 
@@ -4610,7 +4909,7 @@ export const useFormFields = (
       y: 130,
       width: 455,
       height: 18,
-      imageIndex: 9,
+      imageIndex: 10,
       isVisible: true,
     },
 
@@ -4622,7 +4921,7 @@ export const useFormFields = (
       y: 130,
       width: 135,
       height: 18,
-      imageIndex: 9,
+      imageIndex: 10,
       isVisible: true,
       onBlur() {
         calculateTotalAssetsInBangladeshAndOutside();
@@ -4636,7 +4935,7 @@ export const useFormFields = (
       y: 148,
       width: 455,
       height: 18,
-      imageIndex: 9,
+      imageIndex: 10,
       isVisible: true,
     },
     {
@@ -4647,7 +4946,7 @@ export const useFormFields = (
       y: 148,
       width: 135,
       height: 18,
-      imageIndex: 9,
+      imageIndex: 10,
       isVisible: true,
       onBlur() {
         calculateTotalAssetsInBangladeshAndOutside();
@@ -4662,7 +4961,7 @@ export const useFormFields = (
       y: 165,
       width: 455,
       height: 18,
-      imageIndex: 9,
+      imageIndex:10,
       isVisible: true,
     },
     {
@@ -4673,7 +4972,7 @@ export const useFormFields = (
       y: 166,
       width: 135,
       height: 18,
-      imageIndex: 9,
+      imageIndex: 10,
       isVisible: true,
       onBlur() {
         calculateTotalAssetsInBangladeshAndOutside();
@@ -4687,7 +4986,7 @@ export const useFormFields = (
       y: 183,
       width: 455,
       height: 18,
-      imageIndex: 9,
+      imageIndex: 10,
       isVisible: true,
     },
     {
@@ -4698,7 +4997,7 @@ export const useFormFields = (
       y: 184,
       width: 135,
       height: 18,
-      imageIndex: 9,
+      imageIndex: 10,
       isVisible: true,
       onBlur() {
         calculateTotalAssetsInBangladeshAndOutside();
@@ -4712,7 +5011,7 @@ export const useFormFields = (
       y: 202,
       width: 455,
       height: 18,
-      imageIndex: 9,
+      imageIndex: 10,
       isVisible: true,
     },
 
@@ -4724,7 +5023,7 @@ export const useFormFields = (
       y: 202,
       width: 135,
       height: 18,
-      imageIndex: 9,
+      imageIndex: 10,
       isVisible: true,
       onBlur() {
         calculateTotalAssetsInBangladeshAndOutside();
@@ -4740,7 +5039,7 @@ export const useFormFields = (
       y: 237,
       width: 160,
       height: 16,
-      imageIndex: 9,
+      imageIndex: 10,
       isVisible: true,
     },
 
@@ -4752,7 +5051,7 @@ export const useFormFields = (
       y: 272,
       width: 455,
       height: 18,
-      imageIndex: 9,
+      imageIndex: 10,
       isVisible: true,
     },
     {
@@ -4763,7 +5062,7 @@ export const useFormFields = (
       y: 272,
       width: 135,
       height: 18,
-      imageIndex: 9,
+      imageIndex: 10,
       isVisible: true,
       onBlur() {
         calculateTotalAssetsInBangladeshAndOutside();
@@ -4777,7 +5076,7 @@ export const useFormFields = (
       y: 290,
       width: 455,
       height: 18,
-      imageIndex: 9,
+      imageIndex: 10,
       isVisible: true,
     },
     {
@@ -4788,7 +5087,7 @@ export const useFormFields = (
       y: 290,
       width: 135,
       height: 18,
-      imageIndex: 9,
+      imageIndex: 10,
       isVisible: true,
       onBlur() {
         calculateTotalAssetsInBangladeshAndOutside();
@@ -4802,7 +5101,7 @@ export const useFormFields = (
       y: 308,
       width: 455,
       height: 18,
-      imageIndex: 9,
+      imageIndex: 10,
       isVisible: true,
     },
     {
@@ -4813,7 +5112,7 @@ export const useFormFields = (
       y: 308,
       width: 135,
       height: 18,
-      imageIndex: 9,
+      imageIndex: 10,
       isVisible: true,
       onBlur() {
         calculateTotalAssetsInBangladeshAndOutside();
@@ -4828,7 +5127,7 @@ export const useFormFields = (
       y: 360,
       width: 170,
       height: 18,
-      imageIndex: 9,
+      imageIndex: 10,
       isVisible: true,
       onBlur() {
         calculateTotalAssetsInBangladeshAndOutside();
@@ -4843,7 +5142,7 @@ export const useFormFields = (
       y: 378,
       width: 170,
       height: 18,
-      imageIndex: 9,
+      imageIndex: 10,
       isVisible: true,
       onBlur() {
         calculateTotalAssetsInBangladeshAndOutside();
@@ -4857,7 +5156,7 @@ export const useFormFields = (
       y: 396,
       width: 170,
       height: 18,
-      imageIndex: 9,
+      imageIndex: 10,
       isVisible: true,
       onBlur() {
         calculateTotalAssetsInBangladeshAndOutside();
@@ -4871,7 +5170,7 @@ export const useFormFields = (
       y: 414,
       width: 170,
       height: 18,
-      imageIndex: 9,
+      imageIndex: 10,
       isVisible: true,
       onBlur() {
         calculateTotalAssetsInBangladeshAndOutside();
@@ -4886,7 +5185,7 @@ export const useFormFields = (
       y: 432,
       width: 170,
       height: 18,
-      imageIndex: 9,
+      imageIndex: 10,
       isVisible: true,
       onBlur() {
         calculateTotalAssetsInBangladeshAndOutside();
@@ -4900,7 +5199,7 @@ export const useFormFields = (
       y: 450,
       width: 318,
       height: 18,
-      imageIndex: 9,
+      imageIndex: 10,
       isVisible: true,
     },
     {
@@ -4911,7 +5210,7 @@ export const useFormFields = (
       y: 450,
       width: 145,
       height: 18,
-      imageIndex: 9,
+      imageIndex: 10,
       isVisible: true,
     },
     {
@@ -4922,7 +5221,7 @@ export const useFormFields = (
       y: 450,
       width: 170,
       height: 18,
-      imageIndex: 9,
+      imageIndex: 10,
       isVisible: true,
       onBlur() {
         calculateTotalAssetsInBangladeshAndOutside();
@@ -4936,7 +5235,7 @@ export const useFormFields = (
       y: 468,
       width: 170,
       height: 18,
-      imageIndex: 9,
+      imageIndex: 10,
       isVisible: true,
       onBlur() {
         calculateTotalAssetsInBangladeshAndOutside();
@@ -4950,7 +5249,7 @@ export const useFormFields = (
       y: 484,
       width: 170,
       height: 18,
-      imageIndex: 9,
+      imageIndex: 10,
       isVisible: true,
       onBlur() {
         calculateTotalAssetsInBangladeshAndOutside();
@@ -4964,7 +5263,7 @@ export const useFormFields = (
       y: 502,
       width: 402,
       height: 18,
-      imageIndex: 9,
+      imageIndex: 10,
       isVisible: true,
     },
     {
@@ -4975,7 +5274,7 @@ export const useFormFields = (
       y: 502,
       width: 170,
       height: 18,
-      imageIndex: 9,
+      imageIndex: 10,
       isVisible: true,
       onBlur() {
         calculateTotalAssetsInBangladeshAndOutside();
@@ -4990,7 +5289,7 @@ export const useFormFields = (
       y: 521,
       width: 160,
       height: 16,
-      imageIndex: 9,
+      imageIndex: 10,
       isVisible: true,
     },
     // border line
@@ -5004,7 +5303,7 @@ export const useFormFields = (
       y: 538,
       width: 160,
       height: 16,
-      imageIndex: 9,
+      imageIndex: 10,
       isVisible: true,
     },
 
@@ -5016,7 +5315,7 @@ export const useFormFields = (
       y: 573,
       width: 225,
       height: 18,
-      imageIndex: 9,
+      imageIndex: 10,
       isVisible: true,
     },
 
@@ -5028,7 +5327,7 @@ export const useFormFields = (
       y: 573,
       width: 215,
       height: 18,
-      imageIndex: 9,
+      imageIndex: 10,
       isVisible: true,
     },
 
@@ -5040,7 +5339,7 @@ export const useFormFields = (
       y: 573,
       width: 150,
       height: 18,
-      imageIndex: 9,
+      imageIndex: 10,
       isVisible: true,
       onBlur() {
         calculateTotalAssetsInBangladeshAndOutside();
@@ -5055,7 +5354,7 @@ export const useFormFields = (
       y: 590,
       width: 225,
       height: 18,
-      imageIndex: 9,
+      imageIndex: 10,
       isVisible: true,
     },
 
@@ -5067,7 +5366,7 @@ export const useFormFields = (
       y: 590,
       width: 215,
       height: 18,
-      imageIndex: 9,
+      imageIndex: 10,
       isVisible: true,
     },
 
@@ -5079,7 +5378,7 @@ export const useFormFields = (
       y: 590,
       width: 150,
       height: 18,
-      imageIndex: 9,
+      imageIndex: 10,
       isVisible: true,
       onBlur() {
         calculateTotalAssetsInBangladeshAndOutside();
@@ -5093,7 +5392,7 @@ export const useFormFields = (
       y: 610,
       width: 355,
       height: 18,
-      imageIndex: 9,
+      imageIndex: 10,
       isVisible: true,
     },
 
@@ -5105,7 +5404,7 @@ export const useFormFields = (
       y: 610,
       width: 170,
       height: 18,
-      imageIndex: 9,
+      imageIndex: 10,
       isVisible: true,
       onBlur() {
         calculateTotalAssetsInBangladeshAndOutside();
@@ -5120,7 +5419,7 @@ export const useFormFields = (
       y: 628,
       width: 170,
       height: 18,
-      imageIndex: 9,
+      imageIndex: 10,
       isVisible: true,
       onBlur() {
         calculateTotalAssetsInBangladeshAndOutside();
@@ -5135,7 +5434,7 @@ export const useFormFields = (
       y: 645,
       width: 220,
       height: 18,
-      imageIndex: 9,
+      imageIndex: 10,
       isVisible: true,
     },
 
@@ -5147,7 +5446,7 @@ export const useFormFields = (
       y: 645,
       width: 170,
       height: 18,
-      imageIndex: 9,
+      imageIndex: 10,
       isVisible: true,
       onBlur() {
         calculateTotalAssetsInBangladeshAndOutside();
@@ -5162,7 +5461,7 @@ export const useFormFields = (
       y: 680,
       width: 155,
       height: 18,
-      imageIndex: 9,
+      imageIndex: 10,
       isVisible: true,
       onBlur() {
         calculateTotalAssetsInBangladeshAndOutside();
@@ -5176,7 +5475,7 @@ export const useFormFields = (
       y: 698,
       width: 155,
       height: 18,
-      imageIndex: 9,
+      imageIndex: 10,
       isVisible: true,
       onBlur() {
         calculateTotalAssetsInBangladeshAndOutside();
@@ -5190,7 +5489,7 @@ export const useFormFields = (
       y: 715,
       width: 320,
       height: 18,
-      imageIndex: 9,
+      imageIndex: 10,
       isVisible: true,
     },
     {
@@ -5201,7 +5500,7 @@ export const useFormFields = (
       y: 715,
       width: 155,
       height: 18,
-      imageIndex: 9,
+      imageIndex: 10,
       isVisible: true,
       onBlur() {
         calculateTotalAssetsInBangladeshAndOutside();
@@ -5217,7 +5516,7 @@ export const useFormFields = (
       y: 733,
       width: 160,
       height: 16,
-      imageIndex: 9,
+      imageIndex: 10,
       isVisible: true,
     },
     {
@@ -5229,7 +5528,7 @@ export const useFormFields = (
       y: 750,
       width: 160,
       height: 16,
-      imageIndex: 9,
+      imageIndex: 10,
       isVisible: true,
     },
     {
@@ -5241,7 +5540,7 @@ export const useFormFields = (
       disabled: false,
       width: 170,
       height: 18,
-      imageIndex: 9,
+      imageIndex: 10,
       isVisible: true,
       onBlur() {
         calculateTotalAssetsInBangladeshAndOutside();
@@ -5257,7 +5556,7 @@ export const useFormFields = (
       y: 785,
       width: 160,
       height: 16,
-      imageIndex: 9,
+      imageIndex: 10,
       isVisible: true,
     },
 
@@ -5269,7 +5568,7 @@ export const useFormFields = (
       y: 850,
       width: 200,
       height: 40,
-      imageIndex: 9,
+      imageIndex: 10,
       isVisible: true,
     },
     {
@@ -5281,7 +5580,7 @@ export const useFormFields = (
       y: 905,
       width: 340,
       height: 16,
-      imageIndex: 9,
+      imageIndex: 10,
       isVisible: true,
     },
     {
@@ -5292,11 +5591,11 @@ export const useFormFields = (
       y: 940,
       width: 50,
       height: 30,
-      imageIndex: 9,
+      imageIndex: 10,
       isVisible: true,
     },
 
-    // Image 11
+    // Image 12
     {
       name: "taxpayerName",
       type: "text",
@@ -5306,7 +5605,7 @@ export const useFormFields = (
       y: 375,
       width: 530,
       height: 30,
-      imageIndex: 10,
+      imageIndex: 11,
       isVisible: true,
     },
     {
@@ -5318,7 +5617,7 @@ export const useFormFields = (
       y: 420,
       width: 335,
       height: 30,
-      imageIndex: 10,
+      imageIndex: 11,
       isVisible: true,
     },
     {
@@ -5330,7 +5629,7 @@ export const useFormFields = (
       y: 465,
       width: 335,
       height: 30,
-      imageIndex: 10,
+      imageIndex: 11,
       isVisible: true,
     },
     {
@@ -5342,7 +5641,7 @@ export const useFormFields = (
       y: 510,
       width: 225,
       height: 30,
-      imageIndex: 10,
+      imageIndex: 11,
       isVisible: true,
     },
     {
@@ -5354,7 +5653,7 @@ export const useFormFields = (
       y: 510,
       width: 330,
       height: 30,
-      imageIndex: 10,
+      imageIndex: 11,
       isVisible: true,
     },
     {
@@ -5367,7 +5666,7 @@ export const useFormFields = (
       y: 555,
       width: 300,
       height: 30,
-      imageIndex: 10,
+      imageIndex: 11,
       isVisible: true,
     },
     {
@@ -5379,7 +5678,7 @@ export const useFormFields = (
       y: 600,
       width: 300,
       height: 30,
-      imageIndex: 10,
+      imageIndex: 11,
       isVisible: true,
     },
   ];

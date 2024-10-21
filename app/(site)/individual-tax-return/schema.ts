@@ -29,6 +29,13 @@ const personalExpenseSchema = z.object({
   comment: z.string().nullable().optional(),
 });
 
+const incomeFromCapitalGainsSchema = z.object({
+  description:z.string().optional(),
+  capitalGain: z.string().nullable().optional(),
+  exemptedAmount: z.string().nullable().optional(),
+  taxableAmount: z.string().nullable().optional(),
+});
+
 // Define the Zod schema
 export const individualTaxReturnSchema = z.object({
   userId: z.string().optional(),
@@ -203,6 +210,7 @@ export const individualTaxReturnSchema = z.object({
 
   // summary of income
   salesTurnoverReceipts: z.string().optional(),
+  purchase:z.string().optional(),
   grossProfitFromBusiness: z.string().optional(),
   generalAdministrativeSellingExpenses: z.string().optional(),
   badDebtExpense: z.string().optional(),
@@ -220,6 +228,13 @@ export const individualTaxReturnSchema = z.object({
   closingCapital: z.string().optional(),
   liabilities: z.string().optional(),
   totalCapitalsAndLiabilities: z.string().optional(),
+
+  incomeFromShareTransferListedCompany: incomeFromCapitalGainsSchema,
+  incomeFromCapitalGain2:incomeFromCapitalGainsSchema,
+  incomeFromCapitalGain3:incomeFromCapitalGainsSchema,
+  incomeFromCapitalGain4:incomeFromCapitalGainsSchema,
+  incomeFromCapitalGain5:incomeFromCapitalGainsSchema,
+  incomeFromCapitaGainsTotal:incomeFromCapitalGainsSchema,
 
   interestProfitFromBankFI: incomeItemSchema,
   incomeFromSavingCertificates: incomeItemSchema,
