@@ -38,9 +38,9 @@ export function getMenuList(pathname: string): Group[] {
       groupLabel: "",
       menus: [
         {
-          href: "/tax-returns",
-          label: "Tax Returns",
-          active: pathname.includes("/tax-returns"),
+          href: "/orders",
+          label: "Tax Return Orders",
+          active: pathname.includes("/orders"),
           icon: FileText,
           submenus: [],
         },

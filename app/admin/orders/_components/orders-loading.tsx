@@ -1,7 +1,7 @@
 import { Skeleton } from "@/components/ui/skeleton";
 import { TableCell, TableRow } from "@/components/ui/table";
 
-export default function TaxReturnsLoading() {
+export default function OrdersLoading() {
   return (
     <>
       {[...Array(10)].map((_, i) => (

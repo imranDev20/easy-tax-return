@@ -2,11 +2,11 @@ import { Suspense } from "react";
 import { ContentLayout } from "../_components/content-layout";
 import DynamicBreadcrumb from "../_components/dynamic-breadcrumb";
 import { PaymentStatus } from "@prisma/client";
-import TaxReturnsTableHeader from "./_components/orders-table-heade";
-import TaxReturnsLoading from "./_components/orders-loading";
-import TaxReturnsList from "./_components/order-list";
 import { getTaxReturnOrders } from "./actions";
 import { ReusablePagination } from "../_components/dynamic-pagination";
+import OrdersTableHeader from "./_components/orders-table-header";
+import OrdersList from "./_components/order-list";
+import OrdersLoading from "./_components/orders-loading";
 
 const breadcrumbItems = [
   { label: "Dashboard", href: "/admin" },
@@ -39,9 +39,9 @@ export default async function AdminTaxReturnsPage({
   return (
     <ContentLayout title="Tax Returns">
       <DynamicBreadcrumb items={breadcrumbItems} />
-      <TaxReturnsTableHeader />
-      <Suspense fallback={<TaxReturnsLoading />}>
-        <TaxReturnsList orders={orders} pagination={pagination} />
+      <OrdersTableHeader />
+      <Suspense fallback={<OrdersLoading />}>
+        <OrdersList orders={orders} pagination={pagination} />
       </Suspense>
       <ReusablePagination
         currentPage={currentPage}

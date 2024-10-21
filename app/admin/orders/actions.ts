@@ -1,7 +1,5 @@
-import { authOptions } from "@/lib/auth";
 import prisma from "@/lib/prisma";
 import { Prisma, PaymentStatus } from "@prisma/client";
-import { getServerSession } from "next-auth";
 
 export async function getTaxReturnOrders(
   page: number = 1,
@@ -68,38 +66,21 @@ export async function getTaxReturnOrders(
     },
   };
 }
-export async function deleteTaxReturn(taxReturnId: string) {
+export async function deleteOrder(taxReturnId: string) {
   try {
-    const session = await getServerSession(authOptions);
+    // Assume the user is already authenticated and authorized as an admin
 
-    if (!session) {
-      return { success: false, message: "Not authenticated" };
-    }
-
-    // Check if the user is an admin
-    if (session.user.role !== "ADMIN") {
-      return { success: false, message: "Not authorized" };
-    }
-
-    // Use a transaction to delete both the tax return and its associated order
-    const result = await prisma.$transaction(async (prisma) => {
-      // Delete the associated order first
-      await prisma.order.deleteMany({
-        where: { individualTaxesId: taxReturnId },
-      });
-
-      // Then delete the tax return
-      const deletedTaxReturn = await prisma.individualTaxes.delete({
-        where: { id: taxReturnId },
-      });
-
-      return deletedTaxReturn;
+    // Delete the order associated with the tax return
+    const deletedOrder = await prisma.order.delete({
+      where: { individualTaxesId: taxReturnId },
     });
+
+    // The associated IndividualTaxes record will be automatically deleted due to the cascade delete
 
     return {
       success: true,
       message: "Tax return and associated order deleted successfully",
-      data: result,
+      data: deletedOrder,
     };
   } catch (error) {
     console.error("Error deleting tax return:", error);

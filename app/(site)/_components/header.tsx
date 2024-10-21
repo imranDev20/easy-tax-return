@@ -346,7 +346,7 @@ export default function Header() {
           {isAdmin ? (
             <>
               <DropdownMenuItem>
-                <Link href="/dashboard" className="flex items-center w-full">
+                <Link href="/admin" className="flex items-center w-full">
                   <LayoutDashboard className="mr-2 h-4 w-4" />
                   Dashboard
                 </Link>
@@ -442,7 +442,7 @@ export default function Header() {
               aria-label="Mobile menu"
             >
               <SheetHeader>
-                <SheetTitle className="text-primary">E-taxreturn</SheetTitle>
+                <Logo width={150} height={40} />
               </SheetHeader>
               <MobileNavLinks />
               {session ? (

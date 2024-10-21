@@ -1,5 +1,8 @@
 "use client";
 
+import React, { useEffect, useState } from "react";
+import { useRouter, usePathname, useSearchParams } from "next/navigation";
+import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -9,7 +12,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { useDebounce } from "@/hooks/use-debounce";
 import useQueryString from "@/hooks/use-query-string";
 import { PAYMENT_STATUS_OPTIONS } from "@/lib/constants";
 import { kebabToNormal } from "@/lib/utils";
@@ -21,11 +23,9 @@ import {
   SortAsc,
   SortDesc,
 } from "lucide-react";
-import Link from "next/link";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useDebounce } from "@/hooks/use-debounce";
 
-export default function TaxReturnsTableHeader() {
+export default function OrdersTableHeader() {
   const router = useRouter();
   const { createQueryString } = useQueryString();
   const pathname = usePathname();
@@ -37,21 +37,24 @@ export default function TaxReturnsTableHeader() {
   const filterStatus = searchParams.get("filter_status") ?? "";
 
   const [searchValue, setSearchValue] = useState(initialSearchValue);
-  const debouncedSearchValue = useDebounce(searchValue, 300);
 
-  useEffect(() => {
+  const updateSearchQuery = useDebounce((value: string) => {
     router.push(
       `${pathname}?${createQueryString({
-        search: debouncedSearchValue,
+        search: value,
       })}`
     );
-  }, [debouncedSearchValue, pathname, router, createQueryString]);
+  }, 300);
+
+  useEffect(() => {
+    updateSearchQuery(searchValue);
+  }, [searchValue, updateSearchQuery]);
 
   return (
     <div className="space-y-4 mt-7 mb-4">
       <div className="flex justify-between items-center">
         <h1 className="text-2xl font-bold">Tax Returns</h1>
-        <Link href="/admin/tax-returns/new">
+        <Link href="/admin/orders/new">
           <Button size="sm" className="h-9">
             <Plus className="mr-2 h-4 w-4" />
             New Tax Return
