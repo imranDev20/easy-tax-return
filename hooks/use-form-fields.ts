@@ -567,7 +567,7 @@ export const useFormFields = (
     {
       name: "incomeOfMinor",
       type: "number",
-      label: "incomeOfMinor",
+      label: "",
       onBlur: () => {
         calculateTotalIncome();
       },
@@ -582,7 +582,7 @@ export const useFormFields = (
     {
       name: "taxableIncomeFromAbroad",
       type: "number",
-      label: "incomeOfMinor",
+      label: "",
       onBlur: () => {
         calculateTotalIncome();
       },
