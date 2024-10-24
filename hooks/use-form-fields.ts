@@ -1143,14 +1143,13 @@ export const useFormFields = (
 
         if (typeof val === "string")
           setValue("basicPayGovtEmployment.taxable", val);
-
         calculateScheduleOneGovtTotals();
       },
 
       x: 474,
       y: 215,
       width: 153,
-      height: 19,
+      height: 18,
       imageIndex: 3,
       isVisible: watch("typeOfEmployment") === "GOVERNMENT",
     },
@@ -1160,8 +1159,8 @@ export const useFormFields = (
       label: "",
       disabled: true,
       x: 785,
-      y: 216,
-      width: 151,
+      y: 215,
+      width: 153,
       height: 18,
       imageIndex: 3,
       isVisible: watch("typeOfEmployment") === "GOVERNMENT",
@@ -1170,10 +1169,10 @@ export const useFormFields = (
       name: "arrearPayGovtEmployment.amount",
       type: "number",
       label: "",
-      x: 475,
+      x: 474,
       y: 235,
-      width: 151,
-      height: 32,
+      width: 153,
+      height: 31,
       imageIndex: 3,
       onBlur: (val) => {
         calculateScheduleOneGovtTotals();
@@ -1190,8 +1189,8 @@ export const useFormFields = (
       disabled: true,
       x: 785,
       y: 235,
-      width: 151,
-      height: 32,
+      width: 153,
+      height: 31,
       imageIndex: 3,
       isVisible: watch("typeOfEmployment") === "GOVERNMENT",
     },
@@ -1199,9 +1198,9 @@ export const useFormFields = (
       name: "specialAllowanceGovtEmployment.amount",
       type: "number",
       label: "",
-      x: 475,
+      x: 474,
       y: 268,
-      width: 151,
+      width: 153,
       height: 18,
       imageIndex: 3,
       onBlur: (val) => {
@@ -1218,7 +1217,7 @@ export const useFormFields = (
       disabled: true,
       x: 630,
       y: 268,
-      width: 151,
+      width: 153,
       height: 18,
       imageIndex: 3,
       isVisible: watch("typeOfEmployment") === "GOVERNMENT",
@@ -1227,9 +1226,9 @@ export const useFormFields = (
       name: "houseRentAllowanceGovtEmployment.amount",
       type: "number",
       label: "",
-      x: 475,
+      x: 474,
       y: 288,
-      width: 151,
+      width: 153,
       height: 18,
       imageIndex: 3,
       onBlur: (val) => {
@@ -1246,7 +1245,7 @@ export const useFormFields = (
       disabled: true,
       x: 630,
       y: 288,
-      width: 151,
+      width: 153,
       height: 18,
       imageIndex: 3,
       isVisible: watch("typeOfEmployment") === "GOVERNMENT",
@@ -1255,9 +1254,9 @@ export const useFormFields = (
       name: "medicalAllowanceGovtEmployment.amount",
       type: "number",
       label: "",
-      x: 475,
+      x: 474,
       y: 307,
-      width: 151,
+      width: 153,
       height: 18,
       imageIndex: 3,
       onBlur: (val) => {
@@ -1274,7 +1273,7 @@ export const useFormFields = (
       disabled: true,
       x: 630,
       y: 307,
-      width: 151,
+      width: 153,
       height: 18,
       imageIndex: 3,
       isVisible: watch("typeOfEmployment") === "GOVERNMENT",
@@ -1284,9 +1283,9 @@ export const useFormFields = (
       type: "number",
       label: "",
       disabled: false,
-      x: 475,
+      x: 474,
       y: 326,
-      width: 151,
+      width: 153,
       height: 18,
       imageIndex: 3,
       onBlur: (val) => {
@@ -1303,7 +1302,7 @@ export const useFormFields = (
       disabled: true,
       x: 630,
       y: 326,
-      width: 151,
+      width: 153,
       height: 18,
       imageIndex: 3,
       isVisible: watch("typeOfEmployment") === "GOVERNMENT",
@@ -1314,10 +1313,10 @@ export const useFormFields = (
       type: "number",
       label: "",
       disabled: false,
-      x: 475,
-      y: 348,
-      width: 151,
-      height: 16,
+      x: 474,
+      y: 346,
+      width: 153,
+      height: 18,
       imageIndex: 3,
       onBlur: (val) => {
         calculateScheduleOneGovtTotals();
@@ -1332,9 +1331,9 @@ export const useFormFields = (
       label: "",
       disabled: true,
       x: 785,
-      y: 348,
-      width: 151,
-      height: 16,
+      y: 346,
+      width: 153,
+      height: 18,
       imageIndex: 3,
       isVisible: watch("typeOfEmployment") === "GOVERNMENT",
     },
@@ -1344,10 +1343,10 @@ export const useFormFields = (
       type: "number",
       label: "",
       disabled: false,
-      x: 475,
-      y: 367,
-      width: 151,
-      height: 16,
+      x: 474,
+      y: 366,
+      width: 153,
+      height: 18,
       imageIndex: 3,
       onBlur: (val) => {
         calculateScheduleOneGovtTotals();
@@ -1362,9 +1361,9 @@ export const useFormFields = (
       label: "",
       disabled: true,
       x: 630,
-      y: 367,
-      width: 151,
-      height: 16,
+      y: 366,
+      width: 153,
+      height: 18,
       imageIndex: 3,
       isVisible: watch("typeOfEmployment") === "GOVERNMENT",
     },
@@ -1373,9 +1372,9 @@ export const useFormFields = (
       type: "number",
       label: "",
       disabled: false,
-      x: 475,
+      x: 474,
       y: 385,
-      width: 151,
+      width: 153,
       height: 18,
       imageIndex: 3,
       onBlur: (val) => {
@@ -1392,7 +1391,7 @@ export const useFormFields = (
       disabled: true,
       x: 630,
       y: 385,
-      width: 151,
+      width: 153,
       height: 18,
       imageIndex: 3,
       isVisible: watch("typeOfEmployment") === "GOVERNMENT",
@@ -1402,9 +1401,9 @@ export const useFormFields = (
       type: "number",
       label: "",
       disabled: false,
-      x: 475,
+      x: 474,
       y: 404,
-      width: 151,
+      width: 153,
       height: 18,
       imageIndex: 3,
       onBlur: (val) => {
@@ -1421,7 +1420,7 @@ export const useFormFields = (
       disabled: true,
       x: 630,
       y: 404,
-      width: 151,
+      width: 153,
       height: 18,
       imageIndex: 3,
       isVisible: watch("typeOfEmployment") === "GOVERNMENT",
@@ -1431,9 +1430,9 @@ export const useFormFields = (
       type: "number",
       label: "",
       disabled: false,
-      x: 475,
+      x: 474,
       y: 424,
-      width: 151,
+      width: 153,
       height: 18,
       imageIndex: 3,
       onBlur: (val) => {
@@ -1450,7 +1449,7 @@ export const useFormFields = (
       disabled: true,
       x: 630,
       y: 424,
-      width: 151,
+      width: 153,
       height: 18,
       imageIndex: 3,
       isVisible: watch("typeOfEmployment") === "GOVERNMENT",
@@ -1460,9 +1459,9 @@ export const useFormFields = (
       type: "number",
       label: "",
       disabled: false,
-      x: 475,
+      x: 474,
       y: 443,
-      width: 151,
+      width: 153,
       height: 18,
       imageIndex: 3,
       onBlur: (val) => {
@@ -1479,7 +1478,7 @@ export const useFormFields = (
       disabled: true,
       x: 630,
       y: 443,
-      width: 151,
+      width: 153,
       height: 18,
       imageIndex: 3,
       isVisible: watch("typeOfEmployment") === "GOVERNMENT",
@@ -1489,9 +1488,9 @@ export const useFormFields = (
       type: "number",
       label: "",
       disabled: false,
-      x: 475,
+      x: 474,
       y: 462,
-      width: 151,
+      width: 153,
       height: 32,
       imageIndex: 3,
       onBlur: (val) => {
@@ -1511,7 +1510,7 @@ export const useFormFields = (
       disabled: true,
       x: 630,
       y: 462,
-      width: 151,
+      width: 153,
       height: 32,
       imageIndex: 3,
       isVisible: watch("typeOfEmployment") === "GOVERNMENT",
@@ -1521,9 +1520,9 @@ export const useFormFields = (
       type: "number",
       label: "",
       disabled: false,
-      x: 475,
+      x: 474,
       y: 496,
-      width: 151,
+      width: 153,
       height: 18,
       imageIndex: 3,
       onBlur: (val) => {
@@ -1540,7 +1539,7 @@ export const useFormFields = (
       disabled: true,
       x: 630,
       y: 496,
-      width: 151,
+      width: 153,
       height: 18,
       imageIndex: 3,
       isVisible: watch("typeOfEmployment") === "GOVERNMENT",
@@ -1550,9 +1549,9 @@ export const useFormFields = (
       type: "number",
       label: "",
       disabled: false,
-      x: 475,
+      x: 474,
       y: 515,
-      width: 151,
+      width: 153,
       height: 18,
       imageIndex: 3,
       onBlur: (val) => {
@@ -1569,7 +1568,7 @@ export const useFormFields = (
       disabled: true,
       x: 630,
       y: 515,
-      width: 151,
+      width: 153,
       height: 18,
       imageIndex: 3,
       isVisible: watch("typeOfEmployment") === "GOVERNMENT",
@@ -1580,9 +1579,9 @@ export const useFormFields = (
       type: "number",
       label: "",
       disabled: false,
-      x: 475,
+      x: 474,
       y: 535,
-      width: 151,
+      width: 153,
       height: 18,
       imageIndex: 3,
       onBlur() {
@@ -1598,7 +1597,7 @@ export const useFormFields = (
       disabled: false,
       x: 630,
       y: 535,
-      width: 151,
+      width: 153,
       height: 18,
       imageIndex: 3,
       onBlur() {
@@ -1614,7 +1613,7 @@ export const useFormFields = (
       disabled: true,
       x: 785,
       y: 535,
-      width: 151,
+      width: 153,
       height: 18,
       imageIndex: 3,
       isVisible: watch("typeOfEmployment") === "GOVERNMENT",
@@ -1624,9 +1623,9 @@ export const useFormFields = (
       type: "number",
       label: "",
       disabled: true,
-      x: 475,
+      x: 474,
       y: 554,
-      width: 151,
+      width: 153,
       height: 18,
       imageIndex: 3,
       isVisible: watch("typeOfEmployment") === "GOVERNMENT",
@@ -1638,7 +1637,7 @@ export const useFormFields = (
       disabled: true,
       x: 630,
       y: 554,
-      width: 151,
+      width: 153,
       height: 18,
       imageIndex: 3,
       isVisible: watch("typeOfEmployment") === "GOVERNMENT",
@@ -1650,7 +1649,7 @@ export const useFormFields = (
       disabled: true,
       x: 785,
       y: 554,
-      width: 151,
+      width: 153,
       height: 18,
       imageIndex: 3,
       isVisible: watch("typeOfEmployment") === "GOVERNMENT",
@@ -1662,7 +1661,7 @@ export const useFormFields = (
       // disabled: true,
       x: 785,
       y: 576,
-      width: 151,
+      width: 153,
       height: 18,
       imageIndex: 3,
       isVisible: watch("typeOfEmployment") === "GOVERNMENT",
@@ -1676,7 +1675,7 @@ export const useFormFields = (
       label: "",
       x: 630,
       y: 650,
-      width: 151,
+      width: 153,
       height: 18,
       imageIndex: 3,
       onBlur() {
@@ -1690,7 +1689,7 @@ export const useFormFields = (
       label: "",
       x: 630,
       y: 670,
-      width: 151,
+      width: 153,
       height: 18,
       imageIndex: 3,
       onBlur() {
@@ -1705,7 +1704,7 @@ export const useFormFields = (
       // disabled: true,
       x: 630,
       y: 690,
-      width: 151,
+      width: 153,
       height: 18,
       imageIndex: 3,
       onBlur() {
@@ -1720,7 +1719,7 @@ export const useFormFields = (
       // disabled: true,
       x: 630,
       y: 708,
-      width: 151,
+      width: 153,
       height: 18,
       imageIndex: 3,
       onBlur() {
@@ -1735,7 +1734,7 @@ export const useFormFields = (
       // disabled: true,
       x: 630,
       y: 728,
-      width: 151,
+      width: 153,
       height: 18,
       imageIndex: 3,
       onBlur() {
@@ -1750,7 +1749,7 @@ export const useFormFields = (
       // disabled: true,
       x: 630,
       y: 748,
-      width: 151,
+      width: 153,
       height: 18,
       imageIndex: 3,
       onBlur() {
@@ -1765,7 +1764,7 @@ export const useFormFields = (
       // disabled: true,
       x: 630,
       y: 767,
-      width: 151,
+      width: 153,
       height: 18,
       imageIndex: 3,
       onBlur() {
@@ -1780,7 +1779,7 @@ export const useFormFields = (
       // disabled: true,
       x: 630,
       y: 787,
-      width: 151,
+      width: 153,
       height: 18,
       imageIndex: 3,
       onBlur() {
@@ -1831,7 +1830,7 @@ export const useFormFields = (
       disabled: true,
       x: 630,
       y: 806,
-      width: 151,
+      width: 153,
       height: 18,
       imageIndex: 3,
       isVisible: watch("typeOfEmployment") === "PRIVATE",
@@ -1844,7 +1843,7 @@ export const useFormFields = (
       // disabled: true,
       x: 630,
       y: 825,
-      width: 151,
+      width: 153,
       height: 18,
       imageIndex: 3,
       onBlur() {
@@ -1858,7 +1857,7 @@ export const useFormFields = (
       label: "",
       x: 630,
       y: 845,
-      width: 151,
+      width: 153,
       height: 18,
       imageIndex: 3,
       onBlur() {
@@ -1873,7 +1872,7 @@ export const useFormFields = (
       // disabled: true,
       x: 630,
       y: 865,
-      width: 151,
+      width: 153,
       height: 18,
       imageIndex: 3,
       onBlur() {
@@ -1888,7 +1887,7 @@ export const useFormFields = (
       disabled: true,
       x: 630,
       y: 884,
-      width: 151,
+      width: 153,
       height: 17,
       imageIndex: 3,
       isVisible: watch("typeOfEmployment") === "PRIVATE",
@@ -1900,7 +1899,7 @@ export const useFormFields = (
       disabled: true,
       x: 785,
       y: 884,
-      width: 151,
+      width: 153,
       height: 17,
       imageIndex: 3,
       isVisible: watch("typeOfEmployment") === "PRIVATE",
@@ -1912,7 +1911,7 @@ export const useFormFields = (
       disabled: true,
       x: 630,
       y: 903,
-      width: 151,
+      width: 153,
       height: 18,
       imageIndex: 3,
       isVisible: watch("typeOfEmployment") === "PRIVATE",
@@ -1924,7 +1923,7 @@ export const useFormFields = (
       disabled: true,
       x: 785,
       y: 903,
-      width: 151,
+      width: 153,
       height: 18,
       imageIndex: 3,
       isVisible: watch("typeOfEmployment") === "PRIVATE",
@@ -1936,7 +1935,7 @@ export const useFormFields = (
       disabled: true,
       x: 630,
       y: 922,
-      width: 151,
+      width: 153,
       height: 18,
       imageIndex: 3,
       isVisible: watch("typeOfEmployment") === "PRIVATE",
@@ -1948,7 +1947,7 @@ export const useFormFields = (
       disabled: true,
       x: 785,
       y: 922,
-      width: 151,
+      width: 153,
       height: 18,
       imageIndex: 3,
       isVisible: watch("typeOfEmployment") === "PRIVATE",
@@ -3003,7 +3002,7 @@ export const useFormFields = (
     {
       name: "shonchoyparta.balance",
       type: "number",
-      label: "",    
+      label: "",
       x: 460,
       y: 378,
       width: 142,
@@ -3014,7 +3013,7 @@ export const useFormFields = (
     {
       name: "shonchoyparta.interestProfit",
       type: "number",
-      label: "",    
+      label: "",
       x: 604,
       y: 378,
       width: 142,
@@ -3025,7 +3024,7 @@ export const useFormFields = (
     {
       name: "shonchoyparta.sourceTax",
       type: "number",
-      label: "",    
+      label: "",
       x: 750,
       y: 378,
       width: 142,
@@ -3036,7 +3035,7 @@ export const useFormFields = (
     {
       name: "profitFromShoychoyparta2.description",
       type: "text",
-      label: "",    
+      label: "",
       x: 170,
       y: 396,
       width: 285,
@@ -3047,7 +3046,7 @@ export const useFormFields = (
     {
       name: "profitFromShoychoyparta2.balance",
       type: "number",
-      label: "",    
+      label: "",
       x: 460,
       y: 396,
       width: 142,
@@ -3058,7 +3057,7 @@ export const useFormFields = (
     {
       name: "profitFromShoychoyparta2.interestProfit",
       type: "number",
-      label: "",    
+      label: "",
       x: 604,
       y: 396,
       width: 142,
@@ -3069,7 +3068,7 @@ export const useFormFields = (
     {
       name: "profitFromShoychoyparta2.sourceTax",
       type: "number",
-      label: "",    
+      label: "",
       x: 750,
       y: 396,
       width: 142,
@@ -3080,7 +3079,7 @@ export const useFormFields = (
     {
       name: "profitFromShoychoyparta3.description",
       type: "text",
-      label: "",    
+      label: "",
       x: 170,
       y: 413,
       width: 285,
@@ -3091,7 +3090,7 @@ export const useFormFields = (
     {
       name: "profitFromShoychoyparta3.balance",
       type: "number",
-      label: "",    
+      label: "",
       x: 460,
       y: 413,
       width: 142,
@@ -3102,7 +3101,7 @@ export const useFormFields = (
     {
       name: "profitFromShoychoyparta3.interestProfit",
       type: "number",
-      label: "",    
+      label: "",
       x: 604,
       y: 413,
       width: 142,
@@ -3113,7 +3112,7 @@ export const useFormFields = (
     {
       name: "profitFromShoychoyparta3.sourceTax",
       type: "number",
-      label: "",    
+      label: "",
       x: 750,
       y: 413,
       width: 142,
@@ -3124,7 +3123,7 @@ export const useFormFields = (
     {
       name: "profitFromShoychoyparta4.description",
       type: "text",
-      label: "",    
+      label: "",
       x: 170,
       y: 430,
       width: 285,
@@ -3135,7 +3134,7 @@ export const useFormFields = (
     {
       name: "profitFromShoychoyparta4.balance",
       type: "number",
-      label: "",    
+      label: "",
       x: 460,
       y: 430,
       width: 142,
@@ -3146,7 +3145,7 @@ export const useFormFields = (
     {
       name: "profitFromShoychoyparta4.interestProfit",
       type: "number",
-      label: "",    
+      label: "",
       x: 604,
       y: 430,
       width: 142,
@@ -3157,7 +3156,7 @@ export const useFormFields = (
     {
       name: "profitFromShoychoyparta4.sourceTax",
       type: "number",
-      label: "",    
+      label: "",
       x: 750,
       y: 430,
       width: 142,
@@ -3168,7 +3167,7 @@ export const useFormFields = (
     {
       name: "profitFromShoychoyparta5.description",
       type: "text",
-      label: "",    
+      label: "",
       x: 170,
       y: 449,
       width: 285,
@@ -3179,7 +3178,7 @@ export const useFormFields = (
     {
       name: "profitFromShoychoyparta5.balance",
       type: "number",
-      label: "",    
+      label: "",
       x: 460,
       y: 449,
       width: 142,
@@ -3190,7 +3189,7 @@ export const useFormFields = (
     {
       name: "profitFromShoychoyparta5.interestProfit",
       type: "number",
-      label: "",    
+      label: "",
       x: 604,
       y: 449,
       width: 142,
@@ -3201,7 +3200,7 @@ export const useFormFields = (
     {
       name: "profitFromShoychoyparta5.sourceTax",
       type: "number",
-      label: "",    
+      label: "",
       x: 750,
       y: 449,
       width: 142,
@@ -3212,7 +3211,7 @@ export const useFormFields = (
     {
       name: "profitFromShoychoyparta6.description",
       type: "text",
-      label: "",    
+      label: "",
       x: 170,
       y: 467,
       width: 285,
@@ -3223,7 +3222,7 @@ export const useFormFields = (
     {
       name: "profitFromShoychoyparta6.balance",
       type: "number",
-      label: "",    
+      label: "",
       x: 460,
       y: 467,
       width: 142,
@@ -3234,7 +3233,7 @@ export const useFormFields = (
     {
       name: "profitFromShoychoyparta6.interestProfit",
       type: "number",
-      label: "",    
+      label: "",
       x: 604,
       y: 467,
       width: 142,
@@ -3245,7 +3244,7 @@ export const useFormFields = (
     {
       name: "profitFromShoychoyparta6.sourceTax",
       type: "number",
-      label: "",    
+      label: "",
       x: 750,
       y: 467,
       width: 142,
@@ -3256,7 +3255,7 @@ export const useFormFields = (
     {
       name: "profitFromShoychoyparta7.description",
       type: "text",
-      label: "",    
+      label: "",
       x: 170,
       y: 484,
       width: 285,
@@ -3267,7 +3266,7 @@ export const useFormFields = (
     {
       name: "profitFromShoychoyparta7.balance",
       type: "number",
-      label: "",    
+      label: "",
       x: 460,
       y: 484,
       width: 142,
@@ -3278,7 +3277,7 @@ export const useFormFields = (
     {
       name: "profitFromShoychoyparta7.interestProfit",
       type: "number",
-      label: "",    
+      label: "",
       x: 604,
       y: 484,
       width: 142,
@@ -3289,7 +3288,7 @@ export const useFormFields = (
     {
       name: "profitFromShoychoyparta7.sourceTax",
       type: "number",
-      label: "",    
+      label: "",
       x: 750,
       y: 484,
       width: 142,
@@ -3300,7 +3299,7 @@ export const useFormFields = (
     {
       name: "profitFromShoychoyparta8.description",
       type: "text",
-      label: "",    
+      label: "",
       x: 170,
       y: 502,
       width: 285,
@@ -3311,7 +3310,7 @@ export const useFormFields = (
     {
       name: "profitFromShoychoyparta8.balance",
       type: "number",
-      label: "",    
+      label: "",
       x: 460,
       y: 502,
       width: 142,
@@ -3322,7 +3321,7 @@ export const useFormFields = (
     {
       name: "profitFromShoychoyparta8.interestProfit",
       type: "number",
-      label: "",    
+      label: "",
       x: 604,
       y: 502,
       width: 142,
@@ -3333,7 +3332,7 @@ export const useFormFields = (
     {
       name: "profitFromShoychoyparta8.sourceTax",
       type: "number",
-      label: "",    
+      label: "",
       x: 750,
       y: 502,
       width: 142,
@@ -3344,7 +3343,7 @@ export const useFormFields = (
     {
       name: "profitFromShoychoyparta9.description",
       type: "text",
-      label: "",    
+      label: "",
       x: 170,
       y: 520,
       width: 285,
@@ -3355,7 +3354,7 @@ export const useFormFields = (
     {
       name: "profitFromShoychoyparta9.balance",
       type: "number",
-      label: "",    
+      label: "",
       x: 460,
       y: 520,
       width: 142,
@@ -3366,7 +3365,7 @@ export const useFormFields = (
     {
       name: "profitFromShoychoyparta9.interestProfit",
       type: "number",
-      label: "",    
+      label: "",
       x: 604,
       y: 520,
       width: 142,
@@ -3377,7 +3376,7 @@ export const useFormFields = (
     {
       name: "profitFromShoychoyparta9.sourceTax",
       type: "number",
-      label: "",    
+      label: "",
       x: 750,
       y: 520,
       width: 142,
@@ -3388,7 +3387,7 @@ export const useFormFields = (
     {
       name: "profitFromShoychoyparta10.description",
       type: "text",
-      label: "",    
+      label: "",
       x: 170,
       y: 536,
       width: 285,
@@ -3399,7 +3398,7 @@ export const useFormFields = (
     {
       name: "profitFromShoychoyparta10.balance",
       type: "number",
-      label: "",    
+      label: "",
       x: 460,
       y: 536,
       width: 142,
@@ -3410,7 +3409,7 @@ export const useFormFields = (
     {
       name: "profitFromShoychoyparta10.interestProfit",
       type: "number",
-      label: "",    
+      label: "",
       x: 604,
       y: 536,
       width: 142,
@@ -3421,7 +3420,7 @@ export const useFormFields = (
     {
       name: "profitFromShoychoyparta10.sourceTax",
       type: "number",
-      label: "",    
+      label: "",
       x: 750,
       y: 536,
       width: 142,
@@ -3432,10 +3431,10 @@ export const useFormFields = (
     {
       name: "profitFromShoychoypartaTotal.balance",
       type: "number",
-      label: "",    
+      label: "",
       x: 460,
       y: 554,
-      disabled:true,
+      disabled: true,
       width: 142,
       height: 17,
       imageIndex: 6,
@@ -3444,10 +3443,10 @@ export const useFormFields = (
     {
       name: "profitFromShoychoypartaTotal.interestProfit",
       type: "number",
-      label: "",    
+      label: "",
       x: 604,
       y: 554,
-      disabled:true,
+      disabled: true,
       width: 142,
       height: 17,
       imageIndex: 6,
@@ -3456,10 +3455,10 @@ export const useFormFields = (
     {
       name: "profitFromShoychoypartaTotal.sourceTax",
       type: "number",
-      label: "",    
+      label: "",
       x: 750,
       y: 554,
-      disabled:true,
+      disabled: true,
       width: 142,
       height: 17,
       imageIndex: 6,
@@ -3469,7 +3468,7 @@ export const useFormFields = (
     {
       name: "interestFromSecurities.balance",
       type: "number",
-      label: "",    
+      label: "",
       x: 460,
       y: 683,
       width: 142,
@@ -3480,7 +3479,7 @@ export const useFormFields = (
     {
       name: "interestFromSecurities.interestProfit",
       type: "number",
-      label: "",    
+      label: "",
       x: 604,
       y: 683,
       width: 142,
@@ -3491,7 +3490,7 @@ export const useFormFields = (
     {
       name: "interestFromSecurities.sourceTax",
       type: "number",
-      label: "",    
+      label: "",
       x: 750,
       y: 683,
       width: 142,
@@ -3503,7 +3502,7 @@ export const useFormFields = (
     {
       name: "profitInterestFromGovtSecurities2.description",
       type: "text",
-      label: "",    
+      label: "",
       x: 170,
       y: 700,
       width: 285,
@@ -3514,7 +3513,7 @@ export const useFormFields = (
     {
       name: "profitInterestFromGovtSecurities2.balance",
       type: "number",
-      label: "",    
+      label: "",
       x: 460,
       y: 700,
       width: 142,
@@ -3525,7 +3524,7 @@ export const useFormFields = (
     {
       name: "profitInterestFromGovtSecurities2.interestProfit",
       type: "number",
-      label: "",    
+      label: "",
       x: 604,
       y: 700,
       width: 142,
@@ -3536,7 +3535,7 @@ export const useFormFields = (
     {
       name: "profitInterestFromGovtSecurities2.sourceTax",
       type: "number",
-      label: "",    
+      label: "",
       x: 750,
       y: 700,
       width: 142,
@@ -3547,7 +3546,7 @@ export const useFormFields = (
     {
       name: "profitInterestFromGovtSecurities3.description",
       type: "text",
-      label: "",    
+      label: "",
       x: 170,
       y: 719,
       width: 285,
@@ -3558,7 +3557,7 @@ export const useFormFields = (
     {
       name: "profitInterestFromGovtSecurities3.balance",
       type: "number",
-      label: "",    
+      label: "",
       x: 460,
       y: 719,
       width: 142,
@@ -3569,7 +3568,7 @@ export const useFormFields = (
     {
       name: "profitInterestFromGovtSecurities3.interestProfit",
       type: "number",
-      label: "",    
+      label: "",
       x: 604,
       y: 719,
       width: 142,
@@ -3580,7 +3579,7 @@ export const useFormFields = (
     {
       name: "profitInterestFromGovtSecurities3.sourceTax",
       type: "number",
-      label: "",    
+      label: "",
       x: 750,
       y: 719,
       width: 142,
@@ -3591,7 +3590,7 @@ export const useFormFields = (
     {
       name: "profitInterestFromGovtSecurities4.description",
       type: "text",
-      label: "",    
+      label: "",
       x: 170,
       y: 736,
       width: 285,
@@ -3602,7 +3601,7 @@ export const useFormFields = (
     {
       name: "profitInterestFromGovtSecurities4.balance",
       type: "number",
-      label: "",    
+      label: "",
       x: 460,
       y: 736,
       width: 142,
@@ -3613,7 +3612,7 @@ export const useFormFields = (
     {
       name: "profitInterestFromGovtSecurities4.interestProfit",
       type: "number",
-      label: "",    
+      label: "",
       x: 604,
       y: 736,
       width: 142,
@@ -3624,7 +3623,7 @@ export const useFormFields = (
     {
       name: "profitInterestFromGovtSecurities4.sourceTax",
       type: "number",
-      label: "",    
+      label: "",
       x: 750,
       y: 736,
       width: 142,
@@ -3635,7 +3634,7 @@ export const useFormFields = (
     {
       name: "profitInterestFromGovtSecurities5.description",
       type: "text",
-      label: "",    
+      label: "",
       x: 170,
       y: 754,
       width: 285,
@@ -3646,7 +3645,7 @@ export const useFormFields = (
     {
       name: "profitInterestFromGovtSecurities5.balance",
       type: "number",
-      label: "",    
+      label: "",
       x: 460,
       y: 754,
       width: 142,
@@ -3657,7 +3656,7 @@ export const useFormFields = (
     {
       name: "profitInterestFromGovtSecurities5.interestProfit",
       type: "number",
-      label: "",    
+      label: "",
       x: 604,
       y: 754,
       width: 142,
@@ -3668,7 +3667,7 @@ export const useFormFields = (
     {
       name: "profitInterestFromGovtSecurities5.sourceTax",
       type: "number",
-      label: "",    
+      label: "",
       x: 750,
       y: 754,
       width: 142,
@@ -3679,7 +3678,7 @@ export const useFormFields = (
     {
       name: "profitInterestFromGovtSecurities6.description",
       type: "text",
-      label: "",    
+      label: "",
       x: 170,
       y: 772,
       width: 285,
@@ -3690,7 +3689,7 @@ export const useFormFields = (
     {
       name: "profitInterestFromGovtSecurities6.balance",
       type: "number",
-      label: "",    
+      label: "",
       x: 460,
       y: 772,
       width: 142,
@@ -3701,7 +3700,7 @@ export const useFormFields = (
     {
       name: "profitInterestFromGovtSecurities6.interestProfit",
       type: "number",
-      label: "",    
+      label: "",
       x: 604,
       y: 772,
       width: 142,
@@ -3712,7 +3711,7 @@ export const useFormFields = (
     {
       name: "profitInterestFromGovtSecurities6.sourceTax",
       type: "number",
-      label: "",    
+      label: "",
       x: 750,
       y: 772,
       width: 142,
@@ -3723,7 +3722,7 @@ export const useFormFields = (
     {
       name: "profitInterestFromGovtSecurities7.description",
       type: "text",
-      label: "",    
+      label: "",
       x: 170,
       y: 790,
       width: 285,
@@ -3734,7 +3733,7 @@ export const useFormFields = (
     {
       name: "profitInterestFromGovtSecurities7.balance",
       type: "number",
-      label: "",    
+      label: "",
       x: 460,
       y: 790,
       width: 142,
@@ -3745,7 +3744,7 @@ export const useFormFields = (
     {
       name: "profitInterestFromGovtSecurities7.interestProfit",
       type: "number",
-      label: "",    
+      label: "",
       x: 604,
       y: 790,
       width: 142,
@@ -3756,7 +3755,7 @@ export const useFormFields = (
     {
       name: "profitInterestFromGovtSecurities7.sourceTax",
       type: "number",
-      label: "",    
+      label: "",
       x: 750,
       y: 790,
       width: 142,
@@ -3767,7 +3766,7 @@ export const useFormFields = (
     {
       name: "profitInterestFromGovtSecurities8.description",
       type: "text",
-      label: "",    
+      label: "",
       x: 170,
       y: 808,
       width: 285,
@@ -3778,7 +3777,7 @@ export const useFormFields = (
     {
       name: "profitInterestFromGovtSecurities8.balance",
       type: "number",
-      label: "",    
+      label: "",
       x: 460,
       y: 808,
       width: 142,
@@ -3789,7 +3788,7 @@ export const useFormFields = (
     {
       name: "profitInterestFromGovtSecurities8.interestProfit",
       type: "number",
-      label: "",    
+      label: "",
       x: 604,
       y: 808,
       width: 142,
@@ -3800,7 +3799,7 @@ export const useFormFields = (
     {
       name: "profitInterestFromGovtSecurities8.sourceTax",
       type: "number",
-      label: "",    
+      label: "",
       x: 750,
       y: 808,
       width: 142,
@@ -3811,7 +3810,7 @@ export const useFormFields = (
     {
       name: "profitInterestFromGovtSecurities9.description",
       type: "text",
-      label: "",    
+      label: "",
       x: 170,
       y: 824,
       width: 285,
@@ -3822,7 +3821,7 @@ export const useFormFields = (
     {
       name: "profitInterestFromGovtSecurities9.balance",
       type: "number",
-      label: "",    
+      label: "",
       x: 460,
       y: 824,
       width: 142,
@@ -3833,7 +3832,7 @@ export const useFormFields = (
     {
       name: "profitInterestFromGovtSecurities9.interestProfit",
       type: "number",
-      label: "",    
+      label: "",
       x: 604,
       y: 824,
       width: 142,
@@ -3844,7 +3843,7 @@ export const useFormFields = (
     {
       name: "profitInterestFromGovtSecurities9.sourceTax",
       type: "number",
-      label: "",    
+      label: "",
       x: 750,
       y: 824,
       width: 142,
@@ -3855,7 +3854,7 @@ export const useFormFields = (
     {
       name: "profitInterestFromGovtSecurities10.description",
       type: "text",
-      label: "",    
+      label: "",
       x: 170,
       y: 842,
       width: 285,
@@ -3866,7 +3865,7 @@ export const useFormFields = (
     {
       name: "profitInterestFromGovtSecurities10.balance",
       type: "number",
-      label: "",    
+      label: "",
       x: 460,
       y: 842,
       width: 142,
@@ -3877,7 +3876,7 @@ export const useFormFields = (
     {
       name: "profitInterestFromGovtSecurities10.interestProfit",
       type: "number",
-      label: "",    
+      label: "",
       x: 604,
       y: 842,
       width: 142,
@@ -3888,7 +3887,7 @@ export const useFormFields = (
     {
       name: "profitInterestFromGovtSecurities10.sourceTax",
       type: "number",
-      label: "",    
+      label: "",
       x: 750,
       y: 842,
       width: 142,
@@ -3899,8 +3898,8 @@ export const useFormFields = (
     {
       name: "profitInterestFromGovtSecuritiesTotal.balance",
       type: "number",
-      label: "",    
-      disabled:true,
+      label: "",
+      disabled: true,
       x: 460,
       y: 860,
       width: 142,
@@ -3911,8 +3910,8 @@ export const useFormFields = (
     {
       name: "profitInterestFromGovtSecuritiesTotal.interestProfit",
       type: "number",
-      label: "",    
-      disabled:true,
+      label: "",
+      disabled: true,
       x: 604,
       y: 860,
       width: 142,
@@ -3923,8 +3922,8 @@ export const useFormFields = (
     {
       name: "profitInterestFromGovtSecuritiesTotal.sourceTax",
       type: "number",
-      label: "",    
-      disabled:true,
+      label: "",
+      disabled: true,
       x: 750,
       y: 860,
       width: 142,
@@ -3933,7 +3932,6 @@ export const useFormFields = (
       isVisible: true,
     },
 
-   
     // {
     //   name: "otherSubjectToMinTax.taxDeductedAtSource",
     //   type: "number",
@@ -4031,11 +4029,11 @@ export const useFormFields = (
       },
       isVisible: true,
     },
-     {
+    {
       name: "contributionToProvidentFund",
       type: "number",
       label: "",
-      disabled:true,
+      disabled: true,
       x: 790,
       y: 391,
       width: 133,
@@ -4046,11 +4044,11 @@ export const useFormFields = (
       },
       isVisible: true,
     },
-      {
+    {
       name: "selfAndEmployersContribution",
       type: "number",
       label: "",
-      disabled:true,
+      disabled: true,
       x: 790,
       y: 428,
       width: 133,
@@ -4061,7 +4059,7 @@ export const useFormFields = (
       },
       isVisible: true,
     },
-     {
+    {
       name: "contributionToSuperAnnuationFund",
       type: "number",
       label: "",
@@ -4075,7 +4073,7 @@ export const useFormFields = (
       },
       isVisible: true,
     },
-     {
+    {
       name: "contributionToBenevolentFund",
       type: "number",
       label: "",
@@ -4117,7 +4115,7 @@ export const useFormFields = (
       },
       isVisible: true,
     },
-     {
+    {
       name: "totalAllowableInvestmentContribution",
       type: "number",
       label: "",
@@ -4129,7 +4127,7 @@ export const useFormFields = (
       imageIndex: 7,
       isVisible: true,
     },
-     {
+    {
       name: "amountOfTaxRebate",
       type: "number",
       label: "",
@@ -4141,7 +4139,7 @@ export const useFormFields = (
       imageIndex: 7,
       isVisible: true,
     },
-     {
+    {
       name: "totalIncomeRebateTable.totalAmount",
       type: "number",
       label: "",
@@ -4153,7 +4151,7 @@ export const useFormFields = (
       imageIndex: 7,
       isVisible: true,
     },
-     {
+    {
       name: "totalIncomeRebateTable.rebate",
       type: "number",
       label: "",
@@ -4165,7 +4163,7 @@ export const useFormFields = (
       imageIndex: 7,
       isVisible: true,
     },
-     {
+    {
       name: "totalAllowableInvestmentRebateTable.totalAmount",
       type: "number",
       label: "",
@@ -4177,7 +4175,7 @@ export const useFormFields = (
       imageIndex: 7,
       isVisible: true,
     },
-     {
+    {
       name: "totalAllowableInvestmentRebateTable.rebate",
       type: "number",
       label: "",
@@ -4189,7 +4187,7 @@ export const useFormFields = (
       imageIndex: 7,
       isVisible: true,
     },
-     {
+    {
       name: "taka1000000.totalAmount",
       type: "number",
       label: "",
@@ -4201,7 +4199,7 @@ export const useFormFields = (
       imageIndex: 7,
       isVisible: true,
     },
-     {
+    {
       name: "taka1000000.rebate",
       type: "number",
       label: "",
@@ -4226,14 +4224,6 @@ export const useFormFields = (
       imageIndex: 7,
       isVisible: true,
     },
-
-    
-
-    
-   
-   
-
-   
 
     // Image 9
     // 45 inputs
@@ -4605,7 +4595,6 @@ export const useFormFields = (
       onBlur: () => {
         calculateTaxExemptedIncomeAndAllowance();
       },
-
       x: 782,
       y: 690,
       width: 157,
