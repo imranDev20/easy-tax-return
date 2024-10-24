@@ -12,7 +12,7 @@ import {
   AlertDialogDescription,
   AlertDialogFooter,
   AlertDialogHeader,
-  AlertDialogTitle
+  AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
@@ -171,7 +171,6 @@ export function Menu({ isOpen }: MenuProps) {
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
-      ;
     </>
   );
 }

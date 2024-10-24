@@ -9,8 +9,7 @@ import { OrdersByShift } from "./_components/orders-by-shift-chart";
 export default function AdminDashboardPage() {
   return (
     <ContentLayout title="Dashboard">
-      <div className="">      
-      </div>
+      <div className=""></div>
     </ContentLayout>
   );
 }

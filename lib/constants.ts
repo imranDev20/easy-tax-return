@@ -1,3 +1,5 @@
+import { PaymentStatus } from "@prisma/client";
+
 export const MINIMUM_TAX_OPTIONS = [
   "DHAKA_CHATTOGRAM_CITY_CORPORATION_AREA",
   "OTHER_CITY_CORPORATION_AREA",
@@ -19,3 +21,10 @@ export const CALCULATE_OPTION = ["Calculate", "ReCalculate"];
 export const CONTACT_EMAIL = "info.easytax2024@gmail.com";
 export const PHONE_NO = "+880 1773-870749";
 export const PHONE_NO_LINK = PHONE_NO.replace(" ", "").replace("-", "");
+
+export const PAYMENT_STATUS_OPTIONS: PaymentStatus[] = [
+  "CANCELLED",
+  "EXPIRED",
+  "PAID",
+  "PENDING",
+];
