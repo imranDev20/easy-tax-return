@@ -26,12 +26,9 @@ const DynamicBreadcrumb: React.FC<BreadcrumbProps> = ({
   isTransparent = false,
 }) => {
   const textColorClass = isTransparent ? "text-white" : "text-body-dark";
-
   const textHoverColorClass = isTransparent
     ? "hover:text-white hover:underline"
     : "text-body-dark hover:text-primary";
-
-  const lastItemColorClass = isTransparent ? "text-secondary" : "text-primary";
 
   return (
     <Breadcrumb>
@@ -40,9 +37,7 @@ const DynamicBreadcrumb: React.FC<BreadcrumbProps> = ({
           <React.Fragment key={item.label}>
             <BreadcrumbItem>
               {item.isCurrentPage ? (
-                <BreadcrumbPage
-                  className={`${textColorClass} ${lastItemColorClass}`}
-                >
+                <BreadcrumbPage className="text-primary font-medium">
                   {item.label}
                 </BreadcrumbPage>
               ) : (
@@ -58,7 +53,7 @@ const DynamicBreadcrumb: React.FC<BreadcrumbProps> = ({
             </BreadcrumbItem>
 
             {index !== items.length - 1 && (
-              <BreadcrumbSeparator className={`${textColorClass}`} />
+              <BreadcrumbSeparator className={textColorClass} />
             )}
           </React.Fragment>
         ))}

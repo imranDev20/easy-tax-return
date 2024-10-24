@@ -14,7 +14,6 @@ import {
 } from "@/components/ui/select";
 import useQueryString from "@/hooks/use-query-string";
 import { PAYMENT_STATUS_OPTIONS } from "@/lib/constants";
-import { kebabToNormal } from "@/lib/utils";
 import {
   Download,
   Filter,
@@ -135,7 +134,7 @@ export default function OrdersTableHeader() {
             <SelectItem value="ALL">ALL</SelectItem>
             {PAYMENT_STATUS_OPTIONS.map((option) => (
               <SelectItem value={option} key={option}>
-                {kebabToNormal(option)}
+                {option}
               </SelectItem>
             ))}
           </SelectContent>

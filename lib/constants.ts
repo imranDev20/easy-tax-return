@@ -25,7 +25,6 @@ export const PHONE_NO_LINK = PHONE_NO.replace(" ", "").replace("-", "");
 export const PAYMENT_STATUS_OPTIONS: PaymentStatus[] = [
   "CANCELLED",
   "EXPIRED",
-  "CANCELLED",
   "PAID",
   "PENDING",
 ];
