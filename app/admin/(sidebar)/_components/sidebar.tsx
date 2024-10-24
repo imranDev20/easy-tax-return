@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Menu } from "./menu";
 import { useSidebarToggle } from "@/hooks/use-sidebar-toggle";
 import { SidebarToggle } from "./sidebar-toggle";
+import Logo from "@/components/logo";
 
 export function Sidebar() {
   const sidebar = useStore(useSidebarToggle, (state) => state);
@@ -30,18 +31,8 @@ export function Sidebar() {
           variant="link"
           asChild
         >
-          <Link href="/dashboard" className="flex items-center gap-2">
-            <PanelsTopLeft className="w-6 h-6 mr-1" />
-            <h1
-              className={cn(
-                "font-bold text-lg whitespace-nowrap transition-[transform,opacity,display] ease-in-out duration-300",
-                sidebar?.isOpen === false
-                  ? "-translate-x-96 opacity-0 hidden"
-                  : "translate-x-0 opacity-100"
-              )}
-            >
-             e-taxreturns
-            </h1>
+          <Link href="/admin" className="flex items-center gap-2">
+            <Logo height={40} width={180} />
           </Link>
         </Button>
         <Menu isOpen={sidebar?.isOpen} />

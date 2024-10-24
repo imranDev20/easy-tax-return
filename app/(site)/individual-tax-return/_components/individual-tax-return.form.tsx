@@ -18,29 +18,12 @@ import SignatureField from "@/components/custom/signature";
 import { Button } from "@/components/ui/button";
 import { debounce, isFieldRequired, snakeToNormalText } from "@/lib/utils";
 import "flatpickr/dist/themes/airbnb.css";
-import {
-  ArrowLeft,
-  ArrowRight,
-  ChevronUp,
-  Download,
-  Loader2,
-  Menu,
-  Save,
-  ZoomIn,
-  ZoomOut,
-} from "lucide-react";
+import { ArrowLeft, ArrowRight, Loader2, Menu } from "lucide-react";
 import {
   IndividualTaxReturnFormInput,
   individualTaxReturnSchema,
 } from "../schema";
 
-import {
-  CALCULATE_OPTION,
-  MINIMUM_TAX_OPTIONS,
-  NET_WEALTH_LAST_DATE,
-  NET_WEALTH_SURCHARGE_OPTIONS,
-  REPAIR_COLLECTION_OPTIONS,
-} from "@/lib/constants";
 import ImageOne from "@/public/images/1.png";
 import ImageTwo from "@/public/images/2.png";
 import ImageThree from "@/public/images/3.png";

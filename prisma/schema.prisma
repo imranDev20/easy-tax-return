@@ -72,16 +72,18 @@ enum TransportCCType {
 }
 
 model User {
-  id            String    @id @default(cuid())
+  id            String           @id @default(cuid())
   name          String?
-  email         String?   @unique
+  email         String?          @unique
   emailVerified DateTime?
   image         String?
   password      String?
-  role          Role      @default(USER)
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
+  role          Role             @default(USER)
   accounts      Account[]
+  orders        Order[] // Add this line
+  individualTax IndividualTaxes? // Add this line
+  createdAt     DateTime         @default(now())
+  updatedAt     DateTime         @updatedAt
 }
 
 model Account {
@@ -104,81 +106,83 @@ model Account {
 }
 
 model IndividualTaxes {
-  id                                                             String               @id @default(cuid())
-  userId                                                         String
-  // Image 1
-  taxpayerName                                                   String
-  nationalId                                                     String
-  tin                                                            String
-  circle                                                         String
-  zone                                                           String
-  residentialStatus                                              ResidentialStatus
-  specialBenefits                                                SpecialBenefits?
-  isParentOfDisabledPerson                                       Boolean?
-  dateOfBirth                                                    String
-  spouseName                                                     String?
-  spouseTin                                                      String?
-  addressLine1                                                   String
-  addressLine2                                                   String?
-  telephone                                                      String?
-  mobile                                                         String
-  email                                                          String
-  employerName                                                   String?
-  businessName                                                   String?
-  bin                                                            String?
-  partnersInfo                                                   String?
-  partnersMembersAssociation1                                    String?
-  partnersMembersAssociation2                                    String?
+  id                                         String               @id @default(cuid())
+  userId                                     String               @unique
+  user                                       User                 @relation(fields: [userId], references: [id], onDelete: Cascade)
+  order                                      Order?
+  taxpayerName                               String
+  nationalId                                 String
+  tin                                        String
+  circle                                     String
+  zone                                       String
+  residentialStatus                          ResidentialStatus
+  specialBenefits                            SpecialBenefits?
+  isParentOfDisabledPerson                   Boolean?
+  dateOfBirth                                String
+  spouseName                                 String?
+  spouseTin                                  String?
+  addressLine1                               String
+  addressLine2                               String?
+  telephone                                  String?
+  mobile                                     String
+  email                                      String
+  employerName                               String?
+  businessName                               String?
+  bin                                        String?
+  partnersInfo                               String?
+  partnersMembersAssociation1                String?
+  partnersMembersAssociation2                String?
   // Image 2
-  incomeFromEmployment                                           String?
-  incomeFromRent                                                 String?
-  incomeFromAgriculture                                          String?
-  incomeFishFarming                                              Boolean?
-  incomeFishFarmingAmount                                        String?
-  incomeFromBusiness                                             String?
-  incomeFromBusinessMinimum                                      String?
-  incomeFromCapitalGains                                         String?
-  shareOfIncomeFromAOP                                           String?
-  incomeOfMinor                                                  String?
-  taxableIncomeFromAbroad                                        String?
-  minimumTax                                                     MinimumTax
-  netWealthSurcharge                                             NetWealthSurcharge
-  environmentalSurcharge                                         String?
-  delayInterest                                                  String?
-  calculate                                                      CalculationType
-  advanceTaxPaidAmount                                           String?
-  adjustmentOfTaxRefund                                          String?
-  taxPaidWithThisReturn                                          String
-  listOfDocumentsFurnishedWithThisReturn1                        String?
-  listOfDocumentsFurnishedWithThisReturn2                        String?
-  fatherOrHusband                                                String
-  placeOfSignature                                               String?
-  signature                                                      String?
-  dateOfSignature                                                String
+  incomeFromEmployment                       String?
+  incomeFromRent                             String?
+  incomeFromAgriculture                      String?
+  incomeFishFarming                          Boolean?
+  incomeFishFarmingAmount                    String?
+  incomeFromBusiness                         String?
+  incomeFromBusinessMinimum                  String?
+  incomeFromCapitalGains                     String?
+  shareOfIncomeFromAOP                       String?
+  incomeOfMinor                              String?
+  taxableIncomeFromAbroad                    String?
+  minimumTax                                 MinimumTax
+  netWealthSurcharge                         NetWealthSurcharge
+  environmentalSurcharge                     String?
+  delayInterest                              String?
+  calculate                                  CalculationType
+  advanceTaxPaidAmount                       String?
+  adjustmentOfTaxRefund                      String?
+  taxPaidWithThisReturn                      String
+  listOfDocumentsFurnishedWithThisReturn1    String?
+  listOfDocumentsFurnishedWithThisReturn2    String?
+  fatherOrHusband                            String
+  placeOfSignature                           String?
+  signature                                  String?
+  dateOfSignature                            String
   // Image 4 - Govt
-  isIncomeFromEmployment                                         IncomeFromEmployment
-  typeOfEmployment                                               EmploymentType
-  basicPayGovtEmployment                                         Float?
-  arrearPayGovtEmployment                                        Float?
-  specialAllowanceGovtEmployment                                 Float?
-  houseRentAllowanceGovtEmployment                               Float?
-  medicalAllowanceGovtEmployment                                 Float?
-  conveyanceAllowanceGovtEmployment                              Float?
-  festivalAllowanceGovtEmployment                                Float?
-  allowanceForSupportStaffGovtEmployment                         Float?
-  leaveAllowanceGovtEmployment                                   Float?
-  honorariumRewardGovtEmployment                                 Float?
-  overtimeAllowanceGovtEmployment                                Float?
-  banglaNoboborshoAllowancesGovtEmployment                       Float?
-  interestAccruedProvidentFundGovtEmployment                     Float?
-  lumpGrantGovtEmployment                                        Float?
-  gratuityGovtEmployment                                         Float?
-  otherAllowanceGovtEmployment                                   Float?
-  otherAllowanceExemptedGovtEmployment                           Float?
-  totalGovtEmployment                                            Float?
+  isIncomeFromEmployment                     IncomeFromEmployment
+  typeOfEmployment                           EmploymentType
+  basicPayGovtEmployment                     Float?
+  arrearPayGovtEmployment                    Float?
+  specialAllowanceGovtEmployment             Float?
+  houseRentAllowanceGovtEmployment           Float?
+  medicalAllowanceGovtEmployment             Float?
+  conveyanceAllowanceGovtEmployment          Float?
+  festivalAllowanceGovtEmployment            Float?
+  allowanceForSupportStaffGovtEmployment     Float?
+  leaveAllowanceGovtEmployment               Float?
+  honorariumRewardGovtEmployment             Float?
+  overtimeAllowanceGovtEmployment            Float?
+  banglaNoboborshoAllowancesGovtEmployment   Float?
+  interestAccruedProvidentFundGovtEmployment Float?
+  lumpGrantGovtEmployment                    Float?
+  gratuityGovtEmployment                     Float?
+  otherAllowanceGovtEmployment               Float?
+  otherAllowanceExemptedGovtEmployment       Float?
+  totalGovtEmployment                        Float?
   // Image 4 - Private
-  basicPayPrivateEmployment                                      Float?
-  allowancesPrivateEmployment                                    Float?
+  basicPayPrivateEmployment                  Float?
+  allowancesPrivateEmployment                Float?
+
   advanceArrearSalaryPrivateEmployment                           Float?
   gratuityAnnuityPensionOrSimilarBenefitPrivateEmployment        Float?
   perquisitesPrivateEmployment                                   Float?
@@ -368,17 +372,38 @@ model IndividualTaxes {
   others1                                                        String?
   others2                                                        String?
   assetOutsideBangladesh                                         String?
-  createdAt                                                      DateTime             @default(now())
-  updatedAt                                                      DateTime             @updatedAt
+  createdAt                                                      DateTime          @default(now())
+  updatedAt                                                      DateTime          @updatedAt
 }
 
-model Payment {
-  id        String   @id @default(cuid())
-  userId    String // user id from firebase
-  amount    Float?
-  trxID     String?
-  paymentID String?
-  date      String?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+enum PaymentMethod {
+  BKASH
+  NAGAD
+  UPAY
+  SURECASH
+  MKASH
+  ROCKET
+  BANK_TRANSFER
+  OTHERS
+}
+
+enum PaymentStatus {
+  PENDING
+  PAID
+  CANCELLED
+  EXPIRED
+}
+
+model Order {
+  id                String           @id @default(cuid())
+  userId            String
+  user              User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  individualTaxesId String?          @unique
+  individualTaxes   IndividualTaxes? @relation(fields: [individualTaxesId], references: [id], onDelete: Cascade)
+  amount            Float?
+  paymentMethod     PaymentMethod?
+  paymentStatus     PaymentStatus    @default(PENDING)
+  transactionID     String?
+  createdAt         DateTime         @default(now())
+  updatedAt         DateTime         @updatedAt
 }
