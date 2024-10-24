@@ -1029,7 +1029,7 @@ export const useCalculations = (
       "lifeInsurancePremium",
       "contributionToDeposit",
       "investmentInGovernmentSecuritiesDetails",
-      "investmentInGovernmentSecuritiesAmount",
+      // "investmentInGovernmentSecuritiesAmount",
       "investmentInSecurities",
       "contributionToProvidentFund",
       "selfAndEmployersContribution",
