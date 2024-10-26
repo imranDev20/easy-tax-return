@@ -46,7 +46,6 @@ const financialAssetsSchema = z.object({
 const calculationOfRebateAmount = z.object({
   totalAmount: z.string().nullable().optional(),
   rebate: z.string().nullable().optional(),
-  applicableRebate: z.string().nullable().optional(),
 });
 
 // Define the Zod schema
@@ -180,11 +179,11 @@ export const individualTaxReturnSchema = z.object({
     .string()
     .nullable()
     .optional(),
-  employerContributionToRecognizedProvidentFundPrivateEmployment: z
+  employerContributionToProvidentFundPrivateEmployment: z
     .string()
     .nullable()
     .optional(),
-  otherIfAnyPrivateEmployment: z.string().nullable().optional(),
+  otherIncomePrivateEmployment: z.string().nullable().optional(),
   totalSalaryReceivedPrivateEmployment: z.string().nullable().optional(),
   exemptedAmountPrivateEmployment: z.string().nullable().optional(),
   totalIncomeFromSalaryPrivateEmployment: z.string().nullable().optional(),
@@ -287,18 +286,15 @@ export const individualTaxReturnSchema = z.object({
   // Image 8
   lifeInsurancePremium: z.string().optional(),
   contributionToDeposit: z.string().optional(),
-  investmentInGovernmentSecuritiesDetails: z.string().optional(),
-  investmentInSecuritiesListed: z.string().optional(),
-  investmentInSecurities: z.string().optional(),
+  investmentInGovernmentSecurities: z.string().optional(),
+  investmentInSecuritiesStock: z.string().optional(),
   contributionToProvidentFund: z.string().optional(),
   selfAndEmployersContribution: z.string().optional(),
   contributionToSuperAnnuationFund: z.string().optional(),
   contributionToBenevolentFund: z.string().optional(),
   contributionToZakatFundDetails: z.string().optional(),
-  contributionToZakatFundAmount: z.string().optional(),
-  othersRebateDetails: z.string().optional(),
-  othersRebateAmount: z.string().optional(),
-  othersIfAny: z.string().optional(),
+  contributionToZakatFund: z.string().optional(),
+  otherRebatableInvestmentContribution: z.string().optional(),
   amountOfTaxRebate: z.string().optional(),
 
   totalAllowableInvestmentContribution: z.string().optional(),
@@ -307,7 +303,7 @@ export const individualTaxReturnSchema = z.object({
   totalIncomeRebateTable: calculationOfRebateAmount,
   totalAllowableInvestmentRebateTable: calculationOfRebateAmount,
   taka1000000: calculationOfRebateAmount,
-  applicableRebate: calculationOfRebateAmount,
+  applicableRebate: z.string().optional(),
 
   // Image 9
   expensesForFood: personalExpenseSchema,

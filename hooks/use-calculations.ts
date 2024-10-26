@@ -570,54 +570,33 @@ export const useCalculations = (
   const calculateScheduleThreeNetProfit = () => {
     const grossProfitFromAgriculture = parseFloat(
       watch("salesTurnoverReceiptAgriculture") || "0"
-    );
+    ); // same as gross profit
+
     const generalExpensesSellingExpenses = parseFloat(
       watch("generalExpensesSellingExpenses") || "0"
     );
 
-    // Clear any existing errors first
-    clearErrors([
-      "salesTurnoverReceiptAgriculture",
-      "generalExpensesSellingExpenses",
-    ]);
-
     // Handle NaN cases
-    if (isNaN(grossProfitFromAgriculture)) {
-      setError("salesTurnoverReceiptAgriculture", {
-        type: "manual",
-        message: "Please enter a valid number",
-      });
-      return 0;
-    }
-
-    if (isNaN(generalExpensesSellingExpenses)) {
-      setError("generalExpensesSellingExpenses", {
-        type: "manual",
-        message: "Please enter a valid number",
-      });
-      return 0;
-    }
+    const safeGrossProfit = isNaN(grossProfitFromAgriculture)
+      ? 0
+      : grossProfitFromAgriculture;
+    const safeGeneralExpensesSellingExpenses = isNaN(
+      generalExpensesSellingExpenses
+    )
+      ? 0
+      : generalExpensesSellingExpenses;
 
     const netProfitFromAgriculture =
-      grossProfitFromAgriculture - generalExpensesSellingExpenses;
+      safeGrossProfit - safeGeneralExpensesSellingExpenses;
 
-    // Set error if expenses exceed gross profit
-    if (netProfitFromAgriculture < 0) {
-      setError("salesTurnoverReceiptAgriculture", {
-        type: "manual",
-        message: "Gross profit is less than expenses",
-      });
-      setError("generalExpensesSellingExpenses", {
-        type: "manual",
-        message: "Expenses exceed gross profit",
-      });
-    }
+    // Ensure the result is not NaN before setting the value
+    const safeNetProfit = isNaN(netProfitFromAgriculture)
+      ? 0
+      : netProfitFromAgriculture;
 
-    // Set the value regardless of whether it's negative
-    setValue("netProfitFromAgriculture", netProfitFromAgriculture.toFixed(2));
+    setValue("netProfitFromAgriculture", safeNetProfit.toFixed(2));
     calculateTotalIncome();
-
-    return netProfitFromAgriculture;
+    return safeNetProfit;
   };
 
   const calculateTotalAdmissibleDeduction = () => {
@@ -926,6 +905,32 @@ export const useCalculations = (
     return total;
   }, [setValue, watch, calculateSumOfSourceOfFund]);
 
+  // rebate
+  const calculateTotalAllowableInvestmentContribution = useCallback(() => {
+    const fields: FormFieldName[] = [
+      "lifeInsurancePremium",
+      "contributionToDeposit",
+      "investmentInGovernmentSecurities",
+      "investmentInSecuritiesStock",
+      "contributionToProvidentFund",
+      "selfAndEmployersContribution",
+      "contributionToSuperAnnuationFund",
+      "contributionToBenevolentFund",
+      "contributionToZakatFund",
+      "otherRebatableInvestmentContribution",
+    ];
+
+    const total = fields.reduce((sum, field) => {
+      const value = watch(field as keyof IndividualTaxReturnFormInput);
+      const numberValue = parseFloat(value?.toString() || "0");
+      return sum + (isNaN(numberValue) ? 0 : numberValue);
+    }, 0);
+
+    setValue("totalAllowableInvestmentContribution", total.toFixed(2));
+    calculateTaxRebate();
+    return total;
+  }, [watch, setValue, calculateTaxRebate]); // Add dependencies used inside the callback
+
   const calculatePrivateEmploymentTotals = useCallback(() => {
     const fields: FormFieldName[] = [
       "basicPayPrivateEmployment",
@@ -938,8 +943,8 @@ export const useCalculations = (
       "accommodationFacilityPrivateEmployment",
       "transportFacilityPrivateEmployment",
       "anyOtherFacilityProvidedByEmployerPrivateEmployment",
-      "employerContributionToRecognizedProvidentFundPrivateEmployment",
-      "otherIfAnyPrivateEmployment",
+      "employerContributionToProvidentFundPrivateEmployment",
+      "otherIncomePrivateEmployment",
     ] as const;
 
     let totalIncome = 0;
@@ -994,37 +999,20 @@ export const useCalculations = (
     calculateTotalSourceOfFunds();
     calculateTotalIncome();
 
+    // Trigger rebate calculation after setting the value of self and employer's contribution
+    // setting the value of self and employer's contribution in onBlur
+    calculateTotalAllowableInvestmentContribution();
+
     return {
       totalIncome: isNaN(totalIncome) ? 0 : totalIncome,
     };
-  }, [watch, setValue, calculateTotalSourceOfFunds, calculateTotalIncome]);
-
-  // rebate
-  const calculateTotalAllowableInvestmentContribution = () => {
-    const fields: FormFieldName[] = [
-      "lifeInsurancePremium",
-      "contributionToDeposit",
-      "investmentInGovernmentSecuritiesDetails",
-      // "investmentInGovernmentSecuritiesAmount",
-      "investmentInSecurities",
-      "contributionToProvidentFund",
-      "selfAndEmployersContribution",
-      "contributionToSuperAnnuationFund",
-      "contributionToBenevolentFund",
-      "contributionToZakatFundAmount",
-      "othersRebateAmount",
-    ];
-
-    const total = fields.reduce((sum, field) => {
-      const value = watch(field as keyof IndividualTaxReturnFormInput);
-      const numberValue = parseFloat(value?.toString() || "0");
-      return sum + (isNaN(numberValue) ? 0 : numberValue);
-    }, 0);
-
-    setValue("totalAllowableInvestmentContribution", total.toFixed(2));
-    calculateTaxRebate();
-    return total;
-  };
+  }, [
+    watch,
+    setValue,
+    calculateTotalSourceOfFunds,
+    calculateTotalIncome,
+    calculateTotalAllowableInvestmentContribution,
+  ]);
 
   const calculateTotalExpenseAndLoss = () => {
     const fields: FormFieldName[] = [
