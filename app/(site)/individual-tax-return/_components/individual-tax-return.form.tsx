@@ -57,7 +57,7 @@ const images = [
   ImageNine,
   ImageTen,
   ImageEleven,
-  ImageTwelve
+  ImageTwelve,
 ];
 
 interface Image {
@@ -261,14 +261,6 @@ const IndividualTaxReturnForm: React.FC = () => {
 
   useEffect(() => {
     const subscription = watch((value, { name, type }) => {
-      if (name === "netWealthSurcharge") {
-        if (value.netWealthSurcharge === "YES") {
-          setValue("netWealthSurchargeAmount", "0.0");
-        } else {
-          setValue("netWealthSurchargeAmount", undefined);
-        }
-      }
-
       if (name === "minimumTax") {
         if (value.minimumTax === "DHAKA_CHATTOGRAM_CITY_CORPORATION_AREA") {
           setValue("minimumTaxAmount", "5000.00");

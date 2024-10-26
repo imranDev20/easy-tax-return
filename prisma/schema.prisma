@@ -28,11 +28,6 @@ enum MinimumTax {
   OTHER_AREA
 }
 
-enum NetWealthSurcharge {
-  YES
-  NO
-}
-
 enum RepairCollection {
   COMMERCIAL_PROPERTY
   NON_COMMERCIAL
@@ -43,11 +38,6 @@ enum RepairCollection {
 enum NetWealthLastDate {
   YES
   NO_I_AM_A_NEW_TAXPAYER
-}
-
-enum CalculationType {
-  CALCULATE
-  RECALCULATE
 }
 
 enum IncomeFromEmployment {
@@ -144,10 +134,9 @@ model IndividualTaxes {
   incomeOfMinor                              String?
   taxableIncomeFromAbroad                    String?
   minimumTax                                 MinimumTax
-  netWealthSurcharge                         NetWealthSurcharge
+  netWealthSurcharge                         Float?
   environmentalSurcharge                     String?
   delayInterest                              String?
-  calculate                                  CalculationType
   advanceTaxPaidAmount                       String?
   adjustmentOfTaxRefund                      String?
   taxPaidWithThisReturn                      String
@@ -210,7 +199,6 @@ model IndividualTaxes {
   insurancePremiumPaid                                           String?
   others                                                         String?
   taxpayersShare                                                 String
-  taxDeductedSourceFromIncomeRent                                String?
   salesTurnoverReceipt                                           String?
   grossProfit                                                    String?
   generalExpensesSellingExpenses                                 String?

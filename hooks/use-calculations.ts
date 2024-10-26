@@ -2,6 +2,8 @@ import {
   UseFormWatch,
   UseFormSetValue,
   UseFormGetValues,
+  UseFormSetError,
+  UseFormClearErrors,
 } from "react-hook-form";
 import { IndividualTaxReturnFormInput } from "@/app/(site)/individual-tax-return/schema";
 import { RepairCollection } from "@prisma/client";
@@ -11,7 +13,9 @@ import { FormFieldName } from "@/types/tax-return-form";
 export const useCalculations = (
   watch: UseFormWatch<IndividualTaxReturnFormInput>,
   setValue: UseFormSetValue<IndividualTaxReturnFormInput>,
-  getValues: UseFormGetValues<IndividualTaxReturnFormInput>
+  getValues: UseFormGetValues<IndividualTaxReturnFormInput>,
+  setError: UseFormSetError<IndividualTaxReturnFormInput>,
+  clearErrors: UseFormClearErrors<IndividualTaxReturnFormInput>
 ) => {
   const calculateTotalNonAgriculturalAssets = () => {
     const fields: FormFieldName[] = [
@@ -267,7 +271,7 @@ export const useCalculations = (
   const calculateTotalAmountPayable = useCallback(() => {
     let taxPayable = parseFloat(getValues("taxPayable")?.toString() || "0");
     let netWealthSurcharge = parseFloat(
-      getValues("netWealthSurchargeAmount")?.toString() || "0"
+      getValues("netWealthSurcharge")?.toString() || "0"
     );
     let environmentalSurcharge = parseFloat(
       getValues("environmentalSurcharge")?.toString() || "0"
@@ -454,11 +458,9 @@ export const useCalculations = (
   const calculateTotalIncome = useCallback(() => {
     const fields: FormFieldName[] = [
       "incomeFromEmployment",
-      "taxpayersShareAmount",
+      "netIncomeFromRent",
       "netProfitFromAgriculture",
-      "incomeFishFarmingAmount",
       "incomeFromBusiness",
-      "incomeFromBusinessMinimum",
       "incomeFromCapitalGains",
       "incomeFromFinancialAssets",
       "incomeFromOtherSources",
@@ -551,24 +553,6 @@ export const useCalculations = (
     return total;
   };
 
-  const calculateReceiptOfGiftOtherReceipts = () => {
-    const fields: FormFieldName[] = [
-      "typeOfReceiptsAmount1",
-      "typeOfReceiptsAmount2",
-      "typeOfReceiptsAmount3",
-    ];
-
-    const total = fields.reduce((sum, field) => {
-      const value = watch(field as keyof IndividualTaxReturnFormInput);
-      const numberValue = parseFloat(value?.toString() || "0");
-      return sum + (isNaN(numberValue) ? 0 : numberValue);
-    }, 0);
-
-    setValue("totalOtherReceiptsAndSources", total.toFixed(2));
-    setValue("receiptOfGiftOtherReceipts", total.toFixed(2));
-    return total;
-  };
-
   const calcualateScheduleOneOtherAllowanceGovtTaxable = () => {
     const incomeAmount = parseFloat(
       watch("otherAllowanceGovtEmployment.amount") || "0"
@@ -585,33 +569,55 @@ export const useCalculations = (
 
   const calculateScheduleThreeNetProfit = () => {
     const grossProfitFromAgriculture = parseFloat(
-      watch("grossProfitFromAgriculture") || "0"
+      watch("salesTurnoverReceiptAgriculture") || "0"
     );
     const generalExpensesSellingExpenses = parseFloat(
       watch("generalExpensesSellingExpenses") || "0"
     );
 
+    // Clear any existing errors first
+    clearErrors([
+      "salesTurnoverReceiptAgriculture",
+      "generalExpensesSellingExpenses",
+    ]);
+
     // Handle NaN cases
-    const safeGrossProfit = isNaN(grossProfitFromAgriculture)
-      ? 0
-      : grossProfitFromAgriculture;
-    const safeGeneralExpensesSellingExpenses = isNaN(
-      generalExpensesSellingExpenses
-    )
-      ? 0
-      : generalExpensesSellingExpenses;
+    if (isNaN(grossProfitFromAgriculture)) {
+      setError("salesTurnoverReceiptAgriculture", {
+        type: "manual",
+        message: "Please enter a valid number",
+      });
+      return 0;
+    }
+
+    if (isNaN(generalExpensesSellingExpenses)) {
+      setError("generalExpensesSellingExpenses", {
+        type: "manual",
+        message: "Please enter a valid number",
+      });
+      return 0;
+    }
 
     const netProfitFromAgriculture =
-      safeGrossProfit - safeGeneralExpensesSellingExpenses;
+      grossProfitFromAgriculture - generalExpensesSellingExpenses;
 
-    // Ensure the result is not NaN before setting the value
-    const safeNetProfit = isNaN(netProfitFromAgriculture)
-      ? 0
-      : netProfitFromAgriculture;
+    // Set error if expenses exceed gross profit
+    if (netProfitFromAgriculture < 0) {
+      setError("salesTurnoverReceiptAgriculture", {
+        type: "manual",
+        message: "Gross profit is less than expenses",
+      });
+      setError("generalExpensesSellingExpenses", {
+        type: "manual",
+        message: "Expenses exceed gross profit",
+      });
+    }
 
-    setValue("netProfitFromAgriculture", safeNetProfit.toFixed(2));
+    // Set the value regardless of whether it's negative
+    setValue("netProfitFromAgriculture", netProfitFromAgriculture.toFixed(2));
     calculateTotalIncome();
-    return safeNetProfit;
+
+    return netProfitFromAgriculture;
   };
 
   const calculateTotalAdmissibleDeduction = () => {
@@ -621,7 +627,7 @@ export const useCalculations = (
       "landRevenue",
       "interestMortgageCapitalCharge",
       "insurancePremiumPaid",
-      "others",
+      "otherAllowableDeduction",
     ];
 
     const total = fields.reduce((sum, field) => {
@@ -734,12 +740,12 @@ export const useCalculations = (
     const netIncome = totalRentValue - totalAdmissibleDeduction;
 
     // Set the calculated net income in the form
-    setValue("netIncome", netIncome.toFixed(2));
+    setValue("netIncomeFromRent", netIncome.toFixed(2));
     return netIncome;
   };
 
   const calculateTaxPayersShare = () => {
-    const netIncome = parseFloat(watch("netIncome") || "0");
+    const netIncome = parseFloat(watch("netIncomeFromRent") || "0");
     const taxpayersSharePercentage = parseFloat(
       watch("taxpayersSharePercentage") || "0"
     );
@@ -761,28 +767,6 @@ export const useCalculations = (
   };
 
   // Schedule 1
-  const calculateTaxExemptedIncomeAndAllowance = useCallback(() => {
-    const fields: FormFieldName[] = [
-      "exemptedIncomeFromSalary",
-      "exemptedIncomeFromBusiness",
-      "exemptedAgriculturalIncome",
-      "incomeFromProvidentFund",
-      "foreignRemittance",
-      "typeOfTaxExemptedTaxFreeIncomeAmount6",
-      "typeOfTaxExemptedTaxFreeIncomeAmount7",
-    ];
-
-    const total = fields.reduce((sum, field) => {
-      const value = watch(field as keyof IndividualTaxReturnFormInput);
-      const numberValue = parseFloat(value?.toString() || "0");
-      return sum + (isNaN(numberValue) ? 0 : numberValue);
-    }, 0);
-
-    setValue("taxFreeIncomeTotal", total.toFixed(2));
-    setValue("taxExemptedIncomeAndAllowance", total.toFixed(2));
-    return total;
-  }, [setValue, watch]);
-
   const calculateScheduleOneGovtTotals = () => {
     const taxExemptedFields = [
       "specialAllowanceGovtEmployment",
@@ -861,12 +845,12 @@ export const useCalculations = (
     // Set the calculated values
     setValue("totalGovtEmployment.amount", totalIncome.toFixed(2));
     setValue("totalGovtEmployment.taxExempted", totalTaxExempted.toFixed(2));
-    setValue("exemptedIncomeFromSalary", totalTaxExempted.toFixed(2));
     setValue("totalGovtEmployment.taxable", totalTaxable.toFixed(2));
-    setValue("incomeFromEmployment", totalTaxable.toFixed(2)); // for second page
 
-    calculateTotalSourceOfFunds();
-    calculateTaxExemptedIncomeAndAllowance();
+    // for second page
+    setValue("incomeFromEmployment", totalTaxable.toFixed(2));
+
+    calculateTotalSourceOfFunds(); // may need to delete this function
     calculateTotalIncome();
 
     return {
@@ -999,7 +983,6 @@ export const useCalculations = (
     console.log(totalIncomeFromSalary);
 
     setValue("exemptedAmountPrivateEmployment", totalExempted.toFixed(2));
-    setValue("exemptedIncomeFromSalary", totalExempted.toFixed(2));
     setValue("totalSalaryReceivedPrivateEmployment", totalIncome.toFixed(2));
     setValue(
       "totalIncomeFromSalaryPrivateEmployment",
@@ -1009,19 +992,12 @@ export const useCalculations = (
     setValue("incomeFromEmployment", totalIncomeFromSalary.toFixed(2)); // for the second page
 
     calculateTotalSourceOfFunds();
-    calculateTaxExemptedIncomeAndAllowance();
     calculateTotalIncome();
 
     return {
       totalIncome: isNaN(totalIncome) ? 0 : totalIncome,
     };
-  }, [
-    watch,
-    setValue,
-    calculateTotalSourceOfFunds,
-    calculateTaxExemptedIncomeAndAllowance,
-    calculateTotalIncome,
-  ]);
+  }, [watch, setValue, calculateTotalSourceOfFunds, calculateTotalIncome]);
 
   // rebate
   const calculateTotalAllowableInvestmentContribution = () => {
@@ -1178,10 +1154,6 @@ export const useCalculations = (
       "incomeFromBusinessMinTax.netTaxableIncome",
       incomeFromBusinessMinTaxNetTaxable.toFixed(2)
     );
-    setValue(
-      "incomeFromBusinessMinimum",
-      incomeFromBusinessMinTaxNetTaxable.toFixed(2)
-    );
 
     const workersParticipationFundAmount = getValues(
       "workersParticipationFund.amountOfIncome"
@@ -1269,8 +1241,6 @@ export const useCalculations = (
     calculateNetTaxableIncome,
     calculateTotalIncome,
     calculateTaxDeductedCollectedAtSource,
-    calculateTaxExemptedIncomeAndAllowance,
-    calculateReceiptOfGiftOtherReceipts,
     calculatePrivateEmploymentTotals,
     calcualateScheduleOneOtherAllowanceGovtTaxable,
     calculateScheduleOneGovtTotals,

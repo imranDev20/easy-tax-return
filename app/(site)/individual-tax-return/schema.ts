@@ -30,24 +30,23 @@ const personalExpenseSchema = z.object({
 });
 
 const incomeFromCapitalGainsSchema = z.object({
-  description:z.string().optional(),
+  description: z.string().optional(),
   capitalGain: z.string().nullable().optional(),
   exemptedAmount: z.string().nullable().optional(),
   taxableAmount: z.string().nullable().optional(),
 });
 
 const financialAssetsSchema = z.object({
-  description:z.string().optional(),
+  description: z.string().optional(),
   balance: z.string().nullable().optional(),
   interestProfit: z.string().nullable().optional(),
   sourceTax: z.string().nullable().optional(),
-
 });
 
 const calculationOfRebateAmount = z.object({
-  totalAmount : z.string().nullable().optional(),
+  totalAmount: z.string().nullable().optional(),
   rebate: z.string().nullable().optional(),
-  applicableRebate:z.string().nullable().optional()
+  applicableRebate: z.string().nullable().optional(),
 });
 
 // Define the Zod schema
@@ -62,7 +61,12 @@ export const individualTaxReturnSchema = z.object({
   zone: z.string().min(1, "Zone is required"),
   assessmentYear: z.string(),
   residentialStatus: z.enum(["RESIDENT", "NON_RESIDENT"]),
-  assesseeStatus: z.enum(["INDIVIDUAL", "FIRM","HINDU_UNDEVIDED_FAMILY", "OTHERS"]),
+  assesseeStatus: z.enum([
+    "INDIVIDUAL",
+    "FIRM",
+    "HINDU_UNDEVIDED_FAMILY",
+    "OTHERS",
+  ]),
   specialBenefits: z
     .enum([
       "NONE",
@@ -93,10 +97,7 @@ export const individualTaxReturnSchema = z.object({
   incomeFromEmployment: z.string().optional(),
   incomeFromRent: z.string().optional(),
   incomeFromAgriculture: z.string().optional(),
-  incomeFishFarming: z.boolean().optional(),
-  incomeFishFarmingAmount: z.string().optional(),
   incomeFromBusiness: z.string().optional(),
-  incomeFromBusinessMinimum: z.string().optional(),
   incomeFromCapitalGains: z.string().optional(),
   incomeFromFinancialAssets: z.string().optional(),
   incomeFromOtherSources: z.string().optional(),
@@ -106,12 +107,11 @@ export const individualTaxReturnSchema = z.object({
   incomeOfMinor: z.string().optional(),
   taxableIncomeFromAbroad: z.string().optional(),
   minimumTax: z.nativeEnum(MinimumTax),
-  netWealthSurcharge: z.enum(["YES", "NO"]),
+  netWealthSurcharge: z.string().optional(),
   taxPayable: z.string().optional(),
-  netWealthSurchargeAmount: z.string().optional(),
   environmentalSurcharge: z.string().optional(),
   delayInterest: z.string().optional(),
-  calculate: z.nativeEnum(CalculationType),
+
   grossTaxOnTaxableIncome: z.string().optional(),
   taxRebate: z.string().optional(),
   netTaxRebate: z.string().optional(),
@@ -154,7 +154,6 @@ export const individualTaxReturnSchema = z.object({
   gratuityGovtEmployment: govtPayScaleSchema,
   otherAllowanceGovtEmployment: govtPayScaleSchema,
   totalGovtEmployment: govtPayScaleSchema,
-  taxDeductedAtSourceFromIncomefromEmployment: z.string(),
 
   // image 3 // private
   basicPayPrivateEmployment: z.string().nullable().optional(),
@@ -205,15 +204,14 @@ export const individualTaxReturnSchema = z.object({
   landRevenue: z.string().optional(),
   interestMortgageCapitalCharge: z.string().optional(),
   insurancePremiumPaid: z.string().optional(),
-  others: z.string().optional(),
+  otherAllowableDeduction: z.string().optional(),
   taxpayersSharePercentage: z.string(),
   taxpayersShareAmount: z.string().nullable().optional(),
-  taxDeductedSourceFromIncomeRent: z.string().optional(),
-  salesTurnoverReceipt: z.string().optional(),
+  salesTurnoverReceiptAgriculture: z.string().optional(),
   grossProfitFromAgriculture: z.string().optional(),
   generalExpensesSellingExpenses: z.string().optional(),
   totalAdmissibleDeduction: z.string().optional(),
-  netIncome: z.string().optional(),
+  netIncomeFromRent: z.string().optional(),
   netProfitFromAgriculture: z.string().optional(),
 
   // image 6
@@ -224,7 +222,7 @@ export const individualTaxReturnSchema = z.object({
 
   // summary of income
   salesTurnoverReceipts: z.string().optional(),
-  purchase:z.string().optional(),
+  purchase: z.string().optional(),
   grossProfitFromBusiness: z.string().optional(),
   generalAdministrativeSellingExpenses: z.string().optional(),
   badDebtExpense: z.string().optional(),
@@ -244,11 +242,11 @@ export const individualTaxReturnSchema = z.object({
   totalCapitalsAndLiabilities: z.string().optional(),
 
   incomeFromShareTransferListedCompany: incomeFromCapitalGainsSchema,
-  incomeFromCapitalGain2:incomeFromCapitalGainsSchema,
-  incomeFromCapitalGain3:incomeFromCapitalGainsSchema,
-  incomeFromCapitalGain4:incomeFromCapitalGainsSchema,
-  incomeFromCapitalGain5:incomeFromCapitalGainsSchema,
-  incomeFromCapitaGainsTotal:incomeFromCapitalGainsSchema,
+  incomeFromCapitalGain2: incomeFromCapitalGainsSchema,
+  incomeFromCapitalGain3: incomeFromCapitalGainsSchema,
+  incomeFromCapitalGain4: incomeFromCapitalGainsSchema,
+  incomeFromCapitalGain5: incomeFromCapitalGainsSchema,
+  incomeFromCapitaGainsTotal: incomeFromCapitalGainsSchema,
 
   interestProfitFromBankFI: incomeItemSchema,
   incomeFromSavingCertificates: incomeItemSchema,
@@ -286,11 +284,6 @@ export const individualTaxReturnSchema = z.object({
   profitInterestFromGovtSecurities10: financialAssetsSchema,
   profitInterestFromGovtSecuritiesTotal: financialAssetsSchema,
 
-
-
-
-
-
   // Image 8
   lifeInsurancePremium: z.string().optional(),
   contributionToDeposit: z.string().optional(),
@@ -314,7 +307,7 @@ export const individualTaxReturnSchema = z.object({
   totalIncomeRebateTable: calculationOfRebateAmount,
   totalAllowableInvestmentRebateTable: calculationOfRebateAmount,
   taka1000000: calculationOfRebateAmount,
-  applicableRebate:calculationOfRebateAmount,
+  applicableRebate: calculationOfRebateAmount,
 
   // Image 9
   expensesForFood: personalExpenseSchema,
@@ -329,24 +322,6 @@ export const individualTaxReturnSchema = z.object({
   taxSurchargePaid: personalExpenseSchema,
   interestPaid: personalExpenseSchema,
   totalExpenseIndividualPerson: personalExpenseSchema,
-
-  exemptedIncomeFromSalary: z.string().optional(),
-  exemptedIncomeFromBusiness: z.string().optional(),
-  exemptedAgriculturalIncome: z.string().optional(),
-  incomeFromProvidentFund: z.string().optional(),
-  foreignRemittance: z.string().optional(),
-  typeOfReceipts1: z.string().optional(),
-  typeOfReceipts2: z.string().optional(),
-  typeOfReceipts3: z.string().optional(),
-  typeOfReceiptsAmount1: z.string().optional(),
-  typeOfReceiptsAmount2: z.string().optional(),
-  typeOfReceiptsAmount3: z.string().optional(),
-  typeOfTaxExemptedTaxFreeIncome6: z.string().optional(),
-  typeOfTaxExemptedTaxFreeIncome7: z.string().optional(),
-  typeOfTaxExemptedTaxFreeIncomeAmount6: z.string().optional(),
-  typeOfTaxExemptedTaxFreeIncomeAmount7: z.string().optional(),
-  taxFreeIncomeTotal: z.string().optional(),
-  totalOtherReceiptsAndSources: z.string().optional(),
 
   // Image 9
   netWealthLastDate: z.nativeEnum(NetWealthLastDate),
