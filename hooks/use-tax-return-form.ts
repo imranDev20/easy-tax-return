@@ -25,7 +25,6 @@ export const useTaxReturnForm = () => {
       circle: "Circle A",
       zone: "Zone 1",
       residentialStatus: "RESIDENT",
-      assesseeStatus:"INDIVIDUAL",
       dateOfBirth: new Date("1980-01-01"),
       addressLine1: "123 Main St",
       mobile: "1234567890",
