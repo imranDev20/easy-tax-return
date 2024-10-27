@@ -55,6 +55,7 @@ export const useFormFields = (
     calculateBusinessCapitalOfPartnershipFirm,
     calculateTotalTaxableIncomeFromCapitalGains,
     calculateTotalIncomeFromFinancialAssets,
+    calculateTotalAmountPayable,
   } = useCalculations(watch, setValue, getValues, setError, clearErrors);
 
   const formFields: FormField[] = [
@@ -641,9 +642,9 @@ export const useFormFields = (
       isVisible: true,
     },
     {
-      name: "netTaxRebate",
+      name: "netTaxAfterRebate",
       type: "number",
-      label: "netTaxRebate",
+      label: "",
       disabled: true,
       x: 755,
       y: 709,
@@ -705,15 +706,33 @@ export const useFormFields = (
       height: 28,
       imageIndex: 1,
       isVisible: true,
+      onBlur() {
+        calculateTotalAmountPayable();
+      },
     },
     {
       name: "environmentalSurcharge",
       type: "number",
-      label: "environmentalSurcharge",
+      label: "",
       x: 586,
       y: 828,
       width: 166,
       height: 28,
+      imageIndex: 1,
+      isVisible: true,
+      onBlur() {
+        calculateTotalAmountPayable();
+      },
+    },
+    {
+      name: "totalSurcharge",
+      type: "number",
+      label: "",
+      disabled: true,
+      x: 755,
+      y: 798,
+      width: 167,
+      height: 58,
       imageIndex: 1,
       isVisible: true,
     },
@@ -727,6 +746,9 @@ export const useFormFields = (
       height: 28,
       imageIndex: 1,
       isVisible: true,
+      onBlur() {
+        calculateTotalAmountPayable();
+      },
     },
 
     {

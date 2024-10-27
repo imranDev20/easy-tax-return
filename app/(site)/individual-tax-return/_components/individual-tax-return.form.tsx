@@ -267,17 +267,14 @@ const IndividualTaxReturnForm: React.FC = () => {
       if (name === "minimumTax") {
         if (value.minimumTax === "DHAKA_CHATTOGRAM_CITY_CORPORATION_AREA") {
           setValue("minimumTaxAmount", "5000.00");
-
           calculateTaxPayable();
         }
         if (value.minimumTax === "OTHER_CITY_CORPORATION_AREA") {
           setValue("minimumTaxAmount", "4000.00");
-
           calculateTaxPayable();
         }
         if (value.minimumTax === "OTHER_AREA") {
           setValue("minimumTaxAmount", "3000.00");
-
           calculateTaxPayable();
         }
       }

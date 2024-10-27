@@ -266,13 +266,42 @@ export const useCalculations = (
     return safeTotal;
   };
 
+  const calculateTotalAmountPayable = useCallback(() => {
+    const taxPayable = parseFloat(getValues("taxPayable") || "0");
+    const netWealthSurcharge = parseFloat(
+      getValues("netWealthSurcharge") || "0"
+    );
+
+    const environmentalSurcharge = parseFloat(
+      getValues("environmentalSurcharge") || "0"
+    );
+
+    const totalSurcharge = netWealthSurcharge + environmentalSurcharge;
+    setValue("totalSurcharge", totalSurcharge.toFixed(2));
+
+    const delayInterest = parseFloat(getValues("delayInterest") || "0");
+
+    // Calculate total using the returned tax payable value
+    const totalAmountPayable =
+      taxPayable + netWealthSurcharge + environmentalSurcharge + delayInterest;
+
+    // Round to 2 decimal places
+    const roundedTotal = Math.round(totalAmountPayable * 100) / 100;
+
+    // Set the values
+    setValue("totalAmountPayable", roundedTotal.toFixed(2));
+    setValue("totalTaxPaid", roundedTotal.toFixed(2));
+
+    return roundedTotal;
+  }, [getValues, setValue]);
+
   const calculateTaxPayable = useCallback(() => {
     // Get minimum tax amount and net tax rebate
     const minimumTaxAmount = parseFloat(getValues("minimumTaxAmount") || "0");
-    const netTaxRebate = parseFloat(getValues("netTaxRebate") || "0");
+    const netTaxAfterRebate = parseFloat(getValues("netTaxAfterRebate") || "0");
 
-    // Take the maximum of minimumTaxAmount and netTaxRebate
-    const taxPayable = Math.max(minimumTaxAmount, netTaxRebate);
+    // Take the maximum of minimumTaxAmount and netTaxAfterRebate
+    const taxPayable = Math.max(minimumTaxAmount, netTaxAfterRebate);
 
     // Round to 2 decimal places
     const roundedTaxPayable = Math.round(taxPayable * 100) / 100;
@@ -280,8 +309,11 @@ export const useCalculations = (
     // Set the calculated value
     setValue("taxPayable", roundedTaxPayable.toFixed(2));
 
+    // recalculate the total amount payable everytime tax payable is calculated
+    calculateTotalAmountPayable();
+
     return roundedTaxPayable;
-  }, [getValues, setValue]);
+  }, [getValues, setValue, calculateTotalAmountPayable]);
 
   const calculateNetTaxRebate = useCallback(() => {
     // Get gross tax and tax rebate amounts
@@ -291,13 +323,13 @@ export const useCalculations = (
     const taxRebate = parseFloat(getValues("amountOfTaxRebate") || "0");
 
     // Calculate net tax rebate
-    const netTaxRebate = Math.max(0, grossTaxOnTaxableIncome - taxRebate);
+    const netTaxAfterRebate = Math.max(0, grossTaxOnTaxableIncome - taxRebate);
 
     // Round to 2 decimal places
-    const roundedNetTaxRebate = Math.round(netTaxRebate * 100) / 100;
+    const roundedNetTaxRebate = Math.round(netTaxAfterRebate * 100) / 100;
 
     // Set the calculated value
-    setValue("netTaxRebate", roundedNetTaxRebate.toFixed(2));
+    setValue("netTaxAfterRebate", roundedNetTaxRebate.toFixed(2));
 
     // incase rebate changes, calculate the tax payable again
     calculateTaxPayable();
@@ -349,6 +381,10 @@ export const useCalculations = (
     if (residentialStatus === "NON_RESIDENT") {
       const tax = totalIncome * 0.3;
       setValue("grossTaxOnTaxableIncome", tax.toFixed(2));
+
+      // recalculate the net tax rebate incase gross tax has changed after setting net tax
+      // necessary otherwise values won't update
+      calculateNetTaxRebate();
       return tax;
     }
 
@@ -1165,5 +1201,6 @@ export const useCalculations = (
     calculateTotalIncomeFromFinancialAssets,
     calculateGrossTax,
     calculateTaxPayable,
+    calculateTotalAmountPayable,
   };
 };
