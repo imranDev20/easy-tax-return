@@ -236,8 +236,11 @@ const IndividualTaxReturnForm: React.FC = () => {
     formState: { errors, isDirty },
   } = form;
 
-  const { calculatePrivateEmploymentTotals, calculateTaxPayable } =
-    calculations;
+  const {
+    calculatePrivateEmploymentTotals,
+    calculateGrossTax,
+    calculateTaxPayable,
+  } = calculations;
 
   useEffect(() => {
     // This effect will run when the component mounts
@@ -264,16 +267,28 @@ const IndividualTaxReturnForm: React.FC = () => {
       if (name === "minimumTax") {
         if (value.minimumTax === "DHAKA_CHATTOGRAM_CITY_CORPORATION_AREA") {
           setValue("minimumTaxAmount", "5000.00");
+
           calculateTaxPayable();
         }
         if (value.minimumTax === "OTHER_CITY_CORPORATION_AREA") {
           setValue("minimumTaxAmount", "4000.00");
+
           calculateTaxPayable();
         }
         if (value.minimumTax === "OTHER_AREA") {
           setValue("minimumTaxAmount", "3000.00");
+
           calculateTaxPayable();
         }
+      }
+
+      if (
+        name === "totalIncome" ||
+        name === "residentialStatus" ||
+        name === "specialBenefits" ||
+        name === "isParentOfDisabledPerson"
+      ) {
+        calculateGrossTax();
       }
 
       if (name === "tranportFacilityPrivateVehicleCC") {
@@ -290,7 +305,13 @@ const IndividualTaxReturnForm: React.FC = () => {
     });
 
     return () => subscription.unsubscribe();
-  }, [watch, setValue, calculatePrivateEmploymentTotals, calculateTaxPayable]);
+  }, [
+    watch,
+    setValue,
+    calculatePrivateEmploymentTotals,
+    calculateGrossTax,
+    calculateTaxPayable,
+  ]);
 
   const updateScale = useCallback(() => {
     if (containerRef.current && imageRefs.current[0]) {

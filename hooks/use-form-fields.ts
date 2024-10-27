@@ -27,7 +27,6 @@ export const useFormFields = (
 ) => {
   const {
     calculateTotalAssetsInBangladeshAndOutside,
-    calculateTotalCashInHandAndFund,
     calculateTotalMotorValue,
     calculateTotalFinancialAssets,
     calculateTotalAgriculturalAssets,
@@ -55,6 +54,7 @@ export const useFormFields = (
     calculateDirectorsShareholdingsInTheCompanies,
     calculateBusinessCapitalOfPartnershipFirm,
     calculateTotalTaxableIncomeFromCapitalGains,
+    calculateTotalIncomeFromFinancialAssets,
   } = useCalculations(watch, setValue, getValues, setError, clearErrors);
 
   const formFields: FormField[] = [
@@ -519,7 +519,7 @@ export const useFormFields = (
     {
       name: "incomeFromCapitalGains",
       type: "number",
-      label: "incomeFromCapitalGains",
+      label: "",
       disabled: true,
       x: 755,
       y: 327,
@@ -531,7 +531,7 @@ export const useFormFields = (
     {
       name: "incomeFromFinancialAssets",
       type: "number",
-      label: "incomeFromFinancialAssets",
+      label: "",
       disabled: true,
       x: 755,
       y: 357,
@@ -545,13 +545,16 @@ export const useFormFields = (
       name: "incomeFromOtherSources",
       type: "text",
       label: "incomeFromOtherSources",
-      disabled: true,
+      disabled: false,
       x: 755,
       y: 401,
       width: 166,
       height: 43,
       imageIndex: 1,
       isVisible: true,
+      onBlur: () => {
+        calculateTotalIncome();
+      },
     },
 
     {
@@ -615,7 +618,7 @@ export const useFormFields = (
     {
       name: "grossTaxOnTaxableIncome",
       type: "number",
-      label: "grossTaxOnTaxableIncome",
+      label: "",
       disabled: true,
       x: 755,
       y: 649,
@@ -626,9 +629,9 @@ export const useFormFields = (
     },
 
     {
-      name: "taxRebate",
+      name: "amountOfTaxRebate",
       type: "number",
-      label: "taxRebate",
+      label: "",
       disabled: true,
       x: 755,
       y: 679,
@@ -680,8 +683,8 @@ export const useFormFields = (
 
     {
       name: "taxPayable",
-      type: "text",
-      label: "taxPayable",
+      type: "number",
+      label: "",
       disabled: true,
       x: 755,
       y: 769,
@@ -1766,8 +1769,12 @@ export const useFormFields = (
       width: 153,
       height: 18,
       imageIndex: 3,
-      onBlur(value) {
-        setValue("selfAndEmployersContribution", value.toString());
+      onBlur() {
+        const floatValue =
+          parseFloat(
+            watch("employerContributionToProvidentFundPrivateEmployment") || "0"
+          ) * 2;
+        setValue("selfAndEmployersContribution", floatValue.toString());
 
         calculatePrivateEmploymentTotals();
       },
@@ -3387,6 +3394,7 @@ export const useFormFields = (
       isVisible: true,
     },
 
+    // table - 3 - income from financial assets
     {
       name: "interestFromSecurities.balance",
       type: "number",
@@ -3397,6 +3405,9 @@ export const useFormFields = (
       height: 17,
       imageIndex: 6,
       isVisible: true,
+      onBlur() {
+        calculateTotalIncomeFromFinancialAssets();
+      },
     },
     {
       name: "interestFromSecurities.interestProfit",
@@ -3408,6 +3419,9 @@ export const useFormFields = (
       height: 17,
       imageIndex: 6,
       isVisible: true,
+      onBlur() {
+        calculateTotalIncomeFromFinancialAssets();
+      },
     },
     {
       name: "interestFromSecurities.sourceTax",
@@ -3419,6 +3433,9 @@ export const useFormFields = (
       height: 17,
       imageIndex: 6,
       isVisible: true,
+      onBlur() {
+        calculateTotalIncomeFromFinancialAssets();
+      },
     },
 
     {
@@ -3442,6 +3459,9 @@ export const useFormFields = (
       height: 17,
       imageIndex: 6,
       isVisible: true,
+      onBlur() {
+        calculateTotalIncomeFromFinancialAssets();
+      },
     },
     {
       name: "profitInterestFromGovtSecurities2.interestProfit",
@@ -3453,6 +3473,9 @@ export const useFormFields = (
       height: 17,
       imageIndex: 6,
       isVisible: true,
+      onBlur() {
+        calculateTotalIncomeFromFinancialAssets();
+      },
     },
     {
       name: "profitInterestFromGovtSecurities2.sourceTax",
@@ -3464,6 +3487,9 @@ export const useFormFields = (
       height: 17,
       imageIndex: 6,
       isVisible: true,
+      onBlur() {
+        calculateTotalIncomeFromFinancialAssets();
+      },
     },
     {
       name: "profitInterestFromGovtSecurities3.description",
@@ -3486,6 +3512,9 @@ export const useFormFields = (
       height: 17,
       imageIndex: 6,
       isVisible: true,
+      onBlur() {
+        calculateTotalIncomeFromFinancialAssets();
+      },
     },
     {
       name: "profitInterestFromGovtSecurities3.interestProfit",
@@ -3497,6 +3526,9 @@ export const useFormFields = (
       height: 17,
       imageIndex: 6,
       isVisible: true,
+      onBlur() {
+        calculateTotalIncomeFromFinancialAssets();
+      },
     },
     {
       name: "profitInterestFromGovtSecurities3.sourceTax",
@@ -3508,6 +3540,9 @@ export const useFormFields = (
       height: 17,
       imageIndex: 6,
       isVisible: true,
+      onBlur() {
+        calculateTotalIncomeFromFinancialAssets();
+      },
     },
     {
       name: "profitInterestFromGovtSecurities4.description",
@@ -3530,6 +3565,9 @@ export const useFormFields = (
       height: 17,
       imageIndex: 6,
       isVisible: true,
+      onBlur() {
+        calculateTotalIncomeFromFinancialAssets();
+      },
     },
     {
       name: "profitInterestFromGovtSecurities4.interestProfit",
@@ -3541,6 +3579,9 @@ export const useFormFields = (
       height: 17,
       imageIndex: 6,
       isVisible: true,
+      onBlur() {
+        calculateTotalIncomeFromFinancialAssets();
+      },
     },
     {
       name: "profitInterestFromGovtSecurities4.sourceTax",
@@ -3552,6 +3593,9 @@ export const useFormFields = (
       height: 17,
       imageIndex: 6,
       isVisible: true,
+      onBlur() {
+        calculateTotalIncomeFromFinancialAssets();
+      },
     },
     {
       name: "profitInterestFromGovtSecurities5.description",
@@ -3574,6 +3618,9 @@ export const useFormFields = (
       height: 17,
       imageIndex: 6,
       isVisible: true,
+      onBlur() {
+        calculateTotalIncomeFromFinancialAssets();
+      },
     },
     {
       name: "profitInterestFromGovtSecurities5.interestProfit",
@@ -3585,6 +3632,9 @@ export const useFormFields = (
       height: 17,
       imageIndex: 6,
       isVisible: true,
+      onBlur() {
+        calculateTotalIncomeFromFinancialAssets();
+      },
     },
     {
       name: "profitInterestFromGovtSecurities5.sourceTax",
@@ -3596,6 +3646,9 @@ export const useFormFields = (
       height: 17,
       imageIndex: 6,
       isVisible: true,
+      onBlur() {
+        calculateTotalIncomeFromFinancialAssets();
+      },
     },
     {
       name: "profitInterestFromGovtSecurities6.description",
@@ -3618,6 +3671,9 @@ export const useFormFields = (
       height: 17,
       imageIndex: 6,
       isVisible: true,
+      onBlur() {
+        calculateTotalIncomeFromFinancialAssets();
+      },
     },
     {
       name: "profitInterestFromGovtSecurities6.interestProfit",
@@ -3629,6 +3685,9 @@ export const useFormFields = (
       height: 17,
       imageIndex: 6,
       isVisible: true,
+      onBlur() {
+        calculateTotalIncomeFromFinancialAssets();
+      },
     },
     {
       name: "profitInterestFromGovtSecurities6.sourceTax",
@@ -3640,6 +3699,9 @@ export const useFormFields = (
       height: 17,
       imageIndex: 6,
       isVisible: true,
+      onBlur() {
+        calculateTotalIncomeFromFinancialAssets();
+      },
     },
     {
       name: "profitInterestFromGovtSecurities7.description",
@@ -3662,6 +3724,9 @@ export const useFormFields = (
       height: 17,
       imageIndex: 6,
       isVisible: true,
+      onBlur() {
+        calculateTotalIncomeFromFinancialAssets();
+      },
     },
     {
       name: "profitInterestFromGovtSecurities7.interestProfit",
@@ -3673,6 +3738,9 @@ export const useFormFields = (
       height: 17,
       imageIndex: 6,
       isVisible: true,
+      onBlur() {
+        calculateTotalIncomeFromFinancialAssets();
+      },
     },
     {
       name: "profitInterestFromGovtSecurities7.sourceTax",
@@ -3684,6 +3752,9 @@ export const useFormFields = (
       height: 17,
       imageIndex: 6,
       isVisible: true,
+      onBlur() {
+        calculateTotalIncomeFromFinancialAssets();
+      },
     },
     {
       name: "profitInterestFromGovtSecurities8.description",
@@ -3706,6 +3777,9 @@ export const useFormFields = (
       height: 17,
       imageIndex: 6,
       isVisible: true,
+      onBlur() {
+        calculateTotalIncomeFromFinancialAssets();
+      },
     },
     {
       name: "profitInterestFromGovtSecurities8.interestProfit",
@@ -3717,6 +3791,9 @@ export const useFormFields = (
       height: 17,
       imageIndex: 6,
       isVisible: true,
+      onBlur() {
+        calculateTotalIncomeFromFinancialAssets();
+      },
     },
     {
       name: "profitInterestFromGovtSecurities8.sourceTax",
@@ -3728,6 +3805,9 @@ export const useFormFields = (
       height: 17,
       imageIndex: 6,
       isVisible: true,
+      onBlur() {
+        calculateTotalIncomeFromFinancialAssets();
+      },
     },
     {
       name: "profitInterestFromGovtSecurities9.description",
@@ -3750,6 +3830,9 @@ export const useFormFields = (
       height: 17,
       imageIndex: 6,
       isVisible: true,
+      onBlur() {
+        calculateTotalIncomeFromFinancialAssets();
+      },
     },
     {
       name: "profitInterestFromGovtSecurities9.interestProfit",
@@ -3761,6 +3844,9 @@ export const useFormFields = (
       height: 17,
       imageIndex: 6,
       isVisible: true,
+      onBlur() {
+        calculateTotalIncomeFromFinancialAssets();
+      },
     },
     {
       name: "profitInterestFromGovtSecurities9.sourceTax",
@@ -3772,6 +3858,9 @@ export const useFormFields = (
       height: 17,
       imageIndex: 6,
       isVisible: true,
+      onBlur() {
+        calculateTotalIncomeFromFinancialAssets();
+      },
     },
     {
       name: "profitInterestFromGovtSecurities10.description",
@@ -3794,6 +3883,9 @@ export const useFormFields = (
       height: 17,
       imageIndex: 6,
       isVisible: true,
+      onBlur() {
+        calculateTotalIncomeFromFinancialAssets();
+      },
     },
     {
       name: "profitInterestFromGovtSecurities10.interestProfit",
@@ -3805,6 +3897,9 @@ export const useFormFields = (
       height: 17,
       imageIndex: 6,
       isVisible: true,
+      onBlur() {
+        calculateTotalIncomeFromFinancialAssets();
+      },
     },
     {
       name: "profitInterestFromGovtSecurities10.sourceTax",
@@ -3816,6 +3911,9 @@ export const useFormFields = (
       height: 17,
       imageIndex: 6,
       isVisible: true,
+      onBlur() {
+        calculateTotalIncomeFromFinancialAssets();
+      },
     },
     {
       name: "profitInterestFromGovtSecuritiesTotal.balance",
@@ -4047,7 +4145,7 @@ export const useFormFields = (
       isVisible: true,
     },
     {
-      name: "totalIncomeRebateTable.totalAmount",
+      name: "totalIncome",
       type: "number",
       label: "",
       disabled: true,
@@ -4071,7 +4169,7 @@ export const useFormFields = (
       isVisible: true,
     },
     {
-      name: "totalAllowableInvestmentRebateTable.totalAmount",
+      name: "totalAllowableInvestmentContribution",
       type: "number",
       label: "",
       disabled: true,
@@ -4120,7 +4218,7 @@ export const useFormFields = (
     },
 
     {
-      name: "applicableRebate",
+      name: "amountOfTaxRebate",
       type: "number",
       label: "",
       disabled: true,

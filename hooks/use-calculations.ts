@@ -266,6 +266,155 @@ export const useCalculations = (
     return safeTotal;
   };
 
+  const calculateTaxPayable = useCallback(() => {
+    // Get minimum tax amount and net tax rebate
+    const minimumTaxAmount = parseFloat(getValues("minimumTaxAmount") || "0");
+    const netTaxRebate = parseFloat(getValues("netTaxRebate") || "0");
+
+    // Take the maximum of minimumTaxAmount and netTaxRebate
+    const taxPayable = Math.max(minimumTaxAmount, netTaxRebate);
+
+    // Round to 2 decimal places
+    const roundedTaxPayable = Math.round(taxPayable * 100) / 100;
+
+    // Set the calculated value
+    setValue("taxPayable", roundedTaxPayable.toFixed(2));
+
+    return roundedTaxPayable;
+  }, [getValues, setValue]);
+
+  const calculateNetTaxRebate = useCallback(() => {
+    // Get gross tax and tax rebate amounts
+    const grossTaxOnTaxableIncome = parseFloat(
+      getValues("grossTaxOnTaxableIncome") || "0"
+    );
+    const taxRebate = parseFloat(getValues("amountOfTaxRebate") || "0");
+
+    // Calculate net tax rebate
+    const netTaxRebate = Math.max(0, grossTaxOnTaxableIncome - taxRebate);
+
+    // Round to 2 decimal places
+    const roundedNetTaxRebate = Math.round(netTaxRebate * 100) / 100;
+
+    // Set the calculated value
+    setValue("netTaxRebate", roundedNetTaxRebate.toFixed(2));
+
+    // incase rebate changes, calculate the tax payable again
+    calculateTaxPayable();
+
+    return roundedNetTaxRebate;
+  }, [getValues, setValue, calculateTaxPayable]);
+
+  const calculateTaxRebate = useCallback(() => {
+    const totalIncome = parseFloat(getValues("totalIncome") || "0");
+    const totalAllowableInvestments = parseFloat(
+      getValues("totalAllowableInvestmentContribution") || "0"
+    );
+
+    // Calculate percentages
+    const threePercentOfIncome = totalIncome * 0.03;
+    const fifteenPercentOfInvestments = totalAllowableInvestments * 0.15;
+    const maxRebateCap = 1000000;
+
+    setValue("totalIncomeRebateTable.rebate", threePercentOfIncome.toString());
+    setValue(
+      "totalAllowableInvestmentRebateTable.rebate",
+      fifteenPercentOfInvestments.toString()
+    );
+
+    // Find minimum value
+    const taxRebate = Math.min(
+      threePercentOfIncome,
+      fifteenPercentOfInvestments,
+      maxRebateCap
+    );
+
+    // Round to 2 decimal places and set value
+    const roundedRebate = Math.round(taxRebate * 100) / 100;
+    setValue("amountOfTaxRebate", roundedRebate.toFixed(2));
+
+    // // Calculate and set net tax rebate if needed
+    calculateNetTaxRebate();
+
+    return roundedRebate;
+  }, [getValues, setValue, calculateNetTaxRebate]);
+
+  const calculateGrossTax = useCallback(() => {
+    const totalIncome = parseFloat(getValues("totalIncome") || "0");
+    const residentialStatus = watch("residentialStatus");
+    const specialBenefits = watch("specialBenefits") || "NONE";
+    const isParentOfDisabledPerson = watch("isParentOfDisabledPerson");
+
+    // For non-residents, apply 30% flat rate
+    if (residentialStatus === "NON_RESIDENT") {
+      const tax = totalIncome * 0.3;
+      setValue("grossTaxOnTaxableIncome", tax.toFixed(2));
+      return tax;
+    }
+
+    // Get the threshold based on category
+    let threshold = 0;
+
+    // Determine threshold based on category and special benefits
+    if (specialBenefits === "NONE" && !isParentOfDisabledPerson) {
+      // General resident (no special benefits)
+      threshold = 350000;
+    } else {
+      // Apply special benefit thresholds
+      switch (specialBenefits) {
+        case "GAZETTED_WAR_WOUNDED_FREEDOM_FIGHTER":
+          threshold = 500000;
+          break;
+        case "FEMALE":
+        case "AGED_65_OR_MORE":
+          threshold = 400000;
+          break;
+        case "THIRD_GENDER":
+        case "DISABLED_PERSON":
+          threshold = 475000;
+          break;
+        default:
+          threshold = isParentOfDisabledPerson ? 500000 : 350000;
+      }
+    }
+
+    let remainingIncome = Math.max(0, totalIncome - threshold);
+    let totalTax = 0;
+
+    // Apply progressive tax rates
+    const taxSlabs = [
+      { amount: 100000, rate: 0.05 }, // 5% on first 100,000
+      { amount: 400000, rate: 0.1 }, // 10% on next 400,000
+      { amount: 500000, rate: 0.15 }, // 15% on next 500,000
+      { amount: 500000, rate: 0.2 }, // 20% on next 500,000
+    ];
+
+    // Calculate tax for each slab
+    for (const slab of taxSlabs) {
+      if (remainingIncome <= 0) break;
+
+      const taxableInSlab = Math.min(remainingIncome, slab.amount);
+      totalTax += taxableInSlab * slab.rate;
+      remainingIncome -= slab.amount;
+    }
+
+    // Apply 25% on remaining income
+    if (remainingIncome > 0) {
+      totalTax += remainingIncome * 0.25;
+    }
+
+    // Round to 2 decimal places
+    const roundedTax = Math.round(totalTax * 100) / 100;
+
+    // Set the calculated gross tax
+    setValue("grossTaxOnTaxableIncome", roundedTax.toFixed(2));
+
+    // recalculate the net tax rebate incase gross tax has changed after setting net tax
+    calculateNetTaxRebate();
+
+    return roundedTax;
+  }, [watch, getValues, setValue, calculateNetTaxRebate]);
+
   const calculateTotalIncome = useCallback(() => {
     const fields: FormFieldName[] = [
       "incomeFromEmployment",
@@ -288,11 +437,72 @@ export const useCalculations = (
 
     setValue("totalIncome", total.toFixed(2));
     setValue("totalIncomeShown", total.toFixed(2));
-
     setValue("totalIncomeShownInTheReturn", total.toFixed(2));
 
+    calculateTaxRebate();
+    calculateGrossTax();
+
     return total;
-  }, [setValue, watch]);
+  }, [setValue, watch, calculateTaxRebate, calculateGrossTax]);
+
+  const calculateTotalIncomeFromFinancialAssets = () => {
+    const fields = [
+      "interestFromSecurities",
+      "profitInterestFromGovtSecurities2",
+      "profitInterestFromGovtSecurities3",
+      "profitInterestFromGovtSecurities4",
+      "profitInterestFromGovtSecurities5",
+      "profitInterestFromGovtSecurities6",
+      "profitInterestFromGovtSecurities7",
+      "profitInterestFromGovtSecurities8",
+      "profitInterestFromGovtSecurities9",
+      "profitInterestFromGovtSecurities10",
+    ] as const;
+
+    let totalBalance = 0;
+    let totalInterestProfit = 0;
+    let totalSourceTax = 0;
+
+    // Calculate individual entries and running totals
+    fields.forEach((field) => {
+      const balance = parseFloat(watch(`${field}.balance`) || "0");
+      const interestProfit = parseFloat(
+        watch(`${field}.interestProfit`) || "0"
+      );
+      const sourceTax = parseFloat(watch(`${field}.sourceTax`) || "0");
+
+      // Add to running totals (using safe values)
+      totalBalance += isNaN(balance) ? 0 : balance;
+      totalInterestProfit += isNaN(interestProfit) ? 0 : interestProfit;
+      totalSourceTax += isNaN(sourceTax) ? 0 : sourceTax;
+    });
+
+    // Set the totals in the summary row
+    setValue(
+      "profitInterestFromGovtSecuritiesTotal.balance",
+      totalBalance.toFixed(2)
+    );
+    setValue(
+      "profitInterestFromGovtSecuritiesTotal.interestProfit",
+      totalInterestProfit.toFixed(2)
+    );
+    setValue(
+      "profitInterestFromGovtSecuritiesTotal.sourceTax",
+      totalSourceTax.toFixed(2)
+    );
+
+    // Set this total to the main income from financial assets field that's used elsewhere
+    setValue("incomeFromFinancialAssets", totalInterestProfit.toFixed(2));
+
+    // Recalculate total income since financial assets income is a component
+    calculateTotalIncome();
+
+    return {
+      totalBalance,
+      totalInterestProfit,
+      totalSourceTax,
+    };
+  };
 
   const calculateTotalTaxableIncomeFromCapitalGains = () => {
     const fields = [
@@ -807,8 +1017,11 @@ export const useCalculations = (
 
     setValue("totalAllowableInvestmentContribution", total.toFixed(2));
 
+    // set the tax rebate amount
+    calculateTaxRebate();
+
     return total;
-  }, [watch, setValue]); // Add dependencies used inside the callback
+  }, [watch, setValue, calculateTaxRebate]); // Add dependencies used inside the callback
 
   const calculatePrivateEmploymentTotals = useCallback(() => {
     const fields: FormFieldName[] = [
@@ -864,7 +1077,6 @@ export const useCalculations = (
 
     const totalExempted = Math.round(Math.min(totalIncome / 3, 450000));
     const totalIncomeFromSalary = totalIncome - totalExempted;
-    console.log(totalIncomeFromSalary);
 
     setValue("exemptedAmountPrivateEmployment", totalExempted.toFixed(2));
     setValue("totalSalaryReceivedPrivateEmployment", totalIncome.toFixed(2));
@@ -922,7 +1134,7 @@ export const useCalculations = (
 
   return {
     calculateTotalAssetsInBangladeshAndOutside,
-    calculateTotalCashInHandAndFund,
+
     calculateTotalMotorValue,
     calculateTotalFinancialAssets,
     calculateTotalAgriculturalAssets,
@@ -950,5 +1162,8 @@ export const useCalculations = (
     calculateDirectorsShareholdingsInTheCompanies,
     calculateBusinessCapitalOfPartnershipFirm,
     calculateTotalTaxableIncomeFromCapitalGains,
+    calculateTotalIncomeFromFinancialAssets,
+    calculateGrossTax,
+    calculateTaxPayable,
   };
 };

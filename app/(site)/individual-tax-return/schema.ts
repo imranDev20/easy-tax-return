@@ -112,7 +112,6 @@ export const individualTaxReturnSchema = z.object({
   delayInterest: z.string().optional(),
 
   grossTaxOnTaxableIncome: z.string().optional(),
-  taxRebate: z.string().optional(),
   netTaxRebate: z.string().optional(),
   minimumTaxAmount: z.string().optional(),
 
@@ -292,7 +291,6 @@ export const individualTaxReturnSchema = z.object({
   totalIncomeRebateTable: calculationOfRebateAmount,
   totalAllowableInvestmentRebateTable: calculationOfRebateAmount,
   taka1000000: calculationOfRebateAmount,
-  applicableRebate: z.string().optional(),
 
   // Image 9
   expensesForFood: personalExpenseSchema,
