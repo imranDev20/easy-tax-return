@@ -205,7 +205,7 @@ model IndividualTaxes {
   nameOfBusiness                                              String?
   natureOfBusiness                                            String?
   addressOfBusiness                                           String?
-  salesTurnoverReceipts                                       String?
+  salesTurnoverReceiptsBusiness                               String?
   grossProfitAmount                                           String?
   generalAdministrativeSellingExpenses                        String?
   badDebtExpense                                              String?

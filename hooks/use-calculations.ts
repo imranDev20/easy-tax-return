@@ -238,8 +238,6 @@ export const useCalculations = (
       "personalExpenseForLocalForeignTravel",
       "festivalExpense",
       "taxDeductedCollectedAtSource",
-      "advanceTaxPaid",
-      "taxSurchargePaid",
       "interestPaid",
     ];
 
@@ -268,193 +266,6 @@ export const useCalculations = (
     return safeTotal;
   };
 
-  const calculateTotalAmountPayable = useCallback(() => {
-    let taxPayable = parseFloat(getValues("taxPayable")?.toString() || "0");
-    let netWealthSurcharge = parseFloat(
-      getValues("netWealthSurcharge")?.toString() || "0"
-    );
-    let environmentalSurcharge = parseFloat(
-      getValues("environmentalSurcharge")?.toString() || "0"
-    );
-    let delayInterest = parseFloat(
-      getValues("delayInterest")?.toString() || "0"
-    );
-    let totalAmountPayable =
-      taxPayable + netWealthSurcharge + environmentalSurcharge + delayInterest;
-    setValue("totalAmountPayable", totalAmountPayable.toFixed(2));
-    setValue("totalTaxPaid", totalAmountPayable.toFixed(2));
-  }, [getValues, setValue]);
-
-  const calculateTaxPayable = useCallback(() => {
-    let netTaxRebate = parseFloat(getValues("netTaxRebate")?.toString() || "0");
-    let minimumTaxAmount = parseFloat(
-      getValues("minimumTaxAmount")?.toString() || "0"
-    );
-    let taxPayable = Math.max(0, netTaxRebate, minimumTaxAmount);
-    setValue("taxPayable", taxPayable.toFixed(2));
-    calculateTotalAmountPayable();
-  }, [getValues, setValue, calculateTotalAmountPayable]);
-
-  // Schedule 4
-  const calculateSummaryOfBalanceSheet = () => {
-    const netProfitFromBusinessIncome = parseFloat(
-      watch("netProfitFromBusinessIncome") || "0"
-    );
-
-    const cashInHandAtBank = parseFloat(watch("cashInHandAtBank") || "0");
-    const inventories = parseFloat(watch("inventories") || "0");
-    const fixedAssets = parseFloat(watch("fixedAssets") || "0");
-    const otherAssets = parseFloat(watch("otherAssets") || "0");
-
-    const totalAssets =
-      cashInHandAtBank + inventories + otherAssets + fixedAssets;
-
-    setValue("totalAssets", totalAssets.toFixed(2));
-
-    const openingCapital = parseFloat(watch("openingCapital") || "0");
-    const withdrawalsInTheIncomeYear = parseFloat(
-      watch("withdrawalsInTheIncomeYear") || "0"
-    );
-
-    const closingCapital =
-      openingCapital + netProfitFromBusinessIncome - withdrawalsInTheIncomeYear;
-
-    setValue("closingCapital", closingCapital.toFixed(2));
-
-    const liabilities = parseFloat(watch("liabilities") || "0");
-    const totalCapitalsAndLiabilities = liabilities + closingCapital;
-
-    setValue(
-      "totalCapitalsAndLiabilities",
-      totalCapitalsAndLiabilities.toFixed(2)
-    );
-
-    return 0;
-  };
-
-  const getThreshold = useCallback(
-    (
-      category: TaxCategory,
-      isParentOfDisabledPerson: boolean | undefined
-    ): number => {
-      if (category === "NONE" && !isParentOfDisabledPerson) return 350000;
-
-      if (category === "FEMALE" || category === "AGED_65_OR_MORE")
-        return 400000;
-      if (category === "THIRD_GENDER" || category === "DISABLED_PERSON")
-        return 475000;
-      if (
-        category === "GAZETTED_WAR_WOUNDED_FREEDOM_FIGHTER" ||
-        isParentOfDisabledPerson
-      )
-        return 500000;
-      return 350000; // Default case
-    },
-    []
-  );
-
-  const calculateTax = useCallback(
-    (
-      totalIncome: number,
-      category: TaxCategory,
-      residentialStatus: ResidentialStatus,
-      isParentOfDisabledPerson: boolean | undefined
-    ): number => {
-      if (residentialStatus === "NON_RESIDENT") {
-        return totalIncome * 0.3; // 30% flat rate for non-residents
-      }
-
-      if (residentialStatus !== "RESIDENT") {
-        return 0; // Handle undefined case
-      }
-
-      const threshold = getThreshold(category, isParentOfDisabledPerson);
-      let taxableIncome = Math.max(0, totalIncome - threshold);
-      let tax = 0;
-
-      const slabs: [number, number][] = [
-        [100000, 0.05],
-        [400000, 0.1],
-        [500000, 0.15],
-        [500000, 0.2],
-      ];
-
-      for (const [slabAmount, rate] of slabs) {
-        if (taxableIncome <= 0) break;
-        const taxableAmountInSlab = Math.min(taxableIncome, slabAmount);
-        tax += taxableAmountInSlab * rate;
-        taxableIncome -= slabAmount;
-      }
-
-      // For any remaining income above the defined slabs
-      if (taxableIncome > 0) {
-        tax += taxableIncome * 0.25;
-      }
-
-      return Math.round(tax); // Rounding to the nearest integer
-    },
-    [getThreshold]
-  );
-
-  const calculateNetTaxRebate = useCallback(() => {
-    let grossTaxableIncome = parseFloat(
-      getValues("grossTaxOnTaxableIncome")?.toString() || "0"
-    );
-
-    let taxRebate = parseFloat(getValues("taxRebate")?.toString() || "0");
-
-    let netTaxRebate = grossTaxableIncome - taxRebate;
-    setValue("netTaxRebate", netTaxRebate.toFixed(2));
-    calculateTaxPayable();
-  }, [getValues, setValue, calculateTaxPayable]);
-
-  const calculateTaxRebate = useCallback(() => {
-    let totalIncomeShown =
-      parseFloat(getValues("totalIncomeShown")?.toString() || "0") * 0.03;
-    let totalAllowableInvestment =
-      parseFloat(
-        getValues("totalAllowableInvestmentContribution")?.toString() || "0"
-      ) * 0.15;
-    let taka = 1000000;
-    let taxRebate = Math.round(
-      Math.min(totalIncomeShown, totalAllowableInvestment, taka)
-    );
-    setValue("taxRebate", taxRebate.toFixed(2));
-    calculateNetTaxRebate();
-  }, [getValues, setValue, calculateNetTaxRebate]);
-
-  // Function to be used with react-hook-form
-  const calculateTaxForm = useCallback(() => {
-    const totalIncome = parseFloat(
-      getValues("totalIncomeShown")?.toString() || "0"
-    );
-
-    const category: TaxCategory = watch("specialBenefits");
-
-    const residentialStatus: ResidentialStatus = watch("residentialStatus");
-    const isParentOfDisabledPerson: boolean | undefined = watch(
-      "isParentOfDisabledPerson"
-    );
-
-    const tax = calculateTax(
-      totalIncome,
-      category,
-      residentialStatus,
-      isParentOfDisabledPerson
-    );
-
-    setValue("grossTaxOnTaxableIncome", tax.toFixed(2));
-    calculateTaxRebate();
-    calculateNetTaxRebate();
-  }, [
-    getValues,
-    watch,
-    setValue,
-    calculateTax,
-    calculateTaxRebate,
-    calculateNetTaxRebate,
-  ]);
-
   const calculateTotalIncome = useCallback(() => {
     const fields: FormFieldName[] = [
       "incomeFromEmployment",
@@ -477,33 +288,130 @@ export const useCalculations = (
 
     setValue("totalIncome", total.toFixed(2));
     setValue("totalIncomeShown", total.toFixed(2));
-    calculateTaxForm();
-    calculateTaxRebate();
+
     setValue("totalIncomeShownInTheReturn", total.toFixed(2));
 
     return total;
-  }, [setValue, watch, calculateTaxForm, calculateTaxRebate]);
+  }, [setValue, watch]);
 
-  const calculateNetProfitFromBusinessIncome = (): number => {
-    calculateSummaryOfBalanceSheet();
+  const calculateTotalTaxableIncomeFromCapitalGains = () => {
+    const fields = [
+      "incomeFromShareTransferListedCompany",
+      "incomeFromCapitalGain2",
+      "incomeFromCapitalGain3",
+      "incomeFromCapitalGain4",
+      "incomeFromCapitalGain5",
+    ] as const;
 
-    const grossProfit = parseFloat(watch("grossProfitFromBusiness") || "0");
+    let totalCapitalGains = 0;
+    let totalExemptedAmount = 0;
+    let totalTaxableAmount = 0;
+
+    // Calculate individual taxable amounts and running totals
+    fields.forEach((field) => {
+      const capitalGain = parseFloat(watch(`${field}.capitalGain`) || "0");
+      const exemptedAmount = parseFloat(
+        watch(`${field}.exemptedAmount`) || "0"
+      );
+
+      // Add to running totals (using safe values)
+      totalCapitalGains += isNaN(capitalGain) ? 0 : capitalGain;
+      totalExemptedAmount += isNaN(exemptedAmount) ? 0 : exemptedAmount;
+
+      // Calculate taxable amount (capitalGain - exemptedAmount)
+      const taxableAmount = Math.max(0, capitalGain - exemptedAmount);
+      totalTaxableAmount += taxableAmount;
+
+      // Set the calculated taxable amount for this entry
+      setValue(`${field}.taxableAmount`, taxableAmount.toFixed(2));
+    });
+
+    // Set the totals in the summary row
+    setValue(
+      "incomeFromCapitaGainsTotal.capitalGain",
+      totalCapitalGains.toFixed(2)
+    );
+    setValue(
+      "incomeFromCapitaGainsTotal.exemptedAmount",
+      totalExemptedAmount.toFixed(2)
+    );
+    setValue(
+      "incomeFromCapitaGainsTotal.taxableAmount",
+      totalTaxableAmount.toFixed(2)
+    );
+
+    // Set this total to the main income from capital gains field that's used elsewhere
+    setValue("incomeFromCapitalGains", totalTaxableAmount.toFixed(2));
+
+    // Recalculate total income since capital gains is part of it
+    calculateTotalIncome();
+
+    return {
+      totalCapitalGains,
+      totalExemptedAmount,
+      totalTaxableAmount,
+    };
+  };
+
+  const calculateBusinessFinancials = () => {
+    // Part 1: Calculate Net Profit
+    const salesTurnover = parseFloat(
+      watch("salesTurnoverReceiptsBusiness") || "0"
+    );
+    const purchase = parseFloat(watch("purchase") || "0");
+
+    // Calculate gross profit
+    const grossProfit = salesTurnover - purchase;
+    setValue("grossProfitFromBusiness", grossProfit.toFixed(2));
+
+    // Calculate net profit
     const expenses = parseFloat(
       watch("generalAdministrativeSellingExpenses") || "0"
     );
     const badDebt = parseFloat(watch("badDebtExpense") || "0");
-
-    // Guard against NaN values
-    const safeGrossProfit = isNaN(grossProfit) ? 0 : grossProfit;
-    const safeExpenses = isNaN(expenses) ? 0 : expenses;
-    const safeBadDebt = isNaN(badDebt) ? 0 : badDebt;
-
-    // Calculate net profit
-    const netProfit = safeGrossProfit - safeExpenses - safeBadDebt;
+    const netProfit = grossProfit - expenses - badDebt;
     setValue("netProfitFromBusinessIncome", netProfit.toFixed(2));
-    setValue("incomeFromBusiness", netProfit.toFixed(2));
+
+    // Part 2: Balance Sheet Calculations
+
+    // Calculate Total Assets
+    const cashInHand = parseFloat(watch("cashInHandAtBank") || "0");
+    const inventories = parseFloat(watch("inventories") || "0");
+    const fixedAssets = parseFloat(watch("fixedAssets") || "0");
+    const otherAssets = parseFloat(watch("otherAssets") || "0");
+
+    const totalAssets = cashInHand + inventories + fixedAssets + otherAssets;
+    setValue("totalAssets", totalAssets.toFixed(2));
+
+    // Calculate Closing Capital
+    const openingCapital = parseFloat(watch("openingCapital") || "0");
+    const withdrawals = parseFloat(watch("withdrawalsInTheIncomeYear") || "0");
+
+    // Use the netProfit calculated above for the balance sheet
+    setValue("netProfitFromBusinessBalance", netProfit.toFixed(2));
+
+    const closingCapital = openingCapital + netProfit - withdrawals;
+    setValue("closingCapital", closingCapital.toFixed(2));
+
+    // Calculate Total Capital & Liabilities
+    const liabilities = parseFloat(watch("liabilities") || "0");
+    const totalCapitalAndLiabilities = closingCapital + liabilities;
+    setValue(
+      "totalCapitalsAndLiabilities",
+      totalCapitalAndLiabilities.toFixed(2)
+    );
+
+    // Verify balance sheet equation: Total Assets = Total Capital & Liabilities
+    if (totalAssets !== totalCapitalAndLiabilities) {
+      console.warn("Balance sheet mismatch:", {
+        totalAssets,
+        totalCapitalAndLiabilities,
+        difference: totalAssets - totalCapitalAndLiabilities,
+      });
+    }
+
+    // Continue with income calculations if needed
     calculateTotalIncome();
-    return Math.max(netProfit, 0);
   };
 
   const calculateLiabilitiesOutSideBusiness = () => {
@@ -521,35 +429,6 @@ export const useCalculations = (
 
     setValue("totalLiabilitiesOutsideBusiness", total.toFixed(2));
     calculateGrossWealth();
-    return total;
-  };
-
-  const calculateTaxDeductedCollectedAtSource = () => {
-    const fields: FormFieldName[] = [
-      "interestProfitFromBankFI.taxDeductedAtSource",
-      "incomeFromSavingCertificates.taxDeductedAtSource",
-      "incomeFromSecuritiesDebentures.taxDeductedAtSource",
-      "incomeFromFinancialProductScheme.taxDeductedAtSource",
-      "dividendIncome.taxDeductedAtSource",
-      "capitalGainFromTransferOfProperty.taxDeductedAtSource",
-      "incomeFromBusinessMinTax.taxDeductedAtSource",
-      "workersParticipationFund.taxDeductedAtSource",
-      "incomeFromOtherSourcesMinTax.taxDeductedAtSource",
-      "otherSubjectToMinTax.taxDeductedAtSource",
-    ];
-    // particulars
-    // amountOfIncome:
-    // deductionsExpensesExemptedIncome:
-    // netTaxableIncome:
-    // taxDeductedAtSource:
-
-    const total = fields.reduce((sum, field) => {
-      const value = watch(field as keyof IndividualTaxReturnFormInput);
-      const numberValue = parseFloat(value?.toString() || "0");
-      return sum + (isNaN(numberValue) ? 0 : numberValue);
-    }, 0);
-
-    setValue("taxDeductedCollectedAtSource.amount", total.toFixed(2));
     return total;
   };
 
@@ -927,9 +806,9 @@ export const useCalculations = (
     }, 0);
 
     setValue("totalAllowableInvestmentContribution", total.toFixed(2));
-    calculateTaxRebate();
+
     return total;
-  }, [watch, setValue, calculateTaxRebate]); // Add dependencies used inside the callback
+  }, [watch, setValue]); // Add dependencies used inside the callback
 
   const calculatePrivateEmploymentTotals = useCallback(() => {
     const fields: FormFieldName[] = [
@@ -1031,172 +910,6 @@ export const useCalculations = (
     return total;
   };
 
-  const calculateNetTaxableIncome = () => {
-    const interestProfitFromBankFIAmount = getValues(
-      "interestProfitFromBankFI.amountOfIncome"
-    );
-    const interestProfitFromBankFIDedction = getValues(
-      "interestProfitFromBankFI.deductionsExpensesExemptedIncome"
-    );
-    const interestProfitFromBankFINetTaxable =
-      parseFloat(interestProfitFromBankFIAmount?.toString() || "0") -
-      parseFloat(interestProfitFromBankFIDedction?.toString() || "0");
-    setValue(
-      "interestProfitFromBankFI.netTaxableIncome",
-      interestProfitFromBankFINetTaxable.toFixed(2)
-    );
-
-    const incomeFromSavingCertificatesAmount = getValues(
-      "incomeFromSavingCertificates.amountOfIncome"
-    );
-    const incomeFromSavingCertificatesDedction = getValues(
-      "incomeFromSavingCertificates.deductionsExpensesExemptedIncome"
-    );
-    const incomeFromSavingCertificatesNetTaxable =
-      parseFloat(incomeFromSavingCertificatesAmount?.toString() || "0") -
-      parseFloat(incomeFromSavingCertificatesDedction?.toString() || "0");
-    setValue(
-      "incomeFromSavingCertificates.netTaxableIncome",
-      incomeFromSavingCertificatesNetTaxable.toFixed(2)
-    );
-
-    const incomeFromSecuritiesDebenturesAmount = getValues(
-      "incomeFromSecuritiesDebentures.amountOfIncome"
-    );
-    const incomeFromSecuritiesDebenturesDedction = getValues(
-      "incomeFromSecuritiesDebentures.deductionsExpensesExemptedIncome"
-    );
-    const incomeFromSecuritiesDebenturesNetTaxable =
-      parseFloat(incomeFromSecuritiesDebenturesAmount?.toString() || "0") -
-      parseFloat(incomeFromSecuritiesDebenturesDedction?.toString() || "0");
-    setValue(
-      "incomeFromSecuritiesDebentures.netTaxableIncome",
-      incomeFromSecuritiesDebenturesNetTaxable.toFixed(2)
-    );
-
-    const incomeFromFinancialProductSchemeAmount = getValues(
-      "incomeFromFinancialProductScheme.amountOfIncome"
-    );
-    const incomeFromFinancialProductSchemeDedction = getValues(
-      "incomeFromFinancialProductScheme.deductionsExpensesExemptedIncome"
-    );
-    const incomeFromFinancialProductSchemeNetTaxable =
-      parseFloat(incomeFromFinancialProductSchemeAmount?.toString() || "0") -
-      parseFloat(incomeFromFinancialProductSchemeDedction?.toString() || "0");
-    setValue(
-      "incomeFromFinancialProductScheme.netTaxableIncome",
-      incomeFromFinancialProductSchemeNetTaxable.toFixed(2)
-    );
-
-    const dividendIncomeAmount = getValues("dividendIncome.amountOfIncome");
-    const dividendIncomeDedction = getValues(
-      "dividendIncome.deductionsExpensesExemptedIncome"
-    );
-    const dividendIncomeNetTaxable =
-      parseFloat(dividendIncomeAmount?.toString() || "0") -
-      parseFloat(dividendIncomeDedction?.toString() || "0");
-    setValue(
-      "dividendIncome.netTaxableIncome",
-      dividendIncomeNetTaxable.toFixed(2)
-    );
-
-    const incomeFromFinancialAssets =
-      interestProfitFromBankFINetTaxable +
-      incomeFromSavingCertificatesNetTaxable +
-      incomeFromSecuritiesDebenturesNetTaxable +
-      incomeFromFinancialProductSchemeNetTaxable +
-      dividendIncomeNetTaxable;
-
-    setValue("incomeFromFinancialAssets", incomeFromFinancialAssets.toFixed(2));
-
-    const capitalGainFromTransferOfPropertyAmount = getValues(
-      "capitalGainFromTransferOfProperty.amountOfIncome"
-    );
-    const capitalGainFromTransferOfPropertyDedction = getValues(
-      "capitalGainFromTransferOfProperty.deductionsExpensesExemptedIncome"
-    );
-    const capitalGainFromTransferOfPropertyNetTaxable =
-      parseFloat(capitalGainFromTransferOfPropertyAmount?.toString() || "0") -
-      parseFloat(capitalGainFromTransferOfPropertyDedction?.toString() || "0");
-
-    setValue(
-      "capitalGainFromTransferOfProperty.netTaxableIncome",
-      capitalGainFromTransferOfPropertyNetTaxable.toFixed(2)
-    );
-    setValue(
-      "incomeFromCapitalGains",
-      capitalGainFromTransferOfPropertyNetTaxable.toFixed(2)
-    );
-
-    const incomeFromBusinessMinTaxAmount = getValues(
-      "incomeFromBusinessMinTax.amountOfIncome"
-    );
-    const incomeFromBusinessMinTaxDedction = getValues(
-      "incomeFromBusinessMinTax.deductionsExpensesExemptedIncome"
-    );
-    const incomeFromBusinessMinTaxNetTaxable =
-      parseFloat(incomeFromBusinessMinTaxAmount?.toString() || "0") -
-      parseFloat(incomeFromBusinessMinTaxDedction?.toString() || "0");
-
-    setValue(
-      "incomeFromBusinessMinTax.netTaxableIncome",
-      incomeFromBusinessMinTaxNetTaxable.toFixed(2)
-    );
-
-    const workersParticipationFundAmount = getValues(
-      "workersParticipationFund.amountOfIncome"
-    );
-    const workersParticipationFundDedction = getValues(
-      "workersParticipationFund.deductionsExpensesExemptedIncome"
-    );
-    const workersParticipationFundNetTaxable =
-      parseFloat(workersParticipationFundAmount?.toString() || "0") -
-      parseFloat(workersParticipationFundDedction?.toString() || "0");
-
-    setValue(
-      "workersParticipationFund.netTaxableIncome",
-      workersParticipationFundNetTaxable.toFixed(2)
-    );
-
-    const incomeFromOtherSourcesMinTaxAmount = getValues(
-      "incomeFromOtherSourcesMinTax.amountOfIncome"
-    );
-    const incomeFromOtherSourcesMinTaxDedction = getValues(
-      "incomeFromOtherSourcesMinTax.deductionsExpensesExemptedIncome"
-    );
-    const incomeFromOtherSourcesMinTaxNetTaxable =
-      parseFloat(incomeFromOtherSourcesMinTaxAmount?.toString() || "0") -
-      parseFloat(incomeFromOtherSourcesMinTaxDedction?.toString() || "0");
-
-    setValue(
-      "incomeFromOtherSourcesMinTax.netTaxableIncome",
-      incomeFromOtherSourcesMinTaxNetTaxable.toFixed(2)
-    );
-
-    const otherSubjectToMinTaxAmount = getValues(
-      "otherSubjectToMinTax.amountOfIncome"
-    );
-    const otherSubjectToMinTaxDedction = getValues(
-      "otherSubjectToMinTax.deductionsExpensesExemptedIncome"
-    );
-    const otherSubjectToMinTaxNetTaxable =
-      parseFloat(otherSubjectToMinTaxAmount?.toString() || "0") -
-      parseFloat(otherSubjectToMinTaxDedction?.toString() || "0");
-
-    setValue(
-      "otherSubjectToMinTax.netTaxableIncome",
-      otherSubjectToMinTaxNetTaxable.toFixed(2)
-    );
-
-    const incomeFromOtherSources =
-      workersParticipationFundNetTaxable +
-      incomeFromOtherSourcesMinTaxNetTaxable +
-      otherSubjectToMinTaxNetTaxable;
-    setValue("incomeFromOtherSources", incomeFromOtherSources.toFixed(2));
-
-    calculateTotalIncome();
-  };
-
   type TaxCategory =
     | "GAZETTED_WAR_WOUNDED_FREEDOM_FIGHTER"
     | "FEMALE"
@@ -1208,8 +921,6 @@ export const useCalculations = (
   type ResidentialStatus = "RESIDENT" | "NON_RESIDENT" | undefined;
 
   return {
-    calculateTaxPayable,
-    calculateTotalAmountPayable,
     calculateTotalAssetsInBangladeshAndOutside,
     calculateTotalCashInHandAndFund,
     calculateTotalMotorValue,
@@ -1218,17 +929,14 @@ export const useCalculations = (
     calculateTotalNonAgriculturalAssets,
     calculateTotalExpenseIndividualPerson,
     calculateTotalAllowableInvestmentContribution,
-    calculateSummaryOfBalanceSheet,
-    calculateNetProfitFromBusinessIncome,
+    calculateBusinessFinancials,
     calculateGrossWealth,
     calculateNetWealthLastDateOfThisFinancialYear,
     calculateSumOfSourceOfFund,
     calculateTotalSourceOfFunds,
     calculateTotalExpenseAndLoss,
     calculateLiabilitiesOutSideBusiness,
-    calculateNetTaxableIncome,
     calculateTotalIncome,
-    calculateTaxDeductedCollectedAtSource,
     calculatePrivateEmploymentTotals,
     calcualateScheduleOneOtherAllowanceGovtTaxable,
     calculateScheduleOneGovtTotals,
@@ -1241,6 +949,6 @@ export const useCalculations = (
     calculateBusinessCapitalDifference,
     calculateDirectorsShareholdingsInTheCompanies,
     calculateBusinessCapitalOfPartnershipFirm,
-    calculateTax,
+    calculateTotalTaxableIncomeFromCapitalGains,
   };
 };

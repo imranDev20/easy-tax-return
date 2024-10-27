@@ -11,8 +11,6 @@ import { IndividualTaxReturnFormInput } from "@/app/(site)/individual-tax-return
 import { FormField } from "@/types/tax-return-form";
 import {
   MINIMUM_TAX_OPTIONS,
-  NET_WEALTH_SURCHARGE_OPTIONS,
-  CALCULATE_OPTION,
   REPAIR_COLLECTION_OPTIONS,
   NET_WEALTH_LAST_DATE,
 } from "@/lib/constants";
@@ -36,17 +34,14 @@ export const useFormFields = (
     calculateTotalNonAgriculturalAssets,
     calculateTotalExpenseIndividualPerson,
     calculateTotalAllowableInvestmentContribution,
-    calculateSummaryOfBalanceSheet,
-    calculateNetProfitFromBusinessIncome,
+    calculateBusinessFinancials,
     calculateGrossWealth,
     calculateNetWealthLastDateOfThisFinancialYear,
     calculateSumOfSourceOfFund,
     calculateTotalSourceOfFunds,
     calculateTotalExpenseAndLoss,
     calculateLiabilitiesOutSideBusiness,
-    calculateNetTaxableIncome,
     calculateTotalIncome,
-    calculateTaxDeductedCollectedAtSource,
     calculatePrivateEmploymentTotals,
     calcualateScheduleOneOtherAllowanceGovtTaxable,
     calculateScheduleOneGovtTotals,
@@ -59,7 +54,7 @@ export const useFormFields = (
     calculateBusinessCapitalDifference,
     calculateDirectorsShareholdingsInTheCompanies,
     calculateBusinessCapitalOfPartnershipFirm,
-    calculateTotalAmountPayable,
+    calculateTotalTaxableIncomeFromCapitalGains,
   } = useCalculations(watch, setValue, getValues, setError, clearErrors);
 
   const formFields: FormField[] = [
@@ -510,7 +505,7 @@ export const useFormFields = (
 
     {
       name: "incomeFromBusiness",
-      type: "text",
+      type: "number",
       label: "",
       disabled: true,
       x: 755,
@@ -535,7 +530,7 @@ export const useFormFields = (
     },
     {
       name: "incomeFromFinancialAssets",
-      type: "text",
+      type: "number",
       label: "incomeFromFinancialAssets",
       disabled: true,
       x: 755,
@@ -619,7 +614,7 @@ export const useFormFields = (
     // Table 2
     {
       name: "grossTaxOnTaxableIncome",
-      type: "text",
+      type: "number",
       label: "grossTaxOnTaxableIncome",
       disabled: true,
       x: 755,
@@ -644,7 +639,7 @@ export const useFormFields = (
     },
     {
       name: "netTaxRebate",
-      type: "text",
+      type: "number",
       label: "netTaxRebate",
       disabled: true,
       x: 755,
@@ -712,9 +707,6 @@ export const useFormFields = (
       name: "environmentalSurcharge",
       type: "number",
       label: "environmentalSurcharge",
-      onBlur: () => {
-        calculateTotalAmountPayable();
-      },
       x: 586,
       y: 828,
       width: 166,
@@ -726,10 +718,6 @@ export const useFormFields = (
       name: "delayInterest",
       type: "number",
       label: "",
-      onBlur: () => {
-        calculateTotalAmountPayable();
-      },
-
       x: 755,
       y: 858,
       width: 166,
@@ -2339,7 +2327,7 @@ export const useFormFields = (
       isVisible: true,
     },
     {
-      name: "salesTurnoverReceipts",
+      name: "salesTurnoverReceiptsBusiness",
       type: "number",
       label: "",
       x: 703,
@@ -2348,6 +2336,9 @@ export const useFormFields = (
       height: 18,
       imageIndex: 5,
       isVisible: true,
+      onBlur() {
+        calculateBusinessFinancials();
+      },
     },
     {
       name: "purchase",
@@ -2359,6 +2350,9 @@ export const useFormFields = (
       height: 18,
       imageIndex: 5,
       isVisible: true,
+      onBlur() {
+        calculateBusinessFinancials();
+      },
     },
     {
       name: "grossProfitFromBusiness",
@@ -2382,7 +2376,7 @@ export const useFormFields = (
       height: 18,
       imageIndex: 5,
       onBlur() {
-        calculateNetProfitFromBusinessIncome();
+        calculateBusinessFinancials();
       },
       isVisible: true,
     },
@@ -2396,13 +2390,13 @@ export const useFormFields = (
       height: 18,
       imageIndex: 5,
       onBlur() {
-        calculateNetProfitFromBusinessIncome();
+        calculateBusinessFinancials();
       },
       isVisible: true,
     },
     {
       name: "netProfitFromBusinessIncome",
-      type: "text",
+      type: "number",
       label: "",
       disabled: true,
       x: 704,
@@ -2424,7 +2418,7 @@ export const useFormFields = (
       height: 16,
       imageIndex: 5,
       onBlur() {
-        calculateSummaryOfBalanceSheet();
+        calculateBusinessFinancials();
       },
       isVisible: true,
     },
@@ -2438,7 +2432,7 @@ export const useFormFields = (
       height: 18,
       imageIndex: 5,
       onBlur() {
-        calculateSummaryOfBalanceSheet();
+        calculateBusinessFinancials();
       },
       isVisible: true,
     },
@@ -2452,7 +2446,7 @@ export const useFormFields = (
       height: 18,
       imageIndex: 5,
       onBlur() {
-        calculateSummaryOfBalanceSheet();
+        calculateBusinessFinancials();
       },
       isVisible: true,
     },
@@ -2467,7 +2461,7 @@ export const useFormFields = (
       height: 18,
       imageIndex: 5,
       onBlur() {
-        calculateSummaryOfBalanceSheet();
+        calculateBusinessFinancials();
       },
       isVisible: true,
     },
@@ -2494,7 +2488,7 @@ export const useFormFields = (
       height: 18,
       imageIndex: 5,
       onBlur() {
-        calculateSummaryOfBalanceSheet();
+        calculateBusinessFinancials();
       },
       isVisible: true,
     },
@@ -2520,7 +2514,7 @@ export const useFormFields = (
       height: 18,
       imageIndex: 5,
       onBlur() {
-        calculateSummaryOfBalanceSheet();
+        calculateBusinessFinancials();
       },
       isVisible: true,
     },
@@ -2546,7 +2540,7 @@ export const useFormFields = (
       height: 18,
       imageIndex: 5,
       onBlur() {
-        calculateSummaryOfBalanceSheet();
+        calculateBusinessFinancials();
       },
       isVisible: true,
     },
@@ -2567,36 +2561,39 @@ export const useFormFields = (
       name: "incomeFromShareTransferListedCompany.capitalGain",
       type: "number",
       label: "",
-
       disabled: false,
-      x: 475,
-      y: 788,
-      width: 142,
+      x: 473,
+      y: 787,
+      width: 144,
       height: 35,
       imageIndex: 5,
       isVisible: true,
+      onBlur() {
+        calculateTotalTaxableIncomeFromCapitalGains();
+      },
     },
     {
       name: "incomeFromShareTransferListedCompany.exemptedAmount",
       type: "number",
       label: "",
-
       disabled: false,
       x: 618,
-      y: 788,
+      y: 787,
       width: 144,
-      height: 33,
+      height: 35,
       imageIndex: 5,
       isVisible: true,
+      onBlur() {
+        calculateTotalTaxableIncomeFromCapitalGains();
+      },
     },
     {
       name: "incomeFromShareTransferListedCompany.taxableAmount",
       type: "number",
       label: "",
-
       disabled: true,
-      x: 765,
-      y: 788,
+      x: 764,
+      y: 787,
       width: 143,
       height: 34,
       imageIndex: 5,
@@ -2619,20 +2616,21 @@ export const useFormFields = (
       name: "incomeFromCapitalGain2.capitalGain",
       type: "number",
       label: "",
-
       disabled: false,
-      x: 475,
-      y: 822,
-      width: 142,
+      x: 473,
+      y: 823,
+      width: 144,
       height: 17,
       imageIndex: 5,
       isVisible: true,
+      onBlur() {
+        calculateTotalTaxableIncomeFromCapitalGains();
+      },
     },
     {
       name: "incomeFromCapitalGain2.exemptedAmount",
       type: "number",
       label: "",
-
       disabled: false,
       x: 618,
       y: 822,
@@ -2640,6 +2638,9 @@ export const useFormFields = (
       height: 17,
       imageIndex: 5,
       isVisible: true,
+      onBlur() {
+        calculateTotalTaxableIncomeFromCapitalGains();
+      },
     },
     {
       name: "incomeFromCapitalGain2.taxableAmount",
@@ -2671,20 +2672,21 @@ export const useFormFields = (
       name: "incomeFromCapitalGain3.capitalGain",
       type: "number",
       label: "",
-
       disabled: false,
-      x: 475,
+      x: 473,
       y: 840,
-      width: 142,
+      width: 144,
       height: 17,
       imageIndex: 5,
       isVisible: true,
+      onBlur() {
+        calculateTotalTaxableIncomeFromCapitalGains();
+      },
     },
     {
       name: "incomeFromCapitalGain3.exemptedAmount",
       type: "number",
       label: "",
-
       disabled: false,
       x: 618,
       y: 840,
@@ -2692,6 +2694,9 @@ export const useFormFields = (
       height: 17,
       imageIndex: 5,
       isVisible: true,
+      onBlur() {
+        calculateTotalTaxableIncomeFromCapitalGains();
+      },
     },
     {
       name: "incomeFromCapitalGain3.taxableAmount",
@@ -2725,18 +2730,20 @@ export const useFormFields = (
       label: "",
 
       disabled: false,
-      x: 475,
+      x: 473,
       y: 858,
-      width: 142,
+      width: 144,
       height: 17,
       imageIndex: 5,
       isVisible: true,
+      onBlur() {
+        calculateTotalTaxableIncomeFromCapitalGains();
+      },
     },
     {
       name: "incomeFromCapitalGain4.exemptedAmount",
       type: "number",
       label: "",
-
       disabled: false,
       x: 618,
       y: 858,
@@ -2744,12 +2751,14 @@ export const useFormFields = (
       height: 17,
       imageIndex: 5,
       isVisible: true,
+      onBlur() {
+        calculateTotalTaxableIncomeFromCapitalGains();
+      },
     },
     {
       name: "incomeFromCapitalGain4.taxableAmount",
       type: "number",
       label: "",
-
       disabled: true,
       x: 765,
       y: 858,
@@ -2775,20 +2784,21 @@ export const useFormFields = (
       name: "incomeFromCapitalGain5.capitalGain",
       type: "number",
       label: "",
-
       disabled: false,
-      x: 475,
+      x: 473,
       y: 876,
-      width: 142,
+      width: 144,
       height: 17,
       imageIndex: 5,
       isVisible: true,
+      onBlur() {
+        calculateTotalTaxableIncomeFromCapitalGains();
+      },
     },
     {
       name: "incomeFromCapitalGain5.exemptedAmount",
       type: "number",
       label: "",
-
       disabled: false,
       x: 618,
       y: 876,
@@ -2796,6 +2806,9 @@ export const useFormFields = (
       height: 17,
       imageIndex: 5,
       isVisible: true,
+      onBlur() {
+        calculateTotalTaxableIncomeFromCapitalGains();
+      },
     },
     {
       name: "incomeFromCapitalGain5.taxableAmount",
@@ -2814,11 +2827,10 @@ export const useFormFields = (
       name: "incomeFromCapitaGainsTotal.capitalGain",
       type: "number",
       label: "",
-
       disabled: true,
-      x: 475,
+      x: 473,
       y: 894,
-      width: 142,
+      width: 144,
       height: 16,
       imageIndex: 5,
       isVisible: true,
@@ -3842,21 +3854,6 @@ export const useFormFields = (
       isVisible: true,
     },
 
-    // {
-    //   name: "otherSubjectToMinTax.taxDeductedAtSource",
-    //   type: "number",
-    //   label: "customSource.taxDeductedAtSource",
-    //   onBlur: () => {
-    //     calculateTaxDeductedCollectedAtSource();
-    //   },
-    //   x: 828,
-    //   y: 890,
-    //   width: 110,
-    //   height: 18,
-    //   imageIndex: 5,
-    //   isVisible: true,
-    // },
-
     // Image 8
 
     {
@@ -4141,10 +4138,10 @@ export const useFormFields = (
       type: "text",
       label: "Tax payer name",
       disabled: true,
-      x: 95,
-      y: 135,
+      x: 78,
+      y: 131,
       width: 570,
-      height: 20,
+      height: 21,
       imageIndex: 8,
       isVisible: true,
     },
@@ -4154,10 +4151,10 @@ export const useFormFields = (
       type: "text",
       label: "TIN",
       disabled: true,
-      x: 668,
-      y: 135,
-      width: 265,
-      height: 20,
+      x: 651,
+      y: 131,
+      width: 271,
+      height: 21,
       imageIndex: 8,
       isVisible: true,
     },
@@ -4166,10 +4163,10 @@ export const useFormFields = (
       name: "expensesForFood.amount",
       type: "number",
       label: "",
-      x: 598,
-      y: 205,
-      width: 135,
-      height: 20,
+      x: 582,
+      y: 218,
+      width: 136,
+      height: 23,
       imageIndex: 8,
       onBlur() {
         calculateTotalExpenseIndividualPerson();
@@ -4181,10 +4178,10 @@ export const useFormFields = (
       name: "expensesForFood.comment",
       type: "number",
       label: "",
-      x: 732,
-      y: 205,
-      width: 208,
-      height: 20,
+      x: 719,
+      y: 218,
+      width: 203,
+      height: 23,
       imageIndex: 8,
       isVisible: true,
     },
@@ -4192,10 +4189,10 @@ export const useFormFields = (
       name: "housingExpense.amount",
       type: "number",
       label: "",
-      x: 598,
-      y: 225,
-      width: 135,
-      height: 17,
+      x: 582,
+      y: 242.5,
+      width: 136,
+      height: 23,
       imageIndex: 8,
       onBlur() {
         calculateTotalExpenseIndividualPerson();
@@ -4206,10 +4203,10 @@ export const useFormFields = (
       name: "housingExpense.comment",
       type: "text",
       label: "",
-      x: 732,
-      y: 225,
-      width: 208,
-      height: 17,
+      x: 719,
+      y: 242.5,
+      width: 203,
+      height: 23,
       imageIndex: 8,
       isVisible: true,
     },
@@ -4217,10 +4214,10 @@ export const useFormFields = (
       name: "personalTransportationExpenses.amount",
       type: "number",
       label: "",
-      x: 598,
-      y: 242,
-      width: 135,
-      height: 17,
+      x: 582,
+      y: 267,
+      width: 136,
+      height: 23,
       imageIndex: 8,
       onBlur() {
         calculateTotalExpenseIndividualPerson();
@@ -4231,10 +4228,10 @@ export const useFormFields = (
       name: "personalTransportationExpenses.comment",
       type: "text",
       label: "",
-      x: 732,
-      y: 242,
-      width: 208,
-      height: 17,
+      x: 719,
+      y: 267,
+      width: 203,
+      height: 23,
       imageIndex: 8,
       isVisible: true,
     },
@@ -4242,10 +4239,10 @@ export const useFormFields = (
       name: "utilityExpense.amount",
       type: "number",
       label: "",
-      x: 598,
-      y: 260,
-      width: 135,
-      height: 32,
+      x: 582,
+      y: 291,
+      width: 136,
+      height: 47,
       imageIndex: 8,
       onBlur() {
         calculateTotalExpenseIndividualPerson();
@@ -4257,10 +4254,10 @@ export const useFormFields = (
       name: "utilityExpense.comment",
       type: "text",
       label: "",
-      x: 732,
-      y: 260,
-      width: 208,
-      height: 32,
+      x: 719,
+      y: 291,
+      width: 203,
+      height: 47,
       imageIndex: 8,
       isVisible: true,
     },
@@ -4268,10 +4265,10 @@ export const useFormFields = (
       name: "educationExpenses.amount",
       type: "number",
       label: "",
-      x: 598,
-      y: 292,
-      width: 135,
-      height: 17,
+      x: 582,
+      y: 339,
+      width: 136,
+      height: 23.5,
       imageIndex: 8,
       onBlur() {
         calculateTotalExpenseIndividualPerson();
@@ -4282,11 +4279,60 @@ export const useFormFields = (
       name: "educationExpenses.comment",
       type: "text",
       label: "",
-
-      x: 732,
-      y: 292,
-      width: 208,
-      height: 17,
+      x: 719,
+      y: 339,
+      width: 203,
+      height: 23.5,
+      imageIndex: 8,
+      isVisible: true,
+    },
+    {
+      name: "houseKeepingExpense.amount",
+      type: "number",
+      label: "",
+      x: 582,
+      y: 363,
+      width: 136,
+      height: 23.5,
+      imageIndex: 8,
+      onBlur() {
+        calculateTotalExpenseIndividualPerson();
+      },
+      isVisible: true,
+    },
+    {
+      name: "houseKeepingExpense.comment",
+      type: "text",
+      label: "",
+      x: 719,
+      y: 363,
+      width: 203,
+      height: 23.5,
+      imageIndex: 8,
+      isVisible: true,
+    },
+    {
+      name: "humanitiesExpense.amount",
+      type: "number",
+      label: "",
+      x: 582,
+      y: 387,
+      width: 136,
+      height: 24,
+      imageIndex: 8,
+      onBlur() {
+        calculateTotalExpenseIndividualPerson();
+      },
+      isVisible: true,
+    },
+    {
+      name: "humanitiesExpense.comment",
+      type: "text",
+      label: "",
+      x: 719,
+      y: 387,
+      width: 203,
+      height: 24,
       imageIndex: 8,
       isVisible: true,
     },
@@ -4294,10 +4340,10 @@ export const useFormFields = (
       name: "personalExpenseForLocalForeignTravel.amount",
       type: "number",
       label: "",
-      x: 598,
-      y: 311,
-      width: 135,
-      height: 32,
+      x: 582,
+      y: 412,
+      width: 136,
+      height: 47,
       imageIndex: 8,
       onBlur() {
         calculateTotalExpenseIndividualPerson();
@@ -4308,10 +4354,10 @@ export const useFormFields = (
       name: "personalExpenseForLocalForeignTravel.comment",
       type: "text",
       label: "",
-      x: 732,
-      y: 311,
-      width: 208,
-      height: 32,
+      x: 719,
+      y: 412,
+      width: 203,
+      height: 47,
       imageIndex: 8,
       isVisible: true,
     },
@@ -4319,10 +4365,10 @@ export const useFormFields = (
       name: "festivalExpense.amount",
       type: "number",
       label: "",
-      x: 598,
-      y: 345,
-      width: 135,
-      height: 17,
+      x: 582,
+      y: 460,
+      width: 136,
+      height: 23,
       imageIndex: 8,
       onBlur() {
         calculateTotalExpenseIndividualPerson();
@@ -4333,10 +4379,10 @@ export const useFormFields = (
       name: "festivalExpense.comment",
       type: "text",
       label: "",
-      x: 732,
-      y: 345,
-      width: 208,
-      height: 17,
+      x: 719,
+      y: 460,
+      width: 203,
+      height: 23,
       imageIndex: 8,
       isVisible: true,
     },
@@ -4345,11 +4391,10 @@ export const useFormFields = (
       name: "taxDeductedCollectedAtSource.amount",
       type: "number",
       label: "",
-      disabled: true,
-      x: 598,
-      y: 363,
-      width: 135,
-      height: 30,
+      x: 582,
+      y: 484.5,
+      width: 136,
+      height: 47,
       imageIndex: 8,
       onBlur() {
         calculateTotalExpenseIndividualPerson();
@@ -4360,74 +4405,22 @@ export const useFormFields = (
       name: "taxDeductedCollectedAtSource.comment",
       type: "text",
       label: "",
-      x: 732,
-      y: 362,
-      width: 208,
-      height: 32,
+      x: 719,
+      y: 484.5,
+      width: 203,
+      height: 47,
       imageIndex: 8,
       isVisible: true,
     },
 
-    {
-      name: "advanceTaxPaidAmount",
-      type: "text",
-      label: "",
-      disabled: true,
-      x: 598,
-      y: 395,
-      width: 135,
-      height: 17,
-      imageIndex: 8,
-      isVisible: true,
-    },
-
-    {
-      name: "advanceTaxPaid.comment",
-      type: "text",
-      label: "advanceTaxPaidComment",
-
-      x: 732,
-      y: 395,
-      width: 208,
-      height: 19,
-      imageIndex: 8,
-      isVisible: true,
-    },
-
-    {
-      name: "taxSurchargePaid.amount",
-      type: "number",
-      label: "",
-      x: 596,
-      y: 412,
-      width: 138,
-      height: 35,
-      imageIndex: 8,
-      onBlur() {
-        calculateTotalExpenseIndividualPerson();
-      },
-      isVisible: true,
-    },
-    {
-      name: "taxSurchargePaid.comment",
-      type: "text",
-      label: "",
-
-      x: 732,
-      y: 412,
-      width: 208,
-      height: 35,
-      imageIndex: 8,
-      isVisible: true,
-    },
     {
       name: "interestPaid.amount",
       type: "number",
       label: "",
-      x: 596,
-      y: 445,
-      width: 138,
-      height: 35,
+      x: 582,
+      y: 533,
+      width: 136,
+      height: 47,
       imageIndex: 8,
       onBlur() {
         calculateTotalExpenseIndividualPerson();
@@ -4439,10 +4432,10 @@ export const useFormFields = (
       name: "interestPaid.comment",
       type: "text",
       label: "",
-      x: 732,
-      y: 445,
-      width: 208,
-      height: 35,
+      x: 719,
+      y: 533,
+      width: 203,
+      height: 47,
       imageIndex: 8,
       isVisible: true,
     },
@@ -4452,8 +4445,8 @@ export const useFormFields = (
       type: "number",
       label: "",
       disabled: true,
-      x: 598,
-      y: 480,
+      x: 582,
+      y: 583,
       width: 135,
       height: 17,
       imageIndex: 8,
@@ -4465,22 +4458,9 @@ export const useFormFields = (
       type: "text",
       label: "total",
       x: 732,
-      y: 480,
+      y: 583,
       width: 208,
       height: 17,
-      imageIndex: 8,
-      isVisible: true,
-    },
-
-    {
-      name: "taxpayerName",
-      type: "text",
-      label: "",
-      disabled: true,
-      x: 150,
-      y: 595,
-      width: 345,
-      height: 20,
       imageIndex: 8,
       isVisible: true,
     },
@@ -5742,7 +5722,7 @@ export const useFormFields = (
     {
       name: "humanVarification",
       type: "text",
-      label: "humanVarification",
+      label: "",
       x: 480,
       y: 940,
       width: 50,

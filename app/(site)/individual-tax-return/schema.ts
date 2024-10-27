@@ -220,7 +220,7 @@ export const individualTaxReturnSchema = z.object({
   addressOfBusiness: z.string().optional(),
 
   // summary of income
-  salesTurnoverReceipts: z.string().optional(),
+  salesTurnoverReceiptsBusiness: z.string().optional(),
   purchase: z.string().optional(),
   grossProfitFromBusiness: z.string().optional(),
   generalAdministrativeSellingExpenses: z.string().optional(),
@@ -246,17 +246,6 @@ export const individualTaxReturnSchema = z.object({
   incomeFromCapitalGain4: incomeFromCapitalGainsSchema,
   incomeFromCapitalGain5: incomeFromCapitalGainsSchema,
   incomeFromCapitaGainsTotal: incomeFromCapitalGainsSchema,
-
-  interestProfitFromBankFI: incomeItemSchema,
-  incomeFromSavingCertificates: incomeItemSchema,
-  incomeFromSecuritiesDebentures: incomeItemSchema,
-  incomeFromFinancialProductScheme: incomeItemSchema,
-  dividendIncome: incomeItemSchema,
-  capitalGainFromTransferOfProperty: incomeItemSchema,
-  incomeFromBusinessMinTax: incomeItemSchema,
-  workersParticipationFund: incomeItemSchema,
-  incomeFromOtherSourcesMinTax: incomeItemSchema,
-  otherSubjectToMinTax: incomeItemSchema,
 
   // Image 7
   shonchoyparta: financialAssetsSchema,
@@ -310,12 +299,12 @@ export const individualTaxReturnSchema = z.object({
   housingExpense: personalExpenseSchema,
   personalTransportationExpenses: personalExpenseSchema,
   utilityExpense: personalExpenseSchema,
+  houseKeepingExpense: personalExpenseSchema,
+  humanitiesExpense: personalExpenseSchema,
   educationExpenses: personalExpenseSchema,
   personalExpenseForLocalForeignTravel: personalExpenseSchema,
   festivalExpense: personalExpenseSchema,
   taxDeductedCollectedAtSource: personalExpenseSchema,
-  advanceTaxPaid: personalExpenseSchema,
-  taxSurchargePaid: personalExpenseSchema,
   interestPaid: personalExpenseSchema,
   totalExpenseIndividualPerson: personalExpenseSchema,
 
