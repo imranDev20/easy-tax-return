@@ -25,7 +25,8 @@ export default function ContactCTA() {
           </Button>
         </a>
         <p className="text-sm mt-4">
-          Address: 1206, Madani Avenue, 100 Feet Road, Vatara, Dhaka-1217
+          House-37 (02nd Floor), Amin Uddin Khondokar Market, 100 Feet Road,
+          Mafani Avenue, Natun Bazar, Dhaka-1212
           <br />
           Email:{" "}
           <a href={`mailto:${CONTACT_EMAIL}`} className="underline">

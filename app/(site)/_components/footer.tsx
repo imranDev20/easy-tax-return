@@ -161,8 +161,8 @@ export default function Footer() {
                   className="text-gray-400 mt-1 flex-shrink-0"
                 />
                 <p className="text-center md:text-left">
-                  1206, Madani Avenue, 100 Feet Road, Vatara, Dhaka-1217,
-                  Bangladesh
+                  House-37 (02nd Floor), Amin Uddin Khondokar Market, 100 Feet
+                  Road, Mafani Avenue, Natun Bazar, Dhaka-1212, Bangladesh
                 </p>
               </div>
             </div>

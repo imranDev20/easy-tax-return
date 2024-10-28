@@ -57,7 +57,7 @@ const images = [
   ImageNine,
   ImageTen,
   ImageEleven,
-  ImageTwelve
+  ImageTwelve,
 ];
 
 interface Image {
@@ -236,12 +236,15 @@ const IndividualTaxReturnForm: React.FC = () => {
     formState: { errors, isDirty },
   } = form;
 
-  const { calculatePrivateEmploymentTotals, calculateTaxPayable } =
-    calculations;
+  const {
+    calculatePrivateEmploymentTotals,
+    calculateGrossTax,
+    calculateTaxPayable,
+  } = calculations;
 
   useEffect(() => {
     // This effect will run when the component mounts
-    const debugMode = true; // Set this to true when you want to debug
+    const debugMode = false; // Set this to true when you want to debug
 
     if (debugMode) {
       // Assuming you have access to your form data, fields, and images here
@@ -261,14 +264,6 @@ const IndividualTaxReturnForm: React.FC = () => {
 
   useEffect(() => {
     const subscription = watch((value, { name, type }) => {
-      if (name === "netWealthSurcharge") {
-        if (value.netWealthSurcharge === "YES") {
-          setValue("netWealthSurchargeAmount", "0.0");
-        } else {
-          setValue("netWealthSurchargeAmount", undefined);
-        }
-      }
-
       if (name === "minimumTax") {
         if (value.minimumTax === "DHAKA_CHATTOGRAM_CITY_CORPORATION_AREA") {
           setValue("minimumTaxAmount", "5000.00");
@@ -282,6 +277,15 @@ const IndividualTaxReturnForm: React.FC = () => {
           setValue("minimumTaxAmount", "3000.00");
           calculateTaxPayable();
         }
+      }
+
+      if (
+        name === "totalIncome" ||
+        name === "residentialStatus" ||
+        name === "specialBenefits" ||
+        name === "isParentOfDisabledPerson"
+      ) {
+        calculateGrossTax();
       }
 
       if (name === "tranportFacilityPrivateVehicleCC") {
@@ -298,7 +302,13 @@ const IndividualTaxReturnForm: React.FC = () => {
     });
 
     return () => subscription.unsubscribe();
-  }, [watch, setValue, calculatePrivateEmploymentTotals, calculateTaxPayable]);
+  }, [
+    watch,
+    setValue,
+    calculatePrivateEmploymentTotals,
+    calculateGrossTax,
+    calculateTaxPayable,
+  ]);
 
   const updateScale = useCallback(() => {
     if (containerRef.current && imageRefs.current[0]) {
