@@ -1,5 +1,4 @@
 import {
-  CalculationType,
   MinimumTax,
   NetWealthLastDate,
   RepairCollection,
@@ -9,14 +8,6 @@ import {
 } from "@prisma/client";
 
 import z from "zod";
-
-const incomeItemSchema = z.object({
-  particulars: z.string().optional(),
-  amountOfIncome: z.string().nullable().optional(),
-  deductionsExpensesExemptedIncome: z.string().optional(),
-  netTaxableIncome: z.string().nullable().optional(),
-  taxDeductedAtSource: z.string().nullable().optional(),
-});
 
 const govtPayScaleSchema = z.object({
   amount: z.string().nullable().optional(),
