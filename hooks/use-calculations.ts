@@ -25,8 +25,6 @@ export const useCalculations = (
     // const totalCashInHandAndFund = calculateTotalCashInHandAndFund();
 
     const fields: FormFieldName[] = [
-      "nonAgriculturalPropertyLandHouseProperty",
-      "agriculturalProperty",
       "totalFinancialAssets",
       "motorVehiclesTotal",
       "totalCashInHandsAndFundOutsideBusiness",
@@ -88,8 +86,8 @@ export const useCalculations = (
     // Assuming you have a field for the total location value
     setValue("nonAgriculturalPropertyLandHouseProperty", safeTotal.toFixed(2));
 
-    // Recalculate total assets in Bangladesh
-    calculateTotalAssetsInBangladesh();
+    // Recalculate total financial assets
+    calculateTotalFinancialAssets();
 
     return safeTotal;
   };
@@ -121,8 +119,8 @@ export const useCalculations = (
     // Assuming you have a field for the total agricultural location value
     setValue("agriculturalProperty", safeTotal.toFixed(2));
 
-    // Recalculate total assets in Bangladesh
-    calculateTotalAssetsInBangladesh();
+    // Recalculate total financial assets
+    calculateTotalFinancialAssets();
 
     return safeTotal;
   };
@@ -130,6 +128,11 @@ export const useCalculations = (
   // page 11
   const calculateTotalFinancialAssets = useCallback(() => {
     const fields: FormFieldName[] = [
+      "businessCapital",
+      "directorsShareholdingsInTheCompanies",
+      "businessCapitalOfPartnershipFirm",
+      "nonAgriculturalPropertyLandHouseProperty",
+      "agriculturalProperty",
       "shareDebentureUnitCertificate",
       "sanchayapatraSavingsCertificate",
       "depositPensionScheme",
@@ -163,7 +166,7 @@ export const useCalculations = (
     calculateTotalAssetsInBangladesh();
 
     return safeTotal;
-  }, [watch, setValue, calculateTotalAssetsInBangladesh]);
+  }, [watch, setValue]);
 
   const calculateTotalMotorValue = () => {
     const fields: FormFieldName[] = ["motorValue1", "motorValue2"];
@@ -188,8 +191,8 @@ export const useCalculations = (
     // Assuming you have a field for the total motor value
     setValue("motorVehiclesTotal", safeTotal.toFixed(2));
 
-    // Recalculate total assets in Bangladesh
-    calculateTotalAssetsInBangladesh();
+    // Recalculate total financial assets
+    calculateTotalFinancialAssets();
 
     return safeTotal;
   };
@@ -221,8 +224,8 @@ export const useCalculations = (
     // Assuming you have a field for the total cash in hand and fund outside business
     setValue("totalCashInHandsAndFundOutsideBusiness", safeTotal.toFixed(2));
 
-    // Recalculate total assets in Bangladesh
-    calculateTotalAssetsInBangladesh();
+    // Recalculate total financial assets
+    calculateTotalFinancialAssets();
 
     return safeTotal;
   };
@@ -675,11 +678,18 @@ export const useCalculations = (
     // Set this total to the main income from financial assets field that's used elsewhere
     setValue("incomeFromFinancialAssets", totalInterestProfit.toFixed(2));
 
+    // Set this for page 11
+    setValue("shareDebentureUnitCertificate", totalBalance.toFixed(2));
+
     // Recalculate total income since financial assets income is a component
     calculateTotalIncome();
 
     // Recalculate total tax deducted or collected to update it
     calculateTotalTaxDeductedOrCollected();
+
+    // Recalculate the total financial assets for page 11 so
+    // share debenture updates in the sum
+    calculateTotalFinancialAssets();
 
     return {
       totalBalance,
@@ -744,6 +754,10 @@ export const useCalculations = (
 
     // Recalculate total cash in hand and fund outside business
     calculateTotalCashInHandAndFund();
+
+    // Recalculate the total financial assets for page 11 so shonchoypatra updates in the sum
+    // Shonchoypatra is set using onBlur
+    calculateTotalFinancialAssets();
 
     // Recalculate the total tax deducted or collected
     calculateTotalTaxDeductedOrCollected();
@@ -1058,6 +1072,10 @@ export const useCalculations = (
     }, 0);
 
     setValue("directorsShareholdingsInTheCompanies", total.toFixed(2));
+
+    // Recalculate the financial assets
+    calculateTotalFinancialAssets();
+
     return total;
   };
 
@@ -1075,6 +1093,10 @@ export const useCalculations = (
     }, 0);
 
     setValue("businessCapitalOfPartnershipFirm", total.toFixed(2));
+
+    // Recalculate the financial assets
+    calculateTotalFinancialAssets();
+
     return total;
   };
 

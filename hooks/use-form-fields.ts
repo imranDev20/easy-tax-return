@@ -2972,6 +2972,11 @@ export const useFormFields = (
       imageIndex: 6,
       isVisible: true,
       onBlur() {
+        setValue(
+          "sanchayapatraSavingsCertificate",
+          watch("shonchoyparta.balance")?.toString()
+        );
+
         calculateTotalBankAndShonchoypatra();
       },
     },
@@ -4976,7 +4981,7 @@ export const useFormFields = (
     {
       name: "directorsShareholdingsInTheCompanies",
       type: "number",
-      label: "directorsShareholdingsInTheCompanies",
+      label: "",
       disabled: true,
       x: 775,
       y: 765,
@@ -5162,7 +5167,7 @@ export const useFormFields = (
     {
       name: "shareOfProfit2",
       type: "text",
-      label: "shareOfProfit2",
+      label: "",
       x: 505,
       y: 922,
       width: 135,
@@ -5174,7 +5179,7 @@ export const useFormFields = (
     {
       name: "capitalContributed2",
       type: "number",
-      label: "capitalContributed2",
+      label: "",
       onBlur: () => {
         calculateBusinessCapitalOfPartnershipFirm();
       },
@@ -5438,10 +5443,11 @@ export const useFormFields = (
       name: "shareDebentureUnitCertificate",
       type: "number",
       label: "",
-      x: 770,
-      y: 360,
-      width: 170,
-      height: 18,
+      x: 774,
+      y: 361,
+      width: 163,
+      height: 16,
+      disabled: true,
       imageIndex: 10,
       isVisible: true,
     },
@@ -5450,10 +5456,11 @@ export const useFormFields = (
       name: "sanchayapatraSavingsCertificate",
       type: "number",
       label: "",
-      x: 770,
-      y: 396,
-      width: 170,
-      height: 18,
+      x: 774,
+      y: 397,
+      disabled: true,
+      width: 163,
+      height: 16,
       imageIndex: 10,
       isVisible: true,
     },
