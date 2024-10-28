@@ -26,7 +26,7 @@ export const useFormFields = (
   clearErrors: UseFormClearErrors<IndividualTaxReturnFormInput>
 ) => {
   const {
-    calculateTotalAssetsInBangladeshAndOutside,
+    calculateTotalAssetsInBangladesh,
     calculateTotalMotorValue,
     calculateTotalFinancialAssets,
     calculateTotalAgriculturalAssets,
@@ -55,7 +55,7 @@ export const useFormFields = (
     calculateTotalTaxableIncomeFromCapitalGains,
     calculateTotalIncomeFromSecurities,
     calculateTotalAmountPayable,
-    calculateTotalShonchoypatra,
+    calculateTotalBankAndShonchoypatra,
     calculateTotalTaxDeductedOrCollected,
     calculateTotalTaxPaidAdjustmentExcess,
   } = useCalculations(watch, setValue, getValues, setError, clearErrors);
@@ -2972,7 +2972,7 @@ export const useFormFields = (
       imageIndex: 6,
       isVisible: true,
       onBlur() {
-        calculateTotalShonchoypatra();
+        calculateTotalBankAndShonchoypatra();
       },
     },
     {
@@ -2986,7 +2986,7 @@ export const useFormFields = (
       imageIndex: 6,
       isVisible: true,
       onBlur() {
-        calculateTotalShonchoypatra();
+        calculateTotalBankAndShonchoypatra();
       },
     },
     {
@@ -3000,7 +3000,7 @@ export const useFormFields = (
       imageIndex: 6,
       isVisible: true,
       onBlur() {
-        calculateTotalShonchoypatra();
+        calculateTotalBankAndShonchoypatra();
       },
     },
     {
@@ -3025,7 +3025,7 @@ export const useFormFields = (
       imageIndex: 6,
       isVisible: true,
       onBlur() {
-        calculateTotalShonchoypatra();
+        calculateTotalBankAndShonchoypatra();
       },
     },
     {
@@ -3039,7 +3039,7 @@ export const useFormFields = (
       imageIndex: 6,
       isVisible: true,
       onBlur() {
-        calculateTotalShonchoypatra();
+        calculateTotalBankAndShonchoypatra();
       },
     },
     {
@@ -3053,7 +3053,7 @@ export const useFormFields = (
       imageIndex: 6,
       isVisible: true,
       onBlur() {
-        calculateTotalShonchoypatra();
+        calculateTotalBankAndShonchoypatra();
       },
     },
     {
@@ -3078,7 +3078,7 @@ export const useFormFields = (
       imageIndex: 6,
       isVisible: true,
       onBlur() {
-        calculateTotalShonchoypatra();
+        calculateTotalBankAndShonchoypatra();
       },
     },
     {
@@ -3092,7 +3092,7 @@ export const useFormFields = (
       imageIndex: 6,
       isVisible: true,
       onBlur() {
-        calculateTotalShonchoypatra();
+        calculateTotalBankAndShonchoypatra();
       },
     },
     {
@@ -3106,7 +3106,7 @@ export const useFormFields = (
       imageIndex: 6,
       isVisible: true,
       onBlur() {
-        calculateTotalShonchoypatra();
+        calculateTotalBankAndShonchoypatra();
       },
     },
     {
@@ -3131,7 +3131,7 @@ export const useFormFields = (
       imageIndex: 6,
       isVisible: true,
       onBlur() {
-        calculateTotalShonchoypatra();
+        calculateTotalBankAndShonchoypatra();
       },
     },
     {
@@ -3145,7 +3145,7 @@ export const useFormFields = (
       imageIndex: 6,
       isVisible: true,
       onBlur() {
-        calculateTotalShonchoypatra();
+        calculateTotalBankAndShonchoypatra();
       },
     },
     {
@@ -3159,7 +3159,7 @@ export const useFormFields = (
       imageIndex: 6,
       isVisible: true,
       onBlur() {
-        calculateTotalShonchoypatra();
+        calculateTotalBankAndShonchoypatra();
       },
     },
     {
@@ -3184,7 +3184,7 @@ export const useFormFields = (
       imageIndex: 6,
       isVisible: true,
       onBlur() {
-        calculateTotalShonchoypatra();
+        calculateTotalBankAndShonchoypatra();
       },
     },
     {
@@ -3198,7 +3198,7 @@ export const useFormFields = (
       imageIndex: 6,
       isVisible: true,
       onBlur() {
-        calculateTotalShonchoypatra();
+        calculateTotalBankAndShonchoypatra();
       },
     },
     {
@@ -3212,7 +3212,7 @@ export const useFormFields = (
       imageIndex: 6,
       isVisible: true,
       onBlur() {
-        calculateTotalShonchoypatra();
+        calculateTotalBankAndShonchoypatra();
       },
     },
     {
@@ -3237,7 +3237,7 @@ export const useFormFields = (
       imageIndex: 6,
       isVisible: true,
       onBlur() {
-        calculateTotalShonchoypatra();
+        calculateTotalBankAndShonchoypatra();
       },
     },
     {
@@ -3251,7 +3251,7 @@ export const useFormFields = (
       imageIndex: 6,
       isVisible: true,
       onBlur() {
-        calculateTotalShonchoypatra();
+        calculateTotalBankAndShonchoypatra();
       },
     },
     {
@@ -3265,7 +3265,7 @@ export const useFormFields = (
       imageIndex: 6,
       isVisible: true,
       onBlur() {
-        calculateTotalShonchoypatra();
+        calculateTotalBankAndShonchoypatra();
       },
     },
     {
@@ -3290,7 +3290,7 @@ export const useFormFields = (
       imageIndex: 6,
       isVisible: true,
       onBlur() {
-        calculateTotalShonchoypatra();
+        calculateTotalBankAndShonchoypatra();
       },
     },
     {
@@ -3304,7 +3304,7 @@ export const useFormFields = (
       imageIndex: 6,
       isVisible: true,
       onBlur() {
-        calculateTotalShonchoypatra();
+        calculateTotalBankAndShonchoypatra();
       },
     },
     {
@@ -3318,7 +3318,7 @@ export const useFormFields = (
       imageIndex: 6,
       isVisible: true,
       onBlur() {
-        calculateTotalShonchoypatra();
+        calculateTotalBankAndShonchoypatra();
       },
     },
     {
@@ -3343,7 +3343,7 @@ export const useFormFields = (
       imageIndex: 6,
       isVisible: true,
       onBlur() {
-        calculateTotalShonchoypatra();
+        calculateTotalBankAndShonchoypatra();
       },
     },
     {
@@ -3357,7 +3357,7 @@ export const useFormFields = (
       imageIndex: 6,
       isVisible: true,
       onBlur() {
-        calculateTotalShonchoypatra();
+        calculateTotalBankAndShonchoypatra();
       },
     },
     {
@@ -3371,7 +3371,7 @@ export const useFormFields = (
       imageIndex: 6,
       isVisible: true,
       onBlur() {
-        calculateTotalShonchoypatra();
+        calculateTotalBankAndShonchoypatra();
       },
     },
     {
@@ -3396,7 +3396,7 @@ export const useFormFields = (
       imageIndex: 6,
       isVisible: true,
       onBlur() {
-        calculateTotalShonchoypatra();
+        calculateTotalBankAndShonchoypatra();
       },
     },
     {
@@ -3410,7 +3410,7 @@ export const useFormFields = (
       imageIndex: 6,
       isVisible: true,
       onBlur() {
-        calculateTotalShonchoypatra();
+        calculateTotalBankAndShonchoypatra();
       },
     },
     {
@@ -3424,7 +3424,7 @@ export const useFormFields = (
       imageIndex: 6,
       isVisible: true,
       onBlur() {
-        calculateTotalShonchoypatra();
+        calculateTotalBankAndShonchoypatra();
       },
     },
     {
@@ -3449,7 +3449,7 @@ export const useFormFields = (
       imageIndex: 6,
       isVisible: true,
       onBlur() {
-        calculateTotalShonchoypatra();
+        calculateTotalBankAndShonchoypatra();
       },
     },
     {
@@ -3463,7 +3463,7 @@ export const useFormFields = (
       imageIndex: 6,
       isVisible: true,
       onBlur() {
-        calculateTotalShonchoypatra();
+        calculateTotalBankAndShonchoypatra();
       },
     },
     {
@@ -3477,7 +3477,7 @@ export const useFormFields = (
       imageIndex: 6,
       isVisible: true,
       onBlur() {
-        calculateTotalShonchoypatra();
+        calculateTotalBankAndShonchoypatra();
       },
     },
     {
@@ -5227,8 +5227,6 @@ export const useFormFields = (
     },
 
     // Image 11
-    // inputs 54
-
     {
       name: "nonAgriculturalPropertyLandHouseProperty",
       type: "number",
@@ -5264,9 +5262,6 @@ export const useFormFields = (
       height: 18,
       imageIndex: 10,
       isVisible: true,
-      onBlur() {
-        calculateTotalAssetsInBangladeshAndOutside();
-      },
     },
     {
       name: "nonAgriculturalLocationDescription2",
@@ -5289,9 +5284,6 @@ export const useFormFields = (
       height: 18,
       imageIndex: 10,
       isVisible: true,
-      onBlur() {
-        calculateTotalAssetsInBangladeshAndOutside();
-      },
     },
     {
       name: "nonAgriculturalLocationDescription3",
@@ -5315,9 +5307,6 @@ export const useFormFields = (
       height: 18,
       imageIndex: 10,
       isVisible: true,
-      onBlur() {
-        calculateTotalAssetsInBangladeshAndOutside();
-      },
     },
     {
       name: "nonAgriculturalLocationDescription4",
@@ -5340,9 +5329,6 @@ export const useFormFields = (
       height: 18,
       imageIndex: 10,
       isVisible: true,
-      onBlur() {
-        calculateTotalAssetsInBangladeshAndOutside();
-      },
     },
     {
       name: "nonAgriculturalLocationDescription5",
@@ -5366,9 +5352,6 @@ export const useFormFields = (
       height: 18,
       imageIndex: 10,
       isVisible: true,
-      onBlur() {
-        calculateTotalAssetsInBangladeshAndOutside();
-      },
     },
 
     {
@@ -5405,9 +5388,6 @@ export const useFormFields = (
       height: 18,
       imageIndex: 10,
       isVisible: true,
-      onBlur() {
-        calculateTotalAssetsInBangladeshAndOutside();
-      },
     },
     {
       name: "agriculturalLocationAndDescription2",
@@ -5430,9 +5410,6 @@ export const useFormFields = (
       height: 18,
       imageIndex: 10,
       isVisible: true,
-      onBlur() {
-        calculateTotalAssetsInBangladeshAndOutside();
-      },
     },
     {
       name: "agriculturalLocationAndDescription3",
@@ -5455,9 +5432,6 @@ export const useFormFields = (
       height: 18,
       imageIndex: 10,
       isVisible: true,
-      onBlur() {
-        calculateTotalAssetsInBangladeshAndOutside();
-      },
     },
 
     {
@@ -5470,9 +5444,6 @@ export const useFormFields = (
       height: 18,
       imageIndex: 10,
       isVisible: true,
-      onBlur() {
-        calculateTotalAssetsInBangladeshAndOutside();
-      },
     },
 
     {
@@ -5485,9 +5456,6 @@ export const useFormFields = (
       height: 18,
       imageIndex: 10,
       isVisible: true,
-      onBlur() {
-        calculateTotalAssetsInBangladeshAndOutside();
-      },
     },
     {
       name: "depositPensionScheme",
@@ -5499,9 +5467,6 @@ export const useFormFields = (
       height: 18,
       imageIndex: 10,
       isVisible: true,
-      onBlur() {
-        calculateTotalAssetsInBangladeshAndOutside();
-      },
     },
     {
       name: "loanGivenToOthersName",
@@ -5535,9 +5500,6 @@ export const useFormFields = (
       height: 18,
       imageIndex: 10,
       isVisible: true,
-      onBlur() {
-        calculateTotalAssetsInBangladeshAndOutside();
-      },
     },
     {
       name: "savingDeposit",
@@ -5549,9 +5511,6 @@ export const useFormFields = (
       height: 18,
       imageIndex: 10,
       isVisible: true,
-      onBlur() {
-        calculateTotalAssetsInBangladeshAndOutside();
-      },
     },
     {
       name: "providentFund",
@@ -5563,9 +5522,6 @@ export const useFormFields = (
       height: 18,
       imageIndex: 10,
       isVisible: true,
-      onBlur() {
-        calculateTotalAssetsInBangladeshAndOutside();
-      },
     },
     {
       name: "otherInvestmentDesc",
@@ -5588,9 +5544,6 @@ export const useFormFields = (
       height: 18,
       imageIndex: 10,
       isVisible: true,
-      onBlur() {
-        calculateTotalAssetsInBangladeshAndOutside();
-      },
     },
     {
       name: "totalFinancialAssets",
@@ -5607,7 +5560,7 @@ export const useFormFields = (
     // border line
 
     {
-      name: "motorVehiclesAmount",
+      name: "motorVehiclesTotal",
       type: "number",
       label: "",
       disabled: true,
@@ -5646,22 +5599,19 @@ export const useFormFields = (
     {
       name: "motorValue1",
       type: "number",
-      label: "motorValue1",
+      label: "",
       x: 625,
       y: 573,
       width: 150,
       height: 18,
       imageIndex: 10,
       isVisible: true,
-      onBlur() {
-        calculateTotalAssetsInBangladeshAndOutside();
-      },
     },
 
     {
       name: "typeOfMotorVehicle2",
       type: "text",
-      label: "typeOfMotorVehicle2",
+      label: "",
       x: 185,
       y: 590,
       width: 225,
@@ -5673,7 +5623,7 @@ export const useFormFields = (
     {
       name: "registrationNumber2",
       type: "text",
-      label: "registrationNumber2",
+      label: "",
       x: 410,
       y: 590,
       width: 215,
@@ -5685,16 +5635,13 @@ export const useFormFields = (
     {
       name: "motorValue2",
       type: "number",
-      label: "motorValue2",
+      label: "",
       x: 625,
       y: 590,
       width: 150,
       height: 18,
       imageIndex: 10,
       isVisible: true,
-      onBlur() {
-        calculateTotalAssetsInBangladeshAndOutside();
-      },
     },
     {
       name: "ornamentsDesc",
@@ -5718,30 +5665,24 @@ export const useFormFields = (
       height: 18,
       imageIndex: 10,
       isVisible: true,
-      onBlur() {
-        calculateTotalAssetsInBangladeshAndOutside();
-      },
     },
 
     {
       name: "furnitureAndElectronic",
       type: "number",
-      label: "furnitureAndElectronic",
+      label: "",
       x: 770,
       y: 628,
       width: 170,
       height: 18,
       imageIndex: 10,
       isVisible: true,
-      onBlur() {
-        calculateTotalAssetsInBangladeshAndOutside();
-      },
     },
 
     {
       name: "othersAssetsDesc",
-      type: "number",
-      label: "othersAssets1",
+      type: "text",
+      label: "",
       x: 550,
       y: 645,
       width: 220,
@@ -5760,41 +5701,33 @@ export const useFormFields = (
       height: 18,
       imageIndex: 10,
       isVisible: true,
-      onBlur() {
-        calculateTotalAssetsInBangladeshAndOutside();
-      },
     },
 
     {
       name: "bankBalance",
       type: "number",
-      label: "bankBalance",
+      label: "",
+      disabled: true,
       x: 620,
       y: 680,
       width: 155,
       height: 18,
       imageIndex: 10,
       isVisible: true,
-      onBlur() {
-        calculateTotalAssetsInBangladeshAndOutside();
-      },
     },
     {
       name: "cashInHand",
       type: "number",
-      label: "cashInHand",
+      label: "",
       x: 620,
       y: 698,
       width: 155,
       height: 18,
       imageIndex: 10,
       isVisible: true,
-      onBlur() {
-        calculateTotalAssetsInBangladeshAndOutside();
-      },
     },
     {
-      name: "othersDesc",
+      name: "otherFundDesc",
       type: "text",
       label: "",
       x: 300,
@@ -5805,18 +5738,15 @@ export const useFormFields = (
       isVisible: true,
     },
     {
-      name: "othersValue",
+      name: "otherFundOutsideBusiness",
       type: "number",
-      label: "others2",
+      label: "",
       x: 620,
       y: 715,
       width: 155,
       height: 18,
       imageIndex: 10,
       isVisible: true,
-      onBlur() {
-        calculateTotalAssetsInBangladeshAndOutside();
-      },
     },
 
     {
@@ -5854,9 +5784,6 @@ export const useFormFields = (
       height: 18,
       imageIndex: 10,
       isVisible: true,
-      onBlur() {
-        calculateTotalAssetsInBangladeshAndOutside();
-      },
     },
 
     {

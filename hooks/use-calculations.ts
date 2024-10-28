@@ -17,6 +17,48 @@ export const useCalculations = (
   setError: UseFormSetError<IndividualTaxReturnFormInput>,
   clearErrors: UseFormClearErrors<IndividualTaxReturnFormInput>
 ) => {
+  const calculateTotalAssetsInBangladesh = useCallback(() => {
+    // const nonAgriculturalProperty = calculateTotalNonAgriculturalAssets();
+    // const agriculturalProperty = calculateTotalAgriculturalAssets();
+    // const totalFinancialAssets = calculateTotalFinancialAssets();
+    // const totalMotorValue = calculateTotalMotorValue();
+    // const totalCashInHandAndFund = calculateTotalCashInHandAndFund();
+
+    const fields: FormFieldName[] = [
+      "nonAgriculturalPropertyLandHouseProperty",
+      "agriculturalProperty",
+      "totalFinancialAssets",
+      "motorVehiclesTotal",
+      "totalCashInHandsAndFundOutsideBusiness",
+      "ornamentsValue",
+      "furnitureAndElectronic",
+      "othersAssetsValue",
+    ];
+
+    // Initialize totalInBangladesh to 0
+    let totalInBangladesh = 0;
+
+    // Sum up values from all fields
+    fields.forEach((field) => {
+      const value = watch(field as keyof IndividualTaxReturnFormInput);
+      const numberValue = parseFloat(value?.toString() || "0");
+
+      // Add to total, using 0 if the value is invalid
+      totalInBangladesh += isNaN(numberValue) ? 0 : Math.max(0, numberValue);
+    });
+
+    // Round to 2 decimal places
+    const safeTotalInBangladesh = Math.round(totalInBangladesh * 100) / 100;
+
+    // Set the calculated total
+    setValue(
+      "totalAssetslocatedInBangladesh",
+      safeTotalInBangladesh.toFixed(2)
+    );
+
+    return safeTotalInBangladesh;
+  }, [setValue, watch]);
+
   const calculateTotalNonAgriculturalAssets = () => {
     const fields: FormFieldName[] = [
       "nonAgriculturalValue1",
@@ -45,6 +87,9 @@ export const useCalculations = (
 
     // Assuming you have a field for the total location value
     setValue("nonAgriculturalPropertyLandHouseProperty", safeTotal.toFixed(2));
+
+    // Recalculate total assets in Bangladesh
+    calculateTotalAssetsInBangladesh();
 
     return safeTotal;
   };
@@ -75,11 +120,15 @@ export const useCalculations = (
 
     // Assuming you have a field for the total agricultural location value
     setValue("agriculturalProperty", safeTotal.toFixed(2));
+
+    // Recalculate total assets in Bangladesh
+    calculateTotalAssetsInBangladesh();
+
     return safeTotal;
   };
 
   // page 11
-  const calculateTotalFinancialAssets = () => {
+  const calculateTotalFinancialAssets = useCallback(() => {
     const fields: FormFieldName[] = [
       "shareDebentureUnitCertificate",
       "sanchayapatraSavingsCertificate",
@@ -107,10 +156,14 @@ export const useCalculations = (
     // Ensure the final total is not NaN, and round to 2 decimal places
     const safeTotal = isNaN(total) ? 0 : Math.round(total * 100) / 100;
 
-    // Assuming you have a field for the total financial assets
+    // Set total financial assets
     setValue("totalFinancialAssets", safeTotal.toFixed(2));
+
+    // Recalculate total assets in Bangladesh
+    calculateTotalAssetsInBangladesh();
+
     return safeTotal;
-  };
+  }, [watch, setValue, calculateTotalAssetsInBangladesh]);
 
   const calculateTotalMotorValue = () => {
     const fields: FormFieldName[] = ["motorValue1", "motorValue2"];
@@ -133,7 +186,11 @@ export const useCalculations = (
     const safeTotal = isNaN(total) ? 0 : Math.round(total * 100) / 100;
 
     // Assuming you have a field for the total motor value
-    setValue("motorVehiclesAmount", safeTotal.toFixed(2));
+    setValue("motorVehiclesTotal", safeTotal.toFixed(2));
+
+    // Recalculate total assets in Bangladesh
+    calculateTotalAssetsInBangladesh();
+
     return safeTotal;
   };
 
@@ -141,7 +198,7 @@ export const useCalculations = (
     const fields: FormFieldName[] = [
       "bankBalance",
       "cashInHand",
-      "othersValue",
+      "otherFundOutsideBusiness",
     ];
 
     const total = fields.reduce((sum, field) => {
@@ -163,67 +220,11 @@ export const useCalculations = (
 
     // Assuming you have a field for the total cash in hand and fund outside business
     setValue("totalCashInHandsAndFundOutsideBusiness", safeTotal.toFixed(2));
+
+    // Recalculate total assets in Bangladesh
+    calculateTotalAssetsInBangladesh();
+
     return safeTotal;
-  };
-
-  const calculateTotalAssetsInBangladeshAndOutside = () => {
-    const nonAgriculturalProperty = calculateTotalNonAgriculturalAssets();
-    const agriculturalProperty = calculateTotalAgriculturalAssets();
-    const totalFinancialAssets = calculateTotalFinancialAssets();
-    const totalMotorValue = calculateTotalMotorValue();
-    const totalCashInHandAndFund = calculateTotalCashInHandAndFund();
-
-    const fields: FormFieldName[] = [
-      "ornamentsValue",
-      "furnitureAndElectronic",
-      "othersAssetsValue",
-      "assetOutsideBangladesh",
-    ];
-
-    let totalInBangladesh =
-      nonAgriculturalProperty +
-      agriculturalProperty +
-      totalFinancialAssets +
-      totalMotorValue +
-      totalCashInHandAndFund;
-
-    let totalIncludingOutside = totalInBangladesh;
-
-    fields.forEach((field) => {
-      const value = watch(field as keyof IndividualTaxReturnFormInput);
-      const numberValue = parseFloat(value?.toString() || "0");
-
-      if (isNaN(numberValue)) {
-        console.warn(`Invalid value for ${field}: ${value}`);
-        return;
-      }
-
-      const safeValue = Math.max(0, numberValue);
-
-      if (field !== "assetOutsideBangladesh") {
-        totalInBangladesh += safeValue;
-      }
-      totalIncludingOutside += safeValue;
-    });
-
-    const safeTotalInBangladesh = Math.round(totalInBangladesh * 100) / 100;
-    const safeTotalIncludingOutside =
-      Math.round(totalIncludingOutside * 100) / 100;
-
-    setValue(
-      "totalAssetslocatedInBangladesh",
-      safeTotalInBangladesh.toFixed(2)
-    );
-
-    setValue(
-      "totalAssetsInBangladeshAndOutsideBangladesh",
-      safeTotalIncludingOutside.toFixed(2)
-    );
-
-    return {
-      totalInBangladesh: safeTotalInBangladesh,
-      totalIncludingOutside: safeTotalIncludingOutside,
-    };
   };
 
   // individual person expense
@@ -550,10 +551,20 @@ export const useCalculations = (
 
     setValue("totalSourceOfFund", total.toFixed(2));
 
-    // Recalculate the
+    // Recalculate the sum of source of fund and prev years wealth
+    // p-10, 03
     calculateSumOfSourceOfFund();
+
+    // Recalculate the total financial assets
+    calculateTotalFinancialAssets();
+
     return total;
-  }, [setValue, watch, calculateSumOfSourceOfFund]);
+  }, [
+    setValue,
+    watch,
+    calculateSumOfSourceOfFund,
+    calculateTotalFinancialAssets,
+  ]);
 
   const calculateTotalIncome = useCallback(() => {
     const fields: FormFieldName[] = [
@@ -677,7 +688,7 @@ export const useCalculations = (
     };
   };
 
-  const calculateTotalShonchoypatra = () => {
+  const calculateTotalBankAndShonchoypatra = () => {
     const fields = [
       "shonchoyparta",
       "profitFromShoychoyparta2",
@@ -694,9 +705,10 @@ export const useCalculations = (
     let totalBalance = 0;
     let totalInterestProfit = 0;
     let totalSourceTax = 0;
+    let bankBalanceTotal = 0; // New variable for bank balance
 
     // Calculate individual entries and running totals
-    fields.forEach((field) => {
+    fields.forEach((field, index) => {
       const balance = parseFloat(watch(`${field}.balance`) || "0");
       const interestProfit = parseFloat(
         watch(`${field}.interestProfit`) || "0"
@@ -704,9 +716,16 @@ export const useCalculations = (
       const sourceTax = parseFloat(watch(`${field}.sourceTax`) || "0");
 
       // Add to running totals (using safe values)
-      totalBalance += isNaN(balance) ? 0 : balance;
+      const safeBalance = isNaN(balance) ? 0 : balance;
+      totalBalance += safeBalance;
       totalInterestProfit += isNaN(interestProfit) ? 0 : interestProfit;
       totalSourceTax += isNaN(sourceTax) ? 0 : sourceTax;
+
+      // Sum balance from entries 2-10 for bankBalance
+      if (index > 0) {
+        // Skip first entry (index 0)
+        bankBalanceTotal += safeBalance;
+      }
     });
 
     // Set the totals in the summary row
@@ -720,6 +739,12 @@ export const useCalculations = (
       totalSourceTax.toFixed(2)
     );
 
+    // Set bankBalance (sum of entries 2-10)
+    setValue("bankBalance", bankBalanceTotal.toFixed(2));
+
+    // Recalculate total cash in hand and fund outside business
+    calculateTotalCashInHandAndFund();
+
     // Recalculate the total tax deducted or collected
     calculateTotalTaxDeductedOrCollected();
 
@@ -727,6 +752,7 @@ export const useCalculations = (
       totalBalance,
       totalInterestProfit,
       totalSourceTax,
+      bankBalanceTotal,
     };
   };
 
@@ -1314,8 +1340,7 @@ export const useCalculations = (
   };
 
   return {
-    calculateTotalAssetsInBangladeshAndOutside,
-
+    calculateTotalAssetsInBangladesh,
     calculateTotalMotorValue,
     calculateTotalFinancialAssets,
     calculateTotalAgriculturalAssets,
@@ -1346,7 +1371,7 @@ export const useCalculations = (
     calculateGrossTax,
     calculateTaxPayable,
     calculateTotalAmountPayable,
-    calculateTotalShonchoypatra,
+    calculateTotalBankAndShonchoypatra,
     calculateTotalTaxDeductedOrCollected,
     calculateTotalTaxPaidAdjustmentExcess,
   };
