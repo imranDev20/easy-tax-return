@@ -17,6 +17,38 @@ export const useCalculations = (
   setError: UseFormSetError<IndividualTaxReturnFormInput>,
   clearErrors: UseFormClearErrors<IndividualTaxReturnFormInput>
 ) => {
+  const calculateTotalAssetsInAndOutsideBangladesh = useCallback(() => {
+    const fields: FormFieldName[] = [
+      "assetOutsideBangladesh",
+      "totalAssetslocatedInBangladesh",
+    ];
+
+    const total = fields.reduce((sum, field) => {
+      const value = watch(field as keyof IndividualTaxReturnFormInput);
+      const numberValue = parseFloat(value?.toString() || "0");
+
+      // Guard against NaN and return the current sum if the value is not a valid number
+      if (isNaN(numberValue)) {
+        console.warn(`Invalid value for ${field}: ${value}`);
+        return sum;
+      }
+
+      // Ensure we're adding a positive number (or zero)
+      return sum + Math.max(0, numberValue);
+    }, 0);
+
+    // Ensure the final total is not NaN, and round to 2 decimal places
+    const safeTotal = isNaN(total) ? 0 : Math.round(total * 100) / 100;
+
+    // Set the total assets in and outside Bangladesh
+    setValue(
+      "totalAssetsInBangladeshAndOutsideBangladesh",
+      safeTotal.toFixed(2)
+    );
+
+    return safeTotal;
+  }, [watch, setValue]);
+
   const calculateTotalAssetsInBangladesh = useCallback(() => {
     // const nonAgriculturalProperty = calculateTotalNonAgriculturalAssets();
     // const agriculturalProperty = calculateTotalAgriculturalAssets();
@@ -54,8 +86,11 @@ export const useCalculations = (
       safeTotalInBangladesh.toFixed(2)
     );
 
+    // Recalculate total assets in Bangladesh and outside
+    calculateTotalAssetsInAndOutsideBangladesh();
+
     return safeTotalInBangladesh;
-  }, [setValue, watch]);
+  }, [setValue, watch, calculateTotalAssetsInAndOutsideBangladesh]);
 
   const calculateTotalNonAgriculturalAssets = () => {
     const fields: FormFieldName[] = [
@@ -191,8 +226,8 @@ export const useCalculations = (
     // Assuming you have a field for the total motor value
     setValue("motorVehiclesTotal", safeTotal.toFixed(2));
 
-    // Recalculate total financial assets
-    calculateTotalFinancialAssets();
+    // Recalculate total assets located in Bangladesh
+    calculateTotalAssetsInBangladesh();
 
     return safeTotal;
   };
@@ -224,8 +259,8 @@ export const useCalculations = (
     // Assuming you have a field for the total cash in hand and fund outside business
     setValue("totalCashInHandsAndFundOutsideBusiness", safeTotal.toFixed(2));
 
-    // Recalculate total financial assets
-    calculateTotalFinancialAssets();
+    // Recalculate total assets located in Bangladesh
+    calculateTotalAssetsInBangladesh();
 
     return safeTotal;
   };
@@ -1396,5 +1431,6 @@ export const useCalculations = (
     calculateTotalBankAndShonchoypatra,
     calculateTotalTaxDeductedOrCollected,
     calculateTotalTaxPaidAdjustmentExcess,
+    calculateTotalAssetsInAndOutsideBangladesh,
   };
 };
