@@ -54,8 +54,10 @@ export const useFormFields = (
     calculateDirectorsShareholdingsInTheCompanies,
     calculateBusinessCapitalOfPartnershipFirm,
     calculateTotalTaxableIncomeFromCapitalGains,
-    calculateTotalIncomeFromFinancialAssets,
+    calculateTotalIncomeFromSecurities,
     calculateTotalAmountPayable,
+    calculateTotalShonchoypatra,
+    calculateTotalTaxDeductedOrCollected,
   } = useCalculations(watch, setValue, getValues, setError, clearErrors);
 
   const formFields: FormField[] = [
@@ -544,8 +546,8 @@ export const useFormFields = (
 
     {
       name: "incomeFromOtherSources",
-      type: "text",
-      label: "incomeFromOtherSources",
+      type: "number",
+      label: "",
       disabled: false,
       x: 755,
       y: 401,
@@ -2960,6 +2962,9 @@ export const useFormFields = (
       height: 17,
       imageIndex: 6,
       isVisible: true,
+      onBlur() {
+        calculateTotalShonchoypatra();
+      },
     },
     {
       name: "shonchoyparta.interestProfit",
@@ -2971,6 +2976,9 @@ export const useFormFields = (
       height: 17,
       imageIndex: 6,
       isVisible: true,
+      onBlur() {
+        calculateTotalShonchoypatra();
+      },
     },
     {
       name: "shonchoyparta.sourceTax",
@@ -2982,6 +2990,9 @@ export const useFormFields = (
       height: 17,
       imageIndex: 6,
       isVisible: true,
+      onBlur() {
+        calculateTotalShonchoypatra();
+      },
     },
     {
       name: "profitFromShoychoyparta2.description",
@@ -3004,6 +3015,9 @@ export const useFormFields = (
       height: 17,
       imageIndex: 6,
       isVisible: true,
+      onBlur() {
+        calculateTotalShonchoypatra();
+      },
     },
     {
       name: "profitFromShoychoyparta2.interestProfit",
@@ -3015,6 +3029,9 @@ export const useFormFields = (
       height: 17,
       imageIndex: 6,
       isVisible: true,
+      onBlur() {
+        calculateTotalShonchoypatra();
+      },
     },
     {
       name: "profitFromShoychoyparta2.sourceTax",
@@ -3026,6 +3043,9 @@ export const useFormFields = (
       height: 17,
       imageIndex: 6,
       isVisible: true,
+      onBlur() {
+        calculateTotalShonchoypatra();
+      },
     },
     {
       name: "profitFromShoychoyparta3.description",
@@ -3048,6 +3068,9 @@ export const useFormFields = (
       height: 17,
       imageIndex: 6,
       isVisible: true,
+      onBlur() {
+        calculateTotalShonchoypatra();
+      },
     },
     {
       name: "profitFromShoychoyparta3.interestProfit",
@@ -3059,6 +3082,9 @@ export const useFormFields = (
       height: 17,
       imageIndex: 6,
       isVisible: true,
+      onBlur() {
+        calculateTotalShonchoypatra();
+      },
     },
     {
       name: "profitFromShoychoyparta3.sourceTax",
@@ -3070,6 +3096,9 @@ export const useFormFields = (
       height: 17,
       imageIndex: 6,
       isVisible: true,
+      onBlur() {
+        calculateTotalShonchoypatra();
+      },
     },
     {
       name: "profitFromShoychoyparta4.description",
@@ -3092,6 +3121,9 @@ export const useFormFields = (
       height: 17,
       imageIndex: 6,
       isVisible: true,
+      onBlur() {
+        calculateTotalShonchoypatra();
+      },
     },
     {
       name: "profitFromShoychoyparta4.interestProfit",
@@ -3103,6 +3135,9 @@ export const useFormFields = (
       height: 17,
       imageIndex: 6,
       isVisible: true,
+      onBlur() {
+        calculateTotalShonchoypatra();
+      },
     },
     {
       name: "profitFromShoychoyparta4.sourceTax",
@@ -3114,6 +3149,9 @@ export const useFormFields = (
       height: 17,
       imageIndex: 6,
       isVisible: true,
+      onBlur() {
+        calculateTotalShonchoypatra();
+      },
     },
     {
       name: "profitFromShoychoyparta5.description",
@@ -3136,6 +3174,9 @@ export const useFormFields = (
       height: 17,
       imageIndex: 6,
       isVisible: true,
+      onBlur() {
+        calculateTotalShonchoypatra();
+      },
     },
     {
       name: "profitFromShoychoyparta5.interestProfit",
@@ -3147,6 +3188,9 @@ export const useFormFields = (
       height: 17,
       imageIndex: 6,
       isVisible: true,
+      onBlur() {
+        calculateTotalShonchoypatra();
+      },
     },
     {
       name: "profitFromShoychoyparta5.sourceTax",
@@ -3158,6 +3202,9 @@ export const useFormFields = (
       height: 17,
       imageIndex: 6,
       isVisible: true,
+      onBlur() {
+        calculateTotalShonchoypatra();
+      },
     },
     {
       name: "profitFromShoychoyparta6.description",
@@ -3180,6 +3227,9 @@ export const useFormFields = (
       height: 17,
       imageIndex: 6,
       isVisible: true,
+      onBlur() {
+        calculateTotalShonchoypatra();
+      },
     },
     {
       name: "profitFromShoychoyparta6.interestProfit",
@@ -3191,6 +3241,9 @@ export const useFormFields = (
       height: 17,
       imageIndex: 6,
       isVisible: true,
+      onBlur() {
+        calculateTotalShonchoypatra();
+      },
     },
     {
       name: "profitFromShoychoyparta6.sourceTax",
@@ -3202,6 +3255,9 @@ export const useFormFields = (
       height: 17,
       imageIndex: 6,
       isVisible: true,
+      onBlur() {
+        calculateTotalShonchoypatra();
+      },
     },
     {
       name: "profitFromShoychoyparta7.description",
@@ -3224,6 +3280,9 @@ export const useFormFields = (
       height: 17,
       imageIndex: 6,
       isVisible: true,
+      onBlur() {
+        calculateTotalShonchoypatra();
+      },
     },
     {
       name: "profitFromShoychoyparta7.interestProfit",
@@ -3235,6 +3294,9 @@ export const useFormFields = (
       height: 17,
       imageIndex: 6,
       isVisible: true,
+      onBlur() {
+        calculateTotalShonchoypatra();
+      },
     },
     {
       name: "profitFromShoychoyparta7.sourceTax",
@@ -3246,6 +3308,9 @@ export const useFormFields = (
       height: 17,
       imageIndex: 6,
       isVisible: true,
+      onBlur() {
+        calculateTotalShonchoypatra();
+      },
     },
     {
       name: "profitFromShoychoyparta8.description",
@@ -3268,6 +3333,9 @@ export const useFormFields = (
       height: 17,
       imageIndex: 6,
       isVisible: true,
+      onBlur() {
+        calculateTotalShonchoypatra();
+      },
     },
     {
       name: "profitFromShoychoyparta8.interestProfit",
@@ -3279,6 +3347,9 @@ export const useFormFields = (
       height: 17,
       imageIndex: 6,
       isVisible: true,
+      onBlur() {
+        calculateTotalShonchoypatra();
+      },
     },
     {
       name: "profitFromShoychoyparta8.sourceTax",
@@ -3290,6 +3361,9 @@ export const useFormFields = (
       height: 17,
       imageIndex: 6,
       isVisible: true,
+      onBlur() {
+        calculateTotalShonchoypatra();
+      },
     },
     {
       name: "profitFromShoychoyparta9.description",
@@ -3312,6 +3386,9 @@ export const useFormFields = (
       height: 17,
       imageIndex: 6,
       isVisible: true,
+      onBlur() {
+        calculateTotalShonchoypatra();
+      },
     },
     {
       name: "profitFromShoychoyparta9.interestProfit",
@@ -3323,6 +3400,9 @@ export const useFormFields = (
       height: 17,
       imageIndex: 6,
       isVisible: true,
+      onBlur() {
+        calculateTotalShonchoypatra();
+      },
     },
     {
       name: "profitFromShoychoyparta9.sourceTax",
@@ -3334,6 +3414,9 @@ export const useFormFields = (
       height: 17,
       imageIndex: 6,
       isVisible: true,
+      onBlur() {
+        calculateTotalShonchoypatra();
+      },
     },
     {
       name: "profitFromShoychoyparta10.description",
@@ -3356,6 +3439,9 @@ export const useFormFields = (
       height: 17,
       imageIndex: 6,
       isVisible: true,
+      onBlur() {
+        calculateTotalShonchoypatra();
+      },
     },
     {
       name: "profitFromShoychoyparta10.interestProfit",
@@ -3367,6 +3453,9 @@ export const useFormFields = (
       height: 17,
       imageIndex: 6,
       isVisible: true,
+      onBlur() {
+        calculateTotalShonchoypatra();
+      },
     },
     {
       name: "profitFromShoychoyparta10.sourceTax",
@@ -3378,6 +3467,9 @@ export const useFormFields = (
       height: 17,
       imageIndex: 6,
       isVisible: true,
+      onBlur() {
+        calculateTotalShonchoypatra();
+      },
     },
     {
       name: "profitFromShoychoypartaTotal.balance",
@@ -3428,7 +3520,7 @@ export const useFormFields = (
       imageIndex: 6,
       isVisible: true,
       onBlur() {
-        calculateTotalIncomeFromFinancialAssets();
+        calculateTotalIncomeFromSecurities();
       },
     },
     {
@@ -3442,7 +3534,7 @@ export const useFormFields = (
       imageIndex: 6,
       isVisible: true,
       onBlur() {
-        calculateTotalIncomeFromFinancialAssets();
+        calculateTotalIncomeFromSecurities();
       },
     },
     {
@@ -3456,7 +3548,7 @@ export const useFormFields = (
       imageIndex: 6,
       isVisible: true,
       onBlur() {
-        calculateTotalIncomeFromFinancialAssets();
+        calculateTotalIncomeFromSecurities();
       },
     },
 
@@ -3482,7 +3574,7 @@ export const useFormFields = (
       imageIndex: 6,
       isVisible: true,
       onBlur() {
-        calculateTotalIncomeFromFinancialAssets();
+        calculateTotalIncomeFromSecurities();
       },
     },
     {
@@ -3496,7 +3588,7 @@ export const useFormFields = (
       imageIndex: 6,
       isVisible: true,
       onBlur() {
-        calculateTotalIncomeFromFinancialAssets();
+        calculateTotalIncomeFromSecurities();
       },
     },
     {
@@ -3510,7 +3602,7 @@ export const useFormFields = (
       imageIndex: 6,
       isVisible: true,
       onBlur() {
-        calculateTotalIncomeFromFinancialAssets();
+        calculateTotalIncomeFromSecurities();
       },
     },
     {
@@ -3535,7 +3627,7 @@ export const useFormFields = (
       imageIndex: 6,
       isVisible: true,
       onBlur() {
-        calculateTotalIncomeFromFinancialAssets();
+        calculateTotalIncomeFromSecurities();
       },
     },
     {
@@ -3549,7 +3641,7 @@ export const useFormFields = (
       imageIndex: 6,
       isVisible: true,
       onBlur() {
-        calculateTotalIncomeFromFinancialAssets();
+        calculateTotalIncomeFromSecurities();
       },
     },
     {
@@ -3563,7 +3655,7 @@ export const useFormFields = (
       imageIndex: 6,
       isVisible: true,
       onBlur() {
-        calculateTotalIncomeFromFinancialAssets();
+        calculateTotalIncomeFromSecurities();
       },
     },
     {
@@ -3588,7 +3680,7 @@ export const useFormFields = (
       imageIndex: 6,
       isVisible: true,
       onBlur() {
-        calculateTotalIncomeFromFinancialAssets();
+        calculateTotalIncomeFromSecurities();
       },
     },
     {
@@ -3602,7 +3694,7 @@ export const useFormFields = (
       imageIndex: 6,
       isVisible: true,
       onBlur() {
-        calculateTotalIncomeFromFinancialAssets();
+        calculateTotalIncomeFromSecurities();
       },
     },
     {
@@ -3616,7 +3708,7 @@ export const useFormFields = (
       imageIndex: 6,
       isVisible: true,
       onBlur() {
-        calculateTotalIncomeFromFinancialAssets();
+        calculateTotalIncomeFromSecurities();
       },
     },
     {
@@ -3641,7 +3733,7 @@ export const useFormFields = (
       imageIndex: 6,
       isVisible: true,
       onBlur() {
-        calculateTotalIncomeFromFinancialAssets();
+        calculateTotalIncomeFromSecurities();
       },
     },
     {
@@ -3655,7 +3747,7 @@ export const useFormFields = (
       imageIndex: 6,
       isVisible: true,
       onBlur() {
-        calculateTotalIncomeFromFinancialAssets();
+        calculateTotalIncomeFromSecurities();
       },
     },
     {
@@ -3669,7 +3761,7 @@ export const useFormFields = (
       imageIndex: 6,
       isVisible: true,
       onBlur() {
-        calculateTotalIncomeFromFinancialAssets();
+        calculateTotalIncomeFromSecurities();
       },
     },
     {
@@ -3694,7 +3786,7 @@ export const useFormFields = (
       imageIndex: 6,
       isVisible: true,
       onBlur() {
-        calculateTotalIncomeFromFinancialAssets();
+        calculateTotalIncomeFromSecurities();
       },
     },
     {
@@ -3708,7 +3800,7 @@ export const useFormFields = (
       imageIndex: 6,
       isVisible: true,
       onBlur() {
-        calculateTotalIncomeFromFinancialAssets();
+        calculateTotalIncomeFromSecurities();
       },
     },
     {
@@ -3722,7 +3814,7 @@ export const useFormFields = (
       imageIndex: 6,
       isVisible: true,
       onBlur() {
-        calculateTotalIncomeFromFinancialAssets();
+        calculateTotalIncomeFromSecurities();
       },
     },
     {
@@ -3747,7 +3839,7 @@ export const useFormFields = (
       imageIndex: 6,
       isVisible: true,
       onBlur() {
-        calculateTotalIncomeFromFinancialAssets();
+        calculateTotalIncomeFromSecurities();
       },
     },
     {
@@ -3761,7 +3853,7 @@ export const useFormFields = (
       imageIndex: 6,
       isVisible: true,
       onBlur() {
-        calculateTotalIncomeFromFinancialAssets();
+        calculateTotalIncomeFromSecurities();
       },
     },
     {
@@ -3775,7 +3867,7 @@ export const useFormFields = (
       imageIndex: 6,
       isVisible: true,
       onBlur() {
-        calculateTotalIncomeFromFinancialAssets();
+        calculateTotalIncomeFromSecurities();
       },
     },
     {
@@ -3800,7 +3892,7 @@ export const useFormFields = (
       imageIndex: 6,
       isVisible: true,
       onBlur() {
-        calculateTotalIncomeFromFinancialAssets();
+        calculateTotalIncomeFromSecurities();
       },
     },
     {
@@ -3814,7 +3906,7 @@ export const useFormFields = (
       imageIndex: 6,
       isVisible: true,
       onBlur() {
-        calculateTotalIncomeFromFinancialAssets();
+        calculateTotalIncomeFromSecurities();
       },
     },
     {
@@ -3828,7 +3920,7 @@ export const useFormFields = (
       imageIndex: 6,
       isVisible: true,
       onBlur() {
-        calculateTotalIncomeFromFinancialAssets();
+        calculateTotalIncomeFromSecurities();
       },
     },
     {
@@ -3853,7 +3945,7 @@ export const useFormFields = (
       imageIndex: 6,
       isVisible: true,
       onBlur() {
-        calculateTotalIncomeFromFinancialAssets();
+        calculateTotalIncomeFromSecurities();
       },
     },
     {
@@ -3867,7 +3959,7 @@ export const useFormFields = (
       imageIndex: 6,
       isVisible: true,
       onBlur() {
-        calculateTotalIncomeFromFinancialAssets();
+        calculateTotalIncomeFromSecurities();
       },
     },
     {
@@ -3881,7 +3973,7 @@ export const useFormFields = (
       imageIndex: 6,
       isVisible: true,
       onBlur() {
-        calculateTotalIncomeFromFinancialAssets();
+        calculateTotalIncomeFromSecurities();
       },
     },
     {
@@ -3906,7 +3998,7 @@ export const useFormFields = (
       imageIndex: 6,
       isVisible: true,
       onBlur() {
-        calculateTotalIncomeFromFinancialAssets();
+        calculateTotalIncomeFromSecurities();
       },
     },
     {
@@ -3920,7 +4012,7 @@ export const useFormFields = (
       imageIndex: 6,
       isVisible: true,
       onBlur() {
-        calculateTotalIncomeFromFinancialAssets();
+        calculateTotalIncomeFromSecurities();
       },
     },
     {
@@ -3934,7 +4026,7 @@ export const useFormFields = (
       imageIndex: 6,
       isVisible: true,
       onBlur() {
-        calculateTotalIncomeFromFinancialAssets();
+        calculateTotalIncomeFromSecurities();
       },
     },
     {

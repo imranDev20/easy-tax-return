@@ -481,7 +481,24 @@ export const useCalculations = (
     return total;
   }, [setValue, watch, calculateTaxRebate, calculateGrossTax]);
 
-  const calculateTotalIncomeFromFinancialAssets = () => {
+  const calculateTotalTaxDeductedOrCollected = () => {
+    const securitiesSourceTax = parseFloat(
+      watch("profitInterestFromGovtSecuritiesTotal.sourceTax") || "0"
+    );
+    const shonchoypatraSourceTax = parseFloat(
+      watch("profitFromShoychoypartaTotal.sourceTax") || "0"
+    );
+
+    const totalTaxDeducted =
+      (isNaN(securitiesSourceTax) ? 0 : securitiesSourceTax) +
+      (isNaN(shonchoypatraSourceTax) ? 0 : shonchoypatraSourceTax);
+
+    setValue("taxDeductedOrCollected", totalTaxDeducted.toFixed(2));
+
+    return totalTaxDeducted;
+  };
+
+  const calculateTotalIncomeFromSecurities = () => {
     const fields = [
       "interestFromSecurities",
       "profitInterestFromGovtSecurities2",
@@ -532,6 +549,62 @@ export const useCalculations = (
 
     // Recalculate total income since financial assets income is a component
     calculateTotalIncome();
+
+    // Recalculate total tax deducted or collected to update it
+    calculateTotalTaxDeductedOrCollected();
+
+    return {
+      totalBalance,
+      totalInterestProfit,
+      totalSourceTax,
+    };
+  };
+
+  const calculateTotalShonchoypatra = () => {
+    const fields = [
+      "shonchoyparta",
+      "profitFromShoychoyparta2",
+      "profitFromShoychoyparta3",
+      "profitFromShoychoyparta4",
+      "profitFromShoychoyparta5",
+      "profitFromShoychoyparta6",
+      "profitFromShoychoyparta7",
+      "profitFromShoychoyparta8",
+      "profitFromShoychoyparta9",
+      "profitFromShoychoyparta10",
+    ] as const;
+
+    let totalBalance = 0;
+    let totalInterestProfit = 0;
+    let totalSourceTax = 0;
+
+    // Calculate individual entries and running totals
+    fields.forEach((field) => {
+      const balance = parseFloat(watch(`${field}.balance`) || "0");
+      const interestProfit = parseFloat(
+        watch(`${field}.interestProfit`) || "0"
+      );
+      const sourceTax = parseFloat(watch(`${field}.sourceTax`) || "0");
+
+      // Add to running totals (using safe values)
+      totalBalance += isNaN(balance) ? 0 : balance;
+      totalInterestProfit += isNaN(interestProfit) ? 0 : interestProfit;
+      totalSourceTax += isNaN(sourceTax) ? 0 : sourceTax;
+    });
+
+    // Set the totals in the summary row
+    setValue("profitFromShoychoypartaTotal.balance", totalBalance.toFixed(2));
+    setValue(
+      "profitFromShoychoypartaTotal.interestProfit",
+      totalInterestProfit.toFixed(2)
+    );
+    setValue(
+      "profitFromShoychoypartaTotal.sourceTax",
+      totalSourceTax.toFixed(2)
+    );
+
+    // Recalculate the total tax deducted or collected
+    calculateTotalTaxDeductedOrCollected();
 
     return {
       totalBalance,
@@ -1158,16 +1231,6 @@ export const useCalculations = (
     return total;
   };
 
-  type TaxCategory =
-    | "GAZETTED_WAR_WOUNDED_FREEDOM_FIGHTER"
-    | "FEMALE"
-    | "AGED_65_OR_MORE"
-    | "DISABLED_PERSON"
-    | "NONE"
-    | "THIRD_GENDER"
-    | undefined;
-  type ResidentialStatus = "RESIDENT" | "NON_RESIDENT" | undefined;
-
   return {
     calculateTotalAssetsInBangladeshAndOutside,
 
@@ -1198,9 +1261,11 @@ export const useCalculations = (
     calculateDirectorsShareholdingsInTheCompanies,
     calculateBusinessCapitalOfPartnershipFirm,
     calculateTotalTaxableIncomeFromCapitalGains,
-    calculateTotalIncomeFromFinancialAssets,
+    calculateTotalIncomeFromSecurities,
     calculateGrossTax,
     calculateTaxPayable,
     calculateTotalAmountPayable,
+    calculateTotalShonchoypatra,
+    calculateTotalTaxDeductedOrCollected,
   };
 };
