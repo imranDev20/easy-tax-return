@@ -118,12 +118,13 @@ export const individualTaxReturnSchema = z.object({
 
   // Image 3
   taxDeductedOrCollected: z.string().optional(),
+  advanceTaxPaid: z.string().optional(),
+  adjustmentOfTaxRefund: z.string().optional(),
+  taxPaidWithThisReturn: z.string().optional(),
   totalTaxPaidAndAdjusted: z.string().optional(),
   excessPayment: z.string().optional(),
+
   taxExemptedTaxFreeIncome: z.string().optional(),
-  advanceTaxPaidAmount: z.string().optional(),
-  adjustmentOfTaxRefund: z.string().optional(),
-  taxPaidWithThisReturn: z.string(),
   listOfDocumentsFurnishedWithThisReturn1: z.string().optional(),
   listOfDocumentsFurnishedWithThisReturn2: z.string().optional(),
   fatherOrHusband: z.string(),

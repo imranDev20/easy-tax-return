@@ -137,7 +137,7 @@ model IndividualTaxes {
   netWealthSurcharge                         Float?
   environmentalSurcharge                     String?
   delayInterest                              String?
-  advanceTaxPaidAmount                       String?
+  advanceTaxPaid                             String?
   adjustmentOfTaxRefund                      String?
   taxPaidWithThisReturn                      String
   listOfDocumentsFurnishedWithThisReturn1    String?

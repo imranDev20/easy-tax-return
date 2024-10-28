@@ -58,6 +58,7 @@ export const useFormFields = (
     calculateTotalAmountPayable,
     calculateTotalShonchoypatra,
     calculateTotalTaxDeductedOrCollected,
+    calculateTotalTaxPaidAdjustmentExcess,
   } = useCalculations(watch, setValue, getValues, setError, clearErrors);
 
   const formFields: FormField[] = [
@@ -781,7 +782,7 @@ export const useFormFields = (
       isVisible: true,
     },
     {
-      name: "advanceTaxPaidAmount",
+      name: "advanceTaxPaid",
       type: "number",
       label: "",
       x: 770,
@@ -790,6 +791,9 @@ export const useFormFields = (
       height: 29,
       imageIndex: 2,
       isVisible: true,
+      onBlur() {
+        calculateTotalTaxPaidAdjustmentExcess();
+      },
     },
     {
       name: "adjustmentOfTaxRefund",
@@ -801,6 +805,9 @@ export const useFormFields = (
       height: 29,
       imageIndex: 2,
       isVisible: true,
+      onBlur() {
+        calculateTotalTaxPaidAdjustmentExcess();
+      },
     },
     {
       name: "taxPaidWithThisReturn",
@@ -812,6 +819,9 @@ export const useFormFields = (
       height: 29,
       imageIndex: 2,
       isVisible: true,
+      onBlur() {
+        calculateTotalTaxPaidAdjustmentExcess();
+      },
     },
     {
       name: "totalTaxPaidAndAdjusted",
@@ -828,7 +838,7 @@ export const useFormFields = (
     {
       name: "excessPayment",
       type: "number",
-      label: "excessPayment",
+      label: "",
       disabled: true,
       x: 775,
       y: 255,
@@ -840,7 +850,7 @@ export const useFormFields = (
     {
       name: "taxExemptedTaxFreeIncome",
       type: "number",
-      label: "taxExemptedTaxFreeIncome",
+      label: "",
       disabled: true,
       x: 775,
       y: 312,
@@ -853,7 +863,7 @@ export const useFormFields = (
     {
       name: "listOfDocumentsFurnishedWithThisReturn1",
       type: "textarea",
-      label: "listOfDocumentsFurnishedWithThisReturn1",
+      label: "",
       x: 91,
       y: 384,
       width: 425,
@@ -864,7 +874,7 @@ export const useFormFields = (
     {
       name: "listOfDocumentsFurnishedWithThisReturn2",
       type: "textarea",
-      label: "listOfDocumentsFurnishedWithThisReturn2",
+      label: "",
       x: 516,
       y: 384,
       width: 424,

@@ -371,6 +371,44 @@ export const useCalculations = (
     return roundedRebate;
   }, [getValues, setValue, calculateNetTaxRebate]);
 
+  const calculateTotalTaxPaidAdjustmentExcess = () => {
+    // Get all required values with safe parsing
+    const taxDeductedOrCollected = parseFloat(
+      watch("taxDeductedOrCollected") || "0"
+    );
+    const advanceTaxPaid = parseFloat(watch("advanceTaxPaid") || "0");
+    const adjustmentOfTaxRefund = parseFloat(
+      watch("adjustmentOfTaxRefund") || "0"
+    );
+    const taxPaidWithThisReturn = parseFloat(
+      watch("taxPaidWithThisReturn") || "0"
+    );
+    const totalAmountPayable = parseFloat(watch("totalAmountPayable") || "0");
+
+    // Calculate total tax paid and adjusted
+    const totalTaxPaidAndAdjusted =
+      (isNaN(taxDeductedOrCollected) ? 0 : taxDeductedOrCollected) +
+      (isNaN(advanceTaxPaid) ? 0 : advanceTaxPaid) +
+      (isNaN(adjustmentOfTaxRefund) ? 0 : adjustmentOfTaxRefund) +
+      (isNaN(taxPaidWithThisReturn) ? 0 : taxPaidWithThisReturn);
+
+    // Set total tax paid and adjusted
+    setValue("totalTaxPaidAndAdjusted", totalTaxPaidAndAdjusted.toFixed(2));
+
+    // Calculate excess payment (total paid minus amount payable)
+    const excessPayment =
+      totalTaxPaidAndAdjusted -
+      (isNaN(totalAmountPayable) ? 0 : totalAmountPayable);
+
+    // Set excess payment
+    setValue("excessPayment", excessPayment.toFixed(2));
+
+    return {
+      totalTaxPaidAndAdjusted,
+      excessPayment,
+    };
+  };
+
   const calculateGrossTax = useCallback(() => {
     const totalIncome = parseFloat(getValues("totalIncome") || "0");
     const residentialStatus = watch("residentialStatus");
@@ -494,6 +532,9 @@ export const useCalculations = (
       (isNaN(shonchoypatraSourceTax) ? 0 : shonchoypatraSourceTax);
 
     setValue("taxDeductedOrCollected", totalTaxDeducted.toFixed(2));
+
+    // Recalculate total tax paid & adjusted and excess payment
+    calculateTotalTaxPaidAdjustmentExcess();
 
     return totalTaxDeducted;
   };
@@ -1267,5 +1308,6 @@ export const useCalculations = (
     calculateTotalAmountPayable,
     calculateTotalShonchoypatra,
     calculateTotalTaxDeductedOrCollected,
+    calculateTotalTaxPaidAdjustmentExcess,
   };
 };

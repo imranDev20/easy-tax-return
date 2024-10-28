@@ -53,7 +53,7 @@ CREATE TABLE "IndividualTaxes" (
     "netWealthSurcharge" "YesNo" NOT NULL,
     "environmentalSurcharge" TEXT,
     "delayInterest" TEXT,
-    "advanceTaxPaidAmount" TEXT,
+    "advanceTaxPaid" TEXT,
     "adjustmentOfTaxRefund" TEXT,
     "taxPaidWithThisReturn" TEXT NOT NULL,
     "listOfDocumentsFurnishedWithThisReturn1" TEXT,
