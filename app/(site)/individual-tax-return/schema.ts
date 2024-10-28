@@ -405,7 +405,6 @@ export const individualTaxReturnSchema = z.object({
   totalAssetslocatedInBangladesh: z.string().optional(),
   totalCashInHandsAndFundOutsideBusiness: z.string().optional(),
   totalAssetsInBangladeshAndOutsideBangladesh: z.string().optional(),
-  humanVarification: z.string(),
 
   // Image 11
   totalIncomeShown: z.string().optional(),

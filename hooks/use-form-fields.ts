@@ -5887,17 +5887,6 @@ export const useFormFields = (
       imageIndex: 10,
       isVisible: true,
     },
-    {
-      name: "humanVarification",
-      type: "text",
-      label: "",
-      x: 480,
-      y: 940,
-      width: 50,
-      height: 30,
-      imageIndex: 10,
-      isVisible: true,
-    },
 
     // Image 12
     {

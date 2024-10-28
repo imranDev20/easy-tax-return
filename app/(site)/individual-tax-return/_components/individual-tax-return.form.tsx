@@ -244,7 +244,7 @@ const IndividualTaxReturnForm: React.FC = () => {
 
   useEffect(() => {
     // This effect will run when the component mounts
-    const debugMode = true; // Set this to true when you want to debug
+    const debugMode = false; // Set this to true when you want to debug
 
     if (debugMode) {
       // Assuming you have access to your form data, fields, and images here
