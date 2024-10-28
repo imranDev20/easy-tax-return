@@ -332,7 +332,6 @@ model IndividualTaxes {
   agriculturalLocationValue2                                  String?
   agriculturalLocationValue3                                  String?
   shareDebentureUnitCertificate                               String?
-  bondsGovernment                                             String?
   sanchayapatraSavingsCertificate                             String?
   depositPensionScheme                                        String?
   loansGivenToOthers                                          String?

@@ -50,7 +50,6 @@ export const useFormFields = (
     calculateTotalAdmissibleDeduction,
     calculateRepairCollectionAmount,
     calculateTotalRentValue,
-    calculateBusinessCapitalDifference,
     calculateDirectorsShareholdingsInTheCompanies,
     calculateBusinessCapitalOfPartnershipFirm,
     calculateTotalTaxableIncomeFromCapitalGains,
@@ -2510,7 +2509,7 @@ export const useFormFields = (
     {
       name: "totalAssets",
       type: "number",
-      label: "totalAssets",
+      label: "",
       disabled: true,
       x: 702,
       y: 542,
@@ -2522,7 +2521,7 @@ export const useFormFields = (
     {
       name: "openingCapital",
       type: "number",
-      label: "openingCapital",
+      label: "",
       x: 700,
       y: 560,
       width: 205,
@@ -2574,7 +2573,7 @@ export const useFormFields = (
     {
       name: "liabilities",
       type: "number",
-      label: "liabilities",
+      label: "",
       x: 700,
       y: 630,
       width: 205,
@@ -4700,7 +4699,7 @@ export const useFormFields = (
     },
 
     // Image 10
-    // input 42
+
     {
       name: "taxpayerName",
       type: "text",
@@ -4752,8 +4751,7 @@ export const useFormFields = (
     {
       name: "receiptOfGiftOtherReceipts",
       type: "number",
-      label: "receiptOfGiftOtherReceipts",
-      disabled: true,
+      label: "",
       x: 775,
       y: 410,
       width: 160,
@@ -4937,20 +4935,34 @@ export const useFormFields = (
       imageIndex: 9,
       isVisible: true,
     },
+
     {
-      name: "businessCapitalAmount1",
+      name: "totalAssets",
       type: "number",
       label: "",
       disabled: true,
-      x: 640,
-      y: 747,
+      x: 641,
+      y: 711,
       width: 130,
       height: 16,
       imageIndex: 9,
       isVisible: true,
     },
     {
-      name: "businessCapitalAmount1", // intentional duplication
+      name: "liabilities",
+      type: "number",
+      label: "",
+      disabled: true,
+      x: 641,
+      y: 729,
+      width: 130,
+      height: 16,
+      imageIndex: 9,
+      isVisible: true,
+    },
+
+    {
+      name: "businessCapital",
       type: "number",
       label: "",
       disabled: true,
@@ -4970,35 +4982,6 @@ export const useFormFields = (
       y: 765,
       width: 160,
       height: 16,
-      imageIndex: 9,
-      isVisible: true,
-    },
-
-    {
-      name: "totalAssetOfBusiness",
-      type: "number",
-      label: "",
-      onBlur: () => {
-        calculateBusinessCapitalDifference();
-      },
-      x: 640,
-      y: 710,
-      width: 135,
-      height: 18,
-      imageIndex: 9,
-      isVisible: true,
-    },
-    {
-      name: "lessBusinessLiabilities",
-      type: "number",
-      label: "",
-      onBlur: () => {
-        calculateBusinessCapitalDifference();
-      },
-      x: 640,
-      y: 728,
-      width: 135,
-      height: 18,
       imageIndex: 9,
       isVisible: true,
     },
@@ -5493,20 +5476,6 @@ export const useFormFields = (
     },
 
     {
-      name: "bondsGovernment",
-      type: "number",
-      label: "",
-      x: 770,
-      y: 378,
-      width: 170,
-      height: 18,
-      imageIndex: 10,
-      isVisible: true,
-      onBlur() {
-        calculateTotalAssetsInBangladeshAndOutside();
-      },
-    },
-    {
       name: "sanchayapatraSavingsCertificate",
       type: "number",
       label: "",
@@ -5534,23 +5503,8 @@ export const useFormFields = (
         calculateTotalAssetsInBangladeshAndOutside();
       },
     },
-
     {
-      name: "loansGivenToOthers",
-      type: "number",
-      label: "",
-      x: 770,
-      y: 432,
-      width: 170,
-      height: 18,
-      imageIndex: 10,
-      isVisible: true,
-      onBlur() {
-        calculateTotalAssetsInBangladeshAndOutside();
-      },
-    },
-    {
-      name: "name",
+      name: "loanGivenToOthersName",
       type: "text",
       label: "",
       x: 250,
@@ -5561,7 +5515,7 @@ export const useFormFields = (
       isVisible: true,
     },
     {
-      name: "nid",
+      name: "loanGiventoOthersNid",
       type: "text",
       label: "",
       x: 625,
@@ -5572,7 +5526,7 @@ export const useFormFields = (
       isVisible: true,
     },
     {
-      name: "nidValue",
+      name: "loansGivenToOthers",
       type: "number",
       label: "",
       x: 770,
@@ -5588,7 +5542,7 @@ export const useFormFields = (
     {
       name: "savingDeposit",
       type: "number",
-      label: "savingDeposit",
+      label: "",
       x: 770,
       y: 468,
       width: 170,
@@ -5602,7 +5556,7 @@ export const useFormFields = (
     {
       name: "providentFund",
       type: "number",
-      label: "providentFund",
+      label: "",
       x: 770,
       y: 484,
       width: 170,
@@ -5615,8 +5569,8 @@ export const useFormFields = (
     },
     {
       name: "otherInvestmentDesc",
-      type: "number",
-      label: "otherInvestment1",
+      type: "text",
+      label: "",
       x: 370,
       y: 502,
       width: 402,
@@ -5625,7 +5579,7 @@ export const useFormFields = (
       isVisible: true,
     },
     {
-      name: "otherInvestmentAmount",
+      name: "otherInvestment",
       type: "number",
       label: "",
       x: 770,

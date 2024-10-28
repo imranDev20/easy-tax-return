@@ -78,17 +78,16 @@ export const useCalculations = (
     return safeTotal;
   };
 
+  // page 11
   const calculateTotalFinancialAssets = () => {
     const fields: FormFieldName[] = [
       "shareDebentureUnitCertificate",
-      "bondsGovernment",
       "sanchayapatraSavingsCertificate",
       "depositPensionScheme",
       "loansGivenToOthers",
-      "nidValue",
       "savingDeposit",
       "providentFund",
-      "otherInvestmentAmount",
+      "otherInvestment",
     ];
 
     const total = fields.reduce((sum, field) => {
@@ -489,6 +488,73 @@ export const useCalculations = (
     return roundedTax;
   }, [watch, getValues, setValue, calculateNetTaxRebate]);
 
+  const calculateGrossWealth = useCallback(() => {
+    const fields: FormFieldName[] = [
+      "netWealthAtTheLastDateOfThisFinancialYear",
+      "totalLiabilitiesOutsideBusiness",
+    ];
+
+    const total = fields.reduce((sum, field) => {
+      const value = watch(field as keyof IndividualTaxReturnFormInput);
+      const numberValue = parseFloat(value?.toString() || "0");
+      return sum + (isNaN(numberValue) ? 0 : numberValue);
+    }, 0);
+
+    setValue("grossWealth", total.toFixed(2));
+    return total;
+  }, [setValue, watch]);
+
+  const calculateNetWealthLastDateOfThisFinancialYear = useCallback(() => {
+    const sumOfSourceOfFundPreviousYear = getValues(
+      "sumOfSourceOfFundAndPreviousYearsNetWealth"
+    );
+    const totalExpenseAndLoss = getValues("totalExpensesAndLoss");
+
+    const result =
+      parseFloat(sumOfSourceOfFundPreviousYear?.toString() || "0") -
+      parseFloat(totalExpenseAndLoss?.toString() || "0");
+
+    setValue("netWealthAtTheLastDateOfThisFinancialYear", result.toFixed(2));
+    calculateGrossWealth();
+  }, [getValues, setValue, calculateGrossWealth]);
+
+  const calculateSumOfSourceOfFund = useCallback(() => {
+    const fields: FormFieldName[] = [
+      "totalSourceOfFund",
+      "netWealthLastDateAmount",
+    ];
+
+    const total = fields.reduce((sum, field) => {
+      const value = watch(field as keyof IndividualTaxReturnFormInput);
+      const numberValue = parseFloat(value?.toString() || "0");
+      return sum + (isNaN(numberValue) ? 0 : numberValue);
+    }, 0);
+
+    setValue("sumOfSourceOfFundAndPreviousYearsNetWealth", total.toFixed(2));
+    calculateNetWealthLastDateOfThisFinancialYear();
+    return total;
+  }, [setValue, watch, calculateNetWealthLastDateOfThisFinancialYear]);
+
+  const calculateTotalSourceOfFunds = useCallback(() => {
+    const fields: FormFieldName[] = [
+      "totalIncomeShownInTheReturn",
+      "taxExemptedIncomeAndAllowance",
+      "receiptOfGiftOtherReceipts",
+    ];
+
+    const total = fields.reduce((sum, field) => {
+      const value = watch(field as keyof IndividualTaxReturnFormInput);
+      const numberValue = parseFloat(value?.toString() || "0");
+      return sum + (isNaN(numberValue) ? 0 : numberValue);
+    }, 0);
+
+    setValue("totalSourceOfFund", total.toFixed(2));
+
+    // Recalculate the
+    calculateSumOfSourceOfFund();
+    return total;
+  }, [setValue, watch, calculateSumOfSourceOfFund]);
+
   const calculateTotalIncome = useCallback(() => {
     const fields: FormFieldName[] = [
       "incomeFromEmployment",
@@ -516,8 +582,18 @@ export const useCalculations = (
     calculateTaxRebate();
     calculateGrossTax();
 
+    // Recalculate the total source of fund after total income changes
+    // From page 10
+    calculateTotalSourceOfFunds();
+
     return total;
-  }, [setValue, watch, calculateTaxRebate, calculateGrossTax]);
+  }, [
+    setValue,
+    watch,
+    calculateTaxRebate,
+    calculateGrossTax,
+    calculateTotalSourceOfFunds,
+  ]);
 
   const calculateTotalTaxDeductedOrCollected = () => {
     const securitiesSourceTax = parseFloat(
@@ -654,6 +730,35 @@ export const useCalculations = (
     };
   };
 
+  const calculateTotalTaxExempted = useCallback(() => {
+    // Get exempted amounts from private employment
+    const privateEmploymentExempted = parseFloat(
+      watch("exemptedAmountPrivateEmployment") || "0"
+    );
+
+    // Get exempted amounts from government employment
+    const govtEmploymentExempted = parseFloat(
+      watch("totalGovtEmployment.taxExempted") || "0"
+    );
+
+    // Get exempted amounts from capital gains
+    const capitalGainsExempted = parseFloat(
+      watch("incomeFromCapitaGainsTotal.exemptedAmount") || "0"
+    );
+
+    // Calculate total exempted amount
+    const totalExempted =
+      (isNaN(privateEmploymentExempted) ? 0 : privateEmploymentExempted) +
+      (isNaN(govtEmploymentExempted) ? 0 : govtEmploymentExempted) +
+      (isNaN(capitalGainsExempted) ? 0 : capitalGainsExempted);
+
+    // Set the total tax exempted value
+    setValue("taxExemptedTaxFreeIncome", totalExempted.toFixed(2));
+    setValue("taxExemptedIncomeAndAllowance", totalExempted.toFixed(2));
+
+    return totalExempted;
+  }, [watch, setValue]);
+
   const calculateTotalTaxableIncomeFromCapitalGains = () => {
     const fields = [
       "incomeFromShareTransferListedCompany",
@@ -705,6 +810,9 @@ export const useCalculations = (
 
     // Recalculate total income since capital gains is part of it
     calculateTotalIncome();
+
+    // Recalculate total tax free income
+    calculateTotalTaxExempted();
 
     return {
       totalCapitalGains,
@@ -769,6 +877,10 @@ export const useCalculations = (
         difference: totalAssets - totalCapitalAndLiabilities,
       });
     }
+
+    // for page 10, business capital
+    const businessCapital = totalAssets - liabilities;
+    setValue("businessCapital", businessCapital.toFixed(2));
 
     // Continue with income calculations if needed
     calculateTotalIncome();
@@ -906,15 +1018,6 @@ export const useCalculations = (
     setValue("totalRentValue", total.toFixed(2));
   };
 
-  const calculateBusinessCapitalDifference = () => {
-    const totalAssetOfBusiness = getValues("totalAssetOfBusiness");
-    const lessBusinessLiabilities = getValues("lessBusinessLiabilities");
-    const businessCapitalAmount =
-      parseFloat(totalAssetOfBusiness?.toString() || "0") -
-      parseFloat(lessBusinessLiabilities?.toString() || "0");
-    setValue("businessCapitalAmount1", businessCapitalAmount.toFixed(2));
-  };
-
   const calculateDirectorsShareholdingsInTheCompanies = () => {
     const fields: FormFieldName[] = [
       "directorsShareholdingCompanyValue1",
@@ -984,7 +1087,6 @@ export const useCalculations = (
     return safeResult;
   };
 
-  // Schedule 1
   const calculateScheduleOneGovtTotals = () => {
     const taxExemptedFields = [
       "specialAllowanceGovtEmployment",
@@ -1068,8 +1170,11 @@ export const useCalculations = (
     // for second page
     setValue("incomeFromEmployment", totalTaxable.toFixed(2));
 
-    calculateTotalSourceOfFunds(); // may need to delete this function
+    // Recalculate the total income
     calculateTotalIncome();
+
+    // Recalculate total tax free income
+    calculateTotalTaxExempted();
 
     return {
       totalIncome: isNaN(totalIncome) ? 0 : totalIncome,
@@ -1077,72 +1182,6 @@ export const useCalculations = (
       totalTaxable: isNaN(totalTaxable) ? 0 : totalTaxable,
     };
   };
-
-  // Image 8 statement of assests
-  const calculateGrossWealth = useCallback(() => {
-    const fields: FormFieldName[] = [
-      "netWealthAtTheLastDateOfThisFinancialYear",
-      "totalLiabilitiesOutsideBusiness",
-    ];
-
-    const total = fields.reduce((sum, field) => {
-      const value = watch(field as keyof IndividualTaxReturnFormInput);
-      const numberValue = parseFloat(value?.toString() || "0");
-      return sum + (isNaN(numberValue) ? 0 : numberValue);
-    }, 0);
-
-    setValue("grossWealth", total.toFixed(2));
-    return total;
-  }, [setValue, watch]);
-
-  const calculateNetWealthLastDateOfThisFinancialYear = useCallback(() => {
-    const sumOfSourceOfFundPreviousYear = getValues(
-      "sumOfSourceOfFundAndPreviousYearsNetWealth"
-    );
-    const totalExpenseAndLoss = getValues("totalExpensesAndLoss");
-
-    const result =
-      parseFloat(sumOfSourceOfFundPreviousYear?.toString() || "0") -
-      parseFloat(totalExpenseAndLoss?.toString() || "0");
-
-    setValue("netWealthAtTheLastDateOfThisFinancialYear", result.toFixed(2));
-    calculateGrossWealth();
-  }, [getValues, setValue, calculateGrossWealth]);
-
-  const calculateSumOfSourceOfFund = useCallback(() => {
-    const fields: FormFieldName[] = [
-      "totalSourceOfFund",
-      "netWealthLastDateAmount",
-    ];
-
-    const total = fields.reduce((sum, field) => {
-      const value = watch(field as keyof IndividualTaxReturnFormInput);
-      const numberValue = parseFloat(value?.toString() || "0");
-      return sum + (isNaN(numberValue) ? 0 : numberValue);
-    }, 0);
-
-    setValue("sumOfSourceOfFundAndPreviousYearsNetWealth", total.toFixed(2));
-    calculateNetWealthLastDateOfThisFinancialYear();
-    return total;
-  }, [setValue, watch, calculateNetWealthLastDateOfThisFinancialYear]);
-
-  const calculateTotalSourceOfFunds = useCallback(() => {
-    const fields: FormFieldName[] = [
-      "totalIncomeShownInTheReturn",
-      "taxExemptedIncomeAndAllowance",
-      "receiptOfGiftOtherReceipts",
-    ];
-
-    const total = fields.reduce((sum, field) => {
-      const value = watch(field as keyof IndividualTaxReturnFormInput);
-      const numberValue = parseFloat(value?.toString() || "0");
-      return sum + (isNaN(numberValue) ? 0 : numberValue);
-    }, 0);
-
-    setValue("totalSourceOfFund", total.toFixed(2));
-    calculateSumOfSourceOfFund();
-    return total;
-  }, [setValue, watch, calculateSumOfSourceOfFund]);
 
   // rebate
   const calculateTotalAllowableInvestmentContribution = useCallback(() => {
@@ -1237,12 +1276,14 @@ export const useCalculations = (
 
     setValue("incomeFromEmployment", totalIncomeFromSalary.toFixed(2)); // for the second page
 
-    calculateTotalSourceOfFunds();
     calculateTotalIncome();
 
     // Trigger rebate calculation after setting the value of self and employer's contribution
     // setting the value of self and employer's contribution in onBlur
     calculateTotalAllowableInvestmentContribution();
+
+    // Recalculate total tax free income
+    calculateTotalTaxExempted();
 
     return {
       totalIncome: isNaN(totalIncome) ? 0 : totalIncome,
@@ -1250,9 +1291,9 @@ export const useCalculations = (
   }, [
     watch,
     setValue,
-    calculateTotalSourceOfFunds,
     calculateTotalIncome,
     calculateTotalAllowableInvestmentContribution,
+    calculateTotalTaxExempted,
   ]);
 
   const calculateTotalExpenseAndLoss = () => {
@@ -1298,7 +1339,6 @@ export const useCalculations = (
     calculateTotalAdmissibleDeduction,
     calculateRepairCollectionAmount,
     calculateTotalRentValue,
-    calculateBusinessCapitalDifference,
     calculateDirectorsShareholdingsInTheCompanies,
     calculateBusinessCapitalOfPartnershipFirm,
     calculateTotalTaxableIncomeFromCapitalGains,

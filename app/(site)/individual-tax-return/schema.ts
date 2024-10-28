@@ -315,7 +315,6 @@ export const individualTaxReturnSchema = z.object({
   institutionalLiabilities: z.string().optional(),
   nonInstitutionalLiabilities: z.string().optional(),
   otherLiabilities: z.string().optional(),
-  totalAssetOfBusiness: z.string().optional(),
   lessBusinessLiabilities: z.string().optional(),
   directorsShareholdingCompanyName1: z.string().optional(),
   directorsShareholdingCompanyName2: z.string().optional(),
@@ -346,7 +345,7 @@ export const individualTaxReturnSchema = z.object({
   netWealthAtTheLastDateOfThisFinancialYear: z.string().optional(),
   totalLiabilitiesOutsideBusiness: z.string().optional(),
   grossWealth: z.string().optional(),
-  businessCapitalAmount1: z.string().optional(),
+  businessCapital: z.string().optional(),
   directorsShareholdingsInTheCompanies: z.string().optional(),
   businessCapitalOfPartnershipFirm: z.string().optional(),
 
@@ -372,17 +371,17 @@ export const individualTaxReturnSchema = z.object({
   agriculturalLocationValue3: z.string().optional(),
 
   shareDebentureUnitCertificate: z.string().optional(),
-  bondsGovernment: z.string().optional(),
   sanchayapatraSavingsCertificate: z.string().optional(),
   depositPensionScheme: z.string().optional(),
+
+  loanGivenToOthersName: z.string().optional(),
+  loanGiventoOthersNid: z.string().optional(),
   loansGivenToOthers: z.string().optional(),
-  name: z.string().optional(),
-  nid: z.string().optional(),
-  nidValue: z.string().optional(),
+
   savingDeposit: z.string().optional(),
   providentFund: z.string().optional(),
   otherInvestmentDesc: z.string().optional(),
-  otherInvestmentAmount: z.string().optional(),
+  otherInvestment: z.string().optional(),
 
   typeOfMotorVehicle1: z.string().optional(),
   typeOfMotorVehicle2: z.string().optional(),
