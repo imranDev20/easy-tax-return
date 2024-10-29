@@ -12,10 +12,12 @@ import { Button } from "@/components/ui/button";
 import {
   ChevronDown,
   CreditCard,
+  FileCheck,
   History,
   LayoutDashboard,
   LogIn,
   LogOut,
+  Save,
   User,
 } from "lucide-react";
 import { useSession, signOut } from "next-auth/react";
@@ -361,19 +363,26 @@ export default function Header() {
                 </Link>
               </DropdownMenuItem>
               <DropdownMenuItem>
-                <Link href="/history" className="flex items-center w-full">
-                  <History className="mr-2 h-4 w-4" />
-                  History
+                <Link
+                  href="/profile/saved"
+                  className="flex items-center w-full"
+                >
+                  <Save className="mr-2 h-4 w-4" />
+                  Saved Returns
                 </Link>
               </DropdownMenuItem>
               <DropdownMenuItem>
-                <Link href="/transactions" className="flex items-center w-full">
-                  <CreditCard className="mr-2 h-4 w-4" />
-                  Transactions
+                <Link
+                  href="/profile/submitted"
+                  className="flex items-center w-full"
+                >
+                  <FileCheck className="mr-2 h-4 w-4" />
+                  Submitted Returns
                 </Link>
               </DropdownMenuItem>
             </>
           )}
+
           <DropdownMenuSeparator className="bg-slate-200" />
           <DropdownMenuItem
             onClick={async () => await signOut()}
