@@ -2,59 +2,129 @@
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { useTransition } from "react";
+import { updateUser } from "./actions";
+import { useToast } from "@/hooks/use-toast";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { useState } from "react";
-import { Pencil, Check, X } from "lucide-react";
+import { useState, useEffect } from "react";
+import { Check, Loader2, Pencil, X } from "lucide-react";
+import { Prisma } from "@prisma/client";
 
-// Helper function to ensure consistent date formatting
-const formatDate = (date: Date) => {
-  return date.toLocaleDateString("en-US", {
+function formatDate(date: Date | string) {
+  const d = new Date(date);
+  return d.toLocaleDateString("en-US", {
     year: "numeric",
     month: "2-digit",
     day: "2-digit",
   });
+}
+
+type UpdateUserData = {
+  phone?: string;
 };
 
-// Mock user data
-const user = {
-  id: "clq1234567890",
-  name: "John Doe",
-  email: "john.doe@example.com",
-  phone: "+1 (555) 123-4567",
-  image: "https://api.dicebear.com/7.x/avataaars/svg?seed=John",
-  createdAt: new Date("2023-01-01"),
-  updatedAt: new Date(),
-  individualTax: {
-    id: "tax123",
-    tin: "123456789012",
-    createdAt: new Date("2023-06-15"),
-    updatedAt: new Date("2023-06-15"),
-  },
-};
+type UserWithOrders = Prisma.UserGetPayload<{
+  include: {
+    orders: {
+      include: {
+        individualTaxes: true;
+      };
+    };
+  };
+}>;
 
 export default function ProfilePage() {
+  const [isPending, startTransition] = useTransition();
+  const { toast } = useToast();
   const [isEditing, setIsEditing] = useState(false);
-  const [phoneNumber, setPhoneNumber] = useState(user.phone);
-  const [tempPhone, setTempPhone] = useState(user.phone);
+  const [phoneNumber, setPhoneNumber] = useState("");
+  const [user, setUser] = useState<UserWithOrders | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
-  const handleEdit = () => {
-    setIsEditing(true);
-    setTempPhone(phoneNumber);
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        const response = await fetch("/api/users/me");
+        if (!response.ok) {
+          throw new Error("Failed to fetch user data");
+        }
+        const userData = await response.json();
+        setUser(userData);
+        setPhoneNumber(userData.phone || "");
+      } catch (err) {
+        setError(err instanceof Error ? err.message : "An error occurred");
+        toast({
+          title: "Error",
+          description: "Failed to load profile data",
+          variant: "destructive",
+        });
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchUserData();
+  }, [toast]);
+
+  const handleUpdate = async (data: UpdateUserData) => {
+    startTransition(async () => {
+      try {
+        await updateUser(data);
+        setIsEditing(false);
+
+        // Update local user state with new phone number
+        if (user) {
+          setUser({ ...user, phone: data.phone || null });
+        }
+
+        toast({
+          title: "Success",
+          description: "Phone number updated successfully",
+        });
+      } catch (error) {
+        toast({
+          title: "Error",
+          description:
+            error instanceof Error ? error.message : "Failed to update profile",
+          variant: "destructive",
+        });
+      }
+    });
   };
 
-  const handleSave = () => {
-    setPhoneNumber(tempPhone);
-    setIsEditing(false);
+  const handlePhoneSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    handleUpdate({ phone: phoneNumber });
   };
 
-  const handleCancel = () => {
-    setTempPhone(phoneNumber);
-    setIsEditing(false);
-  };
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center min-h-[500px]">
+        <Loader2 className="h-8 w-8 animate-spin" />
+      </div>
+    );
+  }
+
+  if (error || !user) {
+    return (
+      <div className="container mx-auto text-center py-8">
+        <h1 className="text-2xl font-bold text-red-500">
+          Error Loading Profile
+        </h1>
+        <p className="text-gray-600 mt-2">
+          {error || "Failed to load user data"}
+        </p>
+        <Button onClick={() => window.location.reload()} className="mt-4">
+          Try Again
+        </Button>
+      </div>
+    );
+  }
 
   return (
-    <div className="container mx-auto min-h-[500px]">
+    <div className="container mx-auto">
       <h1 className="text-4xl font-bold text-primary mb-8">My Profile</h1>
 
       <div className="grid gap-6">
@@ -80,41 +150,51 @@ export default function ProfilePage() {
                 </dt>
                 <dd className="mt-1 text-sm text-gray-900 flex items-center gap-2">
                   {isEditing ? (
-                    <div className="flex items-center gap-2">
+                    <form onSubmit={handlePhoneSubmit} className="flex gap-2">
                       <Input
-                        value={tempPhone}
-                        onChange={(e) => setTempPhone(e.target.value)}
+                        type="tel"
+                        value={phoneNumber}
+                        onChange={(e) => setPhoneNumber(e.target.value)}
+                        placeholder="+1234567890"
                         className="w-[200px]"
                       />
                       <Button
+                        type="submit"
                         size="icon"
-                        variant="ghost"
-                        onClick={handleSave}
                         className="h-8 w-8"
+                        disabled={isPending}
                       >
-                        <Check className="h-4 w-4" />
+                        {isPending ? (
+                          <Loader2 className="h-4 w-4 animate-spin" />
+                        ) : (
+                          <Check className="h-4 w-4" />
+                        )}
                       </Button>
                       <Button
-                        size="icon"
+                        type="button"
                         variant="ghost"
-                        onClick={handleCancel}
+                        size="icon"
                         className="h-8 w-8"
+                        onClick={() => {
+                          setIsEditing(false);
+                          setPhoneNumber(user.phone || "");
+                        }}
                       >
                         <X className="h-4 w-4" />
                       </Button>
-                    </div>
+                    </form>
                   ) : (
-                    <div className="flex items-center gap-2">
-                      <span>{phoneNumber}</span>
+                    <>
+                      <span>{user.phone || "Not set"}</span>
                       <Button
-                        size="icon"
                         variant="ghost"
-                        onClick={handleEdit}
+                        size="icon"
                         className="h-8 w-8"
+                        onClick={() => setIsEditing(true)}
                       >
                         <Pencil className="h-4 w-4" />
                       </Button>
-                    </div>
+                    </>
                   )}
                 </dd>
               </div>
@@ -130,34 +210,39 @@ export default function ProfilePage() {
           </CardContent>
         </Card>
 
-        {/* Tax Returns Card */}
+        {/* Latest Tax Returns Card */}
         <Card>
           <CardHeader>
-            <CardTitle>Tax Returns</CardTitle>
+            <CardTitle>Latest Tax Returns</CardTitle>
           </CardHeader>
           <CardContent>
-            {user.individualTax ? (
+            {user.orders && user.orders.length > 0 ? (
               <div className="space-y-4">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div>
-                    <dt className="text-sm font-medium text-gray-500">TIN</dt>
-                    <dd className="mt-1 text-sm text-gray-900">
-                      {user.individualTax.tin}
-                    </dd>
+                {user.orders.map((order) => (
+                  <div
+                    key={order.id}
+                    className="flex justify-between items-center border-b pb-4 last:border-0"
+                  >
+                    <div>
+                      <p className="text-sm font-medium">Return #{order.id}</p>
+                      <p className="text-sm text-muted-foreground">
+                        {formatDate(order.createdAt)}
+                      </p>
+                    </div>
+                    <div>
+                      <p className="text-sm font-medium">
+                        ${order.amount?.toFixed(2)}
+                      </p>
+                      <p className="text-sm text-muted-foreground capitalize">
+                        {order.paymentStatus.toLowerCase()}
+                      </p>
+                    </div>
                   </div>
-                  <div>
-                    <dt className="text-sm font-medium text-gray-500">
-                      Latest Filing
-                    </dt>
-                    <dd className="mt-1 text-sm text-gray-900">
-                      {formatDate(user.individualTax.updatedAt)}
-                    </dd>
-                  </div>
-                </div>
+                ))}
               </div>
             ) : (
               <p className="text-sm text-muted-foreground">
-                No tax returns filed yet.
+                No tax returns yet.
               </p>
             )}
           </CardContent>

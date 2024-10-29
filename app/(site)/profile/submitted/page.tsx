@@ -77,14 +77,11 @@ const formatPaymentMethod = (method: PaymentMethod) => {
 
 export default function UserSubmittedTaxReturnsPage() {
   return (
-    <div className="container mx-auto py-8">
+    <div className="container mx-auto min-h-[500px]">
       <div className="flex justify-between items-center mb-8">
         <h1 className="text-4xl font-bold text-primary">
           Submitted Tax Returns
         </h1>
-        <Button asChild>
-          <Link href="/tax-return/new">Start New Return</Link>
-        </Button>
       </div>
 
       {submittedReturns.length === 0 ? (
