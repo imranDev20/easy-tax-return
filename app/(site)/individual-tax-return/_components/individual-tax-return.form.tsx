@@ -44,6 +44,7 @@ import { NumericFormat, numericFormatter } from "react-number-format";
 import { FormField } from "@/types/tax-return-form";
 import { useTaxReturnForm } from "@/hooks/use-tax-return-form";
 import { generatePDF } from "@/lib/pdf";
+import FloatingErrorSummary from "./floating-error-summary";
 
 const images = [
   ImageOne,
@@ -735,6 +736,7 @@ const IndividualTaxReturnForm: React.FC = () => {
 
                 {/* Responsive Floating Bar */}
                 <div className="fixed bottom-0 left-0 right-0 bg-white shadow-lg border-t border-gray-200">
+                  <FloatingErrorSummary />
                   <div className="container mx-auto flex flex-col md:flex-row justify-between items-center py-4 px-6">
                     <div className="hidden md:flex items-center space-x-6 mb-4 md:mb-0">
                       <div className="flex items-center space-x-2">
@@ -767,6 +769,7 @@ const IndividualTaxReturnForm: React.FC = () => {
                     </div>
 
                     <div className="flex items-center space-x-4">
+                      <Button variant="outline">Save for Later</Button>
                       <Button
                         type="submit"
                         disabled={isPending || !allImagesLoaded}
@@ -780,7 +783,7 @@ const IndividualTaxReturnForm: React.FC = () => {
                         ) : !allImagesLoaded ? (
                           "Loading Form..."
                         ) : (
-                          "Save PDF"
+                          "Submit"
                         )}
                       </Button>
                     </div>
