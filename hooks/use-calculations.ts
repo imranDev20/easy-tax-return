@@ -8,7 +8,7 @@ import {
 import { IndividualTaxReturnFormInput } from "@/app/(site)/individual-tax-return/schema";
 import { RepairCollection } from "@prisma/client";
 import { useCallback } from "react";
-import { FormFieldName } from "@/types/tax-return-form";
+import { FormField, FormFieldName } from "@/types/tax-return-form";
 
 export const useCalculations = (
   watch: UseFormWatch<IndividualTaxReturnFormInput>,
@@ -201,7 +201,7 @@ export const useCalculations = (
     calculateTotalAssetsInBangladesh();
 
     return safeTotal;
-  }, [watch, setValue]);
+  }, [watch, setValue, calculateTotalAssetsInBangladesh]);
 
   const calculateTotalMotorValue = () => {
     const fields: FormFieldName[] = ["motorValue1", "motorValue2"];
@@ -386,9 +386,9 @@ export const useCalculations = (
     const fifteenPercentOfInvestments = totalAllowableInvestments * 0.15;
     const maxRebateCap = 1000000;
 
-    setValue("totalIncomeRebateTable.rebate", threePercentOfIncome.toString());
+    setValue("totalIncomeRebateTable", threePercentOfIncome.toString());
     setValue(
-      "totalAllowableInvestmentRebateTable.rebate",
+      "totalAllowableInvestmentRebateTable",
       fifteenPercentOfInvestments.toString()
     );
 
@@ -808,12 +808,12 @@ export const useCalculations = (
   const calculateTotalTaxExempted = useCallback(() => {
     // Get exempted amounts from private employment
     const privateEmploymentExempted = parseFloat(
-      watch("exemptedAmountPrivateEmployment") || "0"
+      watch("exemptedAmountPrivate") || "0"
     );
 
     // Get exempted amounts from government employment
     const govtEmploymentExempted = parseFloat(
-      watch("totalGovtEmployment.taxExempted") || "0"
+      watch("totalGovt.taxExempted") || "0"
     );
 
     // Get exempted amounts from capital gains
@@ -980,15 +980,13 @@ export const useCalculations = (
   };
 
   const calcualateScheduleOneOtherAllowanceGovtTaxable = () => {
-    const incomeAmount = parseFloat(
-      watch("otherAllowanceGovtEmployment.amount") || "0"
-    );
+    const incomeAmount = parseFloat(watch("otherAllowanceGovt.amount") || "0");
     const taxExempted = parseFloat(
-      watch("otherAllowanceGovtEmployment.taxExempted") || "0"
+      watch("otherAllowanceGovt.taxExempted") || "0"
     );
 
     const result = incomeAmount - taxExempted;
-    setValue("otherAllowanceGovtEmployment.taxable", result.toFixed(2));
+    setValue("otherAllowanceGovt.taxable", result.toFixed(2));
 
     return result;
   };
@@ -1172,24 +1170,24 @@ export const useCalculations = (
 
   const calculateScheduleOneGovtTotals = () => {
     const taxExemptedFields = [
-      "specialAllowanceGovtEmployment",
-      "houseRentAllowanceGovtEmployment",
-      "medicalAllowanceGovtEmployment",
-      "conveyanceAllowanceGovtEmployment",
-      "allowanceForSupportStaffGovtEmployment",
-      "leaveAllowanceGovtEmployment",
-      "honorariumRewardGovtEmployment",
-      "banglaNoboborshoAllowancesGovtEmployment",
-      "overtimeAllowanceGovtEmployment",
-      "interestAccruedProvidentFundGovtEmployment",
-      "lumpGrantGovtEmployment",
-      "gratuityGovtEmployment",
+      "specialAllowanceGovt",
+      "houseRentAllowanceGovt",
+      "medicalAllowanceGovt",
+      "conveyanceAllowanceGovt",
+      "allowanceForSupportStaffGovt",
+      "leaveAllowanceGovt",
+      "honorariumRewardGovt",
+      "banglaNoboborshoAllowancesGovt",
+      "overtimeAllowanceGovt",
+      "interestAccruedProvidentFundGovt",
+      "lumpGrantGovt",
+      "gratuityGovt",
     ] as const;
 
     const taxableFields = [
-      "basicPayGovtEmployment",
-      "arrearPayGovtEmployment",
-      "festivalAllowanceGovtEmployment",
+      "basicPayGovt",
+      "arrearPayGovt",
+      "festivalAllowanceGovt",
     ] as const;
 
     let totalIncome = 0;
@@ -1229,7 +1227,7 @@ export const useCalculations = (
     }
 
     // Handle otherAllowanceGovtEmployment separately
-    const otherAllowance = watch("otherAllowanceGovtEmployment");
+    const otherAllowance = watch("otherAllowanceGovt");
     if (
       otherAllowance &&
       typeof otherAllowance === "object" &&
@@ -1246,9 +1244,9 @@ export const useCalculations = (
     }
 
     // Set the calculated values
-    setValue("totalGovtEmployment.amount", totalIncome.toFixed(2));
-    setValue("totalGovtEmployment.taxExempted", totalTaxExempted.toFixed(2));
-    setValue("totalGovtEmployment.taxable", totalTaxable.toFixed(2));
+    setValue("totalGovt.amount", totalIncome.toFixed(2));
+    setValue("totalGovt.taxExempted", totalTaxExempted.toFixed(2));
+    setValue("totalGovt.taxable", totalTaxable.toFixed(2));
 
     // for second page
     setValue("incomeFromEmployment", totalTaxable.toFixed(2));
@@ -1297,18 +1295,18 @@ export const useCalculations = (
 
   const calculatePrivateEmploymentTotals = useCallback(() => {
     const fields: FormFieldName[] = [
-      "basicPayPrivateEmployment",
-      "allowancesPrivateEmployment",
-      "advanceArrearSalaryPrivateEmployment",
-      "gratuityAnnuityPensionOrSimilarBenefitPrivateEmployment",
-      "perquisitesPrivateEmployment",
-      "receiptInLieuOfOrInAdditionToSalaryOrWagesPrivateEmployment",
-      "incomeFromEmployeeShareSchemePrivateEmployment",
-      "accommodationFacilityPrivateEmployment",
-      "transportFacilityPrivateEmployment",
-      "anyOtherFacilityProvidedByEmployerPrivateEmployment",
-      "employerContributionToProvidentFundPrivateEmployment",
-      "otherIncomePrivateEmployment",
+      "basicPayPrivate",
+      "allowancesPrivate",
+      "advanceArrearSalaryPrivate",
+      "gratuityAnnuityPensionOrSimilarBenefitPrivate",
+      "perquisitesPrivate",
+      "receiptInLieuOfOrInAdditionToSalaryOrWagesPrivate",
+      "incomeFromEmployeeShareSchemePrivate",
+      "accommodationFacilityPrivate",
+      "transportFacilityPrivate",
+      "anyOtherFacilityProvidedByEmployerPrivate",
+      "employerContributionToProvidentFundPrivate",
+      "otherIncomePrivate",
     ] as const;
 
     let totalIncome = 0;
@@ -1333,7 +1331,7 @@ export const useCalculations = (
     if (vehicleCC && transportFacilityChecked) {
       const transportAmount = vehicleCC === "LT_EQ_2500" ? 120000 : 300000;
       const currentTransportIncome = parseFloat(
-        watch("transportFacilityPrivateEmployment") || "0"
+        watch("transportFacilityPrivate") || "0"
       );
 
       if (currentTransportIncome) {
@@ -1341,21 +1339,15 @@ export const useCalculations = (
       }
       totalIncome += transportAmount;
 
-      setValue(
-        "transportFacilityPrivateEmployment",
-        transportAmount.toFixed(2)
-      );
+      setValue("transportFacilityPrivate", transportAmount.toFixed(2));
     }
 
     const totalExempted = Math.round(Math.min(totalIncome / 3, 450000));
     const totalIncomeFromSalary = totalIncome - totalExempted;
 
-    setValue("exemptedAmountPrivateEmployment", totalExempted.toFixed(2));
-    setValue("totalSalaryReceivedPrivateEmployment", totalIncome.toFixed(2));
-    setValue(
-      "totalIncomeFromSalaryPrivateEmployment",
-      totalIncomeFromSalary.toFixed(2)
-    );
+    setValue("exemptedAmountPrivate", totalExempted.toFixed(2));
+    setValue("totalSalaryReceivedPrivate", totalIncome.toFixed(2));
+    setValue("totalIncomeFromSalaryPrivate", totalIncomeFromSalary.toFixed(2));
 
     setValue("incomeFromEmployment", totalIncomeFromSalary.toFixed(2)); // for the second page
 

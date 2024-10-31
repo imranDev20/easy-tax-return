@@ -36,7 +36,6 @@ import ImageNine from "@/public/images/9.png";
 import ImageTen from "@/public/images/10.png";
 import ImageEleven from "@/public/images/11.png";
 import ImageTwelve from "@/public/images/12.png";
-import { createIndividualTaxReturn, createPayment } from "../actions";
 import { useToast } from "@/hooks/use-toast";
 import { useRouter } from "next/navigation";
 import CustomCheckbox from "@/components/custom/checkbox";
@@ -772,7 +771,7 @@ const IndividualTaxReturnForm: React.FC = () => {
                       <Button variant="outline">Save for Later</Button>
                       <Button
                         type="submit"
-                        disabled={isPending || !allImagesLoaded}
+                        disabled={isPending}
                         className="w-full"
                       >
                         {isPending ? (
@@ -780,8 +779,6 @@ const IndividualTaxReturnForm: React.FC = () => {
                             <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                             Generating PDF...
                           </>
-                        ) : !allImagesLoaded ? (
-                          "Loading Form..."
                         ) : (
                           "Submit"
                         )}
