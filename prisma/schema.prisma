@@ -68,19 +68,19 @@ enum TransportCCType {
 }
 
 model User {
-  id            String            @id @default(cuid())
-  name          String?
-  email         String?           @unique
-  phone         String?
-  emailVerified DateTime?
-  image         String?
-  password      String?
-  role          Role              @default(USER)
-  accounts      Account[]
-  orders        Order[] // Add this line
-  individualTax IndividualTaxes[] // Changed to array to indicate one-to-many
-  createdAt     DateTime          @default(now())
-  updatedAt     DateTime          @updatedAt
+  id              String            @id @default(cuid())
+  name            String?
+  email           String?           @unique
+  phone           String?
+  emailVerified   DateTime?
+  image           String?
+  password        String?
+  role            Role              @default(USER)
+  accounts        Account[]
+  orders          Order[] // Add this line
+  savedTaxReturns SavedTaxReturns[]
+  createdAt       DateTime          @default(now())
+  updatedAt       DateTime          @updatedAt
 }
 
 model Account {
@@ -103,11 +103,9 @@ model Account {
 }
 
 model IndividualTaxes {
-  id     String @id @default(cuid())
-  userId String
-  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
-
+  id                                                String                  @id @default(cuid())
   order                                             Order?
+  savedTaxReturn                                    SavedTaxReturns?
   // related to form  fields
   // Image 1
   taxpayerName                                      String
@@ -571,6 +569,26 @@ model PersonalExpense {
   taxDeductedCollectedAtSourceDetails         IndividualTaxes? @relation("TaxDeductedCollectedAtSource")
   interestPaidDetails                         IndividualTaxes? @relation("InterestPaid")
   totalExpenseIndividualPersonDetails         IndividualTaxes? @relation("TotalExpenseIndividualPerson")
+}
+
+model SavedTaxReturns {
+  id                String  @id @default(cuid())
+  userId            String
+  individualTaxesId String? @unique
+  completionPercent Float   @default(0)
+  lastSavedPage     Int     @default(1)
+  lastEditedField   String?
+  notes             String? // Optional notes about the saved state
+
+  // Relations
+  user            User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  individualTaxes IndividualTaxes? @relation(fields: [individualTaxesId], references: [id], onDelete: SetNull)
+
+  // Timestamps
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([userId])
 }
 
 enum PaymentMethod {

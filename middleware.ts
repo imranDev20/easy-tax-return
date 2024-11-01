@@ -37,8 +37,6 @@ export default withAuth(
     // Protect user-specific routes
     if (
       path.startsWith("/profile") ||
-      path.startsWith("/history") ||
-      path.startsWith("/transactions") ||
       path.startsWith("/individual-tax-return")
     ) {
       if (!token) {
@@ -71,7 +69,6 @@ export const config = {
   matcher: [
     "/admin/:path*",
     "/profile",
-    "/history",
     "/transactions",
     "/individual-tax-return",
     "/login",

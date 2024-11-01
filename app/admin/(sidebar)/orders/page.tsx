@@ -1,6 +1,6 @@
 import { Suspense } from "react";
 import { ContentLayout } from "../_components/content-layout";
-import DynamicBreadcrumb from "../_components/dynamic-breadcrumb";
+import DynamicBreadcrumb from "../../../../components/custom/dynamic-breadcrumb";
 import { PaymentStatus } from "@prisma/client";
 import { getTaxReturnOrders } from "./actions";
 import { ReusablePagination } from "../_components/dynamic-pagination";

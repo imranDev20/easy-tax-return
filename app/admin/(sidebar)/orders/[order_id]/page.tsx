@@ -23,7 +23,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Check, Loader2, User, Mail, Phone, CreditCard } from "lucide-react";
 import { PAYMENT_STATUS_OPTIONS } from "@/lib/constants";
-import DynamicBreadcrumb from "../../_components/dynamic-breadcrumb";
+import DynamicBreadcrumb from "../../../../../components/custom/dynamic-breadcrumb";
 
 const paymentMethodColors = {
   BKASH: "bg-pink-100 text-pink-800 border-pink-200 hover:bg-pink-100",

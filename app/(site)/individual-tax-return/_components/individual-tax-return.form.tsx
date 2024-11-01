@@ -18,7 +18,7 @@ import SignatureField from "@/components/custom/signature";
 import { Button } from "@/components/ui/button";
 import { debounce, isFieldRequired, snakeToNormalText } from "@/lib/utils";
 import "flatpickr/dist/themes/airbnb.css";
-import { ArrowLeft, ArrowRight, Loader2, Menu } from "lucide-react";
+import { ArrowLeft, ArrowRight, Download, Loader2, Menu } from "lucide-react";
 import {
   IndividualTaxReturnFormInput,
   individualTaxReturnSchema,
@@ -45,6 +45,7 @@ import { useTaxReturnForm } from "@/hooks/use-tax-return-form";
 import { generatePDF } from "@/lib/pdf";
 import FloatingErrorSummary from "./floating-error-summary";
 import { createTaxReturnAndOrder } from "../actions";
+import { Prisma } from "@prisma/client";
 
 const images = [
   ImageOne,
@@ -64,6 +65,12 @@ const images = [
 interface Image {
   src: string;
 }
+
+type OrderWithRelation = Prisma.OrderGetPayload<{
+  include: {
+    individualTaxes: true;
+  };
+}>;
 
 export const createDebugOverlay = (
   images: Image[],
@@ -198,7 +205,11 @@ export const createDebugOverlay = (
   });
 };
 
-const IndividualTaxReturnForm: React.FC = () => {
+const IndividualTaxReturnForm = ({
+  taxReturnOrder,
+}: {
+  taxReturnOrder?: OrderWithRelation;
+}) => {
   const [scale, setScale] = useState(1);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [targetImageIndex, setTargetImageIndex] = useState(0);
@@ -426,13 +437,24 @@ const IndividualTaxReturnForm: React.FC = () => {
   ) => {
     startTransition(async () => {
       try {
-        // await generatePDF(images, formFields, data);
-
         const response = await createTaxReturnAndOrder(data);
-        console.log(response);
-        console.log(data);
+        if (response.data?.order.id) {
+          // Redirect to the profile details page with the new tax return ID
+          router.push(`/profile/submitted/${response.data.order.id}`);
+        } else {
+          toast({
+            title: "Error",
+            description: "Could not create tax return. Please try again.",
+            variant: "destructive",
+          });
+        }
       } catch (error) {
-        console.error("Error generating PDF:", error);
+        console.error("Error submitting tax return:", error);
+        toast({
+          title: "Error",
+          description: "Something went wrong. Please try again.",
+          variant: "destructive",
+        });
       }
     });
   };
@@ -649,166 +671,196 @@ const IndividualTaxReturnForm: React.FC = () => {
   const allImagesLoaded = loadedImages.every((loaded) => loaded);
 
   return (
-    <div className="bg-lightGray min-h-screen">
-      <div className="container mx-auto py-12">
-        <h1 className="text-4xl md:text-5xl font-bold text-primary mb-4 font-serif text-center">
-          Online Tax Return Form
-        </h1>
-        <p className="text-gray-700 mb-8 text-center max-w-2xl mx-auto">
-          Complete your tax return easily and securely. Our form is designed to
-          guide you through the process step by step.
-        </p>
+    <>
+      <div className="flex flex-col items-center justify-center p-8 border-b">
+        <Button
+          size="lg"
+          onClick={() => {
+            startTransition(async () => {
+              try {
+                await generatePDF(images, formFields, getValues());
+                toast({
+                  title: "Success",
+                  description:
+                    "PDF has been generated and downloaded successfully.",
+                  variant: "success",
+                });
+              } catch (error) {
+                console.error("Error generating PDF:", error);
+                toast({
+                  title: "Error",
+                  description: "Failed to generate PDF. Please try again.",
+                  variant: "destructive",
+                });
+              }
+            });
+          }}
+          disabled={isPending || taxReturnOrder?.paymentStatus !== "PAID"}
+          className="gap-3 py-8 px-12 text-xl font-semibold shadow-lg hover:shadow-xl transform transition hover:-translate-y-1"
+        >
+          {isPending ? (
+            <>
+              <Loader2 className="h-6 w-6 animate-spin" />
+              Generating PDF...
+            </>
+          ) : (
+            <>
+              <Download className="h-6 w-6" />
+              Download Tax Return as PDF
+            </>
+          )}
+        </Button>
+      </div>
 
-        <div className="bg-white shadow-lg rounded-lg">
-          <div className="p-6">
-            <FormProvider {...form}>
-              <form onSubmit={handleSubmit(onSubmit)}>
-                <div className="relative" ref={containerRef}>
-                  {images.map((image, index) => (
-                    <div
-                      key={index}
-                      ref={setImageRef(index)}
-                      className="relative border border-gray-200 mb-8 rounded-lg"
-                    >
-                      <div className="relative">
-                        {!loadedImages[index] && (
-                          <div className="absolute inset-0 flex items-center justify-center bg-gray-200 rounded-lg">
-                            <Loader2 className="w-20 h-20 animate-spin text-primary" />
-                          </div>
-                        )}
-                        <Image
-                          src={image}
-                          loading="lazy"
-                          placeholder="blur"
-                          alt={`Form Background ${index + 1}`}
-                          layout="responsive"
-                          className={`rounded-lg transition-opacity duration-300 ${
-                            loadedImages[index] ? "opacity-100" : "opacity-0"
-                          }`}
-                          onLoad={() => handleImageLoad(index)}
-                        />
-                      </div>
-                      {loadedImages[index] && (
-                        <div
-                          ref={setFormContainerRef(index)}
-                          className="absolute top-0 left-0 w-full h-full"
-                        >
-                          {formFields.map((field) => renderField(field, index))}
+      <div className="bg-white shadow-lg rounded-lg">
+        <div className="p-6">
+          <FormProvider {...form}>
+            <form onSubmit={handleSubmit(onSubmit)}>
+              <div className="relative" ref={containerRef}>
+                {images.map((image, index) => (
+                  <div
+                    key={index}
+                    ref={setImageRef(index)}
+                    className="relative border border-gray-200 mb-8 rounded-lg"
+                  >
+                    <div className="relative">
+                      {!loadedImages[index] && (
+                        <div className="absolute inset-0 flex items-center justify-center bg-gray-200 rounded-lg">
+                          <Loader2 className="w-20 h-20 animate-spin text-primary" />
                         </div>
                       )}
+                      <Image
+                        src={image}
+                        loading="lazy"
+                        placeholder="blur"
+                        alt={`Form Background ${index + 1}`}
+                        layout="responsive"
+                        className={`rounded-lg transition-opacity duration-300 ${
+                          loadedImages[index] ? "opacity-100" : "opacity-0"
+                        }`}
+                        onLoad={() => handleImageLoad(index)}
+                      />
                     </div>
-                  ))}
-                </div>
-
-                {/* Responsive Scrollspy */}
-                {isMobile ? (
-                  <Button
-                    onClick={() => setIsScrollspyOpen(!isScrollspyOpen)}
-                    className="fixed right-10 bottom-10 z-20 bg-white shadow-lg rounded-full p-2"
-                  >
-                    <Menu className="h-6 w-6" />
-                  </Button>
-                ) : null}
-
-                <div
-                  className={`fixed right-4 top-1/2 transform -translate-y-1/2 z-10 bg-white rounded-full shadow-lg p-2 transition-all duration-300 ${
-                    isMobile
-                      ? isScrollspyOpen
-                        ? "opacity-100 visible"
-                        : "opacity-0 invisible"
-                      : ""
-                  }`}
-                >
-                  {images.map((_, index) => (
-                    <button
-                      key={index}
-                      type="button"
-                      onClick={() => {
-                        setTargetImageIndex(index);
-                        if (isMobile) setIsScrollspyOpen(false);
-                      }}
-                      className={`block mb-2 w-8 h-8 rounded-full transition-all duration-300 ${
-                        currentImageIndex === index
-                          ? "bg-primary text-white scale-110"
-                          : "bg-gray-200 hover:bg-gray-300"
-                      }`}
-                    >
-                      {index + 1}
-                    </button>
-                  ))}
-                </div>
-
-                {/* Responsive Floating Bar */}
-                <div className="fixed bottom-0 left-0 right-0 bg-white shadow-lg border-t border-gray-200">
-                  <FloatingErrorSummary />
-                  <div className="container mx-auto flex flex-col md:flex-row justify-between items-center py-4 px-6">
-                    <div className="hidden md:flex items-center space-x-6 mb-4 md:mb-0">
-                      <div className="flex items-center space-x-2">
-                        <Button
-                          type="button"
-                          variant="outline"
-                          size="icon"
-                          className="h-10 w-10"
-                          disabled={targetImageIndex === 0}
-                          title="Previous Page"
-                          onClick={() => handleNavigation("prev")}
-                        >
-                          <ArrowLeft className="h-5 w-5" />
-                        </Button>
-                        <span className="text-sm font-medium bg-gray-100 px-3 py-2 rounded-md">
-                          Page {targetImageIndex + 1} of {images.length}
-                        </span>
-                        <Button
-                          variant="outline"
-                          size="icon"
-                          className="h-10 w-10"
-                          disabled={targetImageIndex === images.length - 1}
-                          title="Next Page"
-                          type="button"
-                          onClick={() => handleNavigation("next")}
-                        >
-                          <ArrowRight className="h-5 w-5" />
-                        </Button>
-                      </div>
-                    </div>
-
-                    <div className="flex items-center space-x-4">
-                      <Button variant="outline">Save for Later</Button>
-                      <Button
-                        type="submit"
-                        disabled={isPending}
-                        className="w-full"
+                    {loadedImages[index] && (
+                      <div
+                        ref={setFormContainerRef(index)}
+                        className="absolute top-0 left-0 w-full h-full"
                       >
-                        {isPending ? (
-                          <>
-                            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                            Generating PDF...
-                          </>
-                        ) : (
-                          "Submit"
-                        )}
+                        {formFields.map((field) => renderField(field, index))}
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </div>
+
+              {/* Responsive Scrollspy */}
+              {isMobile ? (
+                <Button
+                  onClick={() => setIsScrollspyOpen(!isScrollspyOpen)}
+                  className="fixed right-10 bottom-10 z-20 bg-white shadow-lg rounded-full p-2"
+                >
+                  <Menu className="h-6 w-6" />
+                </Button>
+              ) : null}
+
+              <div
+                className={`fixed right-4 top-1/2 transform -translate-y-1/2 z-10 bg-white rounded-full shadow-lg p-2 transition-all duration-300 ${
+                  isMobile
+                    ? isScrollspyOpen
+                      ? "opacity-100 visible"
+                      : "opacity-0 invisible"
+                    : ""
+                }`}
+              >
+                {images.map((_, index) => (
+                  <button
+                    key={index}
+                    type="button"
+                    onClick={() => {
+                      setTargetImageIndex(index);
+                      if (isMobile) setIsScrollspyOpen(false);
+                    }}
+                    className={`block mb-2 w-8 h-8 rounded-full transition-all duration-300 ${
+                      currentImageIndex === index
+                        ? "bg-primary text-white scale-110"
+                        : "bg-gray-200 hover:bg-gray-300"
+                    }`}
+                  >
+                    {index + 1}
+                  </button>
+                ))}
+              </div>
+
+              {/* Responsive Floating Bar */}
+              <div className="fixed bottom-0 left-0 right-0 bg-white shadow-lg border-t border-gray-200">
+                <FloatingErrorSummary />
+                <div className="container mx-auto flex flex-col md:flex-row justify-between items-center py-4 px-6">
+                  <div className="hidden md:flex items-center space-x-6 mb-4 md:mb-0">
+                    <div className="flex items-center space-x-2">
+                      <Button
+                        type="button"
+                        variant="outline"
+                        size="icon"
+                        className="h-10 w-10"
+                        disabled={targetImageIndex === 0}
+                        title="Previous Page"
+                        onClick={() => handleNavigation("prev")}
+                      >
+                        <ArrowLeft className="h-5 w-5" />
+                      </Button>
+                      <span className="text-sm font-medium bg-gray-100 px-3 py-2 rounded-md">
+                        Page {targetImageIndex + 1} of {images.length}
+                      </span>
+                      <Button
+                        variant="outline"
+                        size="icon"
+                        className="h-10 w-10"
+                        disabled={targetImageIndex === images.length - 1}
+                        title="Next Page"
+                        type="button"
+                        onClick={() => handleNavigation("next")}
+                      >
+                        <ArrowRight className="h-5 w-5" />
                       </Button>
                     </div>
                   </div>
-                </div>
-              </form>
-            </FormProvider>
-          </div>
-        </div>
 
-        <div className="mt-12 text-center">
-          <h3 className="text-2xl font-semibold mb-4 font-serif text-primary">
-            Need Assistance?
-          </h3>
-          <p className="text-gray-700 mb-4">
-            Our tax experts are here to help you with any questions or concerns.
-          </p>
-          <Button className="px-6 py-3 bg-secondary text-primary border-2 border-primary rounded-lg font-semibold text-lg transition duration-300 hover:bg-primary hover:text-white">
-            Contact Support
-          </Button>
+                  <div className="flex items-center space-x-4">
+                    <Button variant="outline">Save for Later</Button>
+                    <Button
+                      type="submit"
+                      disabled={isPending}
+                      className="w-full"
+                    >
+                      {isPending ? (
+                        <>
+                          <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                          Generating PDF...
+                        </>
+                      ) : (
+                        "Submit"
+                      )}
+                    </Button>
+                  </div>
+                </div>
+              </div>
+            </form>
+          </FormProvider>
         </div>
       </div>
-    </div>
+
+      <div className="mt-12 text-center">
+        <h3 className="text-2xl font-semibold mb-4 font-serif text-primary">
+          Need Assistance?
+        </h3>
+        <p className="text-gray-700 mb-4">
+          Our tax experts are here to help you with any questions or concerns.
+        </p>
+        <Button className="px-6 py-3 bg-secondary text-primary border-2 border-primary rounded-lg font-semibold text-lg transition duration-300 hover:bg-primary hover:text-white">
+          Contact Support
+        </Button>
+      </div>
+    </>
   );
 };
 export default IndividualTaxReturnForm;
