@@ -44,6 +44,7 @@ import { FormField } from "@/types/tax-return-form";
 import { useTaxReturnForm } from "@/hooks/use-tax-return-form";
 import { generatePDF } from "@/lib/pdf";
 import FloatingErrorSummary from "./floating-error-summary";
+import { createTaxReturnAndOrder } from "../actions";
 
 const images = [
   ImageOne,
@@ -288,7 +289,7 @@ const IndividualTaxReturnForm: React.FC = () => {
         calculateGrossTax();
       }
 
-      if (name === "tranportFacilityPrivateVehicleCC") {
+      if (name === "transportFacilityPrivateVehicleCC") {
         calculatePrivateEmploymentTotals();
       }
 
@@ -425,7 +426,10 @@ const IndividualTaxReturnForm: React.FC = () => {
   ) => {
     startTransition(async () => {
       try {
-        await generatePDF(images, formFields, data);
+        // await generatePDF(images, formFields, data);
+
+        const response = await createTaxReturnAndOrder(data);
+        console.log(response);
         console.log(data);
       } catch (error) {
         console.error("Error generating PDF:", error);
@@ -590,6 +594,7 @@ const IndividualTaxReturnForm: React.FC = () => {
                 onChange={(date) => {
                   onChange(date);
                 }}
+                value={value}
                 name={field.name}
                 dayPosition={field.dayPosition}
                 monthPosition={field.monthPosition}

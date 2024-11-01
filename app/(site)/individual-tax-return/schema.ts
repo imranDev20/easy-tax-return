@@ -141,8 +141,8 @@ export const individualTaxReturnSchema = z.object({
   incomeFromEmployeeShareSchemePrivate: z.string().nullable().optional(),
   accommodationFacilityPrivate: z.string().nullable().optional(),
   transportFacilityPrivate: z.string().nullable().optional(),
-  transporFacilityPrivateCheck: z.boolean().optional(),
-  tranportFacilityPrivateVehicleCC: z.nativeEnum(TransportCCType).optional(),
+  transportFacilityPrivateCheck: z.boolean().optional(),
+  transportFacilityPrivateVehicleCC: z.nativeEnum(TransportCCType).optional(),
   anyOtherFacilityProvidedByEmployerPrivate: z.string().nullable().optional(),
   employerContributionToProvidentFundPrivate: z.string().nullable().optional(),
   otherIncomePrivate: z.string().nullable().optional(),
@@ -263,7 +263,7 @@ export const individualTaxReturnSchema = z.object({
   totalExpenseIndividualPerson: personalExpenseSchema,
 
   // Image 10
-  netWealthLastDate: z.nativeEnum(NetWealthLastDate),
+  netWealthLastDate: z.nativeEnum(NetWealthLastDate).optional(),
   netWealthLastDateAmount: z.string().optional(),
   giftExpense: z.string().optional(),
   institutionalLiabilities: z.string().optional(),

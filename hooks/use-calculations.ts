@@ -1325,8 +1325,8 @@ export const useCalculations = (
     }
 
     // Handle transport facility checkbox and vehicle CC
-    const transportFacilityChecked = watch("transporFacilityPrivateCheck");
-    const vehicleCC = watch("tranportFacilityPrivateVehicleCC");
+    const transportFacilityChecked = watch("transportFacilityPrivateCheck");
+    const vehicleCC = watch("transportFacilityPrivateVehicleCC");
 
     if (vehicleCC && transportFacilityChecked) {
       const transportAmount = vehicleCC === "LT_EQ_2500" ? 120000 : 300000;

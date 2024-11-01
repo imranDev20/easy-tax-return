@@ -2,9 +2,8 @@ import React, { useState, useEffect, useRef } from "react";
 import flatpickr from "flatpickr";
 import "flatpickr/dist/themes/airbnb.css";
 
-// Import types from the main flatpickr module
-type FlatpickrInstance = flatpickr.Instance;
-type FlatpickrOptions = flatpickr.Options.Options;
+type Instance = flatpickr.Instance;
+type BaseOptions = flatpickr.Options.Options;
 
 interface DateFieldPosition {
   x: number;
@@ -15,6 +14,7 @@ interface DateFieldPosition {
 
 interface CustomDatePickerProps {
   onChange: (date: Date | null) => void;
+  value?: Date | null;
   dayPosition: DateFieldPosition;
   monthPosition: DateFieldPosition;
   yearPosition: DateFieldPosition;
@@ -25,6 +25,7 @@ interface CustomDatePickerProps {
 
 const CustomDatePicker: React.FC<CustomDatePickerProps> = ({
   onChange,
+  value,
   dayPosition,
   monthPosition,
   yearPosition,
@@ -32,12 +33,11 @@ const CustomDatePicker: React.FC<CustomDatePickerProps> = ({
   name,
   required = false,
 }) => {
-  const [selectedDate, setSelectedDate] = useState<Date | null>(null);
+  const [selectedDate, setSelectedDate] = useState<Date | null>(value || null);
   const containerRef = useRef<HTMLDivElement>(null);
   const dayInputRef = useRef<HTMLInputElement>(null);
   const hiddenInputRef = useRef<HTMLInputElement>(null);
-  const flatpickrInstance = useRef<FlatpickrInstance | null>(null);
-  const scrollPositionRef = useRef<number>(0);
+  const flatpickrRef = useRef<Instance | null>(null);
 
   const formatDate = (date: Date | null) => {
     if (!date) return { day: "", month: "", year: "" };
@@ -50,12 +50,71 @@ const CustomDatePicker: React.FC<CustomDatePickerProps> = ({
 
   const { day, month, year } = formatDate(selectedDate);
 
+  // Update date when value prop changes
+  useEffect(() => {
+    setSelectedDate(value || null);
+    if (flatpickrRef.current && value) {
+      flatpickrRef.current.setDate(value, false);
+    }
+  }, [value]);
+
   const openDatepicker = () => {
-    if (flatpickrInstance.current) {
-      scrollPositionRef.current = window.pageYOffset;
-      flatpickrInstance.current.open();
+    if (flatpickrRef.current) {
+      flatpickrRef.current.open();
     }
   };
+
+  // Initialize flatpickr
+  useEffect(() => {
+    if (!hiddenInputRef.current || !containerRef.current) return;
+
+    const options: Partial<BaseOptions> = {
+      dateFormat: "Y-m-d",
+      allowInput: false,
+      disableMobile: true,
+      static: true,
+      appendTo: containerRef.current,
+      defaultDate: value || undefined,
+      onChange: (selectedDates: Date[]) => {
+        const newDate = selectedDates[0] || null;
+        setSelectedDate(newDate);
+        onChange(newDate);
+      },
+      onOpen: () => {
+        if (
+          !flatpickrRef.current?.calendarContainer ||
+          !containerRef.current ||
+          !dayInputRef.current
+        )
+          return;
+
+        const containerRect = containerRef.current.getBoundingClientRect();
+        const dayInputRect = dayInputRef.current.getBoundingClientRect();
+
+        const calendar = flatpickrRef.current.calendarContainer;
+        calendar.style.position = "absolute";
+        calendar.style.top = `${dayInputRect.bottom - containerRect.top + 5}px`;
+        calendar.style.left = `${dayInputRect.left - containerRect.left}px`;
+        calendar.style.zIndex = "9999";
+      },
+    };
+
+    // Initialize flatpickr
+    flatpickrRef.current = flatpickr(hiddenInputRef.current, options);
+
+    // Set initial date if provided
+    if (value) {
+      flatpickrRef.current.setDate(value, false);
+    }
+
+    // Cleanup
+    return () => {
+      if (flatpickrRef.current) {
+        flatpickrRef.current.destroy();
+        flatpickrRef.current = null;
+      }
+    };
+  }, []); // Empty dependency array to initialize only once
 
   const renderDateField = (
     value: string,
@@ -83,7 +142,6 @@ const CustomDatePicker: React.FC<CustomDatePickerProps> = ({
         className="relative overflow-hidden w-full h-full border border-sky-300 rounded-none bg-sky-300/10 focus:border-sky-500 focus:ring-0 focus:outline-0 focus:bg-transparent hover:border-sky-500 px-2 py-2 cursor-pointer"
         readOnly
       />
-
       {required && (
         <span className="absolute top-0 right-0 -translate-y-1/2 translate-x-1/2 h-10 w-10 bg-sky-300/70 rotate-45 transform origin-center transition-colors">
           <span className="absolute text-white top-[23px] left-[17px] text-lg">
@@ -94,53 +152,6 @@ const CustomDatePicker: React.FC<CustomDatePickerProps> = ({
     </div>
   );
 
-  useEffect(() => {
-    const handleDateChange = (selectedDates: Date[]) => {
-      const newDate = selectedDates[0] || null;
-      setSelectedDate(newDate);
-      onChange(newDate);
-      window.scrollTo(0, scrollPositionRef.current);
-    };
-
-    if (hiddenInputRef.current && containerRef.current && dayInputRef.current) {
-      const options: FlatpickrOptions = {
-        dateFormat: "Y-m-d",
-        allowInput: false,
-        disableMobile: true,
-        static: true,
-        appendTo: containerRef.current,
-        onChange: handleDateChange,
-        onOpen: () => {
-          const calendarElem = flatpickrInstance.current?.calendarContainer;
-          const containerRect = containerRef.current!.getBoundingClientRect();
-          const dayInputRect = dayInputRef.current!.getBoundingClientRect();
-
-          if (calendarElem) {
-            calendarElem.style.position = "absolute";
-            calendarElem.style.top = `${
-              dayInputRect.bottom - containerRect.top + 5
-            }px`;
-            calendarElem.style.left = `${
-              dayInputRect.left - containerRect.left
-            }px`;
-            calendarElem.style.zIndex = "9999";
-          }
-        },
-        onClose: () => {
-          window.scrollTo(0, scrollPositionRef.current);
-        },
-      };
-
-      flatpickrInstance.current = flatpickr(hiddenInputRef.current, options);
-    }
-
-    return () => {
-      if (flatpickrInstance.current) {
-        flatpickrInstance.current.destroy();
-      }
-    };
-  }, [onChange]);
-
   return (
     <div ref={containerRef}>
       {renderDateField(day, dayPosition, "DD", dayInputRef)}
@@ -149,7 +160,7 @@ const CustomDatePicker: React.FC<CustomDatePickerProps> = ({
       <input
         ref={hiddenInputRef}
         type="text"
-        style={{ display: "none", position: "absolute", left: "-9999px" }}
+        style={{ display: "none" }}
         readOnly
       />
     </div>

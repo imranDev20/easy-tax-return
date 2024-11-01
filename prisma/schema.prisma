@@ -68,19 +68,19 @@ enum TransportCCType {
 }
 
 model User {
-  id            String           @id @default(cuid())
+  id            String            @id @default(cuid())
   name          String?
-  email         String?          @unique
+  email         String?           @unique
   phone         String?
   emailVerified DateTime?
   image         String?
   password      String?
-  role          Role             @default(USER)
+  role          Role              @default(USER)
   accounts      Account[]
   orders        Order[] // Add this line
-  individualTax IndividualTaxes? // Add this line
-  createdAt     DateTime         @default(now())
-  updatedAt     DateTime         @updatedAt
+  individualTax IndividualTaxes[] // Changed to array to indicate one-to-many
+  createdAt     DateTime          @default(now())
+  updatedAt     DateTime          @updatedAt
 }
 
 model Account {
@@ -103,9 +103,10 @@ model Account {
 }
 
 model IndividualTaxes {
-  id                                                String                  @id @default(cuid())
-  userId                                            String                  @unique
-  user                                              User                    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  id     String @id @default(cuid())
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
   order                                             Order?
   // related to form  fields
   // Image 1
@@ -126,14 +127,14 @@ model IndividualTaxes {
   addressLine2                                      String?
   telephone                                         String?
   mobile                                            String
-  email                                             String                  @unique
+  email                                             String
   employerName                                      String?
   businessName                                      String?
   bin                                               String?
   partnersMembersAssociation1                       String?
   partnersMembersAssociation2                       String?
   // Image 2
-  statementOfIncomeYearEndedOn                      String?
+  statementOfIncomeYearEndedOn                      DateTime?
   incomeFromEmployment                              String?
   incomeFromRent                                    String?
   incomeFromAgriculture                             String?
@@ -146,7 +147,7 @@ model IndividualTaxes {
   taxableIncomeFromAbroad                           String?
   totalIncome                                       String?
   totalAmountPayable                                String?
-  minimumTax                                        MinimumTax
+  minimumTax                                        MinimumTax?
   netWealthSurcharge                                String?
   taxPayable                                        String?
   environmentalSurcharge                            String?
@@ -165,7 +166,7 @@ model IndividualTaxes {
   taxExemptedTaxFreeIncome                          String?
   listOfDocumentsFurnishedWithThisReturn1           String?
   listOfDocumentsFurnishedWithThisReturn2           String?
-  fatherOrHusband                                   String
+  fatherOrHusband                                   String?
   placeOfSignature                                  String?
   signature                                         String?
   dateOfSignature                                   DateTime
@@ -174,41 +175,41 @@ model IndividualTaxes {
   typeOfEmployment                                  EmploymentType?
   // Image 4 - Govt
   // Foreign key IDs grouped together
-  basicPayGovtId                                    String                  @unique
-  arrearPayGovtId                                   String                  @unique
-  specialAllowanceGovtId                            String                  @unique
-  houseRentAllowanceGovtId                          String                  @unique
-  medicalAllowanceGovtId                            String                  @unique
-  conveyanceAllowanceGovtId                         String                  @unique
-  festivalAllowanceGovtId                           String                  @unique
-  allowanceForSupportStaffGovtId                    String                  @unique
-  leaveAllowanceGovtId                              String                  @unique
-  honorariumRewardGovtId                            String                  @unique
-  overtimeAllowanceGovtId                           String                  @unique
-  banglaNoboborshoAllowancesGovtId                  String                  @unique
-  interestAccruedProvidentFundGovtId                String                  @unique
-  lumpGrantGovtId                                   String                  @unique
-  gratuityGovtId                                    String                  @unique
-  otherAllowanceGovtId                              String                  @unique
-  totalGovtId                                       String                  @unique
+  basicPayGovtId                                    String?                 @unique
+  arrearPayGovtId                                   String?                 @unique
+  specialAllowanceGovtId                            String?                 @unique
+  houseRentAllowanceGovtId                          String?                 @unique
+  medicalAllowanceGovtId                            String?                 @unique
+  conveyanceAllowanceGovtId                         String?                 @unique
+  festivalAllowanceGovtId                           String?                 @unique
+  allowanceForSupportStaffGovtId                    String?                 @unique
+  leaveAllowanceGovtId                              String?                 @unique
+  honorariumRewardGovtId                            String?                 @unique
+  overtimeAllowanceGovtId                           String?                 @unique
+  banglaNoboborshoAllowancesGovtId                  String?                 @unique
+  interestAccruedProvidentFundGovtId                String?                 @unique
+  lumpGrantGovtId                                   String?                 @unique
+  gratuityGovtId                                    String?                 @unique
+  otherAllowanceGovtId                              String?                 @unique
+  totalGovtId                                       String?                 @unique
   // Relations grouped together
-  basicPayGovt                                      GovtPayScale            @relation("BasicPayGovt", fields: [basicPayGovtId], references: [id])
-  arrearPayGovt                                     GovtPayScale            @relation("ArrearPayGovt", fields: [arrearPayGovtId], references: [id])
-  specialAllowanceGovt                              GovtPayScale            @relation("SpecialAllowanceGovt", fields: [specialAllowanceGovtId], references: [id])
-  houseRentAllowanceGovt                            GovtPayScale            @relation("HouseRentAllowanceGovt", fields: [houseRentAllowanceGovtId], references: [id])
-  medicalAllowanceGovt                              GovtPayScale            @relation("MedicalAllowanceGovt", fields: [medicalAllowanceGovtId], references: [id])
-  conveyanceAllowanceGovt                           GovtPayScale            @relation("ConveyanceAllowanceGovt", fields: [conveyanceAllowanceGovtId], references: [id])
-  festivalAllowanceGovt                             GovtPayScale            @relation("FestivalAllowanceGovt", fields: [festivalAllowanceGovtId], references: [id])
-  allowanceForSupportStaffGovt                      GovtPayScale            @relation("AllowanceForSupportStaffGovt", fields: [allowanceForSupportStaffGovtId], references: [id])
-  leaveAllowanceGovt                                GovtPayScale            @relation("LeaveAllowanceGovt", fields: [leaveAllowanceGovtId], references: [id])
-  honorariumRewardGovt                              GovtPayScale            @relation("HonorariumRewardGovt", fields: [honorariumRewardGovtId], references: [id])
-  overtimeAllowanceGovt                             GovtPayScale            @relation("OvertimeAllowanceGovt", fields: [overtimeAllowanceGovtId], references: [id])
-  banglaNoboborshoAllowancesGovt                    GovtPayScale            @relation("BanglaNoboborshoAllowancesGovt", fields: [banglaNoboborshoAllowancesGovtId], references: [id])
-  interestAccruedProvidentFundGovt                  GovtPayScale            @relation("InterestAccruedProvidentFundGovt", fields: [interestAccruedProvidentFundGovtId], references: [id])
-  lumpGrantGovt                                     GovtPayScale            @relation("LumpGrantGovt", fields: [lumpGrantGovtId], references: [id])
-  gratuityGovt                                      GovtPayScale            @relation("GratuityGovt", fields: [gratuityGovtId], references: [id])
-  otherAllowanceGovt                                GovtPayScale            @relation("OtherAllowanceGovt", fields: [otherAllowanceGovtId], references: [id])
-  totalGovt                                         GovtPayScale            @relation("TotalGovt", fields: [totalGovtId], references: [id])
+  basicPayGovt                                      GovtPayScale?           @relation("BasicPayGovt", fields: [basicPayGovtId], references: [id])
+  arrearPayGovt                                     GovtPayScale?           @relation("ArrearPayGovt", fields: [arrearPayGovtId], references: [id])
+  specialAllowanceGovt                              GovtPayScale?           @relation("SpecialAllowanceGovt", fields: [specialAllowanceGovtId], references: [id])
+  houseRentAllowanceGovt                            GovtPayScale?           @relation("HouseRentAllowanceGovt", fields: [houseRentAllowanceGovtId], references: [id])
+  medicalAllowanceGovt                              GovtPayScale?           @relation("MedicalAllowanceGovt", fields: [medicalAllowanceGovtId], references: [id])
+  conveyanceAllowanceGovt                           GovtPayScale?           @relation("ConveyanceAllowanceGovt", fields: [conveyanceAllowanceGovtId], references: [id])
+  festivalAllowanceGovt                             GovtPayScale?           @relation("FestivalAllowanceGovt", fields: [festivalAllowanceGovtId], references: [id])
+  allowanceForSupportStaffGovt                      GovtPayScale?           @relation("AllowanceForSupportStaffGovt", fields: [allowanceForSupportStaffGovtId], references: [id])
+  leaveAllowanceGovt                                GovtPayScale?           @relation("LeaveAllowanceGovt", fields: [leaveAllowanceGovtId], references: [id])
+  honorariumRewardGovt                              GovtPayScale?           @relation("HonorariumRewardGovt", fields: [honorariumRewardGovtId], references: [id])
+  overtimeAllowanceGovt                             GovtPayScale?           @relation("OvertimeAllowanceGovt", fields: [overtimeAllowanceGovtId], references: [id])
+  banglaNoboborshoAllowancesGovt                    GovtPayScale?           @relation("BanglaNoboborshoAllowancesGovt", fields: [banglaNoboborshoAllowancesGovtId], references: [id])
+  interestAccruedProvidentFundGovt                  GovtPayScale?           @relation("InterestAccruedProvidentFundGovt", fields: [interestAccruedProvidentFundGovtId], references: [id])
+  lumpGrantGovt                                     GovtPayScale?           @relation("LumpGrantGovt", fields: [lumpGrantGovtId], references: [id])
+  gratuityGovt                                      GovtPayScale?           @relation("GratuityGovt", fields: [gratuityGovtId], references: [id])
+  otherAllowanceGovt                                GovtPayScale?           @relation("OtherAllowanceGovt", fields: [otherAllowanceGovtId], references: [id])
+  totalGovt                                         GovtPayScale?           @relation("TotalGovt", fields: [totalGovtId], references: [id])
   // Image 4 - Private
   basicPayPrivate                                   String?
   allowancesPrivate                                 String?
@@ -379,7 +380,7 @@ model IndividualTaxes {
   totalExpenseIndividualPerson                      PersonalExpense?        @relation("TotalExpenseIndividualPerson", fields: [totalExpenseIndividualPersonId], references: [id])
   // Image 10
   // Net Wealth and Liabilities
-  netWealthLastDate                                 NetWealthLastDate
+  netWealthLastDate                                 NetWealthLastDate?
   netWealthLastDateAmount                           String?
   giftExpense                                       String?
   institutionalLiabilities                          String?

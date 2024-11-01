@@ -1046,8 +1046,8 @@ export const useFormFields = (
         "incomeFromEmployeeShareSchemePrivate",
         "accommodationFacilityPrivate",
         "transportFacilityPrivate",
-        "transporFacilityPrivateCheck",
-        "tranportFacilityPrivateVehicleCC",
+        "transportFacilityPrivateCheck",
+        "transportFacilityPrivateVehicleCC",
         "anyOtherFacilityProvidedByEmployerPrivate",
         "employerContributionToProvidentFundPrivate",
         "otherIncomePrivate",
@@ -1721,7 +1721,7 @@ export const useFormFields = (
       isVisible: watch("typeOfEmployment") === "PRIVATE",
     },
     {
-      name: "transporFacilityPrivateCheck",
+      name: "transportFacilityPrivateCheck",
       type: "checkbox",
       label: "",
       x: 295,
@@ -1736,7 +1736,7 @@ export const useFormFields = (
     },
 
     {
-      name: "tranportFacilityPrivateVehicleCC",
+      name: "transportFacilityPrivateVehicleCC",
       type: "select",
       label: "",
       placeholder: "Choose One",
@@ -1753,7 +1753,7 @@ export const useFormFields = (
       height: 18,
       imageIndex: 3,
       isVisible:
-        watch("transporFacilityPrivateCheck") &&
+        watch("transportFacilityPrivateCheck") &&
         watch("typeOfEmployment") === "PRIVATE",
     },
     {
