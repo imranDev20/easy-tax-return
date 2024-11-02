@@ -10,6 +10,7 @@ import { Input } from "@/components/ui/input";
 import { useState, useEffect } from "react";
 import { Check, Loader2, Pencil, X } from "lucide-react";
 import { Prisma } from "@prisma/client";
+import { useRouter } from "next/navigation";
 
 function formatDate(date: Date | string) {
   const d = new Date(date);
@@ -42,6 +43,7 @@ export default function ProfilePage() {
   const [user, setUser] = useState<UserWithOrders | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const router = useRouter();
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -74,7 +76,6 @@ export default function ProfilePage() {
         await updateUser(data);
         setIsEditing(false);
 
-        // Update local user state with new phone number
         if (user) {
           setUser({ ...user, phone: data.phone || null });
         }
@@ -122,6 +123,9 @@ export default function ProfilePage() {
       </div>
     );
   }
+
+  const recentOrders = user.orders.slice(0, 5);
+  const hasMoreOrders = user.orders.length > 5;
 
   return (
     <div className="container mx-auto">
@@ -216,9 +220,9 @@ export default function ProfilePage() {
             <CardTitle>Latest Tax Returns</CardTitle>
           </CardHeader>
           <CardContent>
-            {user.orders && user.orders.length > 0 ? (
+            {recentOrders.length > 0 ? (
               <div className="space-y-4">
-                {user.orders.map((order) => (
+                {recentOrders.map((order) => (
                   <div
                     key={order.id}
                     className="flex justify-between items-center border-b pb-4 last:border-0"
@@ -239,6 +243,16 @@ export default function ProfilePage() {
                     </div>
                   </div>
                 ))}
+                {hasMoreOrders && (
+                  <div className="text-center pt-4">
+                    <Button
+                      variant="outline"
+                      onClick={() => router.push("/profile/submitted")}
+                    >
+                      See All Returns
+                    </Button>
+                  </div>
+                )}
               </div>
             ) : (
               <p className="text-sm text-muted-foreground">

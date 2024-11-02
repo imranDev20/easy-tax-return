@@ -68,7 +68,7 @@ export default withAuth(
 export const config = {
   matcher: [
     "/admin/:path*",
-    "/profile",
+    "/profile/:path*", // Changed from "/profile" to "/profile/:path*"
     "/transactions",
     "/individual-tax-return",
     "/login",

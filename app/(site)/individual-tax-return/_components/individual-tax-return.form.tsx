@@ -672,45 +672,47 @@ const IndividualTaxReturnForm = ({
 
   return (
     <>
-      <div className="flex flex-col items-center justify-center p-8 border-b">
-        <Button
-          size="lg"
-          onClick={() => {
-            startTransition(async () => {
-              try {
-                await generatePDF(images, formFields, getValues());
-                toast({
-                  title: "Success",
-                  description:
-                    "PDF has been generated and downloaded successfully.",
-                  variant: "success",
-                });
-              } catch (error) {
-                console.error("Error generating PDF:", error);
-                toast({
-                  title: "Error",
-                  description: "Failed to generate PDF. Please try again.",
-                  variant: "destructive",
-                });
-              }
-            });
-          }}
-          disabled={isPending || taxReturnOrder?.paymentStatus !== "PAID"}
-          className="gap-3 py-8 px-12 text-xl font-semibold shadow-lg hover:shadow-xl transform transition hover:-translate-y-1"
-        >
-          {isPending ? (
-            <>
-              <Loader2 className="h-6 w-6 animate-spin" />
-              Generating PDF...
-            </>
-          ) : (
-            <>
-              <Download className="h-6 w-6" />
-              Download Tax Return as PDF
-            </>
-          )}
-        </Button>
-      </div>
+      {taxReturnOrder && (
+        <div className="flex flex-col items-center justify-center p-8 border-b">
+          <Button
+            size="lg"
+            onClick={() => {
+              startTransition(async () => {
+                try {
+                  await generatePDF(images, formFields, getValues());
+                  toast({
+                    title: "Success",
+                    description:
+                      "PDF has been generated and downloaded successfully.",
+                    variant: "success",
+                  });
+                } catch (error) {
+                  console.error("Error generating PDF:", error);
+                  toast({
+                    title: "Error",
+                    description: "Failed to generate PDF. Please try again.",
+                    variant: "destructive",
+                  });
+                }
+              });
+            }}
+            disabled={isPending || taxReturnOrder?.paymentStatus !== "PAID"}
+            className="gap-3 py-8 px-12 text-xl font-semibold shadow-lg hover:shadow-xl transform transition hover:-translate-y-1"
+          >
+            {isPending ? (
+              <>
+                <Loader2 className="h-6 w-6 animate-spin" />
+                Generating PDF...
+              </>
+            ) : (
+              <>
+                <Download className="h-6 w-6" />
+                Download Tax Return as PDF
+              </>
+            )}
+          </Button>
+        </div>
+      )}
 
       <div className="bg-white shadow-lg rounded-lg">
         <div className="p-6">
@@ -826,7 +828,10 @@ const IndividualTaxReturnForm = ({
                   </div>
 
                   <div className="flex items-center space-x-4">
-                    <Button variant="outline">Save for Later</Button>
+                    {!taxReturnOrder && (
+                      <Button variant="outline">Save for Later</Button>
+                    )}
+
                     <Button
                       type="submit"
                       disabled={isPending}
