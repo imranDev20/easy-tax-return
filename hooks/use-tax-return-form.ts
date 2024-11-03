@@ -235,7 +235,7 @@ export const useTaxReturnForm = () => {
         exemptedAmount: "500",
         taxableAmount: "3500",
       },
-      incomeFromCapitaGainsTotal: {
+      incomeFromCapitalGainsTotal: {
         capitalGain: "48000",
         exemptedAmount: "10000",
         taxableAmount: "38000",

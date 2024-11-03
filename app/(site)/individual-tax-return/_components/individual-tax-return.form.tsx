@@ -68,7 +68,71 @@ interface Image {
 
 type OrderWithRelation = Prisma.OrderGetPayload<{
   include: {
-    individualTaxes: true;
+    individualTaxes: {
+      include: {
+        basicPayGovt: true;
+        arrearPayGovt: true;
+        specialAllowanceGovt: true;
+        houseRentAllowanceGovt: true;
+        medicalAllowanceGovt: true;
+        conveyanceAllowanceGovt: true;
+        festivalAllowanceGovt: true;
+        allowanceForSupportStaffGovt: true;
+        leaveAllowanceGovt: true;
+        honorariumRewardGovt: true;
+        overtimeAllowanceGovt: true;
+        banglaNoboborshoAllowancesGovt: true;
+        interestAccruedProvidentFundGovt: true;
+        lumpGrantGovt: true;
+        gratuityGovt: true;
+        otherAllowanceGovt: true;
+        totalGovt: true;
+        incomeFromShareTransferListedCompany: true;
+        incomeFromCapitalGain2: true;
+        incomeFromCapitalGain3: true;
+        incomeFromCapitalGain4: true;
+        incomeFromCapitalGain5: true;
+        incomeFromCapitalGainsTotal: true;
+
+        shonchoyparta: true;
+        profitFromShoychoyparta2: true;
+        profitFromShoychoyparta3: true;
+        profitFromShoychoyparta4: true;
+        profitFromShoychoyparta5: true;
+        profitFromShoychoyparta6: true;
+        profitFromShoychoyparta7: true;
+        profitFromShoychoyparta8: true;
+        profitFromShoychoyparta9: true;
+        profitFromShoychoyparta10: true;
+        profitFromShoychoypartaTotal: true;
+
+        interestFromSecurities: true;
+        profitInterestFromGovtSecurities2: true;
+        profitInterestFromGovtSecurities3: true;
+        profitInterestFromGovtSecurities4: true;
+        profitInterestFromGovtSecurities5: true;
+        profitInterestFromGovtSecurities6: true;
+        profitInterestFromGovtSecurities7: true;
+        profitInterestFromGovtSecurities8: true;
+        profitInterestFromGovtSecurities9: true;
+        profitInterestFromGovtSecurities10: true;
+        profitInterestFromGovtSecuritiesTotal: true;
+
+        // Image 9
+        expensesForFood: true;
+        housingExpense: true;
+        personalTransportationExpenses: true;
+        utilityExpense: true;
+        houseKeepingExpense: true;
+        humanitiesExpense: true;
+        educationExpenses: true;
+        personalExpenseForLocalForeignTravel: true;
+        festivalExpense: true;
+        taxDeductedCollectedAtSource: true;
+        interestPaid: true;
+        totalExpenseIndividualPerson: true;
+      };
+    };
   };
 }>;
 
@@ -236,6 +300,8 @@ const IndividualTaxReturnForm = ({
   const { toast } = useToast();
   const router = useRouter();
 
+  const individualTaxes = taxReturnOrder?.individualTaxes;
+
   const { form, formFields, calculations } = useTaxReturnForm();
   const {
     register,
@@ -321,6 +387,794 @@ const IndividualTaxReturnForm = ({
     calculateGrossTax,
     calculateTaxPayable,
   ]);
+
+  useEffect(() => {
+    if (individualTaxes) {
+      reset({
+        ...getValues(),
+
+        // Image 1
+        taxpayerName: individualTaxes.taxpayerName,
+        nationalId: individualTaxes.nationalId,
+        tin: individualTaxes.tin,
+        circle: individualTaxes.circle,
+        zone: individualTaxes.zone,
+        assessmentYear: individualTaxes.assessmentYear,
+        residentialStatus: individualTaxes.residentialStatus,
+        assesseeStatus: individualTaxes.assesseeStatus,
+        specialBenefits: individualTaxes.specialBenefits || "NONE",
+        isParentOfDisabledPerson:
+          individualTaxes.isParentOfDisabledPerson || false,
+        dateOfBirth: new Date(individualTaxes.dateOfBirth),
+        spouseName: individualTaxes.spouseName || "",
+        spouseTin: individualTaxes.spouseTin || "",
+        addressLine1: individualTaxes.addressLine1,
+        addressLine2: individualTaxes.addressLine2 || "",
+        telephone: individualTaxes.telephone || "",
+        mobile: individualTaxes.mobile,
+        email: individualTaxes.email,
+        employerName: individualTaxes.employerName || "",
+        businessName: individualTaxes.businessName || "",
+        bin: individualTaxes.bin || "",
+        partnersMembersAssociation1:
+          individualTaxes.partnersMembersAssociation1 || "",
+        partnersMembersAssociation2:
+          individualTaxes.partnersMembersAssociation2 || "",
+
+        // Image 2
+        statementOfIncomeYearEndedOn: new Date(
+          individualTaxes.statementOfIncomeYearEndedOn
+        ),
+        incomeFromEmployment: individualTaxes.incomeFromEmployment || "",
+        incomeFromRent: individualTaxes.incomeFromRent || "",
+        incomeFromAgriculture: individualTaxes.incomeFromAgriculture || "",
+        incomeFromBusiness: individualTaxes.incomeFromBusiness || "",
+        incomeFromCapitalGains: individualTaxes.incomeFromCapitalGains || "",
+        incomeFromFinancialAssets:
+          individualTaxes.incomeFromFinancialAssets || "",
+        incomeFromOtherSources: individualTaxes.incomeFromOtherSources || "",
+        shareOfIncomeFromAOP: individualTaxes.shareOfIncomeFromAOP || "",
+        incomeOfMinor: individualTaxes.incomeOfMinor || "",
+        taxableIncomeFromAbroad: individualTaxes.taxableIncomeFromAbroad || "",
+        totalIncome: individualTaxes.totalIncome || "",
+        totalAmountPayable: individualTaxes.totalAmountPayable || "",
+        minimumTax: individualTaxes.minimumTax || undefined,
+        netWealthSurcharge: individualTaxes.netWealthSurcharge || "",
+        taxPayable: individualTaxes.taxPayable || "",
+        environmentalSurcharge: individualTaxes.environmentalSurcharge || "",
+        totalSurcharge: individualTaxes.totalSurcharge || "",
+        delayInterest: individualTaxes.delayInterest || "",
+        grossTaxOnTaxableIncome: individualTaxes.grossTaxOnTaxableIncome || "",
+        netTaxAfterRebate: individualTaxes.netTaxAfterRebate || "",
+        minimumTaxAmount: individualTaxes.minimumTaxAmount || "",
+
+        // Image 3
+        taxDeductedOrCollected: individualTaxes.taxDeductedOrCollected || "",
+        advanceTaxPaid: individualTaxes.advanceTaxPaid || "",
+        adjustmentOfTaxRefund: individualTaxes.adjustmentOfTaxRefund || "",
+        taxPaidWithThisReturn: individualTaxes.taxPaidWithThisReturn || "",
+        totalTaxPaidAndAdjusted: individualTaxes.totalTaxPaidAndAdjusted || "",
+        excessPayment: individualTaxes.excessPayment || "",
+        taxExemptedTaxFreeIncome:
+          individualTaxes.taxExemptedTaxFreeIncome || "",
+        listOfDocumentsFurnishedWithThisReturn1:
+          individualTaxes.listOfDocumentsFurnishedWithThisReturn1 || "",
+        listOfDocumentsFurnishedWithThisReturn2:
+          individualTaxes.listOfDocumentsFurnishedWithThisReturn2 || "",
+        fatherOrHusband: individualTaxes.fatherOrHusband || "",
+        placeOfSignature: individualTaxes.placeOfSignature || "",
+        signature: individualTaxes?.signature || "",
+        dateOfSignature: new Date(individualTaxes.dateOfSignature),
+
+        // Image 4 - Employment Type & Govt Employment
+        isIncomeFromEmployment: individualTaxes.isIncomeFromEmployment,
+        typeOfEmployment: individualTaxes.typeOfEmployment,
+
+        // Government Pay Scales
+        basicPayGovt: {
+          amount: individualTaxes.basicPayGovt?.amount || "",
+          taxExempted: individualTaxes.basicPayGovt?.taxExempted || "",
+          taxable: individualTaxes.basicPayGovt?.taxable || "",
+        },
+        arrearPayGovt: {
+          amount: individualTaxes.arrearPayGovt?.amount || "",
+          taxExempted: individualTaxes.arrearPayGovt?.taxExempted || "",
+          taxable: individualTaxes.arrearPayGovt?.taxable || "",
+        },
+        specialAllowanceGovt: {
+          amount: individualTaxes.specialAllowanceGovt?.amount || "",
+          taxExempted: individualTaxes.specialAllowanceGovt?.taxExempted || "",
+          taxable: individualTaxes.specialAllowanceGovt?.taxable || "",
+        },
+        houseRentAllowanceGovt: {
+          amount: individualTaxes.houseRentAllowanceGovt?.amount || "",
+          taxExempted:
+            individualTaxes.houseRentAllowanceGovt?.taxExempted || "",
+          taxable: individualTaxes.houseRentAllowanceGovt?.taxable || "",
+        },
+        medicalAllowanceGovt: {
+          amount: individualTaxes.medicalAllowanceGovt?.amount || "",
+          taxExempted: individualTaxes.medicalAllowanceGovt?.taxExempted || "",
+          taxable: individualTaxes.medicalAllowanceGovt?.taxable || "",
+        },
+        conveyanceAllowanceGovt: {
+          amount: individualTaxes.conveyanceAllowanceGovt?.amount || "",
+          taxExempted:
+            individualTaxes.conveyanceAllowanceGovt?.taxExempted || "",
+          taxable: individualTaxes.conveyanceAllowanceGovt?.taxable || "",
+        },
+        festivalAllowanceGovt: {
+          amount: individualTaxes.festivalAllowanceGovt?.amount || "",
+          taxExempted: individualTaxes.festivalAllowanceGovt?.taxExempted || "",
+          taxable: individualTaxes.festivalAllowanceGovt?.taxable || "",
+        },
+        allowanceForSupportStaffGovt: {
+          amount: individualTaxes.allowanceForSupportStaffGovt?.amount || "",
+          taxExempted:
+            individualTaxes.allowanceForSupportStaffGovt?.taxExempted || "",
+          taxable: individualTaxes.allowanceForSupportStaffGovt?.taxable || "",
+        },
+        leaveAllowanceGovt: {
+          amount: individualTaxes.leaveAllowanceGovt?.amount || "",
+          taxExempted: individualTaxes.leaveAllowanceGovt?.taxExempted || "",
+          taxable: individualTaxes.leaveAllowanceGovt?.taxable || "",
+        },
+        honorariumRewardGovt: {
+          amount: individualTaxes.honorariumRewardGovt?.amount || "",
+          taxExempted: individualTaxes.honorariumRewardGovt?.taxExempted || "",
+          taxable: individualTaxes.honorariumRewardGovt?.taxable || "",
+        },
+        overtimeAllowanceGovt: {
+          amount: individualTaxes.overtimeAllowanceGovt?.amount || "",
+          taxExempted: individualTaxes.overtimeAllowanceGovt?.taxExempted || "",
+          taxable: individualTaxes.overtimeAllowanceGovt?.taxable || "",
+        },
+        banglaNoboborshoAllowancesGovt: {
+          amount: individualTaxes.banglaNoboborshoAllowancesGovt?.amount || "",
+          taxExempted:
+            individualTaxes.banglaNoboborshoAllowancesGovt?.taxExempted || "",
+          taxable:
+            individualTaxes.banglaNoboborshoAllowancesGovt?.taxable || "",
+        },
+        interestAccruedProvidentFundGovt: {
+          amount:
+            individualTaxes.interestAccruedProvidentFundGovt?.amount || "",
+          taxExempted:
+            individualTaxes.interestAccruedProvidentFundGovt?.taxExempted || "",
+          taxable:
+            individualTaxes.interestAccruedProvidentFundGovt?.taxable || "",
+        },
+        lumpGrantGovt: {
+          amount: individualTaxes.lumpGrantGovt?.amount || "",
+          taxExempted: individualTaxes.lumpGrantGovt?.taxExempted || "",
+          taxable: individualTaxes.lumpGrantGovt?.taxable || "",
+        },
+        gratuityGovt: {
+          amount: individualTaxes.gratuityGovt?.amount || "",
+          taxExempted: individualTaxes.gratuityGovt?.taxExempted || "",
+          taxable: individualTaxes.gratuityGovt?.taxable || "",
+        },
+        otherAllowanceGovt: {
+          amount: individualTaxes.otherAllowanceGovt?.amount || "",
+          taxExempted: individualTaxes.otherAllowanceGovt?.taxExempted || "",
+          taxable: individualTaxes.otherAllowanceGovt?.taxable || "",
+        },
+        totalGovt: {
+          amount: individualTaxes.totalGovt?.amount || "",
+          taxExempted: individualTaxes.totalGovt?.taxExempted || "",
+          taxable: individualTaxes.totalGovt?.taxable || "",
+        },
+
+        // Image 4 - Private Employment
+        basicPayPrivate: individualTaxes.basicPayPrivate || "",
+        allowancesPrivate: individualTaxes.allowancesPrivate || "",
+        advanceArrearSalaryPrivate:
+          individualTaxes.advanceArrearSalaryPrivate || "",
+        gratuityAnnuityPensionOrSimilarBenefitPrivate:
+          individualTaxes.gratuityAnnuityPensionOrSimilarBenefitPrivate || "",
+        perquisitesPrivate: individualTaxes.perquisitesPrivate || "",
+        receiptInLieuOfOrInAdditionToSalaryOrWagesPrivate:
+          individualTaxes.receiptInLieuOfOrInAdditionToSalaryOrWagesPrivate ||
+          "",
+        incomeFromEmployeeShareSchemePrivate:
+          individualTaxes.incomeFromEmployeeShareSchemePrivate || "",
+        accommodationFacilityPrivate:
+          individualTaxes.accommodationFacilityPrivate || "",
+        transportFacilityPrivate:
+          individualTaxes.transportFacilityPrivate || "",
+        transportFacilityPrivateCheck:
+          individualTaxes.transportFacilityPrivateCheck || false,
+        transportFacilityPrivateVehicleCC:
+          individualTaxes.transportFacilityPrivateVehicleCC ?? undefined,
+        anyOtherFacilityProvidedByEmployerPrivate:
+          individualTaxes.anyOtherFacilityProvidedByEmployerPrivate || "",
+        employerContributionToProvidentFundPrivate:
+          individualTaxes.employerContributionToProvidentFundPrivate || "",
+        otherIncomePrivate: individualTaxes.otherIncomePrivate || "",
+        totalSalaryReceivedPrivate:
+          individualTaxes.totalSalaryReceivedPrivate || "",
+        exemptedAmountPrivate: individualTaxes.exemptedAmountPrivate || "",
+        totalIncomeFromSalaryPrivate:
+          individualTaxes.totalIncomeFromSalaryPrivate || "",
+
+        // Image 5
+        locationDescriptionOwnershipProportionOfProperty:
+          individualTaxes.locationDescriptionOwnershipProportionOfProperty ||
+          "",
+        rentReceivedOrAnnualValue:
+          individualTaxes.rentReceivedOrAnnualValue || "",
+        advanceRentReceived: individualTaxes.advanceRentReceived || "",
+        valueOfAnyBenefit: individualTaxes.valueOfAnyBenefit || "",
+        adjustedAdvanceRent: individualTaxes.adjustedAdvanceRent || "",
+        vacancyAllowance: individualTaxes.vacancyAllowance || "",
+        totalRentValue: individualTaxes.totalRentValue || "",
+        repairCollectionProperty:
+          individualTaxes.repairCollectionProperty ?? undefined,
+        repairCollectionAmount: individualTaxes.repairCollectionAmount || "",
+        municipalOrLocalTax: individualTaxes.municipalOrLocalTax || "",
+        landRevenue: individualTaxes.landRevenue || "",
+        interestMortgageCapitalCharge:
+          individualTaxes.interestMortgageCapitalCharge || "",
+        insurancePremiumPaid: individualTaxes.insurancePremiumPaid || "",
+        otherAllowableDeduction: individualTaxes.otherAllowableDeduction || "",
+        taxpayersSharePercentage:
+          individualTaxes.taxpayersSharePercentage || "",
+        taxpayersShareAmount: individualTaxes.taxpayersShareAmount || "",
+        salesTurnoverReceiptAgriculture:
+          individualTaxes.salesTurnoverReceiptAgriculture || "",
+        grossProfitFromAgriculture:
+          individualTaxes.grossProfitFromAgriculture || "",
+        generalExpensesSellingExpenses:
+          individualTaxes.generalExpensesSellingExpenses || "",
+        totalAdmissibleDeduction:
+          individualTaxes.totalAdmissibleDeduction || "",
+        netIncomeFromRent: individualTaxes.netIncomeFromRent || "",
+        netProfitFromAgriculture:
+          individualTaxes.netProfitFromAgriculture || "",
+
+        // Image 6
+        nameOfBusiness: individualTaxes.nameOfBusiness || "",
+        natureOfBusiness: individualTaxes.natureOfBusiness || "",
+        addressOfBusiness: individualTaxes.addressOfBusiness || "",
+
+        // Summary of Income
+        salesTurnoverReceiptsBusiness:
+          individualTaxes.salesTurnoverReceiptsBusiness || "",
+        purchase: individualTaxes.purchase || "",
+        grossProfitFromBusiness: individualTaxes.grossProfitFromBusiness || "",
+        generalAdministrativeSellingExpenses:
+          individualTaxes.generalAdministrativeSellingExpenses || "",
+        badDebtExpense: individualTaxes.badDebtExpense || "",
+        netProfitFromBusinessIncome:
+          individualTaxes.netProfitFromBusinessIncome || "",
+
+        // Balance Sheet
+        cashInHandAtBank: individualTaxes.cashInHandAtBank || "",
+        inventories: individualTaxes.inventories || "",
+        fixedAssets: individualTaxes.fixedAssets || "",
+        otherAssets: individualTaxes.otherAssets || "",
+        totalAssets: individualTaxes.totalAssets || "",
+        openingCapital: individualTaxes.openingCapital || "",
+        netProfitFromBusinessBalance:
+          individualTaxes.netProfitFromBusinessBalance || "",
+        withdrawalsInTheIncomeYear:
+          individualTaxes.withdrawalsInTheIncomeYear || "",
+        closingCapital: individualTaxes.closingCapital || "",
+        liabilities: individualTaxes.liabilities || "",
+        totalCapitalsAndLiabilities:
+          individualTaxes.totalCapitalsAndLiabilities || "",
+
+        //  Capital Gains
+        incomeFromShareTransferListedCompany: {
+          description:
+            individualTaxes.incomeFromShareTransferListedCompany?.description ||
+            "",
+          capitalGain:
+            individualTaxes.incomeFromShareTransferListedCompany?.capitalGain ||
+            "",
+          exemptedAmount:
+            individualTaxes.incomeFromShareTransferListedCompany
+              ?.exemptedAmount || "",
+          taxableAmount:
+            individualTaxes.incomeFromShareTransferListedCompany
+              ?.taxableAmount || "",
+        },
+
+        incomeFromCapitalGain2: {
+          description:
+            individualTaxes.incomeFromCapitalGain2?.description || "",
+          capitalGain:
+            individualTaxes.incomeFromCapitalGain2?.capitalGain || "",
+          exemptedAmount:
+            individualTaxes.incomeFromCapitalGain2?.exemptedAmount || "",
+          taxableAmount:
+            individualTaxes.incomeFromCapitalGain2?.taxableAmount || "",
+        },
+
+        incomeFromCapitalGain3: {
+          description:
+            individualTaxes.incomeFromCapitalGain3?.description || "",
+          capitalGain:
+            individualTaxes.incomeFromCapitalGain3?.capitalGain || "",
+          exemptedAmount:
+            individualTaxes.incomeFromCapitalGain3?.exemptedAmount || "",
+          taxableAmount:
+            individualTaxes.incomeFromCapitalGain3?.taxableAmount || "",
+        },
+
+        incomeFromCapitalGain4: {
+          description:
+            individualTaxes.incomeFromCapitalGain4?.description || "",
+          capitalGain:
+            individualTaxes.incomeFromCapitalGain4?.capitalGain || "",
+          exemptedAmount:
+            individualTaxes.incomeFromCapitalGain4?.exemptedAmount || "",
+          taxableAmount:
+            individualTaxes.incomeFromCapitalGain4?.taxableAmount || "",
+        },
+
+        incomeFromCapitalGain5: {
+          description:
+            individualTaxes.incomeFromCapitalGain5?.description || "",
+          capitalGain:
+            individualTaxes.incomeFromCapitalGain5?.capitalGain || "",
+          exemptedAmount:
+            individualTaxes.incomeFromCapitalGain5?.exemptedAmount || "",
+          taxableAmount:
+            individualTaxes.incomeFromCapitalGain5?.taxableAmount || "",
+        },
+
+        incomeFromCapitalGainsTotal: {
+          description:
+            individualTaxes.incomeFromCapitalGainsTotal?.description || "",
+          capitalGain:
+            individualTaxes.incomeFromCapitalGainsTotal?.capitalGain || "",
+          exemptedAmount:
+            individualTaxes.incomeFromCapitalGainsTotal?.exemptedAmount || "",
+          taxableAmount:
+            individualTaxes.incomeFromCapitalGainsTotal?.taxableAmount || "",
+        },
+
+        // Image 7 - Shonchoypatra
+        shonchoyparta: {
+          description: individualTaxes.shonchoyparta?.description || "",
+          balance: individualTaxes.shonchoyparta?.balance || "",
+          interestProfit: individualTaxes.shonchoyparta?.interestProfit || "",
+          sourceTax: individualTaxes.shonchoyparta?.sourceTax || "",
+        },
+        profitFromShoychoyparta2: {
+          description:
+            individualTaxes.profitFromShoychoyparta2?.description || "",
+          balance: individualTaxes.profitFromShoychoyparta2?.balance || "",
+          interestProfit:
+            individualTaxes.profitFromShoychoyparta2?.interestProfit || "",
+          sourceTax: individualTaxes.profitFromShoychoyparta2?.sourceTax || "",
+        },
+        profitFromShoychoyparta3: {
+          description:
+            individualTaxes.profitFromShoychoyparta3?.description || "",
+          balance: individualTaxes.profitFromShoychoyparta3?.balance || "",
+          interestProfit:
+            individualTaxes.profitFromShoychoyparta3?.interestProfit || "",
+          sourceTax: individualTaxes.profitFromShoychoyparta3?.sourceTax || "",
+        },
+        profitFromShoychoyparta4: {
+          description:
+            individualTaxes.profitFromShoychoyparta4?.description || "",
+          balance: individualTaxes.profitFromShoychoyparta4?.balance || "",
+          interestProfit:
+            individualTaxes.profitFromShoychoyparta4?.interestProfit || "",
+          sourceTax: individualTaxes.profitFromShoychoyparta4?.sourceTax || "",
+        },
+        profitFromShoychoyparta5: {
+          description:
+            individualTaxes.profitFromShoychoyparta5?.description || "",
+          balance: individualTaxes.profitFromShoychoyparta5?.balance || "",
+          interestProfit:
+            individualTaxes.profitFromShoychoyparta5?.interestProfit || "",
+          sourceTax: individualTaxes.profitFromShoychoyparta5?.sourceTax || "",
+        },
+        profitFromShoychoyparta6: {
+          description:
+            individualTaxes.profitFromShoychoyparta6?.description || "",
+          balance: individualTaxes.profitFromShoychoyparta6?.balance || "",
+          interestProfit:
+            individualTaxes.profitFromShoychoyparta6?.interestProfit || "",
+          sourceTax: individualTaxes.profitFromShoychoyparta6?.sourceTax || "",
+        },
+        profitFromShoychoyparta7: {
+          description:
+            individualTaxes.profitFromShoychoyparta7?.description || "",
+          balance: individualTaxes.profitFromShoychoyparta7?.balance || "",
+          interestProfit:
+            individualTaxes.profitFromShoychoyparta7?.interestProfit || "",
+          sourceTax: individualTaxes.profitFromShoychoyparta7?.sourceTax || "",
+        },
+        profitFromShoychoyparta8: {
+          description:
+            individualTaxes.profitFromShoychoyparta8?.description || "",
+          balance: individualTaxes.profitFromShoychoyparta8?.balance || "",
+          interestProfit:
+            individualTaxes.profitFromShoychoyparta8?.interestProfit || "",
+          sourceTax: individualTaxes.profitFromShoychoyparta8?.sourceTax || "",
+        },
+        profitFromShoychoyparta9: {
+          description:
+            individualTaxes.profitFromShoychoyparta9?.description || "",
+          balance: individualTaxes.profitFromShoychoyparta9?.balance || "",
+          interestProfit:
+            individualTaxes.profitFromShoychoyparta9?.interestProfit || "",
+          sourceTax: individualTaxes.profitFromShoychoyparta9?.sourceTax || "",
+        },
+        profitFromShoychoyparta10: {
+          description:
+            individualTaxes.profitFromShoychoyparta10?.description || "",
+          balance: individualTaxes.profitFromShoychoyparta10?.balance || "",
+          interestProfit:
+            individualTaxes.profitFromShoychoyparta10?.interestProfit || "",
+          sourceTax: individualTaxes.profitFromShoychoyparta10?.sourceTax || "",
+        },
+        profitFromShoychoypartaTotal: {
+          description:
+            individualTaxes.profitFromShoychoypartaTotal?.description || "",
+          balance: individualTaxes.profitFromShoychoypartaTotal?.balance || "",
+          interestProfit:
+            individualTaxes.profitFromShoychoypartaTotal?.interestProfit || "",
+          sourceTax:
+            individualTaxes.profitFromShoychoypartaTotal?.sourceTax || "",
+        },
+
+        // Securities
+        interestFromSecurities: {
+          description:
+            individualTaxes.interestFromSecurities?.description || "",
+          balance: individualTaxes.interestFromSecurities?.balance || "",
+          interestProfit:
+            individualTaxes.interestFromSecurities?.interestProfit || "",
+          sourceTax: individualTaxes.interestFromSecurities?.sourceTax || "",
+        },
+        profitInterestFromGovtSecurities2: {
+          description:
+            individualTaxes.profitInterestFromGovtSecurities2?.description ||
+            "",
+          balance:
+            individualTaxes.profitInterestFromGovtSecurities2?.balance || "",
+          interestProfit:
+            individualTaxes.profitInterestFromGovtSecurities2?.interestProfit ||
+            "",
+          sourceTax:
+            individualTaxes.profitInterestFromGovtSecurities2?.sourceTax || "",
+        },
+        profitInterestFromGovtSecurities3: {
+          description:
+            individualTaxes.profitInterestFromGovtSecurities3?.description ||
+            "",
+          balance:
+            individualTaxes.profitInterestFromGovtSecurities3?.balance || "",
+          interestProfit:
+            individualTaxes.profitInterestFromGovtSecurities3?.interestProfit ||
+            "",
+          sourceTax:
+            individualTaxes.profitInterestFromGovtSecurities3?.sourceTax || "",
+        },
+        profitInterestFromGovtSecurities4: {
+          description:
+            individualTaxes.profitInterestFromGovtSecurities4?.description ||
+            "",
+          balance:
+            individualTaxes.profitInterestFromGovtSecurities4?.balance || "",
+          interestProfit:
+            individualTaxes.profitInterestFromGovtSecurities4?.interestProfit ||
+            "",
+          sourceTax:
+            individualTaxes.profitInterestFromGovtSecurities4?.sourceTax || "",
+        },
+        profitInterestFromGovtSecurities5: {
+          description:
+            individualTaxes.profitInterestFromGovtSecurities5?.description ||
+            "",
+          balance:
+            individualTaxes.profitInterestFromGovtSecurities5?.balance || "",
+          interestProfit:
+            individualTaxes.profitInterestFromGovtSecurities5?.interestProfit ||
+            "",
+          sourceTax:
+            individualTaxes.profitInterestFromGovtSecurities5?.sourceTax || "",
+        },
+        profitInterestFromGovtSecurities6: {
+          description:
+            individualTaxes.profitInterestFromGovtSecurities6?.description ||
+            "",
+          balance:
+            individualTaxes.profitInterestFromGovtSecurities6?.balance || "",
+          interestProfit:
+            individualTaxes.profitInterestFromGovtSecurities6?.interestProfit ||
+            "",
+          sourceTax:
+            individualTaxes.profitInterestFromGovtSecurities6?.sourceTax || "",
+        },
+        profitInterestFromGovtSecurities7: {
+          description:
+            individualTaxes.profitInterestFromGovtSecurities7?.description ||
+            "",
+          balance:
+            individualTaxes.profitInterestFromGovtSecurities7?.balance || "",
+          interestProfit:
+            individualTaxes.profitInterestFromGovtSecurities7?.interestProfit ||
+            "",
+          sourceTax:
+            individualTaxes.profitInterestFromGovtSecurities7?.sourceTax || "",
+        },
+        profitInterestFromGovtSecurities8: {
+          description:
+            individualTaxes.profitInterestFromGovtSecurities8?.description ||
+            "",
+          balance:
+            individualTaxes.profitInterestFromGovtSecurities8?.balance || "",
+          interestProfit:
+            individualTaxes.profitInterestFromGovtSecurities8?.interestProfit ||
+            "",
+          sourceTax:
+            individualTaxes.profitInterestFromGovtSecurities8?.sourceTax || "",
+        },
+        profitInterestFromGovtSecurities9: {
+          description:
+            individualTaxes.profitInterestFromGovtSecurities9?.description ||
+            "",
+          balance:
+            individualTaxes.profitInterestFromGovtSecurities9?.balance || "",
+          interestProfit:
+            individualTaxes.profitInterestFromGovtSecurities9?.interestProfit ||
+            "",
+          sourceTax:
+            individualTaxes.profitInterestFromGovtSecurities9?.sourceTax || "",
+        },
+        profitInterestFromGovtSecurities10: {
+          description:
+            individualTaxes.profitInterestFromGovtSecurities10?.description ||
+            "",
+          balance:
+            individualTaxes.profitInterestFromGovtSecurities10?.balance || "",
+          interestProfit:
+            individualTaxes.profitInterestFromGovtSecurities10
+              ?.interestProfit || "",
+          sourceTax:
+            individualTaxes.profitInterestFromGovtSecurities10?.sourceTax || "",
+        },
+        profitInterestFromGovtSecuritiesTotal: {
+          description:
+            individualTaxes.profitInterestFromGovtSecuritiesTotal
+              ?.description || "",
+          balance:
+            individualTaxes.profitInterestFromGovtSecuritiesTotal?.balance ||
+            "",
+          interestProfit:
+            individualTaxes.profitInterestFromGovtSecuritiesTotal
+              ?.interestProfit || "",
+          sourceTax:
+            individualTaxes.profitInterestFromGovtSecuritiesTotal?.sourceTax ||
+            "",
+        },
+
+        // Image 8
+        lifeInsurancePremium: individualTaxes.lifeInsurancePremium || "",
+        contributionToDeposit: individualTaxes.contributionToDeposit || "",
+        investmentInGovernmentSecurities:
+          individualTaxes.investmentInGovernmentSecurities || "",
+        investmentInSecuritiesStock:
+          individualTaxes.investmentInSecuritiesStock || "",
+        contributionToProvidentFund:
+          individualTaxes.contributionToProvidentFund || "",
+        selfAndEmployersContribution:
+          individualTaxes.selfAndEmployersContribution || "",
+        contributionToSuperAnnuationFund:
+          individualTaxes.contributionToSuperAnnuationFund || "",
+        contributionToBenevolentFund:
+          individualTaxes.contributionToBenevolentFund || "",
+        contributionToZakatFund: individualTaxes.contributionToZakatFund || "",
+        otherRebatableInvestmentContribution:
+          individualTaxes.otherRebatableInvestmentContribution || "",
+        amountOfTaxRebate: individualTaxes.amountOfTaxRebate || "",
+        totalAllowableInvestmentContribution:
+          individualTaxes.totalAllowableInvestmentContribution || "",
+        totalIncomeRebateTable: individualTaxes.totalIncomeRebateTable || "",
+        totalAllowableInvestmentRebateTable:
+          individualTaxes.totalAllowableInvestmentRebateTable || "",
+        taka1000000: individualTaxes.taka1000000 || "",
+
+        // Image 9 - Personal Expenses
+        expensesForFood: {
+          amount: individualTaxes.expensesForFood?.amount || "",
+          comment: individualTaxes.expensesForFood?.comment || "",
+        },
+        housingExpense: {
+          amount: individualTaxes.housingExpense?.amount || "",
+          comment: individualTaxes.housingExpense?.comment || "",
+        },
+        personalTransportationExpenses: {
+          amount: individualTaxes.personalTransportationExpenses?.amount || "",
+          comment:
+            individualTaxes.personalTransportationExpenses?.comment || "",
+        },
+        utilityExpense: {
+          amount: individualTaxes.utilityExpense?.amount || "",
+          comment: individualTaxes.utilityExpense?.comment || "",
+        },
+        houseKeepingExpense: {
+          amount: individualTaxes.houseKeepingExpense?.amount || "",
+          comment: individualTaxes.houseKeepingExpense?.comment || "",
+        },
+        humanitiesExpense: {
+          amount: individualTaxes.humanitiesExpense?.amount || "",
+          comment: individualTaxes.humanitiesExpense?.comment || "",
+        },
+        educationExpenses: {
+          amount: individualTaxes.educationExpenses?.amount || "",
+          comment: individualTaxes.educationExpenses?.comment || "",
+        },
+        personalExpenseForLocalForeignTravel: {
+          amount:
+            individualTaxes.personalExpenseForLocalForeignTravel?.amount || "",
+          comment:
+            individualTaxes.personalExpenseForLocalForeignTravel?.comment || "",
+        },
+        festivalExpense: {
+          amount: individualTaxes.festivalExpense?.amount || "",
+          comment: individualTaxes.festivalExpense?.comment || "",
+        },
+        taxDeductedCollectedAtSource: {
+          amount: individualTaxes.taxDeductedCollectedAtSource?.amount || "",
+          comment: individualTaxes.taxDeductedCollectedAtSource?.comment || "",
+        },
+        interestPaid: {
+          amount: individualTaxes.interestPaid?.amount || "",
+          comment: individualTaxes.interestPaid?.comment || "",
+        },
+        totalExpenseIndividualPerson: {
+          amount: individualTaxes.totalExpenseIndividualPerson?.amount || "",
+          comment: individualTaxes.totalExpenseIndividualPerson?.comment || "",
+        },
+
+        // Image 10
+        netWealthLastDate: individualTaxes.netWealthLastDate || undefined,
+        netWealthLastDateAmount: individualTaxes.netWealthLastDateAmount || "",
+        giftExpense: individualTaxes.giftExpense || "",
+        institutionalLiabilities:
+          individualTaxes.institutionalLiabilities || "",
+        nonInstitutionalLiabilities:
+          individualTaxes.nonInstitutionalLiabilities || "",
+        otherLiabilities: individualTaxes.otherLiabilities || "",
+        lessBusinessLiabilities: individualTaxes.lessBusinessLiabilities || "",
+        directorsShareholdingCompanyName1:
+          individualTaxes.directorsShareholdingCompanyName1 || "",
+        directorsShareholdingCompanyName2:
+          individualTaxes.directorsShareholdingCompanyName2 || "",
+        directorsShareholdingCompanyName3:
+          individualTaxes.directorsShareholdingCompanyName3 || "",
+        directorsShareholdingNoOfShare1:
+          individualTaxes.directorsShareholdingNoOfShare1 || "",
+        directorsShareholdingNoOfShare2:
+          individualTaxes.directorsShareholdingNoOfShare2 || "",
+        directorsShareholdingNoOfShare3:
+          individualTaxes.directorsShareholdingNoOfShare3 || "",
+        directorsShareholdingCompanyValue1:
+          individualTaxes.directorsShareholdingCompanyValue1 || "",
+        directorsShareholdingCompanyValue2:
+          individualTaxes.directorsShareholdingCompanyValue2 || "",
+        directorsShareholdingCompanyValue3:
+          individualTaxes.directorsShareholdingCompanyValue3 || "",
+
+        nameOfPartnershipFirm1: individualTaxes.nameOfPartnershipFirm1 || "",
+        nameOfPartnershipFirm2: individualTaxes.nameOfPartnershipFirm2 || "",
+        nameOfPartnershipFirm3: individualTaxes.nameOfPartnershipFirm3 || "",
+        shareOfProfit1: individualTaxes.shareOfProfit1 || "",
+        shareOfProfit2: individualTaxes.shareOfProfit2 || "",
+        shareOfProfit3: individualTaxes.shareOfProfit3 || "",
+        capitalContributed1: individualTaxes.capitalContributed1 || "",
+        capitalContributed2: individualTaxes.capitalContributed2 || "",
+        capitalContributed3: individualTaxes.capitalContributed3 || "",
+        totalIncomeShownInTheReturn:
+          individualTaxes.totalIncomeShownInTheReturn || "",
+        taxExemptedIncomeAndAllowance:
+          individualTaxes.taxExemptedIncomeAndAllowance || "",
+        receiptOfGiftOtherReceipts:
+          individualTaxes.receiptOfGiftOtherReceipts || "",
+        totalSourceOfFund: individualTaxes.totalSourceOfFund || "",
+        sumOfSourceOfFundAndPreviousYearsNetWealth:
+          individualTaxes.sumOfSourceOfFundAndPreviousYearsNetWealth || "",
+        expenseRelatingToLifestyle:
+          individualTaxes.expenseRelatingToLifestyle || "",
+        totalExpensesAndLoss: individualTaxes.totalExpensesAndLoss || "",
+        netWealthAtTheLastDateOfThisFinancialYear:
+          individualTaxes.netWealthAtTheLastDateOfThisFinancialYear || "",
+        totalLiabilitiesOutsideBusiness:
+          individualTaxes.totalLiabilitiesOutsideBusiness || "",
+        grossWealth: individualTaxes.grossWealth || "",
+        businessCapital: individualTaxes.businessCapital || "",
+        directorsShareholdingsInTheCompanies:
+          individualTaxes.directorsShareholdingsInTheCompanies || "",
+        businessCapitalOfPartnershipFirm:
+          individualTaxes.businessCapitalOfPartnershipFirm || "",
+
+        // Image 11
+        nonAgriculturalPropertyLandHouseProperty:
+          individualTaxes.nonAgriculturalPropertyLandHouseProperty || "",
+        nonAgriculturalLocationDescription1:
+          individualTaxes.nonAgriculturalLocationDescription1 || "",
+        nonAgriculturalLocationDescription2:
+          individualTaxes.nonAgriculturalLocationDescription2 || "",
+        nonAgriculturalLocationDescription3:
+          individualTaxes.nonAgriculturalLocationDescription3 || "",
+        nonAgriculturalLocationDescription4:
+          individualTaxes.nonAgriculturalLocationDescription4 || "",
+        nonAgriculturalLocationDescription5:
+          individualTaxes.nonAgriculturalLocationDescription5 || "",
+        nonAgriculturalValue1: individualTaxes.nonAgriculturalValue1 || "",
+        nonAgriculturalValue2: individualTaxes.nonAgriculturalValue2 || "",
+        nonAgriculturalValue3: individualTaxes.nonAgriculturalValue3 || "",
+        nonAgriculturalValue4: individualTaxes.nonAgriculturalValue4 || "",
+        nonAgriculturalValue5: individualTaxes.nonAgriculturalValue5 || "",
+        agriculturalLocationAndDescription1:
+          individualTaxes.agriculturalLocationAndDescription1 || "",
+        agriculturalLocationAndDescription2:
+          individualTaxes.agriculturalLocationAndDescription2 || "",
+        agriculturalLocationAndDescription3:
+          individualTaxes.agriculturalLocationAndDescription3 || "",
+        agriculturalLocationValue1:
+          individualTaxes.agriculturalLocationValue1 || "",
+        agriculturalLocationValue2:
+          individualTaxes.agriculturalLocationValue2 || "",
+        agriculturalLocationValue3:
+          individualTaxes.agriculturalLocationValue3 || "",
+
+        shareDebentureUnitCertificate:
+          individualTaxes.shareDebentureUnitCertificate || "",
+        sanchayapatraSavingsCertificate:
+          individualTaxes.sanchayapatraSavingsCertificate || "",
+        depositPensionScheme: individualTaxes.depositPensionScheme || "",
+
+        loanGivenToOthersName: individualTaxes.loanGivenToOthersName || "",
+        loanGiventoOthersNid: individualTaxes.loanGiventoOthersNid || "",
+        loansGivenToOthers: individualTaxes.loansGivenToOthers || "",
+
+        savingDeposit: individualTaxes.savingDeposit || "",
+        providentFund: individualTaxes.providentFund || "",
+        otherInvestmentDesc: individualTaxes.otherInvestmentDesc || "",
+        otherInvestment: individualTaxes.otherInvestment || "",
+
+        typeOfMotorVehicle1: individualTaxes.typeOfMotorVehicle1 || "",
+        typeOfMotorVehicle2: individualTaxes.typeOfMotorVehicle2 || "",
+        registrationNumber1: individualTaxes.registrationNumber1 || "",
+        registrationNumber2: individualTaxes.registrationNumber2 || "",
+        motorValue1: individualTaxes.motorValue1 || "",
+        motorValue2: individualTaxes.motorValue2 || "",
+        ornamentsDesc: individualTaxes.ornamentsDesc || "",
+        ornamentsValue: individualTaxes.ornamentsValue || "",
+        furnitureAndElectronic: individualTaxes.furnitureAndElectronic || "",
+        othersAssetsDesc: individualTaxes.othersAssetsDesc || "",
+        othersAssetsValue: individualTaxes.othersAssetsValue || "",
+        bankBalance: individualTaxes.bankBalance || "",
+        cashInHand: individualTaxes.cashInHand || "",
+        otherFundDesc: individualTaxes.otherFundDesc || "",
+        otherFundOutsideBusiness:
+          individualTaxes.otherFundOutsideBusiness || "",
+        assetOutsideBangladesh: individualTaxes.assetOutsideBangladesh || "",
+        agriculturalProperty: individualTaxes.agriculturalProperty || "",
+        totalFinancialAssets: individualTaxes.totalFinancialAssets || "",
+        motorVehiclesTotal: individualTaxes.motorVehiclesTotal || "",
+        totalAssetslocatedInBangladesh:
+          individualTaxes.totalAssetslocatedInBangladesh || "",
+        totalCashInHandsAndFundOutsideBusiness:
+          individualTaxes.totalCashInHandsAndFundOutsideBusiness || "",
+        totalAssetsInBangladeshAndOutsideBangladesh:
+          individualTaxes.totalAssetsInBangladeshAndOutsideBangladesh || "",
+
+        // Image 12
+        totalIncomeShown: individualTaxes.totalIncomeShown || "",
+        totalTaxPaid: individualTaxes.totalTaxPaid || "",
+      });
+    }
+  }, [individualTaxes, reset, getValues]);
 
   const updateScale = useCallback(() => {
     if (containerRef.current && imageRefs.current[0]) {
@@ -437,6 +1291,8 @@ const IndividualTaxReturnForm = ({
   ) => {
     startTransition(async () => {
       try {
+        // await generatePDF(images, formFields, data);
+
         const response = await createTaxReturnAndOrder(data);
         if (response.data?.order.id) {
           // Redirect to the profile details page with the new tax return ID
@@ -616,6 +1472,7 @@ const IndividualTaxReturnForm = ({
                 onChange={(date) => {
                   onChange(date);
                 }}
+                disabled={field.disabled}
                 value={value}
                 name={field.name}
                 dayPosition={field.dayPosition}
@@ -627,25 +1484,26 @@ const IndividualTaxReturnForm = ({
           />
         );
 
-      // case "signature":
-      //   return (
-      //     <div style={fieldStyle}>
-      //       <Controller
-      //         name="signature"
-      //         control={control}
-      //         render={({ field: { onChange, value } }) => (
-      //           <SignatureField
-      //             onChange={(signatureData) => {
-      //               onChange(signatureData);
-      //             }}
-      //             width={field.width}
-      //             height={field.height}
-      //             value={value as string}
-      //           />
-      //         )}
-      //       />
-      //     </div>
-      //   );
+      case "signature":
+        return (
+          <div style={fieldStyle}>
+            <Controller
+              name="signature"
+              control={control}
+              render={({ field: { onChange, value } }) => (
+                <SignatureField
+                  onChange={(signatureData) => {
+                    onChange(signatureData);
+                  }}
+                  disabled={field.disabled}
+                  width={field.width}
+                  height={field.height}
+                  value={value as string}
+                />
+              )}
+            />
+          </div>
+        );
       case "textarea":
         return (
           <div style={fieldStyle} className="relative overflow-hidden">

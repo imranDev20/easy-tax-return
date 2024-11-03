@@ -21,6 +21,7 @@ interface CustomDatePickerProps {
   scale: number;
   name: string;
   required?: boolean;
+  disabled?: boolean;
 }
 
 const CustomDatePicker: React.FC<CustomDatePickerProps> = ({
@@ -32,6 +33,7 @@ const CustomDatePicker: React.FC<CustomDatePickerProps> = ({
   scale,
   name,
   required = false,
+  disabled = false,
 }) => {
   const [selectedDate, setSelectedDate] = useState<Date | null>(value || null);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -59,7 +61,7 @@ const CustomDatePicker: React.FC<CustomDatePickerProps> = ({
   }, [value]);
 
   const openDatepicker = () => {
-    if (flatpickrRef.current) {
+    if (flatpickrRef.current && !disabled) {
       flatpickrRef.current.open();
     }
   };
@@ -137,12 +139,17 @@ const CustomDatePicker: React.FC<CustomDatePickerProps> = ({
         ref={ref}
         type="text"
         value={value}
-        onClick={openDatepicker}
+        onClick={disabled ? undefined : openDatepicker}
         placeholder={placeholder}
-        className="relative overflow-hidden w-full h-full border border-sky-300 rounded-none bg-sky-300/10 focus:border-sky-500 focus:ring-0 focus:outline-0 focus:bg-transparent hover:border-sky-500 px-2 py-2 cursor-pointer"
+        className={`relative overflow-hidden w-full h-full border rounded-none px-2 py-2 ${
+          disabled
+            ? "bg-gray-100 border-gray-300 text-gray-500 cursor-not-allowed"
+            : "border-sky-300 bg-sky-300/10 focus:border-sky-500 focus:ring-0 focus:outline-0 focus:bg-transparent hover:border-sky-500 cursor-pointer"
+        }`}
         readOnly
+        disabled={disabled}
       />
-      {required && (
+      {required && !disabled && (
         <span className="absolute top-0 right-0 -translate-y-1/2 translate-x-1/2 h-10 w-10 bg-sky-300/70 rotate-45 transform origin-center transition-colors">
           <span className="absolute text-white top-[23px] left-[17px] text-lg">
             *
@@ -162,6 +169,7 @@ const CustomDatePicker: React.FC<CustomDatePickerProps> = ({
         type="text"
         style={{ display: "none" }}
         readOnly
+        disabled={disabled}
       />
     </div>
   );

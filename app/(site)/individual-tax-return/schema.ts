@@ -165,7 +165,7 @@ export const individualTaxReturnSchema = z.object({
   interestMortgageCapitalCharge: z.string().optional(),
   insurancePremiumPaid: z.string().optional(),
   otherAllowableDeduction: z.string().optional(),
-  taxpayersSharePercentage: z.string(),
+  taxpayersSharePercentage: z.string().optional(),
   taxpayersShareAmount: z.string().nullable().optional(),
   salesTurnoverReceiptAgriculture: z.string().optional(),
   grossProfitFromAgriculture: z.string().optional(),
@@ -204,7 +204,7 @@ export const individualTaxReturnSchema = z.object({
   incomeFromCapitalGain3: incomeFromCapitalGainsSchema,
   incomeFromCapitalGain4: incomeFromCapitalGainsSchema,
   incomeFromCapitalGain5: incomeFromCapitalGainsSchema,
-  incomeFromCapitaGainsTotal: incomeFromCapitalGainsSchema,
+  incomeFromCapitalGainsTotal: incomeFromCapitalGainsSchema,
 
   // Image 7
   shonchoyparta: financialAssetsSchema,

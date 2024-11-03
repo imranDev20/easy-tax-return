@@ -8,6 +8,21 @@ type Image = {
   src: string;
 };
 
+// Helper function to format dates consistently
+const formatDateForPDF = (dateValue: Date | string | null): string => {
+  if (!dateValue) return "";
+
+  const date = dateValue instanceof Date ? dateValue : new Date(dateValue);
+
+  if (isNaN(date.getTime())) return ""; // Invalid date
+
+  const day = date.getDate().toString().padStart(2, "0");
+  const month = (date.getMonth() + 1).toString().padStart(2, "0");
+  const year = date.getFullYear();
+
+  return `${day}/${month}/${year}`;
+};
+
 export const generatePDF = async (
   images: Image[],
   formFields: FormField[],
@@ -29,17 +44,25 @@ export const generatePDF = async (
       line-height: 1;
       font-family: Arial, sans-serif;
     }
+    .signature-text {
+      font-family: cursive;
+      font-size: 16px;
+      color: #000;
+    }
+    .date-field {
+      font-family: Arial, sans-serif;
+      font-size: 12px;
+      color: #000;
+    }
   `;
 
   try {
     for (let i = 0; i < images.length; i++) {
-      // Create a container for this page
       const formContainer = document.createElement("div");
       formContainer.style.position = "relative";
       formContainer.style.width = "595px";
       formContainer.style.height = "842px";
 
-      // Create a unique ID for the container
       const containerId = `pdf-container-${i}`;
       formContainer.id = containerId;
 
@@ -70,8 +93,135 @@ export const generatePDF = async (
             field.isShowInPDF !== false &&
             field.type !== "select"
         )
-        .forEach((field) => {
-          if (field.type === "radio") {
+        .forEach(async (field) => {
+          if (field.type === "date") {
+            const dateValue = formData[
+              field.name as keyof IndividualTaxReturnFormInput
+            ] as Date | null;
+            const formattedDate = formatDateForPDF(dateValue);
+            const [day, month, year] = formattedDate
+              ? formattedDate.split("/")
+              : ["", "", ""];
+
+            // Day field with separator
+            const dayContainer = document.createElement("div");
+            dayContainer.style.position = "absolute";
+            dayContainer.style.left = `${field.dayPosition.x / 10}%`;
+            dayContainer.style.top = `${field.dayPosition.y / 10}%`;
+            dayContainer.style.width = `${field.dayPosition.width / 10}%`;
+            dayContainer.style.height = `${field.dayPosition.height / 10}%`;
+            dayContainer.style.display = "flex";
+            dayContainer.style.alignItems = "center";
+
+            const dayElement = document.createElement("span");
+            dayElement.className = "date-field";
+            dayElement.style.paddingLeft = "5px";
+            dayElement.textContent = day || "DD";
+            dayContainer.appendChild(dayElement);
+
+            // First separator (/)
+            const separator1 = document.createElement("div");
+            separator1.style.position = "absolute";
+            separator1.style.left = `${
+              (field.dayPosition.x + field.dayPosition.width) / 10
+            }%`;
+            separator1.style.top = `${field.dayPosition.y / 10}%`;
+            separator1.style.height = `${field.dayPosition.height / 10}%`;
+            separator1.style.display = "flex";
+            separator1.style.alignItems = "center";
+            separator1.style.justifyContent = "center";
+            separator1.style.paddingLeft = "2px";
+            separator1.style.paddingRight = "2px";
+            separator1.textContent = "/";
+
+            // Month field with separator
+            const monthContainer = document.createElement("div");
+            monthContainer.style.position = "absolute";
+            monthContainer.style.left = `${field.monthPosition.x / 10}%`;
+            monthContainer.style.top = `${field.monthPosition.y / 10}%`;
+            monthContainer.style.width = `${field.monthPosition.width / 10}%`;
+            monthContainer.style.height = `${field.monthPosition.height / 10}%`;
+            monthContainer.style.display = "flex";
+            monthContainer.style.alignItems = "center";
+
+            const monthElement = document.createElement("span");
+            monthElement.className = "date-field";
+            monthElement.style.paddingLeft = "5px";
+            monthElement.textContent = month || "MM";
+            monthContainer.appendChild(monthElement);
+
+            // Second separator (/)
+            const separator2 = document.createElement("div");
+            separator2.style.position = "absolute";
+            separator2.style.left = `${
+              (field.monthPosition.x + field.monthPosition.width) / 10
+            }%`;
+            separator2.style.top = `${field.monthPosition.y / 10}%`;
+            separator2.style.height = `${field.monthPosition.height / 10}%`;
+            separator2.style.display = "flex";
+            separator2.style.alignItems = "center";
+            separator2.style.justifyContent = "center";
+            separator2.style.paddingLeft = "2px";
+            separator2.style.paddingRight = "2px";
+            separator2.textContent = "/";
+
+            // Year field
+            const yearContainer = document.createElement("div");
+            yearContainer.style.position = "absolute";
+            yearContainer.style.left = `${field.yearPosition.x / 10}%`;
+            yearContainer.style.top = `${field.yearPosition.y / 10}%`;
+            yearContainer.style.width = `${field.yearPosition.width / 10}%`;
+            yearContainer.style.height = `${field.yearPosition.height / 10}%`;
+            yearContainer.style.display = "flex";
+            yearContainer.style.alignItems = "center";
+
+            const yearElement = document.createElement("span");
+            yearElement.className = "date-field";
+            yearElement.style.paddingLeft = "5px";
+            yearElement.textContent = year || "YYYY";
+            yearContainer.appendChild(yearElement);
+
+            // Append all elements to the fields container
+            fieldsContainer.appendChild(dayContainer);
+            fieldsContainer.appendChild(separator1);
+            fieldsContainer.appendChild(monthContainer);
+            fieldsContainer.appendChild(separator2);
+            fieldsContainer.appendChild(yearContainer);
+          } else if (field.type === "signature") {
+            const signatureContainer = document.createElement("div");
+            signatureContainer.style.position = "absolute";
+            signatureContainer.style.left = `${field.x / 10}%`;
+            signatureContainer.style.top = `${field.y / 10}%`;
+            signatureContainer.style.width = `${field.width / 10}%`;
+            signatureContainer.style.height = `${field.height / 10}%`;
+            signatureContainer.style.display = "flex";
+            signatureContainer.style.alignItems = "center";
+            signatureContainer.style.justifyContent = "center";
+
+            const value = formData[
+              field.name as keyof IndividualTaxReturnFormInput
+            ] as string;
+
+            if (value) {
+              if (value.startsWith("data:image")) {
+                const img = document.createElement("img");
+                img.src = value;
+                img.style.maxWidth = "100%";
+                img.style.maxHeight = "100%";
+                img.style.objectFit = "contain";
+                signatureContainer.appendChild(img);
+              } else {
+                const signatureText = document.createElement("div");
+                signatureText.className = "signature-text";
+                signatureText.textContent = value;
+                signatureText.style.width = "100%";
+                signatureText.style.textAlign = "center";
+                signatureContainer.appendChild(signatureText);
+              }
+            }
+
+            fieldsContainer.appendChild(signatureContainer);
+          } else if (field.type === "radio") {
             const value =
               formData[field.name as keyof IndividualTaxReturnFormInput];
             field.options?.forEach((option) => {
@@ -156,10 +306,8 @@ export const generatePDF = async (
       styleElement.textContent = baseStyles;
       formContainer.appendChild(styleElement);
 
-      // Append to body
       document.body.appendChild(formContainer);
 
-      // Generate canvas and add to PDF
       const canvas = await html2canvas(formContainer, {
         scale: 3,
         useCORS: true,
@@ -173,18 +321,15 @@ export const generatePDF = async (
       }
       pdf.addImage(imgData, "PNG", 0, 0, 595, 842);
 
-      // Clean up - remove the container if it exists
       const containerToRemove = document.getElementById(containerId);
       if (containerToRemove && containerToRemove.parentNode) {
         containerToRemove.parentNode.removeChild(containerToRemove);
       }
     }
 
-    // Save the PDF
     pdf.save("filled_form.pdf");
   } catch (error) {
     console.error("Error generating PDF:", error);
-    // Clean up any remaining containers
     images.forEach((_, index) => {
       const containerToRemove = document.getElementById(
         `pdf-container-${index}`

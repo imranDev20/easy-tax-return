@@ -818,7 +818,7 @@ export const useCalculations = (
 
     // Get exempted amounts from capital gains
     const capitalGainsExempted = parseFloat(
-      watch("incomeFromCapitaGainsTotal.exemptedAmount") || "0"
+      watch("incomeFromCapitalGainsTotal.exemptedAmount") || "0"
     );
 
     // Calculate total exempted amount
@@ -868,15 +868,15 @@ export const useCalculations = (
 
     // Set the totals in the summary row
     setValue(
-      "incomeFromCapitaGainsTotal.capitalGain",
+      "incomeFromCapitalGainsTotal.capitalGain",
       totalCapitalGains.toFixed(2)
     );
     setValue(
-      "incomeFromCapitaGainsTotal.exemptedAmount",
+      "incomeFromCapitalGainsTotal.exemptedAmount",
       totalExemptedAmount.toFixed(2)
     );
     setValue(
-      "incomeFromCapitaGainsTotal.taxableAmount",
+      "incomeFromCapitalGainsTotal.taxableAmount",
       totalTaxableAmount.toFixed(2)
     );
 

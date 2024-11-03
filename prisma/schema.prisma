@@ -105,7 +105,6 @@ model Account {
 model IndividualTaxes {
   id                                                String                  @id @default(cuid())
   order                                             Order?
-  savedTaxReturn                                    SavedTaxReturns?
   // related to form  fields
   // Image 1
   taxpayerName                                      String
@@ -132,7 +131,7 @@ model IndividualTaxes {
   partnersMembersAssociation1                       String?
   partnersMembersAssociation2                       String?
   // Image 2
-  statementOfIncomeYearEndedOn                      DateTime?
+  statementOfIncomeYearEndedOn                      DateTime
   incomeFromEmployment                              String?
   incomeFromRent                                    String?
   incomeFromAgriculture                             String?
@@ -164,7 +163,7 @@ model IndividualTaxes {
   taxExemptedTaxFreeIncome                          String?
   listOfDocumentsFurnishedWithThisReturn1           String?
   listOfDocumentsFurnishedWithThisReturn2           String?
-  fatherOrHusband                                   String?
+  fatherOrHusband                                   String
   placeOfSignature                                  String?
   signature                                         String?
   dateOfSignature                                   DateTime
@@ -572,21 +571,14 @@ model PersonalExpense {
 }
 
 model SavedTaxReturns {
-  id                String  @id @default(cuid())
+  id                String   @id @default(cuid())
   userId            String
-  individualTaxesId String? @unique
-  completionPercent Float   @default(0)
-  lastSavedPage     Int     @default(1)
+  user              User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  individualTaxes   Json
+  completionPercent Float    @default(0)
   lastEditedField   String?
-  notes             String? // Optional notes about the saved state
-
-  // Relations
-  user            User             @relation(fields: [userId], references: [id], onDelete: Cascade)
-  individualTaxes IndividualTaxes? @relation(fields: [individualTaxesId], references: [id], onDelete: SetNull)
-
-  // Timestamps
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
 
   @@index([userId])
 }

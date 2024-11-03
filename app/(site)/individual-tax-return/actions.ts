@@ -514,9 +514,9 @@ async function createCapitalGains(
   // Capital Gains Total
   const capitalGainsTotal = await tx.incomeFromCapitalGains.create({
     data: {
-      capitalGain: data.incomeFromCapitaGainsTotal?.capitalGain || null,
-      exemptedAmount: data.incomeFromCapitaGainsTotal?.exemptedAmount || null,
-      taxableAmount: data.incomeFromCapitaGainsTotal?.taxableAmount || null,
+      capitalGain: data.incomeFromCapitalGainsTotal?.capitalGain || null,
+      exemptedAmount: data.incomeFromCapitalGainsTotal?.exemptedAmount || null,
+      taxableAmount: data.incomeFromCapitalGainsTotal?.taxableAmount || null,
     },
   });
 
@@ -550,12 +550,100 @@ async function createPersonalExpenses(
     },
   });
 
-  // ... Create other personal expenses similarly
+  // Personal Transportation Expenses
+  const personalTransportationExpenses = await tx.personalExpense.create({
+    data: {
+      amount: data.personalTransportationExpenses?.amount || null,
+      comment: data.personalTransportationExpenses?.comment || null,
+    },
+  });
+
+  // Utility Expense
+  const utilityExpense = await tx.personalExpense.create({
+    data: {
+      amount: data.utilityExpense?.amount || null,
+      comment: data.utilityExpense?.comment || null,
+    },
+  });
+
+  // House Keeping Expense
+  const houseKeepingExpense = await tx.personalExpense.create({
+    data: {
+      amount: data.houseKeepingExpense?.amount || null,
+      comment: data.houseKeepingExpense?.comment || null,
+    },
+  });
+
+  // Humanities Expense
+  const humanitiesExpense = await tx.personalExpense.create({
+    data: {
+      amount: data.humanitiesExpense?.amount || null,
+      comment: data.humanitiesExpense?.comment || null,
+    },
+  });
+
+  // Education Expenses
+  const educationExpenses = await tx.personalExpense.create({
+    data: {
+      amount: data.educationExpenses?.amount || null,
+      comment: data.educationExpenses?.comment || null,
+    },
+  });
+
+  // Personal Expense For Local Foreign Travel
+  const personalExpenseForLocalForeignTravel = await tx.personalExpense.create({
+    data: {
+      amount: data.personalExpenseForLocalForeignTravel?.amount || null,
+      comment: data.personalExpenseForLocalForeignTravel?.comment || null,
+    },
+  });
+
+  // Festival Expense
+  const festivalExpense = await tx.personalExpense.create({
+    data: {
+      amount: data.festivalExpense?.amount || null,
+      comment: data.festivalExpense?.comment || null,
+    },
+  });
+
+  // Tax Deducted Collected At Source
+  const taxDeductedCollectedAtSource = await tx.personalExpense.create({
+    data: {
+      amount: data.taxDeductedCollectedAtSource?.amount || null,
+      comment: data.taxDeductedCollectedAtSource?.comment || null,
+    },
+  });
+
+  // Interest Paid
+  const interestPaid = await tx.personalExpense.create({
+    data: {
+      amount: data.interestPaid?.amount || null,
+      comment: data.interestPaid?.comment || null,
+    },
+  });
+
+  // Total Expense Individual Person
+  const totalExpenseIndividualPerson = await tx.personalExpense.create({
+    data: {
+      amount: data.totalExpenseIndividualPerson?.amount || null,
+      comment: data.totalExpenseIndividualPerson?.comment || null,
+    },
+  });
 
   return {
     expensesForFoodId: foodExpenses.id,
     housingExpenseId: housingExpense.id,
-    // ... return other ids
+    personalTransportationExpensesId: personalTransportationExpenses.id,
+    utilityExpenseId: utilityExpense.id,
+    houseKeepingExpenseId: houseKeepingExpense.id,
+    humanitiesExpenseId: humanitiesExpense.id,
+    educationExpensesId: educationExpenses.id,
+    personalExpenseForLocalForeignTravelId:
+      personalExpenseForLocalForeignTravel.id,
+    festivalExpenseId: festivalExpense.id,
+    taxDeductedCollectedAtSourceId: taxDeductedCollectedAtSource.id,
+    interestPaidId: interestPaid.id,
+    totalExpenseIndividualPersonId: totalExpenseIndividualPerson.id,
   };
 }
 
@@ -587,7 +675,6 @@ export async function createTaxReturnAndOrder(
       // Create the individual tax return with all relations
       const taxReturn = await tx.individualTaxes.create({
         data: {
-          userId: session.user.id,
           // Image 1
           taxpayerName: validatedData.taxpayerName,
           nationalId: validatedData.nationalId,
@@ -658,7 +745,7 @@ export async function createTaxReturnAndOrder(
             validatedData.listOfDocumentsFurnishedWithThisReturn1 || null,
           listOfDocumentsFurnishedWithThisReturn2:
             validatedData.listOfDocumentsFurnishedWithThisReturn2 || null,
-          fatherOrHusband: validatedData.fatherOrHusband || null,
+          fatherOrHusband: validatedData.fatherOrHusband,
           placeOfSignature: validatedData.placeOfSignature || null,
           signature: validatedData.signature || null,
           dateOfSignature: new Date(), // or from validatedData
@@ -803,9 +890,152 @@ export async function createTaxReturnAndOrder(
           taka1000000: validatedData.taka1000000 || null,
 
           // Image 9
+          ...personalExpenses,
 
-          // Add these required fields:
-          netWealthLastDate: "NO_I_AM_A_NEW_TAXPAYER", // or from validatedData, enum value
+          // Image 10 - Net Wealth and Liabilities
+          netWealthLastDate: validatedData.netWealthLastDate, // or from validatedData, enum value
+          netWealthLastDateAmount:
+            validatedData.netWealthLastDateAmount || null,
+          giftExpense: validatedData.giftExpense || null,
+          institutionalLiabilities:
+            validatedData.institutionalLiabilities || null,
+          nonInstitutionalLiabilities:
+            validatedData.nonInstitutionalLiabilities || null,
+          otherLiabilities: validatedData.otherLiabilities || null,
+          lessBusinessLiabilities:
+            validatedData.lessBusinessLiabilities || null,
+
+          // Directors Shareholding
+          directorsShareholdingCompanyName1:
+            validatedData.directorsShareholdingCompanyName1 || null,
+          directorsShareholdingCompanyName2:
+            validatedData.directorsShareholdingCompanyName2 || null,
+          directorsShareholdingCompanyName3:
+            validatedData.directorsShareholdingCompanyName3 || null,
+          directorsShareholdingNoOfShare1:
+            validatedData.directorsShareholdingNoOfShare1 || null,
+          directorsShareholdingNoOfShare2:
+            validatedData.directorsShareholdingNoOfShare2 || null,
+          directorsShareholdingNoOfShare3:
+            validatedData.directorsShareholdingNoOfShare3 || null,
+          directorsShareholdingCompanyValue1:
+            validatedData.directorsShareholdingCompanyValue1 || null,
+          directorsShareholdingCompanyValue2:
+            validatedData.directorsShareholdingCompanyValue2 || null,
+          directorsShareholdingCompanyValue3:
+            validatedData.directorsShareholdingCompanyValue3 || null,
+
+          // Partnership Firms
+          nameOfPartnershipFirm1: validatedData.nameOfPartnershipFirm1 || null,
+          nameOfPartnershipFirm2: validatedData.nameOfPartnershipFirm2 || null,
+          nameOfPartnershipFirm3: validatedData.nameOfPartnershipFirm3 || null,
+          shareOfProfit1: validatedData.shareOfProfit1 || null,
+          shareOfProfit2: validatedData.shareOfProfit2 || null,
+          shareOfProfit3: validatedData.shareOfProfit3 || null,
+          capitalContributed1: validatedData.capitalContributed1 || null,
+          capitalContributed2: validatedData.capitalContributed2 || null,
+          capitalContributed3: validatedData.capitalContributed3 || null,
+
+          // Income and Fund
+          totalIncomeShownInTheReturn:
+            validatedData.totalIncomeShownInTheReturn || null,
+          taxExemptedIncomeAndAllowance:
+            validatedData.taxExemptedIncomeAndAllowance || null,
+          receiptOfGiftOtherReceipts:
+            validatedData.receiptOfGiftOtherReceipts || null,
+          totalSourceOfFund: validatedData.totalSourceOfFund || null,
+          sumOfSourceOfFundAndPreviousYearsNetWealth:
+            validatedData.sumOfSourceOfFundAndPreviousYearsNetWealth || null,
+          expenseRelatingToLifestyle:
+            validatedData.expenseRelatingToLifestyle || null,
+          totalExpensesAndLoss: validatedData.totalExpensesAndLoss || null,
+          netWealthAtTheLastDateOfThisFinancialYear:
+            validatedData.netWealthAtTheLastDateOfThisFinancialYear || null,
+          totalLiabilitiesOutsideBusiness:
+            validatedData.totalLiabilitiesOutsideBusiness || null,
+          grossWealth: validatedData.grossWealth || null,
+          businessCapital: validatedData.businessCapital || null,
+          directorsShareholdingsInTheCompanies:
+            validatedData.directorsShareholdingsInTheCompanies || null,
+          businessCapitalOfPartnershipFirm:
+            validatedData.businessCapitalOfPartnershipFirm || null,
+
+          // Image 11 - Agricultural and Non-Agricultural Properties
+          nonAgriculturalPropertyLandHouseProperty:
+            validatedData.nonAgriculturalPropertyLandHouseProperty || null,
+          nonAgriculturalLocationDescription1:
+            validatedData.nonAgriculturalLocationDescription1 || null,
+          nonAgriculturalLocationDescription2:
+            validatedData.nonAgriculturalLocationDescription2 || null,
+          nonAgriculturalLocationDescription3:
+            validatedData.nonAgriculturalLocationDescription3 || null,
+          nonAgriculturalLocationDescription4:
+            validatedData.nonAgriculturalLocationDescription4 || null,
+          nonAgriculturalLocationDescription5:
+            validatedData.nonAgriculturalLocationDescription5 || null,
+          nonAgriculturalValue1: validatedData.nonAgriculturalValue1 || null,
+          nonAgriculturalValue2: validatedData.nonAgriculturalValue2 || null,
+          nonAgriculturalValue3: validatedData.nonAgriculturalValue3 || null,
+          nonAgriculturalValue4: validatedData.nonAgriculturalValue4 || null,
+          nonAgriculturalValue5: validatedData.nonAgriculturalValue5 || null,
+          agriculturalLocationAndDescription1:
+            validatedData.agriculturalLocationAndDescription1 || null,
+          agriculturalLocationAndDescription2:
+            validatedData.agriculturalLocationAndDescription2 || null,
+          agriculturalLocationAndDescription3:
+            validatedData.agriculturalLocationAndDescription3 || null,
+          agriculturalLocationValue1:
+            validatedData.agriculturalLocationValue1 || null,
+          agriculturalLocationValue2:
+            validatedData.agriculturalLocationValue2 || null,
+          agriculturalLocationValue3:
+            validatedData.agriculturalLocationValue3 || null,
+
+          // Financial Assets
+          shareDebentureUnitCertificate:
+            validatedData.shareDebentureUnitCertificate || null,
+          sanchayapatraSavingsCertificate:
+            validatedData.sanchayapatraSavingsCertificate || null,
+          depositPensionScheme: validatedData.depositPensionScheme || null,
+          loanGivenToOthersName: validatedData.loanGivenToOthersName || null,
+          loanGiventoOthersNid: validatedData.loanGiventoOthersNid || null,
+          loansGivenToOthers: validatedData.loansGivenToOthers || null,
+          savingDeposit: validatedData.savingDeposit || null,
+          providentFund: validatedData.providentFund || null,
+          otherInvestmentDesc: validatedData.otherInvestmentDesc || null,
+          otherInvestment: validatedData.otherInvestment || null,
+
+          // Motor Vehicles and Assets
+          typeOfMotorVehicle1: validatedData.typeOfMotorVehicle1 || null,
+          typeOfMotorVehicle2: validatedData.typeOfMotorVehicle2 || null,
+          registrationNumber1: validatedData.registrationNumber1 || null,
+          registrationNumber2: validatedData.registrationNumber2 || null,
+          motorValue1: validatedData.motorValue1 || null,
+          motorValue2: validatedData.motorValue2 || null,
+          ornamentsDesc: validatedData.ornamentsDesc || null,
+          ornamentsValue: validatedData.ornamentsValue || null,
+          furnitureAndElectronic: validatedData.furnitureAndElectronic || null,
+          othersAssetsDesc: validatedData.othersAssetsDesc || null,
+          othersAssetsValue: validatedData.othersAssetsValue || null,
+          bankBalance: validatedData.bankBalance || null,
+          cashInHand: validatedData.cashInHand || null,
+          otherFundDesc: validatedData.otherFundDesc || null,
+          otherFundOutsideBusiness:
+            validatedData.otherFundOutsideBusiness || null,
+          assetOutsideBangladesh: validatedData.assetOutsideBangladesh || null,
+          agriculturalProperty: validatedData.agriculturalProperty || null,
+          totalFinancialAssets: validatedData.totalFinancialAssets || null,
+          motorVehiclesTotal: validatedData.motorVehiclesTotal || null,
+          totalAssetslocatedInBangladesh:
+            validatedData.totalAssetslocatedInBangladesh || null,
+          totalCashInHandsAndFundOutsideBusiness:
+            validatedData.totalCashInHandsAndFundOutsideBusiness || null,
+          totalAssetsInBangladeshAndOutsideBangladesh:
+            validatedData.totalAssetsInBangladeshAndOutsideBangladesh || null,
+
+          // Totals
+          totalIncomeShown: validatedData.totalIncomeShown || null,
+          totalTaxPaid: validatedData.totalTaxPaid || null,
         },
       });
 
