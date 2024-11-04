@@ -56,6 +56,7 @@ export const useFormFields = (
     calculateTotalBankAndShonchoypatra,
     calculateTotalTaxPaidAdjustmentExcess,
     calculateTotalAssetsInAndOutsideBangladesh,
+    calculateTotalCashInHandAndFund,
   } = useCalculations(watch, setValue, getValues, setError, clearErrors);
 
   const formFields: FormField[] = [
@@ -5794,6 +5795,9 @@ export const useFormFields = (
       height: 18,
       imageIndex: 10,
       isVisible: true,
+      onBlur() {
+        calculateTotalCashInHandAndFund();
+      },
     },
     {
       name: "otherFundDesc",
@@ -5816,6 +5820,9 @@ export const useFormFields = (
       height: 18,
       imageIndex: 10,
       isVisible: true,
+      onBlur() {
+        calculateTotalCashInHandAndFund();
+      },
     },
 
     {

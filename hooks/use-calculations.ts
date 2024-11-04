@@ -50,12 +50,6 @@ export const useCalculations = (
   }, [watch, setValue]);
 
   const calculateTotalAssetsInBangladesh = useCallback(() => {
-    // const nonAgriculturalProperty = calculateTotalNonAgriculturalAssets();
-    // const agriculturalProperty = calculateTotalAgriculturalAssets();
-    // const totalFinancialAssets = calculateTotalFinancialAssets();
-    // const totalMotorValue = calculateTotalMotorValue();
-    // const totalCashInHandAndFund = calculateTotalCashInHandAndFund();
-
     const fields: FormFieldName[] = [
       "totalFinancialAssets",
       "motorVehiclesTotal",
@@ -1424,5 +1418,6 @@ export const useCalculations = (
     calculateTotalTaxDeductedOrCollected,
     calculateTotalTaxPaidAdjustmentExcess,
     calculateTotalAssetsInAndOutsideBangladesh,
+    calculateTotalCashInHandAndFund,
   };
 };

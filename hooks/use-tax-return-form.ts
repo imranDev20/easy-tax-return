@@ -19,7 +19,7 @@ export const useTaxReturnForm = () => {
       tin: "",
       circle: "",
       zone: "",
-      assessmentYear: "2024-25",
+      assessmentYear: "2024-2025",
       isParentOfDisabledPerson: false, // boolean defaulted to false
       spouseName: "",
       spouseTin: "",
