@@ -44,7 +44,7 @@ import { FormField } from "@/types/tax-return-form";
 import { useTaxReturnForm } from "@/hooks/use-tax-return-form";
 import { generatePDF } from "@/lib/pdf";
 import FloatingErrorSummary from "./floating-error-summary";
-import { createTaxReturnAndOrder } from "../actions";
+import { createTaxReturnAndOrder, updateTaxReturnOrder } from "../actions";
 import { Prisma } from "@prisma/client";
 
 const images = [
@@ -366,7 +366,10 @@ const IndividualTaxReturnForm = ({
         calculateGrossTax();
       }
 
-      if (name === "transportFacilityPrivateVehicleCC") {
+      if (
+        name === "transportFacilityPrivateVehicleCC" ||
+        name === "transportFacilityPrivateCheck"
+      ) {
         calculatePrivateEmploymentTotals();
       }
 
@@ -1289,22 +1292,44 @@ const IndividualTaxReturnForm = ({
   ) => {
     startTransition(async () => {
       try {
-        // await generatePDF(images, formFields, data);
+        let response;
 
         if (taxReturnOrder) {
-          return;
-        }
+          // If tax return exists, update it
+          response = await updateTaxReturnOrder(taxReturnOrder.id, data);
 
-        const response = await createTaxReturnAndOrder(data);
-        if (response.data?.order.id) {
-          // Redirect to the profile details page with the new tax return ID
-          router.push(`/profile/submitted/${response.data.order.id}`);
+          if (response.data?.taxReturn.id) {
+            toast({
+              title: "Success",
+              description: "Tax return updated successfully.",
+              variant: "success",
+            });
+          } else {
+            toast({
+              title: "Error",
+              description: "Could not update tax return. Please try again.",
+              variant: "destructive",
+            });
+          }
         } else {
-          toast({
-            title: "Error",
-            description: "Could not create tax return. Please try again.",
-            variant: "destructive",
-          });
+          // If no existing tax return, create new one
+          response = await createTaxReturnAndOrder(data);
+
+          if (response.data?.order.id) {
+            toast({
+              title: "Success",
+              description: "Tax return created successfully.",
+              variant: "success",
+            });
+            // Redirect to the profile details page with the new tax return ID
+            router.push(`/profile/submitted/${response.data.order.id}`);
+          } else {
+            toast({
+              title: "Error",
+              description: "Could not create tax return. Please try again.",
+              variant: "destructive",
+            });
+          }
         }
       } catch (error) {
         console.error("Error submitting tax return:", error);
@@ -1316,8 +1341,6 @@ const IndividualTaxReturnForm = ({
       }
     });
   };
-
-  console.log(errors);
 
   const renderField = (field: FormField, imageIndex: number) => {
     if (field.imageIndex !== imageIndex || !field.isVisible) return null;
@@ -1421,6 +1444,7 @@ const IndividualTaxReturnForm = ({
               left: `${field.x / 10}%`,
               top: `${field.y / 10}%`,
             }}
+            value={field.value as boolean}
             scale={scale}
             width={field.width}
             height={field.height}

@@ -1334,6 +1334,8 @@ export const useCalculations = (
       totalIncome += transportAmount;
 
       setValue("transportFacilityPrivate", transportAmount.toFixed(2));
+    } else {
+      setValue("transportFacilityPrivate", "0.00");
     }
 
     const totalExempted = Math.round(Math.min(totalIncome / 3, 450000));

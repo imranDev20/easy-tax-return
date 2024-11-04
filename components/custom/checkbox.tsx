@@ -11,6 +11,8 @@ interface CustomCheckboxProps {
   height: number;
   required: boolean;
   onBlur?: (val: string | boolean) => void;
+  value?: boolean; // Add value prop
+  onChange?: (value: boolean) => void; // Add onChange prop
 }
 
 const CustomCheckbox: React.FC<CustomCheckboxProps> = ({
@@ -23,8 +25,12 @@ const CustomCheckbox: React.FC<CustomCheckboxProps> = ({
   height,
   required,
   onBlur,
+  value,
+  onChange,
 }) => {
-  const [isChecked, setIsChecked] = useState(false);
+  // Use controlled state if value prop is provided, otherwise use local state
+  const [internalChecked, setInternalChecked] = useState(false);
+  const isChecked = value !== undefined ? value : internalChecked;
 
   const combinedStyle = {
     ...style,
@@ -33,20 +39,46 @@ const CustomCheckbox: React.FC<CustomCheckboxProps> = ({
     height: `${height / 10}%`,
   };
 
-  const { onChange, ...rest } = register(name);
+  const { onChange: registerOnChange, ...rest } = register(name);
 
   useEffect(() => {
-    const storedValue = localStorage.getItem(name);
-    if (storedValue) {
-      setIsChecked(JSON.parse(storedValue));
+    // Only load from localStorage if value prop is not provided
+    if (value === undefined) {
+      const storedValue = localStorage.getItem(name);
+      if (storedValue) {
+        setInternalChecked(JSON.parse(storedValue));
+      }
     }
-  }, [name]);
+  }, [name, value]);
+
+  useEffect(() => {
+    // Update internal state when value prop changes
+    if (value !== undefined) {
+      setInternalChecked(value);
+    }
+  }, [value]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newCheckedState = e.target.checked;
-    setIsChecked(newCheckedState);
-    onChange(e);
-    if (onBlur) onBlur(e.target.checked);
+
+    // Update internal state if uncontrolled
+    if (value === undefined) {
+      setInternalChecked(newCheckedState);
+      localStorage.setItem(name, JSON.stringify(newCheckedState));
+    }
+
+    // Call parent onChange if provided
+    if (onChange) {
+      onChange(newCheckedState);
+    }
+
+    // Call react-hook-form's onChange
+    registerOnChange(e);
+
+    // Call onBlur callback if provided
+    if (onBlur) {
+      onBlur(newCheckedState);
+    }
   };
 
   return (

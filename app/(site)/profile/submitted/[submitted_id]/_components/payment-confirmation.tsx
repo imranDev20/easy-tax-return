@@ -124,7 +124,7 @@ const PaymentConfirmation = ({
         </CardHeader>
 
         <CardContent className="p-0">
-          <div className="relative w-full" style={{ height: "600px" }}>
+          <div className="relative w-full h-[600px]">
             <Image
               src={InvoiceImage}
               alt="Invoice with QR Code"
@@ -132,6 +132,31 @@ const PaymentConfirmation = ({
               className="object-contain"
               priority
             />
+
+            {/* Name */}
+            <p className="absolute text-sm left-[8.7rem] top-[7.4rem]">
+              {taxReturnOrder.individualTaxes?.taxpayerName || "N/A"}
+            </p>
+
+            {/* Order ID */}
+            <p className="absolute text-sm left-[8.7rem] top-[9.2rem]">
+              {taxReturnOrder.id || "N/A"}
+            </p>
+
+            {/* TIN */}
+            <p className="absolute text-sm left-[8.7rem] top-[11.1rem]">
+              {taxReturnOrder.individualTaxes?.tin || "N/A"}
+            </p>
+
+            {/* Mobile */}
+            <p className="absolute text-sm left-[8.7rem] top-[12.9rem]">
+              {taxReturnOrder.individualTaxes?.mobile || "N/A"}
+            </p>
+
+            {/* Date */}
+            <p className="absolute text-sm left-[29rem] top-[7.6rem]">
+              {new Date(taxReturnOrder.createdAt).toLocaleDateString()}
+            </p>
           </div>
 
           <div className="px-8 py-6 border-t bg-white">

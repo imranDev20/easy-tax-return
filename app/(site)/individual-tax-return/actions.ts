@@ -758,7 +758,7 @@ export async function createTaxReturnAndOrder(
   }
 }
 
-export async function updateTaxReturn(
+export async function updateTaxReturnOrder(
   orderId: string,
   input: IndividualTaxReturnFormInput
 ) {

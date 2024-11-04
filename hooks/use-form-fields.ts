@@ -1733,6 +1733,7 @@ export const useFormFields = (
       onBlur() {
         calculatePrivateEmploymentTotals();
       },
+
       isVisible: watch("typeOfEmployment") === "PRIVATE",
     },
 
@@ -4394,7 +4395,7 @@ export const useFormFields = (
 
     {
       name: "expensesForFood.comment",
-      type: "number",
+      type: "text",
       label: "",
       x: 719,
       y: 218,
@@ -4674,7 +4675,7 @@ export const useFormFields = (
     {
       name: "totalExpenseIndividualPerson.comment",
       type: "text",
-      label: "total",
+      label: "",
       x: 719,
       y: 581,
       width: 203,
