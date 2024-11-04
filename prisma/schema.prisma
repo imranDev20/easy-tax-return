@@ -603,6 +603,7 @@ enum PaymentStatus {
 
 model Order {
   id                String           @id @default(cuid())
+  invoiceId         String           @unique
   userId            String
   user              User             @relation(fields: [userId], references: [id], onDelete: Cascade)
   individualTaxesId String?          @unique

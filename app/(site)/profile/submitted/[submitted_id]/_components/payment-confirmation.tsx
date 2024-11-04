@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useTransition } from "react";
+import React, { useTransition, useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -37,9 +37,22 @@ const PaymentConfirmation = ({
   taxReturnOrder: OrderWithRelation;
 }) => {
   const [isPending, startTransition] = useTransition();
+  const [formattedDate, setFormattedDate] = useState("");
   const hasExistingPaymentInfo = Boolean(
     taxReturnOrder.transactionID && taxReturnOrder.phoneNumberUsed
   );
+
+  useEffect(() => {
+    // Format date only on client side to avoid hydration mismatch
+    const date = new Date(taxReturnOrder.createdAt);
+    setFormattedDate(
+      date.toLocaleDateString("en-GB", {
+        day: "2-digit",
+        month: "2-digit",
+        year: "numeric",
+      })
+    );
+  }, [taxReturnOrder.createdAt]);
 
   const form = useForm<ConfirmPaymentInput>({
     resolver: zodResolver(confirmPaymentSchema),
@@ -155,7 +168,7 @@ const PaymentConfirmation = ({
 
             {/* Date */}
             <p className="absolute text-sm left-[29rem] top-[7.6rem]">
-              {new Date(taxReturnOrder.createdAt).toLocaleDateString()}
+              {formattedDate}
             </p>
           </div>
 

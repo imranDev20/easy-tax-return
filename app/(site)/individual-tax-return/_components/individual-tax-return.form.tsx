@@ -1342,6 +1342,8 @@ const IndividualTaxReturnForm = ({
     });
   };
 
+  console.log(errors);
+
   const renderField = (field: FormField, imageIndex: number) => {
     if (field.imageIndex !== imageIndex || !field.isVisible) return null;
 
@@ -1500,6 +1502,7 @@ const IndividualTaxReturnForm = ({
                 onChange={(date) => {
                   onChange(date);
                 }}
+                required={isRequired}
                 disabled={field.disabled}
                 value={value}
                 name={field.name}
@@ -1785,11 +1788,13 @@ const renderErrorAndRequiredIndicator = (
 ) => (
   <>
     {(errors as any)[field.name] && (
-      <p className="absolute bottom-0 left-0 text-red-500 text-xs mt-1">
-        {(errors as any)[field.name]?.message as string}
-      </p>
+      <span className="absolute top-0 right-0 -translate-y-1/2 translate-x-1/2 h-10 w-10 bg-red-400/70 rotate-45 transform origin-center transition-colors">
+        <span className="absolute text-white top-[23px] left-[17px] text-lg">
+          *
+        </span>
+      </span>
     )}
-    {isRequired && !field.disabled && (
+    {isRequired && !field.disabled && !(errors as any)[field.name] && (
       <span className="absolute top-0 right-0 -translate-y-1/2 translate-x-1/2 h-10 w-10 bg-sky-300/70 rotate-45 transform origin-center transition-colors">
         <span className="absolute text-white top-[23px] left-[17px] text-lg">
           *

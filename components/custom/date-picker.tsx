@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
+import { useFormContext } from "react-hook-form";
 import flatpickr from "flatpickr";
 import "flatpickr/dist/themes/airbnb.css";
 
@@ -35,11 +36,16 @@ const CustomDatePicker: React.FC<CustomDatePickerProps> = ({
   required = false,
   disabled = false,
 }) => {
+  const {
+    formState: { errors },
+  } = useFormContext();
   const [selectedDate, setSelectedDate] = useState<Date | null>(value || null);
   const containerRef = useRef<HTMLDivElement>(null);
   const dayInputRef = useRef<HTMLInputElement>(null);
   const hiddenInputRef = useRef<HTMLInputElement>(null);
   const flatpickrRef = useRef<Instance | null>(null);
+
+  const hasError = !!errors[name];
 
   const formatDate = (date: Date | null) => {
     if (!date) return { day: "", month: "", year: "" };
@@ -52,7 +58,6 @@ const CustomDatePicker: React.FC<CustomDatePickerProps> = ({
 
   const { day, month, year } = formatDate(selectedDate);
 
-  // Update date when value prop changes
   useEffect(() => {
     setSelectedDate(value || null);
     if (flatpickrRef.current && value) {
@@ -66,7 +71,6 @@ const CustomDatePicker: React.FC<CustomDatePickerProps> = ({
     }
   };
 
-  // Initialize flatpickr
   useEffect(() => {
     if (!hiddenInputRef.current || !containerRef.current) return;
 
@@ -101,22 +105,34 @@ const CustomDatePicker: React.FC<CustomDatePickerProps> = ({
       },
     };
 
-    // Initialize flatpickr
     flatpickrRef.current = flatpickr(hiddenInputRef.current, options);
 
-    // Set initial date if provided
     if (value) {
       flatpickrRef.current.setDate(value, false);
     }
 
-    // Cleanup
     return () => {
       if (flatpickrRef.current) {
         flatpickrRef.current.destroy();
         flatpickrRef.current = null;
       }
     };
-  }, []); // Empty dependency array to initialize only once
+  }, []);
+
+  const getInputClassName = () => {
+    const baseClasses =
+      "relative overflow-hidden w-full h-full border rounded-none px-2 py-2";
+
+    if (disabled) {
+      return `${baseClasses} bg-gray-100 border-gray-300 text-gray-500 cursor-not-allowed`;
+    }
+
+    if (hasError) {
+      return `${baseClasses} border-red-500 bg-red-50 focus:border-red-700 focus:ring-0 focus:outline-0 focus:bg-red-50 hover:border-red-700`;
+    }
+
+    return `${baseClasses} border-sky-300 bg-sky-300/10 focus:border-sky-500 focus:ring-0 focus:outline-0 focus:bg-transparent hover:border-sky-500 cursor-pointer`;
+  };
 
   const renderDateField = (
     value: string,
@@ -141,16 +157,16 @@ const CustomDatePicker: React.FC<CustomDatePickerProps> = ({
         value={value}
         onClick={disabled ? undefined : openDatepicker}
         placeholder={placeholder}
-        className={`relative overflow-hidden w-full h-full border rounded-none px-2 py-2 ${
-          disabled
-            ? "bg-gray-100 border-gray-300 text-gray-500 cursor-not-allowed"
-            : "border-sky-300 bg-sky-300/10 focus:border-sky-500 focus:ring-0 focus:outline-0 focus:bg-transparent hover:border-sky-500 cursor-pointer"
-        }`}
+        className={getInputClassName()}
         readOnly
         disabled={disabled}
       />
-      {required && !disabled && (
-        <span className="absolute top-0 right-0 -translate-y-1/2 translate-x-1/2 h-10 w-10 bg-sky-300/70 rotate-45 transform origin-center transition-colors">
+      {required && (
+        <span
+          className={`absolute top-0 right-0 -translate-y-1/2 translate-x-1/2 h-10 w-10 rotate-45 transform origin-center transition-colors ${
+            hasError ? "bg-red-400/70" : "bg-sky-300/70"
+          }`}
+        >
           <span className="absolute text-white top-[23px] left-[17px] text-lg">
             *
           </span>

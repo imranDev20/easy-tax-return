@@ -40,11 +40,16 @@ const financialAssetsSchema = z.object({
 // Define the Zod schema
 export const individualTaxReturnSchema = z.object({
   // Image 1
-  taxpayerName: z.string().min(1, "Name is required"),
-  nationalId: z.string().min(1, "National ID or Passport number is required"),
-  tin: z.string().min(1, "TIN is required"),
-  circle: z.string().min(1, "Circle is required"),
-  zone: z.string().min(1, "Zone is required"),
+  taxpayerName: z.string().min(2, "Name must be at least 2 characters"),
+  nationalId: z
+    .string()
+    .min(10, "National ID or Passport number must be at least 10 characters"),
+  tin: z
+    .string()
+    .min(12, "TIN must be 12 characters")
+    .max(12, "TIN must be 12 characters"),
+  circle: z.string().min(2, "Circle must be at least 2 characters"),
+  zone: z.string().min(2, "Zone must be at least 2 characters"),
   assessmentYear: z.string(),
   residentialStatus: z.nativeEnum(ResidentialStatus),
   assesseeStatus: z.nativeEnum(AssesseeStatus),
@@ -53,11 +58,11 @@ export const individualTaxReturnSchema = z.object({
   dateOfBirth: z.date(),
   spouseName: z.string().optional(),
   spouseTin: z.string().optional(),
-  addressLine1: z.string(),
+  addressLine1: z.string().min(5, "Address must be at least 5 characters"),
   addressLine2: z.string().optional(),
   telephone: z.string().optional(),
-  mobile: z.string(),
-  email: z.string().email(),
+  mobile: z.string().min(11, "Mobile number must be at least 11 characters"),
+  email: z.string().email("Please enter a valid email address"),
   employerName: z.string().optional(),
   businessName: z.string().optional(),
   bin: z.string().optional(),

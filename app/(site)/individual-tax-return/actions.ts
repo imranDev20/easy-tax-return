@@ -691,6 +691,45 @@ async function getTaxReturnData({
   };
 }
 
+export async function generateInvoiceId(): Promise<string> {
+  try {
+    // Get the latest order
+    const latestOrder = await prisma.order.findFirst({
+      orderBy: {
+        createdAt: "desc",
+      },
+    });
+
+    if (!latestOrder?.transactionID) {
+      // If no previous order exists or no transactionID, start with INV000001A
+      return "INV000001A";
+    }
+
+    const currentId = latestOrder.transactionID;
+
+    // Extract the numeric part and letter suffix
+    const numericPart = parseInt(currentId.substring(3, 9));
+    const letterSuffix = currentId.charAt(9);
+
+    if (numericPart === 999999) {
+      // If we've reached 999999, increment the letter and reset the number
+      if (letterSuffix === "Z") {
+        throw new Error("Maximum invoice ID reached");
+      }
+      // Get next letter in alphabet
+      const nextLetter = String.fromCharCode(letterSuffix.charCodeAt(0) + 1);
+      return `INV000001${nextLetter}`;
+    } else {
+      // Just increment the number
+      const nextNumber = numericPart + 1;
+      return `INV${nextNumber.toString().padStart(6, "0")}${letterSuffix}`;
+    }
+  } catch (error) {
+    console.error("Error generating invoice ID:", error);
+    throw error;
+  }
+}
+
 // actions
 export async function createTaxReturnAndOrder(
   input: IndividualTaxReturnFormInput
@@ -698,6 +737,7 @@ export async function createTaxReturnAndOrder(
   try {
     // Get the authenticated user's session
     const session = await getServerSession(authOptions);
+    const invoiceId = await generateInvoiceId();
 
     if (!session?.user) {
       return {
@@ -729,6 +769,7 @@ export async function createTaxReturnAndOrder(
         data: {
           userId: session.user.id,
           individualTaxesId: taxReturn.id,
+          invoiceId,
           amount: 1000, // Set your default amount or get from configuration
           paymentStatus: PaymentStatus.PENDING,
           // Add other order fields as needed
