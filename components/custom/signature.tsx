@@ -30,8 +30,6 @@ const SignatureField: React.FC<SignatureFieldProps> = ({
   const signatureCanvasRef = useRef<SignatureCanvas>(null);
   const { toast } = useToast();
 
-  console.log(value);
-
   const handleUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {

@@ -105,7 +105,7 @@ export const individualTaxReturnSchema = z.object({
 
   // Image 4 -
   isIncomeFromEmployment: z.nativeEnum(IncomeFromEmployment),
-  typeOfEmployment: z.nativeEnum(EmploymentType).nullable(),
+  typeOfEmployment: z.nativeEnum(EmploymentType).nullable().optional(),
   // govt
   basicPayGovt: govtPayScaleSchema,
   arrearPayGovt: govtPayScaleSchema,
@@ -125,7 +125,7 @@ export const individualTaxReturnSchema = z.object({
   otherAllowanceGovt: govtPayScaleSchema,
   totalGovt: govtPayScaleSchema,
 
-  // image 3 // private
+  // image 4 // private
   basicPayPrivate: z.string().nullable().optional(),
   allowancesPrivate: z.string().nullable().optional(),
   advanceArrearSalaryPrivate: z.string().nullable().optional(),

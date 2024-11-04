@@ -60,7 +60,7 @@ interface RadioFormField extends BaseFormField {
   type: "radio";
   options: Array<{
     label: string;
-    value: string;
+    value: string | boolean;
     x: number;
     y: number;
     width: number;

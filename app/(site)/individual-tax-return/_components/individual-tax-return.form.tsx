@@ -391,8 +391,6 @@ const IndividualTaxReturnForm = ({
   useEffect(() => {
     if (individualTaxes) {
       reset({
-        ...getValues(),
-
         // Image 1
         taxpayerName: individualTaxes.taxpayerName,
         nationalId: individualTaxes.nationalId,
@@ -1293,6 +1291,10 @@ const IndividualTaxReturnForm = ({
       try {
         // await generatePDF(images, formFields, data);
 
+        if (taxReturnOrder) {
+          return;
+        }
+
         const response = await createTaxReturnAndOrder(data);
         if (response.data?.order.id) {
           // Redirect to the profile details page with the new tax return ID
@@ -1314,6 +1316,8 @@ const IndividualTaxReturnForm = ({
       }
     });
   };
+
+  console.log(errors);
 
   const renderField = (field: FormField, imageIndex: number) => {
     if (field.imageIndex !== imageIndex || !field.isVisible) return null;
@@ -1429,7 +1433,7 @@ const IndividualTaxReturnForm = ({
           <RadioGroup
             control={control}
             name={field.name as any}
-            options={field.options}
+            options={field.options as any}
             scale={scale}
             disabled={field.disabled}
             resetFields={field.resetFields}

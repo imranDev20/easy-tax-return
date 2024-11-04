@@ -264,7 +264,7 @@ export const useFormFields = (
       options: [
         {
           label: "",
-          value: "true",
+          value: true,
           x: 888,
           y: 555,
           width: 49,
