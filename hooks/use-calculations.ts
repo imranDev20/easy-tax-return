@@ -908,6 +908,7 @@ export const useCalculations = (
     const badDebt = parseFloat(watch("badDebtExpense") || "0");
     const netProfit = grossProfit - expenses - badDebt;
     setValue("netProfitFromBusinessIncome", netProfit.toFixed(2));
+    setValue("incomeFromBusiness", netProfit.toFixed(2)); // for the second page
 
     // Part 2: Balance Sheet Calculations
 

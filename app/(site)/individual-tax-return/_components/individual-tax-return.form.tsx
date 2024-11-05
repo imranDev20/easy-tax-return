@@ -1342,7 +1342,7 @@ const IndividualTaxReturnForm = ({
     });
   };
 
-  console.log(errors);
+  console.log(getValues("transportFacilityPrivateCheck"));
 
   const renderField = (field: FormField, imageIndex: number) => {
     if (field.imageIndex !== imageIndex || !field.isVisible) return null;
@@ -1394,6 +1394,50 @@ const IndividualTaxReturnForm = ({
         );
 
       case "number":
+        const NumberFieldComponent = ({
+          value,
+          onChange,
+        }: {
+          value: string;
+          onChange: (value: string) => void;
+        }) => {
+          const debouncedChange = useMemo(
+            () =>
+              debounce((newValue: string) => {
+                onChange(newValue);
+                if (field?.onBlur) field.onBlur(newValue);
+              }, 500),
+            [onChange]
+          );
+
+          return (
+            <div style={fieldStyle} className="relative overflow-hidden">
+              <NumericFormat
+                value={value as string}
+                thousandSeparator={true}
+                thousandsGroupStyle="lakh"
+                decimalScale={2}
+                fixedDecimalScale={true}
+                className={`w-full h-full absolute border px-2 font-medium ${
+                  !field.disabled
+                    ? (errors as any)[field.name]
+                      ? "border-red-500 bg-red-300/10 focus:border-red-700 focus:ring-0 focus:outline-0 focus:bg-red-300/20 hover:border-red-700"
+                      : "border-sky-300 rounded-none bg-sky-300/10 focus:border-sky-500 focus:ring-0 focus:outline-0 focus:bg-transparent hover:border-sky-500"
+                    : "bg-[#F5F5F5] font-medium text-[#948C91]"
+                }`}
+                style={{ fontSize: `${14 * scale}px` }}
+                disabled={field.disabled}
+                allowNegative={false}
+                customInput={CustomInput}
+                onValueChange={(values) => {
+                  debouncedChange(values.value);
+                }}
+              />
+              {renderErrorAndRequiredIndicator(field, errors, isRequired)}
+            </div>
+          );
+        };
+
         return (
           <>
             {field.isVisible && (
@@ -1401,34 +1445,7 @@ const IndividualTaxReturnForm = ({
                 name={field.name as any}
                 control={control}
                 render={({ field: { value, onChange } }) => (
-                  <div style={fieldStyle} className="relative overflow-hidden">
-                    <NumericFormat
-                      value={value as string}
-                      thousandSeparator={true}
-                      thousandsGroupStyle="lakh"
-                      decimalScale={2}
-                      fixedDecimalScale={true}
-                      className={`w-full h-full absolute border px-2 font-medium ${
-                        !field.disabled
-                          ? (errors as any)[field.name]
-                            ? "border-red-500 bg-red-300/10 focus:border-red-700 focus:ring-0 focus:outline-0 focus:bg-red-300/20 hover:border-red-700"
-                            : "border-sky-300 rounded-none bg-sky-300/10 focus:border-sky-500 focus:ring-0 focus:outline-0 focus:bg-transparent hover:border-sky-500"
-                          : "bg-[#F5F5F5] font-medium text-[#948C91]"
-                      }`}
-                      style={{ fontSize: `${14 * scale}px` }}
-                      disabled={field.disabled}
-                      allowNegative={false}
-                      customInput={CustomInput}
-                      onValueChange={(values) => {
-                        onChange(values.value);
-                      }}
-                      onBlur={(e) => {
-                        // onChange(e.target.value);
-                        if (field?.onBlur) field.onBlur(e.target.value);
-                      }}
-                    />
-                    {renderErrorAndRequiredIndicator(field, errors, isRequired)}
-                  </div>
+                  <NumberFieldComponent value={value} onChange={onChange} />
                 )}
               />
             )}

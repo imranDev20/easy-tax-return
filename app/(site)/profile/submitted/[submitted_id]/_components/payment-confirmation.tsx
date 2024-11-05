@@ -147,27 +147,27 @@ const PaymentConfirmation = ({
             />
 
             {/* Name */}
-            <p className="absolute text-sm left-[8.7rem] top-[7.4rem]">
+            <p className="absolute text-sm left-[9rem] top-[7.4rem]">
               {taxReturnOrder.individualTaxes?.taxpayerName || "N/A"}
             </p>
 
             {/* Order ID */}
-            <p className="absolute text-sm left-[8.7rem] top-[9.2rem]">
-              {taxReturnOrder.id || "N/A"}
+            <p className="absolute text-sm left-[9rem] top-[9.2rem]">
+              {taxReturnOrder.invoiceId || "N/A"}
             </p>
 
             {/* TIN */}
-            <p className="absolute text-sm left-[8.7rem] top-[11.1rem]">
+            <p className="absolute text-sm left-[9rem] top-[11.1rem]">
               {taxReturnOrder.individualTaxes?.tin || "N/A"}
             </p>
 
             {/* Mobile */}
-            <p className="absolute text-sm left-[8.7rem] top-[12.9rem]">
+            <p className="absolute text-sm left-[9rem] top-[12.9rem]">
               {taxReturnOrder.individualTaxes?.mobile || "N/A"}
             </p>
 
             {/* Date */}
-            <p className="absolute text-sm left-[29rem] top-[7.6rem]">
+            <p className="absolute text-sm left-[30rem] top-[7.5rem]">
               {formattedDate}
             </p>
           </div>

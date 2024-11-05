@@ -770,7 +770,7 @@ export async function createTaxReturnAndOrder(
           userId: session.user.id,
           individualTaxesId: taxReturn.id,
           invoiceId,
-          amount: 1000, // Set your default amount or get from configuration
+          amount: 1150, // Set your default amount or get from configuration
           paymentStatus: PaymentStatus.PENDING,
           // Add other order fields as needed
         },

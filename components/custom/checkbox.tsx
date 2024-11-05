@@ -11,8 +11,8 @@ interface CustomCheckboxProps {
   height: number;
   required: boolean;
   onBlur?: (val: string | boolean) => void;
-  value?: boolean; // Add value prop
-  onChange?: (value: boolean) => void; // Add onChange prop
+  value?: boolean;
+  onChange?: (value: boolean) => void;
 }
 
 const CustomCheckbox: React.FC<CustomCheckboxProps> = ({
@@ -28,7 +28,6 @@ const CustomCheckbox: React.FC<CustomCheckboxProps> = ({
   value,
   onChange,
 }) => {
-  // Use controlled state if value prop is provided, otherwise use local state
   const [internalChecked, setInternalChecked] = useState(false);
   const isChecked = value !== undefined ? value : internalChecked;
 
@@ -42,17 +41,6 @@ const CustomCheckbox: React.FC<CustomCheckboxProps> = ({
   const { onChange: registerOnChange, ...rest } = register(name);
 
   useEffect(() => {
-    // Only load from localStorage if value prop is not provided
-    if (value === undefined) {
-      const storedValue = localStorage.getItem(name);
-      if (storedValue) {
-        setInternalChecked(JSON.parse(storedValue));
-      }
-    }
-  }, [name, value]);
-
-  useEffect(() => {
-    // Update internal state when value prop changes
     if (value !== undefined) {
       setInternalChecked(value);
     }
@@ -61,21 +49,16 @@ const CustomCheckbox: React.FC<CustomCheckboxProps> = ({
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newCheckedState = e.target.checked;
 
-    // Update internal state if uncontrolled
     if (value === undefined) {
       setInternalChecked(newCheckedState);
-      localStorage.setItem(name, JSON.stringify(newCheckedState));
     }
 
-    // Call parent onChange if provided
     if (onChange) {
       onChange(newCheckedState);
     }
 
-    // Call react-hook-form's onChange
     registerOnChange(e);
 
-    // Call onBlur callback if provided
     if (onBlur) {
       onBlur(newCheckedState);
     }
