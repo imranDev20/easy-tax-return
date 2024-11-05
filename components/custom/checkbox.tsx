@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from "react";
-import { UseFormRegister, FieldValues } from "react-hook-form";
+import { useFormContext } from "react-hook-form";
 
 interface CustomCheckboxProps {
   label: string;
   name: string;
-  register: UseFormRegister<FieldValues>;
   style?: React.CSSProperties;
   scale: number;
   width: number;
@@ -18,7 +17,6 @@ interface CustomCheckboxProps {
 const CustomCheckbox: React.FC<CustomCheckboxProps> = ({
   label,
   name,
-  register,
   style,
   scale,
   width,
@@ -29,6 +27,10 @@ const CustomCheckbox: React.FC<CustomCheckboxProps> = ({
   onChange,
 }) => {
   const [internalChecked, setInternalChecked] = useState(false);
+  const {
+    register,
+    formState: { errors },
+  } = useFormContext();
   const isChecked = value !== undefined ? value : internalChecked;
 
   const combinedStyle = {
@@ -64,6 +66,8 @@ const CustomCheckbox: React.FC<CustomCheckboxProps> = ({
     }
   };
 
+  const fieldError = errors[name];
+
   return (
     <div className="relative" style={combinedStyle}>
       <label className="flex items-center cursor-pointer w-full h-full">
@@ -74,9 +78,19 @@ const CustomCheckbox: React.FC<CustomCheckboxProps> = ({
           {...rest}
           className="absolute opacity-0 w-0 h-0"
         />
-        <span className="relative overflow-hidden w-full h-full border border-sky-300 rounded-none bg-sky-300/10 focus:border-sky-500 focus:ring-0 focus:outline-0 focus:bg-transparent hover:border-sky-500">
+        <span
+          className={`relative overflow-hidden w-full h-full border rounded-none
+            ${
+              fieldError
+                ? "border-red-500 bg-red-300/10 hover:border-red-700"
+                : "border-sky-300 bg-sky-300/10 hover:border-sky-500"
+            } focus:border-sky-500 focus:ring-0 focus:outline-0 focus:bg-transparent`}
+        >
           {required && (
-            <span className="absolute top-0 right-0 -translate-y-1/2 translate-x-1/2 h-10 w-10 bg-sky-300/70 rotate-45 transform origin-center transition-colors">
+            <span
+              className={`absolute top-0 right-0 -translate-y-1/2 translate-x-1/2 h-10 w-10 rotate-45 transform origin-center transition-colors
+                ${fieldError ? "bg-red-400/70" : "bg-sky-300/70"}`}
+            >
               <span className="absolute text-white top-[23px] left-[17px] text-lg">
                 *
               </span>

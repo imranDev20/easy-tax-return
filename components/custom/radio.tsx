@@ -1,15 +1,13 @@
 "use client";
 
 import { IndividualTaxReturnFormInput } from "@/app/(site)/individual-tax-return/schema";
+import { FormFieldName } from "@/types/tax-return-form";
 import React from "react";
 import {
   Controller,
-  Control,
   FieldValues,
-  Path,
   useFormContext,
   FieldError,
-  FieldErrors,
 } from "react-hook-form";
 
 interface CustomRadioProps {
@@ -111,8 +109,7 @@ const CustomRadio: React.FC<CustomRadioProps> = ({
 };
 
 interface RadioGroupProps<TFieldValues extends FieldValues> {
-  control: Control<TFieldValues>;
-  name: Path<TFieldValues>;
+  name: FormFieldName;
   x: number;
   y: number;
   options: Array<{
@@ -132,7 +129,6 @@ interface RadioGroupProps<TFieldValues extends FieldValues> {
 }
 
 function RadioGroup<TFieldValues extends FieldValues>({
-  control,
   name,
   options,
   scale,
@@ -147,6 +143,7 @@ function RadioGroup<TFieldValues extends FieldValues>({
   const {
     resetField,
     formState: { errors },
+    control,
   } = useFormContext<IndividualTaxReturnFormInput>();
 
   // Safely access the error for the field
@@ -156,7 +153,7 @@ function RadioGroup<TFieldValues extends FieldValues>({
 
   return (
     <Controller
-      name={name}
+      name={name as any}
       control={control}
       render={({ field: { onChange, value } }) => (
         <div>

@@ -1457,7 +1457,6 @@ const IndividualTaxReturnForm = ({
           <CustomCheckbox
             label={field.label}
             name={field.name}
-            register={register as any}
             style={{
               position: "absolute",
               left: `${field.x / 10}%`,
@@ -1474,7 +1473,6 @@ const IndividualTaxReturnForm = ({
       case "radio":
         return (
           <RadioGroup
-            control={control}
             name={field.name as any}
             options={field.options as any}
             scale={scale}

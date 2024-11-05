@@ -7,10 +7,11 @@ import prisma from "@/lib/prisma";
 import { redirect } from "next/navigation";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
-import { FileX } from "lucide-react";
+import { Download, FileX } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import PaymentConfirmation from "./_components/payment-confirmation";
+import InvoiceDownloadButton from "./_components/invoice-download-button";
 
 interface PageProps {
   params: {
@@ -184,10 +185,17 @@ export default async function UserSubmittedTaxReturnDetails({
           <>
             {/* Header Section */}
             <div className="mb-8">
-              <h1 className="text-4xl md:text-5xl font-bold text-primary mb-4 font-serif text-center">
-                Tax Return Details
-              </h1>
-              <p className="text-gray-700 mb-8 text-center max-w-2xl mx-auto">
+              <div className="flex flex-col md:flex-row justify-between items-center mb-6">
+                <h1 className="text-4xl md:text-5xl font-bold text-primary mb-4 md:mb-0 font-serif text-center md:text-left">
+                  Tax Return Details
+                </h1>
+                <InvoiceDownloadButton
+                  orderId={params.submitted_id}
+                  invoiceId={order.invoiceId}
+                  paymentStatus={order.paymentStatus}
+                />
+              </div>
+              <p className="text-gray-700 mb-8 text-center md:text-left max-w-2xl">
                 Review your submitted tax return information and download
                 related documents.
               </p>
