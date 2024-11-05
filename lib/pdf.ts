@@ -3,6 +3,7 @@ import html2canvas from "html2canvas";
 import { numericFormatter } from "react-number-format";
 import { FormField } from "@/types/tax-return-form";
 import { IndividualTaxReturnFormInput } from "@/app/(site)/individual-tax-return/schema";
+import { formatDate } from "date-fns";
 
 type Image = {
   src: string;
@@ -338,6 +339,226 @@ export const generatePDF = async (
         containerToRemove.parentNode.removeChild(containerToRemove);
       }
     });
+    throw error;
+  }
+};
+
+interface InvoiceData {
+  taxpayerName: string;
+  invoiceId: string;
+  tin: string;
+  mobile: string;
+  createdAt: Date;
+}
+
+interface TextFieldOptions {
+  align?: "left" | "right" | "center";
+  fontSize?: number;
+}
+
+interface Field {
+  text: string;
+  x: number;
+  y: number;
+  width: number;
+  options?: TextFieldOptions;
+}
+
+export const generateInvoicePDF = async (
+  invoiceImage: string,
+  invoiceData: InvoiceData
+): Promise<void> => {
+  // Keep the same PDF and dimension setup
+  const pdf = new jsPDF({
+    orientation: "landscape",
+    unit: "px",
+    format: [842, 595],
+  });
+
+  const MAX_WIDTH = 842;
+  const MAX_HEIGHT = 595;
+  const ASPECT_RATIO = 720 / 1280;
+
+  let finalWidth = MAX_WIDTH;
+  let finalHeight = MAX_WIDTH * ASPECT_RATIO;
+
+  if (finalHeight > MAX_HEIGHT) {
+    finalHeight = MAX_HEIGHT;
+    finalWidth = MAX_HEIGHT / ASPECT_RATIO;
+  }
+
+  const xOffset = (MAX_WIDTH - finalWidth) / 2;
+  const yOffset = (MAX_HEIGHT - finalHeight) / 2;
+
+  // Updated base styles with larger default font size
+  const baseStyles = `
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+    }
+    .invoice-text {
+      font-size: 16px;
+      color: #000;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      font-weight: 500;
+    }
+  `;
+
+  try {
+    // Keep the same container setup
+    const formContainer = document.createElement("div");
+    formContainer.style.position = "relative";
+    formContainer.style.width = `${finalWidth}px`;
+    formContainer.style.height = `${finalHeight}px`;
+    formContainer.id = "invoice-container";
+
+    const imageContainer = document.createElement("div");
+    imageContainer.style.position = "relative";
+    imageContainer.style.width = "100%";
+    imageContainer.style.height = "100%";
+    imageContainer.style.overflow = "hidden";
+
+    const img = document.createElement("img");
+    img.src = invoiceImage;
+    img.style.width = "100%";
+    img.style.height = "100%";
+    img.style.objectFit = "cover";
+    imageContainer.appendChild(img);
+
+    const fieldsContainer = document.createElement("div");
+    fieldsContainer.style.position = "absolute";
+    fieldsContainer.style.top = "0";
+    fieldsContainer.style.left = "0";
+    fieldsContainer.style.width = "100%";
+    fieldsContainer.style.height = "100%";
+
+    const scaleX = finalWidth / 1280;
+    const scaleY = finalHeight / 720;
+
+    // Updated createTextField with larger minimum font size
+    const createTextField = (
+      text: string,
+      originalX: number,
+      originalY: number,
+      width: number,
+      options: TextFieldOptions = {}
+    ) => {
+      const field = document.createElement("p");
+      field.className = "invoice-text";
+      field.style.position = "absolute";
+
+      const scaledX = originalX * scaleX;
+      const scaledY = originalY * scaleY;
+      const scaledWidth = width * scaleX;
+
+      field.style.left = `${scaledX}px`;
+      field.style.top = `${scaledY}px`;
+      field.style.width = `${scaledWidth}px`;
+      field.style.textAlign = options.align || "left";
+
+      // Increased base font size and minimum size
+      const baseFontSize = options.fontSize || 18;
+      field.style.fontSize = `${Math.max(baseFontSize * scaleX, 14)}px`;
+
+      field.textContent = text || "N/A";
+      return field;
+    };
+
+    // Updated fields with larger font sizes
+    const fields: Field[] = [
+      {
+        text: invoiceData.invoiceId,
+        x: 180,
+        y: 122,
+        width: 200,
+        options: { fontSize: 20 },
+      },
+      {
+        text: invoiceData.taxpayerName,
+        x: 180,
+        y: 160,
+        width: 300,
+        options: { fontSize: 20 },
+      },
+      {
+        text: invoiceData.tin,
+        x: 180,
+        y: 197,
+        width: 200,
+        options: { fontSize: 20 },
+      },
+      {
+        text: invoiceData.mobile,
+        x: 180,
+        y: 237,
+        width: 200,
+        options: { fontSize: 20 },
+      },
+      {
+        text: formatDate(invoiceData.createdAt, "dd/MM/yyyy"),
+        x: 510,
+        y: 122,
+        width: 200,
+        options: {
+          align: "right" as const,
+          fontSize: 20,
+        },
+      },
+    ];
+
+    // Keep the rest of the code the same
+    fields.forEach((field) => {
+      fieldsContainer.appendChild(
+        createTextField(
+          field.text,
+          field.x,
+          field.y,
+          field.width,
+          field.options
+        )
+      );
+    });
+
+    imageContainer.appendChild(fieldsContainer);
+    formContainer.appendChild(imageContainer);
+
+    const styleElement = document.createElement("style");
+    styleElement.textContent = baseStyles;
+    formContainer.appendChild(styleElement);
+
+    document.body.appendChild(formContainer);
+
+    // Increased scale for better quality
+    const canvas = await html2canvas(formContainer, {
+      scale: 3,
+      useCORS: true,
+      allowTaint: true,
+      logging: false,
+      backgroundColor: null,
+      imageTimeout: 0,
+    });
+
+    const imgData = canvas.toDataURL("image/png");
+
+    pdf.addImage(imgData, "PNG", xOffset, yOffset, finalWidth, finalHeight);
+
+    pdf.save(`invoice-${invoiceData.invoiceId}.pdf`);
+
+    // Clean up
+    const containerToRemove = document.getElementById("invoice-container");
+    if (containerToRemove && containerToRemove.parentNode) {
+      containerToRemove.parentNode.removeChild(containerToRemove);
+    }
+  } catch (error) {
+    console.error("Error generating invoice PDF:", error);
+    const containerToRemove = document.getElementById("invoice-container");
+    if (containerToRemove && containerToRemove.parentNode) {
+      containerToRemove.parentNode.removeChild(containerToRemove);
+    }
     throw error;
   }
 };

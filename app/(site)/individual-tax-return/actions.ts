@@ -868,3 +868,177 @@ export async function updateTaxReturnOrder(
     };
   }
 }
+
+export async function saveTaxReturn(
+  input: IndividualTaxReturnFormInput,
+  savedTaxReturnId?: string
+) {
+  try {
+    // Get the authenticated user's session
+    const session = await getServerSession(authOptions);
+
+    if (!session?.user) {
+      return {
+        success: false,
+        error: "Authentication required",
+      };
+    }
+
+    // Calculate completion percentage based on filled fields
+    const calculateCompletionPercentage = (
+      data: IndividualTaxReturnFormInput
+    ) => {
+      const totalFields = Object.keys(data).length;
+      const filledFields = Object.entries(data).filter(([_, value]) => {
+        if (value === null || value === undefined) return false;
+        if (typeof value === "string") return value.trim() !== "";
+        if (typeof value === "object") {
+          // Handle nested objects (like govt pay scales)
+          return Object.values(value).some(
+            (v) => v !== null && v !== undefined && v !== ""
+          );
+        }
+        return true;
+      }).length;
+
+      return (filledFields / totalFields) * 100;
+    };
+
+    // Find the last edited field
+    const findLastEditedField = (data: IndividualTaxReturnFormInput) => {
+      const filledFields = Object.entries(data)
+        .filter(
+          ([_, value]) => value !== null && value !== undefined && value !== ""
+        )
+        .map(([key, _]) => key);
+
+      return filledFields[filledFields.length - 1] || null;
+    };
+
+    const completionPercent = calculateCompletionPercentage(input);
+    const lastEditedField = findLastEditedField(input);
+
+    if (savedTaxReturnId) {
+      // Update existing saved tax return
+      const updatedTaxReturn = await prisma.savedTaxReturns.update({
+        where: {
+          id: savedTaxReturnId,
+          userId: session.user.id,
+        },
+        data: {
+          taxData: input,
+          completionPercent,
+          lastEditedField,
+          updatedAt: new Date(),
+        },
+      });
+
+      revalidatePath("/", "layout");
+
+      return {
+        success: true,
+        data: updatedTaxReturn,
+      };
+    } else {
+      // Create new saved tax return
+      const newTaxReturn = await prisma.savedTaxReturns.create({
+        data: {
+          userId: session.user.id,
+          taxData: input,
+          completionPercent,
+          lastEditedField,
+        },
+      });
+
+      revalidatePath("/");
+
+      return {
+        success: true,
+        data: newTaxReturn,
+      };
+    }
+  } catch (error) {
+    console.error("Error saving tax return:", error);
+
+    return {
+      success: false,
+      error:
+        error instanceof Error ? error.message : "Failed to save tax return",
+    };
+  }
+}
+
+// Get saved tax returns for the current user
+export async function getSavedTaxReturns() {
+  try {
+    const session = await getServerSession(authOptions);
+
+    if (!session?.user) {
+      return {
+        success: false,
+        error: "Authentication required",
+      };
+    }
+
+    const savedTaxReturns = await prisma.savedTaxReturns.findMany({
+      where: {
+        userId: session.user.id,
+      },
+      orderBy: {
+        updatedAt: "desc",
+      },
+    });
+
+    return {
+      success: true,
+      data: savedTaxReturns,
+    };
+  } catch (error) {
+    console.error("Error fetching saved tax returns:", error);
+
+    return {
+      success: false,
+      error:
+        error instanceof Error
+          ? error.message
+          : "Failed to fetch saved tax returns",
+    };
+  }
+}
+
+// Delete a saved tax return
+export async function deleteSavedTaxReturn(savedTaxReturnId: string) {
+  try {
+    const session = await getServerSession(authOptions);
+
+    if (!session?.user) {
+      return {
+        success: false,
+        error: "Authentication required",
+      };
+    }
+
+    await prisma.savedTaxReturns.delete({
+      where: {
+        id: savedTaxReturnId,
+        userId: session.user.id,
+      },
+    });
+
+    revalidatePath("/");
+
+    return {
+      success: true,
+    };
+  } catch (error) {
+    console.error("Error deleting saved tax return:", error);
+
+    return {
+      success: false,
+      error:
+        error instanceof Error
+          ? error.message
+          : "Failed to delete saved tax return",
+    };
+  }
+}

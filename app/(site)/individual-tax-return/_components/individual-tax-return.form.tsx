@@ -44,7 +44,11 @@ import { FormField } from "@/types/tax-return-form";
 import { useTaxReturnForm } from "@/hooks/use-tax-return-form";
 import { generatePDF } from "@/lib/pdf";
 import FloatingErrorSummary from "./floating-error-summary";
-import { createTaxReturnAndOrder, updateTaxReturnOrder } from "../actions";
+import {
+  createTaxReturnAndOrder,
+  saveTaxReturn,
+  updateTaxReturnOrder,
+} from "../actions";
 import { Prisma } from "@prisma/client";
 
 const images = [
@@ -271,8 +275,10 @@ export const createDebugOverlay = (
 
 const IndividualTaxReturnForm = ({
   taxReturnOrder,
+  savedTaxReturn,
 }: {
   taxReturnOrder?: OrderWithRelation;
+  savedTaxReturn?: string;
 }) => {
   const [scale, setScale] = useState(1);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
@@ -1175,7 +1181,7 @@ const IndividualTaxReturnForm = ({
         totalTaxPaid: individualTaxes.totalTaxPaid || "",
       });
     }
-  }, [individualTaxes, reset, getValues]);
+  }, [individualTaxes, reset]);
 
   const updateScale = useCallback(() => {
     if (containerRef.current && imageRefs.current[0]) {
@@ -1342,7 +1348,36 @@ const IndividualTaxReturnForm = ({
     });
   };
 
-  console.log(getValues("transportFacilityPrivateCheck"));
+  const handleSaveForLater = async () => {
+    startTransition(async () => {
+      try {
+        const data = getValues();
+        const result = await saveTaxReturn(data);
+
+        if (result.success) {
+          toast({
+            title: "Success",
+            description: "Tax return saved successfully.",
+            variant: "success",
+          });
+        } else {
+          toast({
+            title: "Error",
+            description:
+              result.error || "Could not save tax return. Please try again.",
+            variant: "destructive",
+          });
+        }
+      } catch (error) {
+        console.error("Error saving tax return:", error);
+        toast({
+          title: "Error",
+          description: "Something went wrong. Please try again.",
+          variant: "destructive",
+        });
+      }
+    });
+  };
 
   const renderField = (field: FormField, imageIndex: number) => {
     if (field.imageIndex !== imageIndex || !field.isVisible) return null;
@@ -1733,7 +1768,13 @@ const IndividualTaxReturnForm = ({
 
                   <div className="flex items-center space-x-4">
                     {!taxReturnOrder && (
-                      <Button variant="outline">Save for Later</Button>
+                      <Button
+                        variant="outline"
+                        type="button"
+                        onClick={handleSaveForLater}
+                      >
+                        Save for Later
+                      </Button>
                     )}
 
                     <Button

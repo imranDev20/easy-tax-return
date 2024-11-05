@@ -30,9 +30,12 @@ export async function GET() {
       },
       include: {
         // Include tax return data if it exists
-        individualTax: true,
+
         // Include orders if needed
         orders: {
+          include: {
+            individualTaxes: true,
+          },
           orderBy: {
             createdAt: "desc",
           },

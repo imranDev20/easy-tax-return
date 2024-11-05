@@ -137,7 +137,7 @@ export default function AdminOrderDetails({ taxReturnOrder }: Props) {
             <div className="flex justify-between items-start">
               <div>
                 <CardTitle className="text-2xl">
-                  Order #{taxReturnOrder.id}
+                  Order #{taxReturnOrder.invoiceId}
                 </CardTitle>
                 <CardDescription>
                   Submitted on {format(taxReturnOrder.createdAt, "PPP")}

@@ -128,7 +128,7 @@ export default function ProfilePage() {
   const hasMoreOrders = user.orders.length > 5;
 
   return (
-    <div className="container mx-auto">
+    <div className="container mx-auto min-h-[600px]">
       <h1 className="text-4xl font-bold text-primary mb-8">My Profile</h1>
 
       <div className="grid gap-6">

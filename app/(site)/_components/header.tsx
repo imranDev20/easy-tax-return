@@ -122,14 +122,14 @@ export default function Header() {
       icon: User,
     },
     {
-      href: "/profile/saved",
-      label: "Saved Returns",
-      icon: Save,
-    },
-    {
       href: "/profile/submitted",
       label: "Submitted Returns",
       icon: FileCheck,
+    },
+    {
+      href: "/profile/saved",
+      label: "Saved Returns",
+      icon: Save,
     },
   ];
 

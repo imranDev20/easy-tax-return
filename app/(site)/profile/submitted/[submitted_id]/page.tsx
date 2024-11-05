@@ -141,7 +141,7 @@ export default async function UserSubmittedTaxReturnDetails({
   if (!order) {
     return (
       <div className="bg-lightGray min-h-screen">
-        <div className="container mx-auto py-8">
+        <div className="container mx-auto px-4 md:px-8">
           <div className="mb-8">
             <DynamicBreadcrumb
               items={[
@@ -173,7 +173,7 @@ export default async function UserSubmittedTaxReturnDetails({
 
   return (
     <div className="bg-lightGray min-h-screen">
-      <div className="container mx-auto py-8">
+      <div className="container mx-auto px-4 md:px-8">
         {/* Breadcrumb */}
         <div className="mb-8">
           <DynamicBreadcrumb items={breadcrumbItems} />
@@ -193,6 +193,7 @@ export default async function UserSubmittedTaxReturnDetails({
                   orderId={params.submitted_id}
                   invoiceId={order.invoiceId}
                   paymentStatus={order.paymentStatus}
+                  taxReturnOrder={order}
                 />
               </div>
               <p className="text-gray-700 mb-8 text-center md:text-left max-w-2xl">

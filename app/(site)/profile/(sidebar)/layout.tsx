@@ -20,19 +20,19 @@ export default function ProfileLayout({
       icon: User,
     },
     {
-      label: "Saved Tax Returns",
-      href: "/profile/saved",
-      icon: FileText,
-    },
-    {
       label: "Submitted Tax Returns",
       href: "/profile/submitted",
       icon: FileCheck,
     },
+    {
+      label: "Saved Tax Returns",
+      href: "/profile/saved",
+      icon: FileText,
+    },
   ];
 
   return (
-    <div className="container mx-auto max-w-7xl py-12 px-4">
+    <div className="container mx-auto max-w-7xl py-12 px-4 md:px-8">
       <div className="grid grid-cols-1 md:grid-cols-12 gap-5 sm:gap-8">
         <div className="md:col-span-3 sticky top-4">
           <Card className="p-4">

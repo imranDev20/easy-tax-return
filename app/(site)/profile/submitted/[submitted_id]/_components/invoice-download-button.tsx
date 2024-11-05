@@ -4,37 +4,47 @@ import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Download, Loader2 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { generateInvoicePDF } from "@/lib/pdf";
+import InvoiceImage from "@/public/images/invoice.jpeg";
+import { Order, IndividualTaxes } from "@prisma/client";
+
+interface InvoiceDownloadButtonProps {
+  orderId: string;
+  invoiceId: string;
+  paymentStatus: string;
+  taxReturnOrder: Order & {
+    individualTaxes: IndividualTaxes | null;
+  };
+}
 
 export default function InvoiceDownloadButton({
   orderId,
   invoiceId,
   paymentStatus,
-}: {
-  orderId: string;
-  invoiceId: string;
-  paymentStatus: string;
-}) {
+  taxReturnOrder,
+}: InvoiceDownloadButtonProps) {
   const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
 
   const handleDownload = async () => {
+    if (!taxReturnOrder.individualTaxes) {
+      toast({
+        title: "Error",
+        description: "Tax return data not found",
+        variant: "destructive",
+      });
+      return;
+    }
+
     try {
       setIsLoading(true);
-      const response = await fetch(`/api/invoice/${orderId}`);
-
-      if (!response.ok) {
-        throw new Error("Failed to download invoice");
-      }
-
-      const blob = await response.blob();
-      const url = window.URL.createObjectURL(blob);
-      const link = document.createElement("a");
-      link.href = url;
-      link.download = `invoice-${invoiceId}.pdf`;
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-      window.URL.revokeObjectURL(url);
+      await generateInvoicePDF(InvoiceImage.src, {
+        taxpayerName: taxReturnOrder.individualTaxes.taxpayerName,
+        invoiceId: taxReturnOrder.invoiceId,
+        tin: taxReturnOrder.individualTaxes.tin,
+        mobile: taxReturnOrder.individualTaxes.mobile,
+        createdAt: taxReturnOrder.createdAt,
+      });
 
       toast({
         title: "Success",
