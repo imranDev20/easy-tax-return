@@ -74,7 +74,7 @@ export default function OrdersTableHeader() {
             </Badge>
           )}
         </div>
-        <Link href="/individual-tax-return">
+        <Link href="/admin/orders/new">
           <Button size="sm" className="w-full sm:w-auto h-9 shadow-sm">
             <Plus className="mr-2 h-4 w-4" />
             New Tax Return

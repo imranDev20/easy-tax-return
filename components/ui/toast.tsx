@@ -1,3 +1,5 @@
+"use client";
+
 import * as React from "react";
 import * as ToastPrimitives from "@radix-ui/react-toast";
 import { cva, type VariantProps } from "class-variance-authority";
@@ -22,7 +24,7 @@ const ToastViewport = React.forwardRef<
 ToastViewport.displayName = ToastPrimitives.Viewport.displayName;
 
 const toastVariants = cva(
-  "group pointer-events-auto relative flex w-full items-center justify-between space-x-4 overflow-hidden rounded-lg border p-4 pr-8 shadow-lg transition-all data-[swipe=cancel]:translate-x-0 data-[swipe=end]:translate-x-[var(--radix-toast-swipe-end-x)] data-[swipe=move]:translate-x-[var(--radix-toast-swipe-move-x)] data-[swipe=move]:transition-none data-[state=open]:animate-in data-[state=closed]:animate-out data-[swipe=end]:animate-out data-[state=closed]:fade-out-80 data-[state=closed]:slide-out-to-right-full data-[state=open]:slide-in-from-bottom-full",
+  "group pointer-events-auto relative flex w-full items-center justify-between overflow-hidden rounded-lg border p-4 pr-8 shadow-lg transition-all data-[swipe=cancel]:translate-x-0 data-[swipe=end]:translate-x-[var(--radix-toast-swipe-end-x)] data-[swipe=move]:translate-x-[var(--radix-toast-swipe-move-x)] data-[swipe=move]:transition-none data-[state=open]:animate-in data-[state=closed]:animate-out data-[swipe=end]:animate-out data-[state=closed]:fade-out-80 data-[state=closed]:slide-out-to-right-full data-[state=open]:slide-in-from-bottom-full",
   {
     variants: {
       variant: {
@@ -41,8 +43,35 @@ const toastVariants = cva(
 const Toast = React.forwardRef<
   React.ElementRef<typeof ToastPrimitives.Root>,
   React.ComponentPropsWithoutRef<typeof ToastPrimitives.Root> &
-    VariantProps<typeof toastVariants>
->(({ className, variant, ...props }, ref) => {
+    VariantProps<typeof toastVariants> & { duration?: number }
+>(({ className, variant, duration = 5000, ...props }, ref) => {
+  const [progress, setProgress] = React.useState(100);
+  const progressInterval = React.useRef<number>();
+  const startTime = React.useRef<number>();
+
+  React.useEffect(() => {
+    startTime.current = Date.now();
+    const intervalTime = 10; // Update every 10ms for smooth animation
+    const totalSteps = duration / intervalTime;
+    const decrementPerStep = 100 / totalSteps;
+
+    progressInterval.current = window.setInterval(() => {
+      const elapsed = Date.now() - (startTime.current || 0);
+      const remaining = Math.max(0, 100 - (elapsed / duration) * 100);
+      setProgress(remaining);
+
+      if (remaining <= 0) {
+        clearInterval(progressInterval.current);
+      }
+    }, intervalTime);
+
+    return () => {
+      if (progressInterval.current) {
+        clearInterval(progressInterval.current);
+      }
+    };
+  }, [duration]);
+
   const IconComponent = {
     default: Info,
     destructive: AlertCircle,
@@ -50,15 +79,43 @@ const Toast = React.forwardRef<
     info: Info,
   }[variant || "default"];
 
+  const progressBarColor = {
+    default: "bg-gray-200",
+    destructive: "bg-red-200",
+    success: "bg-green-200",
+    info: "bg-blue-200",
+  }[variant || "default"];
+
+  const progressBarFillColor = {
+    default: "bg-gray-500",
+    destructive: "bg-red-500",
+    success: "bg-green-500",
+    info: "bg-blue-500",
+  }[variant || "default"];
+
   return (
     <ToastPrimitives.Root
       ref={ref}
-      className={cn(toastVariants({ variant }), className)}
+      className={cn(toastVariants({ variant }), "pb-6", className)}
       {...props}
     >
-      <div className="flex items-start">
+      <div className="flex items-start w-full">
         <IconComponent className="h-5 w-5 mr-2 mt-0.5 flex-shrink-0" />
         <div className="flex-grow">{props.children}</div>
+      </div>
+      <div
+        className={cn(
+          "absolute bottom-0 left-0 right-0 h-1.5",
+          progressBarColor
+        )}
+      >
+        <div
+          className={cn(
+            "h-full transition-all duration-75 ease-linear",
+            progressBarFillColor
+          )}
+          style={{ width: `${progress}%` }}
+        />
       </div>
       <ToastClose />
     </ToastPrimitives.Root>
@@ -132,7 +189,6 @@ const ToastDescription = React.forwardRef<
 ToastDescription.displayName = ToastPrimitives.Description.displayName;
 
 type ToastProps = React.ComponentPropsWithoutRef<typeof Toast>;
-
 type ToastActionElement = React.ReactElement<typeof ToastAction>;
 
 export {
@@ -146,3 +202,5 @@ export {
   ToastClose,
   ToastAction,
 };
+
+export default Toast;

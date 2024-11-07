@@ -738,12 +738,12 @@ export async function generateInvoiceId(): Promise<string> {
 
 // actions
 export async function createTaxReturnAndOrder(
-  input: IndividualTaxReturnFormInput
+  input: IndividualTaxReturnFormInput,
+  targetUserId: string | null
 ) {
   try {
     // Get the authenticated user's session
     const session = await getServerSession(authOptions);
-    const invoiceId = await generateInvoiceId();
 
     if (!session?.user) {
       return {
@@ -752,13 +752,46 @@ export async function createTaxReturnAndOrder(
       };
     }
 
+    // Check if the user is an admin
+    const isAdmin = session.user.role === "ADMIN";
+
+    // Determine and validate the effective userId
+    let effectiveUserId: string;
+
+    if (isAdmin) {
+      // Admin must provide a target user
+      if (!targetUserId) {
+        return {
+          success: false,
+          error: "Admin must specify a target user",
+        };
+      }
+
+      // Verify target user exists
+      const targetUser = await prisma.user.findUnique({
+        where: { id: targetUserId },
+      });
+
+      if (!targetUser) {
+        return {
+          success: false,
+          error: "Target user not found",
+        };
+      }
+
+      effectiveUserId = targetUserId;
+    } else {
+      // For regular users, use their own ID
+      effectiveUserId = session.user.id;
+    }
+
+    const invoiceId = await generateInvoiceId();
+
     // Validate input data
     const validatedData = individualTaxReturnSchema.parse(input);
 
     // Use a transaction to ensure both tax return and order are created atomically
     const result = await prisma.$transaction(async (tx) => {
-      // First, create all the nested relations
-
       const data = await getTaxReturnData({
         tx,
         validatedData,
@@ -770,15 +803,14 @@ export async function createTaxReturnAndOrder(
         data,
       });
 
-      // Create the order linked to the tax return
+      // Create the order with the guaranteed userId
       const order = await tx.order.create({
         data: {
-          userId: session.user.id,
+          userId: effectiveUserId, // Now this is guaranteed to be a string
           individualTaxesId: taxReturn.id,
           invoiceId,
-          amount: 1150, // Set your default amount or get from configuration
+          amount: 1150,
           paymentStatus: PaymentStatus.PENDING,
-          // Add other order fields as needed
         },
       });
 
@@ -810,6 +842,7 @@ export async function updateTaxReturnOrder(
   input: IndividualTaxReturnFormInput
 ) {
   try {
+    // Get the authenticated user's session
     const session = await getServerSession(authOptions);
 
     if (!session?.user) {
@@ -819,21 +852,16 @@ export async function updateTaxReturnOrder(
       };
     }
 
+    // Parse and validate the input data
     const validatedData = individualTaxReturnSchema.parse(input);
 
-    // First find the order without user restriction to check ownership
+    // Fetch the existing order with user information
     const existingOrder = await prisma.order.findUnique({
       where: {
         id: orderId,
       },
       include: {
         individualTaxes: true,
-        user: {
-          select: {
-            id: true,
-            role: true,
-          },
-        },
       },
     });
 
@@ -844,17 +872,19 @@ export async function updateTaxReturnOrder(
       };
     }
 
-    // Check if user is authorized to update this order
+    // Authorization check
     const isAdmin = session.user.role === "ADMIN";
     const isOwner = existingOrder.userId === session.user.id;
 
+    // Only allow update if user is admin or the owner
     if (!isAdmin && !isOwner) {
       return {
         success: false,
-        error: "You are not authorized to update this tax return",
+        error: "You do not have permission to update this tax return",
       };
     }
 
+    // If authorization passes, proceed with update
     const existingTaxReturn = existingOrder.individualTaxes;
 
     const result = await prisma.$transaction(async (tx) => {
@@ -873,6 +903,7 @@ export async function updateTaxReturnOrder(
       return { taxReturn: updatedTaxReturn };
     });
 
+    // Revalidate paths after successful update
     revalidatePath("/", "layout");
 
     return {

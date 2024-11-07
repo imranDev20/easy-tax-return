@@ -37,7 +37,7 @@ import ImageTen from "@/public/images/10.png";
 import ImageEleven from "@/public/images/11.png";
 import ImageTwelve from "@/public/images/12.png";
 import { useToast } from "@/hooks/use-toast";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import CustomCheckbox from "@/components/custom/checkbox";
 import { NumericFormat, numericFormatter } from "react-number-format";
 import { FormField } from "@/types/tax-return-form";
@@ -50,6 +50,7 @@ import {
   updateTaxReturnOrder,
 } from "../actions";
 import { Prisma, SavedTaxReturns } from "@prisma/client";
+import { useSession } from "next-auth/react";
 
 const images = [
   ImageOne,
@@ -291,6 +292,8 @@ const IndividualTaxReturnForm = ({
     new Array(images.length).fill(false)
   );
 
+  const session = useSession();
+
   const handleImageLoad = (index: number) => {
     setLoadedImages((prev) => {
       const newLoadedImages = [...prev];
@@ -305,6 +308,7 @@ const IndividualTaxReturnForm = ({
   const [isPending, startTransition] = useTransition();
   const { toast } = useToast();
   const router = useRouter();
+  const searchParams = useSearchParams();
 
   const individualTaxes = taxReturnOrder?.individualTaxes;
 
@@ -1318,7 +1322,10 @@ const IndividualTaxReturnForm = ({
           }
         } else {
           // If no existing tax return, create new one
-          response = await createTaxReturnAndOrder(data);
+          response = await createTaxReturnAndOrder(
+            data,
+            searchParams.get("user_id")
+          );
 
           if (response.data?.order.id) {
             toast({
@@ -1326,8 +1333,12 @@ const IndividualTaxReturnForm = ({
               description: "Tax return created successfully.",
               variant: "success",
             });
-            // Redirect to the profile details page with the new tax return ID
-            router.push(`/profile/submitted/${response.data.order.id}`);
+
+            if (session.data?.user.role === "ADMIN") {
+              router.push(`/admin/orders/${response.data.order.id}`);
+            } else {
+              router.push(`/profile/submitted/${response.data.order.id}`);
+            }
           } else {
             toast({
               title: "Error",

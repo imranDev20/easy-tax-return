@@ -35,6 +35,8 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import useQueryString from "@/hooks/use-query-string";
+import { useRouter } from "next/navigation";
 
 interface User {
   id: string;
@@ -56,6 +58,9 @@ export default function UserSelection({ users = [] }: UserSelectionProps) {
     email: "",
     phone: "",
   });
+
+  const { createQueryString } = useQueryString();
+  const router = useRouter();
 
   // Prevent opening the popover when users aren't loaded
   const handleOpenChange = (open: boolean) => {
@@ -84,16 +89,16 @@ export default function UserSelection({ users = [] }: UserSelectionProps) {
                   className="w-full justify-between"
                   disabled={!users}
                 >
-                  <span className="text-muted-foreground flex items-center gap-2">
+                  <span className="text-muted-foreground flex items-center gap-2 min-w-0">
                     {selectedUser ? (
-                      <>
-                        <span className="font-medium text-foreground">
+                      <span className="flex items-center gap-2 truncate">
+                        <span className="font-medium text-foreground whitespace-nowrap">
                           {selectedUser.name || "Unnamed User"}
                         </span>
-                        <span className="text-muted-foreground text-sm">
+                        <span className="text-muted-foreground text-sm truncate">
                           ({selectedUser.email || "No email"})
                         </span>
-                      </>
+                      </span>
                     ) : (
                       "Select a user"
                     )}
@@ -101,7 +106,7 @@ export default function UserSelection({ users = [] }: UserSelectionProps) {
                   <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                 </Button>
               </PopoverTrigger>
-              <PopoverContent className="w-[200px] p-0">
+              <PopoverContent className="p-0">
                 <Command>
                   <CommandInput placeholder="Search users..." />
                   <CommandList>
@@ -114,6 +119,11 @@ export default function UserSelection({ users = [] }: UserSelectionProps) {
                           onSelect={() => {
                             setSelectedUser(user);
                             setOpenCombobox(false);
+                            // Update URL with selected user_id
+                            const queryString = createQueryString({
+                              user_id: user.id,
+                            });
+                            router.push(`?${queryString}`);
                           }}
                           className="flex items-center justify-between"
                         >
@@ -130,7 +140,7 @@ export default function UserSelection({ users = [] }: UserSelectionProps) {
                               <p className="font-medium">
                                 {user.name || "Unnamed User"}
                               </p>
-                              <p className="text-xs text-muted-foreground">
+                              <p className="text-xs text-muted-foreground truncate">
                                 {user.email || "No email"}
                               </p>
                             </div>

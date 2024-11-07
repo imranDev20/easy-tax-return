@@ -1,12 +1,15 @@
-// app/(site)/admin/orders/new/page.tsx
 import DynamicBreadcrumb from "@/components/custom/dynamic-breadcrumb";
 import IndividualTaxReturnForm from "@/app/(site)/individual-tax-return/_components/individual-tax-return-form";
 import UserSelection from "./_components/user-selection";
 import prisma from "@/lib/prisma";
+import { Role } from "@prisma/client";
 
 async function getUsers() {
   try {
     const users = await prisma.user.findMany({
+      where: {
+        role: Role.USER, // Only get users with role USER, excluding admins
+      },
       select: {
         id: true,
         name: true,
