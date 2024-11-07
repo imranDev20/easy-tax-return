@@ -37,6 +37,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import useQueryString from "@/hooks/use-query-string";
 import { useRouter } from "next/navigation";
+import CreateUserDialog from "./create-user-dialog";
 
 interface User {
   id: string;
@@ -154,90 +155,7 @@ export default function UserSelection({ users = [] }: UserSelectionProps) {
             </Popover>
           </div>
 
-          <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-            <DialogTrigger asChild>
-              <Button className="md:w-48" variant="outline">
-                <PlusCircle className="mr-2 h-4 w-4" />
-                New User
-              </Button>
-            </DialogTrigger>
-            <DialogContent>
-              <DialogHeader>
-                <DialogTitle>Create New User</DialogTitle>
-                <DialogDescription>
-                  Add a new user to process their tax return.
-                </DialogDescription>
-              </DialogHeader>
-              <div className="grid gap-4 py-4">
-                <div className="grid gap-2">
-                  <Label htmlFor="name">Full Name</Label>
-                  <Input
-                    id="name"
-                    value={newUserForm.name}
-                    onChange={(e) =>
-                      setNewUserForm((prev) => ({
-                        ...prev,
-                        name: e.target.value,
-                      }))
-                    }
-                  />
-                </div>
-                <div className="grid gap-2">
-                  <Label htmlFor="email">Email</Label>
-                  <Input
-                    id="email"
-                    type="email"
-                    value={newUserForm.email}
-                    onChange={(e) =>
-                      setNewUserForm((prev) => ({
-                        ...prev,
-                        email: e.target.value,
-                      }))
-                    }
-                  />
-                </div>
-                <div className="grid gap-2">
-                  <Label htmlFor="phone">Phone Number</Label>
-                  <Input
-                    id="phone"
-                    type="tel"
-                    value={newUserForm.phone}
-                    onChange={(e) =>
-                      setNewUserForm((prev) => ({
-                        ...prev,
-                        phone: e.target.value,
-                      }))
-                    }
-                  />
-                </div>
-              </div>
-              <DialogFooter>
-                <Button variant="outline" onClick={() => setDialogOpen(false)}>
-                  Cancel
-                </Button>
-                <Button
-                  onClick={() => {
-                    setIsLoading(true);
-                    // Add your user creation logic here
-                    setTimeout(() => {
-                      setIsLoading(false);
-                      setDialogOpen(false);
-                    }, 1000);
-                  }}
-                  disabled={isLoading}
-                >
-                  {isLoading ? (
-                    <>
-                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                      Creating...
-                    </>
-                  ) : (
-                    "Create User"
-                  )}
-                </Button>
-              </DialogFooter>
-            </DialogContent>
-          </Dialog>
+          <CreateUserDialog />
         </div>
 
         {selectedUser && (
