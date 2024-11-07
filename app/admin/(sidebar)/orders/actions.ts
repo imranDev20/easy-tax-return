@@ -72,27 +72,37 @@ export async function getTaxReturnOrders(
   };
 }
 
-export async function deleteOrder(taxReturnId: string) {
+export async function deleteOrders(orderIds: string[]) {
   try {
-    // Assume the user is already authenticated and authorized as an admin
+    await prisma.$transaction(async (tx) => {
+      // First delete associated tax returns
+      await tx.individualTaxes.deleteMany({
+        where: {
+          order: {
+            id: {
+              in: orderIds,
+            },
+          },
+        },
+      });
 
-    // Delete the order associated with the tax return
-    const deletedOrder = await prisma.order.delete({
-      where: { individualTaxesId: taxReturnId },
+      // Then delete the orders
+      await tx.order.deleteMany({
+        where: {
+          id: {
+            in: orderIds,
+          },
+        },
+      });
     });
 
-    // The associated IndividualTaxes record will be automatically deleted due to the cascade delete
-
-    return {
-      success: true,
-      message: "Tax return and associated order deleted successfully",
-      data: deletedOrder,
-    };
+    revalidatePath("/", "layout");
+    return { success: true };
   } catch (error) {
-    console.error("Error deleting tax return:", error);
+    console.error("Error deleting orders:", error);
     return {
       success: false,
-      message: "Failed to delete tax return. Please try again.",
+      error: error instanceof Error ? error.message : "Failed to delete orders",
     };
   }
 }

@@ -2,7 +2,7 @@ import React from "react";
 import { FileX } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import IndividualTaxReturnForm from "@/app/(site)/individual-tax-return/_components/individual-tax-return.form";
+import IndividualTaxReturnForm from "@/app/(site)/individual-tax-return/_components/individual-tax-return-form";
 import DynamicBreadcrumb from "@/components/custom/dynamic-breadcrumb";
 import prisma from "@/lib/prisma";
 import { redirect } from "next/navigation";
@@ -111,9 +111,7 @@ export default async function UserSavedTaxReturnDetails({ params }: PageProps) {
 
         {/* Form Container */}
         {savedReturn.taxData ? (
-          <IndividualTaxReturnForm
-            savedTaxReturn={savedReturn.taxData as string}
-          />
+          <IndividualTaxReturnForm savedTaxReturn={savedReturn} />
         ) : (
           <NoDataState />
         )}

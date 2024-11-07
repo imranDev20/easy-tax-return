@@ -49,7 +49,7 @@ import {
   saveTaxReturn,
   updateTaxReturnOrder,
 } from "../actions";
-import { Prisma } from "@prisma/client";
+import { Prisma, SavedTaxReturns } from "@prisma/client";
 
 const images = [
   ImageOne,
@@ -278,7 +278,7 @@ const IndividualTaxReturnForm = ({
   savedTaxReturn,
 }: {
   taxReturnOrder?: OrderWithRelation;
-  savedTaxReturn?: string;
+  savedTaxReturn?: SavedTaxReturns;
 }) => {
   const [scale, setScale] = useState(1);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
@@ -1299,7 +1299,6 @@ const IndividualTaxReturnForm = ({
     startTransition(async () => {
       try {
         let response;
-
         if (taxReturnOrder) {
           // If tax return exists, update it
           response = await updateTaxReturnOrder(taxReturnOrder.id, data);
@@ -1352,7 +1351,7 @@ const IndividualTaxReturnForm = ({
     startTransition(async () => {
       try {
         const data = getValues();
-        const result = await saveTaxReturn(data);
+        const result = await saveTaxReturn(data, savedTaxReturn?.id);
 
         if (result.success) {
           toast({
@@ -1785,7 +1784,7 @@ const IndividualTaxReturnForm = ({
                       {isPending ? (
                         <>
                           <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                          Generating PDF...
+                          Submitting...
                         </>
                       ) : (
                         "Submit"

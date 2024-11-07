@@ -41,7 +41,7 @@ export default async function AdminTaxReturnsPage({
       <DynamicBreadcrumb items={breadcrumbItems} />
       <OrdersTableHeader />
       <Suspense fallback={<OrdersLoading />}>
-        <OrdersList orders={orders} pagination={pagination} />
+        <OrdersList orders={orders} />
       </Suspense>
       <ReusablePagination
         currentPage={currentPage}

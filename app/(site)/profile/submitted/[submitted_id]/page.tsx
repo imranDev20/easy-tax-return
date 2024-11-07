@@ -1,7 +1,7 @@
 import React from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import IndividualTaxReturnForm from "@/app/(site)/individual-tax-return/_components/individual-tax-return.form";
+import IndividualTaxReturnForm from "@/app/(site)/individual-tax-return/_components/individual-tax-return-form";
 import DynamicBreadcrumb from "@/components/custom/dynamic-breadcrumb";
 import prisma from "@/lib/prisma";
 import { redirect } from "next/navigation";
@@ -141,7 +141,7 @@ export default async function UserSubmittedTaxReturnDetails({
   if (!order) {
     return (
       <div className="bg-lightGray min-h-screen">
-        <div className="container mx-auto px-4 md:px-8">
+        <div className="container mx-auto px-4 md:px-8 py-8">
           <div className="mb-8">
             <DynamicBreadcrumb
               items={[
@@ -173,7 +173,7 @@ export default async function UserSubmittedTaxReturnDetails({
 
   return (
     <div className="bg-lightGray min-h-screen">
-      <div className="container mx-auto px-4 md:px-8">
+      <div className="container mx-auto px-4 md:px-8 py-8">
         {/* Breadcrumb */}
         <div className="mb-8">
           <DynamicBreadcrumb items={breadcrumbItems} />

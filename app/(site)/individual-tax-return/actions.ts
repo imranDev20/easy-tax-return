@@ -700,12 +700,18 @@ export async function generateInvoiceId(): Promise<string> {
       },
     });
 
-    if (!latestOrder?.transactionID) {
-      // If no previous order exists or no transactionID, start with INV000001A
+    if (!latestOrder?.invoiceId) {
+      // If no previous order exists or no invoiceId, start with INV000001A
       return "INV000001A";
     }
 
-    const currentId = latestOrder.transactionID;
+    const currentId = latestOrder.invoiceId;
+
+    // Validate the current ID format
+    if (!currentId.match(/^INV\d{6}[A-Z]$/)) {
+      console.error("Invalid invoice ID format:", currentId);
+      return "INV000001A"; // Reset to initial format if invalid
+    }
 
     // Extract the numeric part and letter suffix
     const numericPart = parseInt(currentId.substring(3, 9));
@@ -815,29 +821,43 @@ export async function updateTaxReturnOrder(
 
     const validatedData = individualTaxReturnSchema.parse(input);
 
+    // First find the order without user restriction to check ownership
     const existingOrder = await prisma.order.findUnique({
       where: {
         id: orderId,
-        userId: session.user.id,
       },
       include: {
         individualTaxes: true,
+        user: {
+          select: {
+            id: true,
+            role: true,
+          },
+        },
       },
     });
 
     if (!existingOrder?.individualTaxes) {
       return {
         success: false,
-        error: "Tax return not found or access denied",
+        error: "Tax return not found",
       };
     }
 
-    // Extract individualTaxes to a separate constant to help TypeScript understand it's not null
+    // Check if user is authorized to update this order
+    const isAdmin = session.user.role === "ADMIN";
+    const isOwner = existingOrder.userId === session.user.id;
+
+    if (!isAdmin && !isOwner) {
+      return {
+        success: false,
+        error: "You are not authorized to update this tax return",
+      };
+    }
+
     const existingTaxReturn = existingOrder.individualTaxes;
 
     const result = await prisma.$transaction(async (tx) => {
-      // Now we pass existingTaxReturn which we know is not null
-
       const data = await getTaxReturnData({
         tx,
         validatedData,

@@ -28,15 +28,37 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { Check, Loader2, User, Mail, Phone, CreditCard } from "lucide-react";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
+import {
+  Check,
+  Loader2,
+  User,
+  Mail,
+  Phone,
+  CreditCard,
+  Trash2,
+  Eye,
+  AlertOctagon,
+  X,
+} from "lucide-react";
 import { PAYMENT_STATUS_OPTIONS } from "@/lib/constants";
 import DynamicBreadcrumb from "@/components/custom/dynamic-breadcrumb";
 import { ContentLayout } from "../../../_components/content-layout";
-import { useForm, Controller } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useToast } from "@/hooks/use-toast";
-import { updatePaymentInfo } from "../../actions";
+import { updatePaymentInfo, deleteOrders } from "../../actions";
 import { OrderUpdateForm, orderUpdateSchema } from "../schema";
+import { useRouter } from "next/navigation";
 
 const paymentMethodColors = {
   BKASH: "bg-pink-100 text-pink-800 border-pink-200 hover:bg-pink-100",
@@ -63,7 +85,9 @@ interface Props {
 
 export default function AdminOrderDetails({ taxReturnOrder }: Props) {
   const { toast } = useToast();
+  const router = useRouter();
   const [isPending, startTransition] = useTransition();
+  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = React.useState(false);
 
   const form = useForm<OrderUpdateForm>({
     resolver: zodResolver(orderUpdateSchema),
@@ -125,6 +149,35 @@ export default function AdminOrderDetails({ taxReturnOrder }: Props) {
     });
   };
 
+  const handleDelete = async () => {
+    startTransition(async () => {
+      try {
+        const result = await deleteOrders([taxReturnOrder.id]);
+
+        if (result.success) {
+          toast({
+            title: "Success",
+            description: "Order deleted successfully.",
+            variant: "success",
+          });
+          router.push("/admin/orders");
+        } else {
+          toast({
+            title: "Error",
+            description: result.error || "Failed to delete order",
+            variant: "destructive",
+          });
+        }
+      } catch (error) {
+        toast({
+          title: "Error",
+          description: "Something went wrong. Please try again.",
+          variant: "destructive",
+        });
+      }
+    });
+  };
+
   return (
     <ContentLayout title={taxReturnOrder.invoiceId}>
       <div className="mb-6">
@@ -133,8 +186,8 @@ export default function AdminOrderDetails({ taxReturnOrder }: Props) {
 
       <div className="grid gap-6 mb-6">
         <Card>
-          <CardHeader>
-            <div className="flex justify-between items-start">
+          <CardHeader className="space-y-0">
+            <div className="flex flex-col md:flex-row md:justify-between md:items-start gap-4">
               <div>
                 <CardTitle className="text-2xl">
                   Order #{taxReturnOrder.invoiceId}
@@ -144,161 +197,173 @@ export default function AdminOrderDetails({ taxReturnOrder }: Props) {
                 </CardDescription>
               </div>
 
-              {taxReturnOrder.paymentMethod && (
-                <Badge
+              <div className="flex flex-col sm:flex-row gap-3 self-start">
+                {taxReturnOrder.paymentMethod && (
+                  <Badge
+                    variant="outline"
+                    className={`text-base px-4 py-1 ${
+                      paymentMethodColors[taxReturnOrder.paymentMethod]
+                    }`}
+                  >
+                    <CreditCard className="w-4 h-4 mr-2" />
+                    {taxReturnOrder.paymentMethod}
+                  </Badge>
+                )}
+
+                <Button
                   variant="outline"
-                  className={`text-base px-4 py-1 ${
-                    paymentMethodColors[taxReturnOrder.paymentMethod]
-                  }`}
+                  className="border-primary text-primary hover:bg-primary hover:text-white"
+                  onClick={() =>
+                    router.push(
+                      `/admin/orders/${taxReturnOrder.id}/${taxReturnOrder.individualTaxesId}`
+                    )
+                  }
                 >
-                  <CreditCard className="w-4 h-4 mr-2" />
-                  {taxReturnOrder.paymentMethod}
-                </Badge>
-              )}
+                  <Eye className="w-4 h-4 mr-2" />
+                  View Tax Return
+                </Button>
+              </div>
             </div>
           </CardHeader>
           <CardContent>
             <Form {...form}>
               <form
                 onSubmit={form.handleSubmit(onSubmit)}
-                className="grid md:grid-cols-2 gap-8"
+                className="space-y-8"
               >
-                <div className="space-y-6">
-                  <FormField
-                    control={form.control}
-                    name="paymentStatus"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel className="text-gray-500">
-                          Payment Status
-                        </FormLabel>
-                        <FormControl>
-                          <Select
-                            onValueChange={(value) => {
-                              if (value) {
-                                field.onChange(value);
-                              }
-                            }}
-                            value={field.value}
-                          >
-                            <SelectTrigger className="w-full">
-                              <SelectValue placeholder="Select status" />
-                            </SelectTrigger>
-                            <SelectContent>
-                              {PAYMENT_STATUS_OPTIONS.map((status) => (
-                                <SelectItem key={status} value={status}>
-                                  {status}
-                                </SelectItem>
-                              ))}
-                            </SelectContent>
-                          </Select>
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
+                <div className="grid md:grid-cols-2 gap-8">
+                  <div className="space-y-6">
+                    <FormField
+                      control={form.control}
+                      name="paymentStatus"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel className="text-gray-500">
+                            Payment Status
+                          </FormLabel>
+                          <FormControl>
+                            <Select
+                              onValueChange={(value) => {
+                                if (value) {
+                                  field.onChange(value);
+                                }
+                              }}
+                              value={field.value}
+                            >
+                              <SelectTrigger className="w-full">
+                                <SelectValue placeholder="Select status" />
+                              </SelectTrigger>
+                              <SelectContent>
+                                {PAYMENT_STATUS_OPTIONS.map((status) => (
+                                  <SelectItem key={status} value={status}>
+                                    {status}
+                                  </SelectItem>
+                                ))}
+                              </SelectContent>
+                            </Select>
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
 
-                  <FormField
-                    control={form.control}
-                    name="transactionID"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel className="text-gray-500">
-                          Transaction ID
-                        </FormLabel>
-                        <FormControl>
-                          <Input
-                            {...field}
-                            placeholder="Enter transaction ID"
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
+                    <FormField
+                      control={form.control}
+                      name="transactionID"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel className="text-gray-500">
+                            Transaction ID
+                          </FormLabel>
+                          <FormControl>
+                            <Input
+                              {...field}
+                              placeholder="Enter transaction ID"
+                            />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
 
-                  <FormField
-                    control={form.control}
-                    name="phoneNumberUsed"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel className="text-gray-500">
-                          Phone Number Used
-                        </FormLabel>
-                        <FormControl>
-                          <Input
-                            {...field}
-                            placeholder="Enter phone number used"
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
+                    <FormField
+                      control={form.control}
+                      name="phoneNumberUsed"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel className="text-gray-500">
+                            Phone Number Used
+                          </FormLabel>
+                          <FormControl>
+                            <Input
+                              {...field}
+                              placeholder="Enter phone number used"
+                            />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
 
-                  <div>
-                    <label className="block text-sm font-medium text-gray-500 mb-1">
-                      Amount
-                    </label>
-                    <div className="text-2xl font-semibold text-primary">
-                      ৳{taxReturnOrder.amount?.toLocaleString()}
+                    <div>
+                      <label className="block text-sm font-medium text-gray-500 mb-1">
+                        Amount
+                      </label>
+                      <div className="text-2xl font-semibold text-primary">
+                        ৳{taxReturnOrder.amount?.toLocaleString()}
+                      </div>
                     </div>
                   </div>
-                </div>
 
-                <div className="relative overflow-hidden rounded-lg border bg-gray-50">
-                  <div className="p-6">
-                    <h3 className="font-semibold text-lg text-gray-900 mb-6 flex items-center">
+                  <div className="bg-gray-50 rounded-lg p-6">
+                    <h3 className="font-medium text-gray-900 mb-4">
                       Taxpayer Information
                     </h3>
-                    <div className="grid gap-5">
-                      <div className="flex items-center gap-3 p-3 bg-white rounded-md border border-gray-100 shadow-sm transition-colors hover:border-gray-200">
-                        <div className="flex-shrink-0">
-                          <div className="p-2 bg-primary/5 rounded-full">
-                            <User className="h-4 w-4 text-primary" />
-                          </div>
-                        </div>
-                        <div className="min-w-0 flex-1">
-                          <p className="font-medium text-gray-900 truncate">
-                            {taxReturnOrder.user.name}
-                          </p>
-                        </div>
+                    <dl className="space-y-4">
+                      <div className="flex items-center gap-3">
+                        <dt className="flex-shrink-0">
+                          <User className="h-5 w-5 text-gray-500" />
+                        </dt>
+                        <dd className="text-sm text-gray-700">
+                          {taxReturnOrder.user.name}
+                        </dd>
                       </div>
-
-                      <div className="flex items-center gap-3 p-3 bg-white rounded-md border border-gray-100 shadow-sm transition-colors hover:border-gray-200">
-                        <div className="flex-shrink-0">
-                          <div className="p-2 bg-primary/5 rounded-full">
-                            <Mail className="h-4 w-4 text-primary" />
-                          </div>
-                        </div>
-                        <div className="min-w-0 flex-1">
-                          <p className="font-medium text-gray-900 truncate">
-                            {taxReturnOrder.user.email}
-                          </p>
-                        </div>
+                      <div className="flex items-center gap-3">
+                        <dt className="flex-shrink-0">
+                          <Mail className="h-5 w-5 text-gray-500" />
+                        </dt>
+                        <dd className="text-sm text-gray-700 break-all">
+                          {taxReturnOrder.user.email}
+                        </dd>
                       </div>
-
-                      <div className="flex items-center gap-3 p-3 bg-white rounded-md border border-gray-100 shadow-sm transition-colors hover:border-gray-200">
-                        <div className="flex-shrink-0">
-                          <div className="p-2 bg-primary/5 rounded-full">
-                            <Phone className="h-4 w-4 text-primary" />
-                          </div>
-                        </div>
-                        <div className="min-w-0 flex-1">
-                          <p className="font-medium text-gray-900 truncate">
-                            {taxReturnOrder.user.phone}
-                          </p>
-                        </div>
+                      <div className="flex items-center gap-3">
+                        <dt className="flex-shrink-0">
+                          <Phone className="h-5 w-5 text-gray-500" />
+                        </dt>
+                        <dd className="text-sm text-gray-700">
+                          {taxReturnOrder.user.phone}
+                        </dd>
                       </div>
-                    </div>
+                    </dl>
                   </div>
                 </div>
 
-                <div className="md:col-span-2 flex justify-end">
+                <div className="flex flex-col-reverse sm:flex-row sm:justify-between sm:items-center gap-4">
+                  <Button
+                    type="button"
+                    variant="destructive"
+                    onClick={() => setIsDeleteDialogOpen(true)}
+                    disabled={isPending}
+                    className="w-full sm:w-auto"
+                  >
+                    <Trash2 className="mr-2 h-4 w-4" />
+                    Delete Order
+                  </Button>
+
                   <Button
                     type="submit"
                     disabled={isPending || !form.formState.isDirty}
-                    className="w-32"
+                    className="w-full sm:w-auto"
                   >
                     {isPending ? (
                       <>
@@ -308,7 +373,7 @@ export default function AdminOrderDetails({ taxReturnOrder }: Props) {
                     ) : (
                       <>
                         <Check className="mr-2 h-4 w-4" />
-                        Save
+                        Save Changes
                       </>
                     )}
                   </Button>
@@ -318,6 +383,48 @@ export default function AdminOrderDetails({ taxReturnOrder }: Props) {
           </CardContent>
         </Card>
       </div>
+
+      <AlertDialog
+        open={isDeleteDialogOpen}
+        onOpenChange={setIsDeleteDialogOpen}
+      >
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle className="flex items-center gap-2">
+              <AlertOctagon className="h-5 w-5 text-destructive" />
+              Are you absolutely sure?
+            </AlertDialogTitle>
+            <AlertDialogDescription>
+              This action cannot be undone. This will permanently delete this
+              order and remove all associated data from our servers.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel className="gap-2">
+              <X className="h-4 w-4" />
+              Cancel
+            </AlertDialogCancel>
+
+            <AlertDialogAction
+              onClick={handleDelete}
+              className="bg-destructive hover:bg-destructive/90 text-white gap-2"
+              disabled={isPending}
+            >
+              {isPending ? (
+                <>
+                  <Loader2 className="h-4 w-4 animate-spin" />
+                  Deleting...
+                </>
+              ) : (
+                <>
+                  <Trash2 className="h-4 w-4" />
+                  Delete
+                </>
+              )}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </ContentLayout>
   );
 }
