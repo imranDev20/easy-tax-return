@@ -4,6 +4,7 @@ import Link from "next/link";
 import prisma from "@/lib/prisma";
 import { ChevronRight, Home } from "lucide-react";
 import IndividualTaxReturnForm from "@/app/(site)/individual-tax-return/_components/individual-tax-return-form";
+import { Suspense } from "react";
 
 interface AdminTaxReturnDetailsFormPageProps {
   params: {
@@ -142,7 +143,9 @@ export default async function AdminTaxReturnDetailsFormPage({
         <p className="mt-2 text-gray-600">Invoice ID: {order.invoiceId}</p>
       </div>
 
-      <IndividualTaxReturnForm taxReturnOrder={order} />
+      <Suspense>
+        <IndividualTaxReturnForm taxReturnOrder={order} />
+      </Suspense>
     </div>
   );
 }

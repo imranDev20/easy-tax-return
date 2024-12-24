@@ -97,7 +97,7 @@ export async function deleteOrders(orderIds: string[]) {
     });
 
     revalidatePath("/", "layout");
-    return { success: true };
+    return { success: true, message: "Orders deleted successfully" };
   } catch (error) {
     console.error("Error deleting orders:", error);
     return {

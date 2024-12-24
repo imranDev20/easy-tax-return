@@ -16,7 +16,7 @@ import { Controller, FormProvider, SubmitHandler } from "react-hook-form";
 import CustomDatePicker from "@/components/custom/date-picker";
 import SignatureField from "@/components/custom/signature";
 import { Button } from "@/components/ui/button";
-import { debounce, isFieldRequired, snakeToNormalText } from "@/lib/utils";
+import { debounce, isFieldRequired } from "@/lib/utils";
 import "flatpickr/dist/themes/airbnb.css";
 import { ArrowLeft, ArrowRight, Download, Loader2, Menu } from "lucide-react";
 import {

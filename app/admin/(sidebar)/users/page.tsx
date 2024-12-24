@@ -116,8 +116,9 @@ export default async function AdminUsersPage({
   return (
     <ContentLayout title="Users">
       <DynamicBreadcrumb items={breadcrumbItems} />
-      <UsersTableHeader />
+
       <Suspense fallback={<UsersLoading />}>
+        <UsersTableHeader />
         <UserList users={users} />
       </Suspense>
       <ReusablePagination
