@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Suspense } from "react";
 import { FileX } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
@@ -111,7 +111,9 @@ export default async function UserSavedTaxReturnDetails({ params }: PageProps) {
 
         {/* Form Container */}
         {savedReturn.taxData ? (
-          <IndividualTaxReturnForm savedTaxReturn={savedReturn} />
+          <Suspense>
+            <IndividualTaxReturnForm savedTaxReturn={savedReturn} />
+          </Suspense>
         ) : (
           <NoDataState />
         )}

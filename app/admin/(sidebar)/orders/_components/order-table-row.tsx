@@ -18,7 +18,7 @@ import { Edit, MoreHorizontal, Trash2 } from "lucide-react";
 import Link from "next/link";
 import { useTransition } from "react";
 import { NumericFormat } from "react-number-format";
-import { deleteOrder } from "../actions";
+import { deleteOrders } from "../actions";
 import { OrderWithRelations } from "./order-list";
 import { useToast } from "@/hooks/use-toast";
 
@@ -35,7 +35,7 @@ export default function OrderTableRow({
     e.stopPropagation();
 
     startTransition(async () => {
-      const result = await deleteOrder(order.id);
+      const result = await deleteOrders([order.id]);
 
       if (result.success) {
         toast({

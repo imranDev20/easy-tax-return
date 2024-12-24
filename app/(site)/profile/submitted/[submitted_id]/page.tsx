@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Suspense } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import IndividualTaxReturnForm from "@/app/(site)/individual-tax-return/_components/individual-tax-return-form";
@@ -264,7 +264,9 @@ export default async function UserSubmittedTaxReturnDetails({
 
         {/* Form Container */}
         {order.individualTaxes ? (
-          <IndividualTaxReturnForm taxReturnOrder={order} />
+          <Suspense>
+            <IndividualTaxReturnForm taxReturnOrder={order} />
+          </Suspense>
         ) : (
           <NoDataState />
         )}
