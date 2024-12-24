@@ -51,14 +51,7 @@ interface UserSelectionProps {
 
 export default function UserSelection({ users = [] }: UserSelectionProps) {
   const [openCombobox, setOpenCombobox] = useState(false);
-  const [dialogOpen, setDialogOpen] = useState(false);
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
-  const [isLoading, setIsLoading] = useState(false);
-  const [newUserForm, setNewUserForm] = useState({
-    name: "",
-    email: "",
-    phone: "",
-  });
 
   const { createQueryString } = useQueryString();
   const router = useRouter();

@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import IndividualTaxReturnForm from "./_components/individual-tax-return-form";
 import type { Metadata } from "next";
 
@@ -45,7 +46,10 @@ export default function IndividualTaxReturnPage() {
             Complete your tax return easily and securely. Our form is designed
             to guide you through the process step by step.
           </p>
-          <IndividualTaxReturnForm />
+
+          <Suspense>
+            <IndividualTaxReturnForm />
+          </Suspense>
         </div>
       </div>
     </>

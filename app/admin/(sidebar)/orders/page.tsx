@@ -39,8 +39,9 @@ export default async function AdminTaxReturnsPage({
   return (
     <ContentLayout title="Tax Returns">
       <DynamicBreadcrumb items={breadcrumbItems} />
-      <OrdersTableHeader />
+
       <Suspense fallback={<OrdersLoading />}>
+        <OrdersTableHeader />
         <OrdersList orders={orders} />
       </Suspense>
       <ReusablePagination

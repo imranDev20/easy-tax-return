@@ -2,8 +2,6 @@
 
 import React, { useEffect, useState } from "react";
 import { useRouter, usePathname, useSearchParams } from "next/navigation";
-import Link from "next/link";
-import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
   Select,
@@ -13,7 +11,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import useQueryString from "@/hooks/use-query-string";
-import { Plus, Search, SortAsc, SortDesc, X } from "lucide-react";
+import { Search, SortAsc, SortDesc, X } from "lucide-react";
 import { useDebounce } from "@/hooks/use-debounce";
 import { Badge } from "@/components/ui/badge";
 import CreateUserDialog from "@/app/admin/orders/new/_components/create-user-dialog";
