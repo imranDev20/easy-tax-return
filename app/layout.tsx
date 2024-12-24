@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import { Judson, Poppins } from "next/font/google";
 import "./globals.css";
 import NextAuthSessionProvider from "@/providers/session-provider";
+import { Toaster } from "@/components/ui/toaster";
 
 export const metadata: Metadata = {
   title: "Easy Tax Return | Online Tax Preparation and Filing",
@@ -97,6 +98,8 @@ export default function RootLayout({
             {children}
           </ThemeProvider>
         </NextAuthSessionProvider>
+
+        <Toaster />
       </body>
     </html>
   );

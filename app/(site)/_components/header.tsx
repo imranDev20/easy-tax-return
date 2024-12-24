@@ -12,10 +12,12 @@ import { Button } from "@/components/ui/button";
 import {
   ChevronDown,
   CreditCard,
+  FileCheck,
   History,
   LayoutDashboard,
   LogIn,
   LogOut,
+  Save,
   User,
 } from "lucide-react";
 import { useSession, signOut } from "next-auth/react";
@@ -112,6 +114,24 @@ export default function Header() {
     ],
     []
   );
+
+  const menuItems = [
+    {
+      href: "/profile",
+      label: "My Profile",
+      icon: User,
+    },
+    {
+      href: "/profile/submitted",
+      label: "Submitted Returns",
+      icon: FileCheck,
+    },
+    {
+      href: "/profile/saved",
+      label: "Saved Returns",
+      icon: Save,
+    },
+  ];
 
   const handleScroll = useCallback(() => {
     const scrollY = window.pageYOffset;
@@ -354,26 +374,20 @@ export default function Header() {
             </>
           ) : (
             <>
-              <DropdownMenuItem>
-                <Link href="/profile" className="flex items-center w-full">
-                  <User className="mr-2 h-4 w-4" />
-                  Profile
-                </Link>
-              </DropdownMenuItem>
-              <DropdownMenuItem>
-                <Link href="/history" className="flex items-center w-full">
-                  <History className="mr-2 h-4 w-4" />
-                  History
-                </Link>
-              </DropdownMenuItem>
-              <DropdownMenuItem>
-                <Link href="/transactions" className="flex items-center w-full">
-                  <CreditCard className="mr-2 h-4 w-4" />
-                  Transactions
-                </Link>
-              </DropdownMenuItem>
+              {menuItems.map(({ href, label, icon: Icon }) => (
+                <DropdownMenuItem key={href} className="p-0" asChild>
+                  <Link
+                    href={href}
+                    className="flex items-center w-full px-2 py-1.5 hover:bg-accent hover:text-accent-foreground cursor-pointer"
+                  >
+                    <Icon className="mr-2 h-4 w-4" />
+                    {label}
+                  </Link>
+                </DropdownMenuItem>
+              ))}
             </>
           )}
+
           <DropdownMenuSeparator className="bg-slate-200" />
           <DropdownMenuItem
             onClick={async () => await signOut()}

@@ -48,7 +48,7 @@ interface BaseFormField {
   y: number;
   disabled?: boolean;
   onBlur?: (value: string | boolean) => void;
-  value?: string | number | Date;
+  value?: string | number | Date | boolean;
   width: number;
   height: number;
   isVisible?: boolean;
@@ -60,7 +60,7 @@ interface RadioFormField extends BaseFormField {
   type: "radio";
   options: Array<{
     label: string;
-    value: string;
+    value: string | boolean;
     x: number;
     y: number;
     width: number;

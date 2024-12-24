@@ -103,13 +103,13 @@ export function ReusablePagination({
   const endItem = Math.min(currentPage * itemsPerPage, totalItems);
 
   return (
-    <nav className="relative" aria-label="Pagination">
-      <div className="text-xs text-muted-foreground absolute left-0 top-1/2 -translate-y-1/2">
+    <nav className="relative mt-4" aria-label="Pagination">
+      <div className="text-center md:text-left md:absolute md:left-0 md:top-1/2 md:-translate-y-1/2 text-xs text-muted-foreground mb-4 md:mb-0">
         Showing <strong>{startItem}</strong> to <strong>{endItem}</strong> of{" "}
         <strong>{totalItems}</strong> {itemName}
         {totalItems !== 1 ? "s" : ""}
       </div>
-      <Pagination className="mt-5">
+      <Pagination>
         <PaginationContent>
           <PaginationItem>
             <Link
@@ -147,3 +147,5 @@ export function ReusablePagination({
     </nav>
   );
 }
+
+export default ReusablePagination;

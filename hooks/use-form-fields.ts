@@ -34,8 +34,6 @@ export const useFormFields = (
     calculateTotalExpenseIndividualPerson,
     calculateTotalAllowableInvestmentContribution,
     calculateBusinessFinancials,
-    calculateGrossWealth,
-    calculateNetWealthLastDateOfThisFinancialYear,
     calculateSumOfSourceOfFund,
     calculateTotalSourceOfFunds,
     calculateTotalExpenseAndLoss,
@@ -56,9 +54,9 @@ export const useFormFields = (
     calculateTotalIncomeFromSecurities,
     calculateTotalAmountPayable,
     calculateTotalBankAndShonchoypatra,
-    calculateTotalTaxDeductedOrCollected,
     calculateTotalTaxPaidAdjustmentExcess,
     calculateTotalAssetsInAndOutsideBangladesh,
+    calculateTotalCashInHandAndFund,
   } = useCalculations(watch, setValue, getValues, setError, clearErrors);
 
   const formFields: FormField[] = [
@@ -267,7 +265,7 @@ export const useFormFields = (
       options: [
         {
           label: "",
-          value: "true",
+          value: true,
           x: 888,
           y: 555,
           width: 49,
@@ -922,7 +920,7 @@ export const useFormFields = (
     {
       name: "placeOfSignature",
       type: "text",
-      label: "placeOfSignature",
+      label: "",
       x: 145,
       y: 870,
       width: 250,
@@ -934,7 +932,7 @@ export const useFormFields = (
     {
       name: "dateOfSignature",
       type: "date",
-      label: "Date of Signature",
+      label: "",
       x: 538,
       y: 910,
       width: 397,
@@ -949,11 +947,11 @@ export const useFormFields = (
     {
       name: "signature",
       type: "signature",
-      label: "Signature",
+      label: "",
       x: 650,
-      y: 800,
-      width: 500,
-      height: 200,
+      y: 825,
+      width: 300,
+      height: 70,
       imageIndex: 2,
       isVisible: true,
     },
@@ -1023,40 +1021,40 @@ export const useFormFields = (
       ],
 
       resetFields: [
-        "basicPayGovtEmployment",
-        "arrearPayGovtEmployment",
-        "specialAllowanceGovtEmployment",
-        "houseRentAllowanceGovtEmployment",
-        "medicalAllowanceGovtEmployment",
-        "conveyanceAllowanceGovtEmployment",
-        "festivalAllowanceGovtEmployment",
-        "allowanceForSupportStaffGovtEmployment",
-        "leaveAllowanceGovtEmployment",
-        "honorariumRewardGovtEmployment",
-        "overtimeAllowanceGovtEmployment",
-        "banglaNoboborshoAllowancesGovtEmployment",
-        "interestAccruedProvidentFundGovtEmployment",
-        "lumpGrantGovtEmployment",
-        "gratuityGovtEmployment",
-        "otherAllowanceGovtEmployment",
-        "totalGovtEmployment",
-        "basicPayPrivateEmployment",
-        "allowancesPrivateEmployment",
-        "advanceArrearSalaryPrivateEmployment",
-        "gratuityAnnuityPensionOrSimilarBenefitPrivateEmployment",
-        "perquisitesPrivateEmployment",
-        "receiptInLieuOfOrInAdditionToSalaryOrWagesPrivateEmployment",
-        "incomeFromEmployeeShareSchemePrivateEmployment",
-        "accommodationFacilityPrivateEmployment",
-        "transportFacilityPrivateEmployment",
-        "transporFacilityPrivateCheck",
-        "tranportFacilityPrivateVehicleCC",
-        "anyOtherFacilityProvidedByEmployerPrivateEmployment",
-        "employerContributionToProvidentFundPrivateEmployment",
-        "otherIncomePrivateEmployment",
-        "totalSalaryReceivedPrivateEmployment",
-        "exemptedAmountPrivateEmployment",
-        "totalIncomeFromSalaryPrivateEmployment",
+        "basicPayGovt",
+        "arrearPayGovt",
+        "specialAllowanceGovt",
+        "houseRentAllowanceGovt",
+        "medicalAllowanceGovt",
+        "conveyanceAllowanceGovt",
+        "festivalAllowanceGovt",
+        "allowanceForSupportStaffGovt",
+        "leaveAllowanceGovt",
+        "honorariumRewardGovt",
+        "overtimeAllowanceGovt",
+        "banglaNoboborshoAllowancesGovt",
+        "interestAccruedProvidentFundGovt",
+        "lumpGrantGovt",
+        "gratuityGovt",
+        "otherAllowanceGovt",
+        "totalGovt",
+        "basicPayPrivate",
+        "allowancesPrivate",
+        "advanceArrearSalaryPrivate",
+        "gratuityAnnuityPensionOrSimilarBenefitPrivate",
+        "perquisitesPrivate",
+        "receiptInLieuOfOrInAdditionToSalaryOrWagesPrivate",
+        "incomeFromEmployeeShareSchemePrivate",
+        "accommodationFacilityPrivate",
+        "transportFacilityPrivate",
+        "transportFacilityPrivateCheck",
+        "transportFacilityPrivateVehicleCC",
+        "anyOtherFacilityProvidedByEmployerPrivate",
+        "employerContributionToProvidentFundPrivate",
+        "otherIncomePrivate",
+        "totalSalaryReceivedPrivate",
+        "exemptedAmountPrivate",
+        "totalIncomeFromSalaryPrivate",
         "incomeFromEmployment",
         "totalIncomeShownInTheReturn",
         "taxExemptedIncomeAndAllowance", // from page 9
@@ -1090,14 +1088,13 @@ export const useFormFields = (
     },
 
     {
-      name: "basicPayGovtEmployment.amount",
+      name: "basicPayGovt.amount",
       type: "number",
       label: "",
       onBlur: (val) => {
         console.log(typeof val);
 
-        if (typeof val === "string")
-          setValue("basicPayGovtEmployment.taxable", val);
+        if (typeof val === "string") setValue("basicPayGovt.taxable", val);
         calculateScheduleOneGovtTotals();
       },
 
@@ -1109,7 +1106,7 @@ export const useFormFields = (
       isVisible: watch("typeOfEmployment") === "GOVERNMENT",
     },
     {
-      name: "basicPayGovtEmployment.taxable",
+      name: "basicPayGovt.taxable",
       type: "number",
       label: "",
       disabled: true,
@@ -1121,7 +1118,7 @@ export const useFormFields = (
       isVisible: watch("typeOfEmployment") === "GOVERNMENT",
     },
     {
-      name: "arrearPayGovtEmployment.amount",
+      name: "arrearPayGovt.amount",
       type: "number",
       label: "",
       x: 474,
@@ -1132,13 +1129,12 @@ export const useFormFields = (
       onBlur: (val) => {
         calculateScheduleOneGovtTotals();
 
-        if (typeof val === "string")
-          setValue("arrearPayGovtEmployment.taxable", val);
+        if (typeof val === "string") setValue("arrearPayGovt.taxable", val);
       },
       isVisible: watch("typeOfEmployment") === "GOVERNMENT",
     },
     {
-      name: "arrearPayGovtEmployment.taxable",
+      name: "arrearPayGovt.taxable",
       type: "number",
       label: "",
       disabled: true,
@@ -1150,7 +1146,7 @@ export const useFormFields = (
       isVisible: watch("typeOfEmployment") === "GOVERNMENT",
     },
     {
-      name: "specialAllowanceGovtEmployment.amount",
+      name: "specialAllowanceGovt.amount",
       type: "number",
       label: "",
       x: 474,
@@ -1161,12 +1157,12 @@ export const useFormFields = (
       onBlur: (val) => {
         calculateScheduleOneGovtTotals();
         if (typeof val === "string")
-          setValue("specialAllowanceGovtEmployment.taxExempted", val);
+          setValue("specialAllowanceGovt.taxExempted", val);
       },
       isVisible: watch("typeOfEmployment") === "GOVERNMENT",
     },
     {
-      name: "specialAllowanceGovtEmployment.taxExempted",
+      name: "specialAllowanceGovt.taxExempted",
       type: "number",
       label: "",
       disabled: true,
@@ -1178,7 +1174,7 @@ export const useFormFields = (
       isVisible: watch("typeOfEmployment") === "GOVERNMENT",
     },
     {
-      name: "houseRentAllowanceGovtEmployment.amount",
+      name: "houseRentAllowanceGovt.amount",
       type: "number",
       label: "",
       x: 474,
@@ -1189,12 +1185,12 @@ export const useFormFields = (
       onBlur: (val) => {
         calculateScheduleOneGovtTotals();
         if (typeof val === "string")
-          setValue("houseRentAllowanceGovtEmployment.taxExempted", val);
+          setValue("houseRentAllowanceGovt.taxExempted", val);
       },
       isVisible: watch("typeOfEmployment") === "GOVERNMENT",
     },
     {
-      name: "houseRentAllowanceGovtEmployment.taxExempted",
+      name: "houseRentAllowanceGovt.taxExempted",
       type: "number",
       label: "",
       disabled: true,
@@ -1206,7 +1202,7 @@ export const useFormFields = (
       isVisible: watch("typeOfEmployment") === "GOVERNMENT",
     },
     {
-      name: "medicalAllowanceGovtEmployment.amount",
+      name: "medicalAllowanceGovt.amount",
       type: "number",
       label: "",
       x: 474,
@@ -1217,12 +1213,12 @@ export const useFormFields = (
       onBlur: (val) => {
         calculateScheduleOneGovtTotals();
         if (typeof val === "string")
-          setValue("medicalAllowanceGovtEmployment.taxExempted", val);
+          setValue("medicalAllowanceGovt.taxExempted", val);
       },
       isVisible: watch("typeOfEmployment") === "GOVERNMENT",
     },
     {
-      name: "medicalAllowanceGovtEmployment.taxExempted",
+      name: "medicalAllowanceGovt.taxExempted",
       type: "number",
       label: "",
       disabled: true,
@@ -1234,7 +1230,7 @@ export const useFormFields = (
       isVisible: watch("typeOfEmployment") === "GOVERNMENT",
     },
     {
-      name: "conveyanceAllowanceGovtEmployment.amount",
+      name: "conveyanceAllowanceGovt.amount",
       type: "number",
       label: "",
       disabled: false,
@@ -1246,12 +1242,12 @@ export const useFormFields = (
       onBlur: (val) => {
         calculateScheduleOneGovtTotals();
         if (typeof val === "string")
-          setValue("conveyanceAllowanceGovtEmployment.taxExempted", val);
+          setValue("conveyanceAllowanceGovt.taxExempted", val);
       },
       isVisible: watch("typeOfEmployment") === "GOVERNMENT",
     },
     {
-      name: "conveyanceAllowanceGovtEmployment.taxExempted",
+      name: "conveyanceAllowanceGovt.taxExempted",
       type: "number",
       label: "",
       disabled: true,
@@ -1264,7 +1260,7 @@ export const useFormFields = (
     },
 
     {
-      name: "festivalAllowanceGovtEmployment.amount",
+      name: "festivalAllowanceGovt.amount",
       type: "number",
       label: "",
       disabled: false,
@@ -1276,12 +1272,12 @@ export const useFormFields = (
       onBlur: (val) => {
         calculateScheduleOneGovtTotals();
         if (typeof val === "string")
-          setValue("festivalAllowanceGovtEmployment.taxable", val);
+          setValue("festivalAllowanceGovt.taxable", val);
       },
       isVisible: watch("typeOfEmployment") === "GOVERNMENT",
     },
     {
-      name: "festivalAllowanceGovtEmployment.taxable",
+      name: "festivalAllowanceGovt.taxable",
       type: "number",
       label: "",
       disabled: true,
@@ -1294,7 +1290,7 @@ export const useFormFields = (
     },
 
     {
-      name: "allowanceForSupportStaffGovtEmployment.amount",
+      name: "allowanceForSupportStaffGovt.amount",
       type: "number",
       label: "",
       disabled: false,
@@ -1306,12 +1302,12 @@ export const useFormFields = (
       onBlur: (val) => {
         calculateScheduleOneGovtTotals();
         if (typeof val === "string")
-          setValue("allowanceForSupportStaffGovtEmployment.taxExempted", val);
+          setValue("allowanceForSupportStaffGovt.taxExempted", val);
       },
       isVisible: watch("typeOfEmployment") === "GOVERNMENT",
     },
     {
-      name: "allowanceForSupportStaffGovtEmployment.taxExempted",
+      name: "allowanceForSupportStaffGovt.taxExempted",
       type: "number",
       label: "",
       disabled: true,
@@ -1323,7 +1319,7 @@ export const useFormFields = (
       isVisible: watch("typeOfEmployment") === "GOVERNMENT",
     },
     {
-      name: "leaveAllowanceGovtEmployment.amount",
+      name: "leaveAllowanceGovt.amount",
       type: "number",
       label: "",
       disabled: false,
@@ -1335,12 +1331,12 @@ export const useFormFields = (
       onBlur: (val) => {
         calculateScheduleOneGovtTotals();
         if (typeof val === "string")
-          setValue("leaveAllowanceGovtEmployment.taxExempted", val);
+          setValue("leaveAllowanceGovt.taxExempted", val);
       },
       isVisible: watch("typeOfEmployment") === "GOVERNMENT",
     },
     {
-      name: "leaveAllowanceGovtEmployment.taxExempted",
+      name: "leaveAllowanceGovt.taxExempted",
       type: "number",
       label: "",
       disabled: true,
@@ -1352,7 +1348,7 @@ export const useFormFields = (
       isVisible: watch("typeOfEmployment") === "GOVERNMENT",
     },
     {
-      name: "honorariumRewardGovtEmployment.amount",
+      name: "honorariumRewardGovt.amount",
       type: "number",
       label: "",
       disabled: false,
@@ -1364,12 +1360,12 @@ export const useFormFields = (
       onBlur: (val) => {
         calculateScheduleOneGovtTotals();
         if (typeof val === "string")
-          setValue("honorariumRewardGovtEmployment.taxExempted", val);
+          setValue("honorariumRewardGovt.taxExempted", val);
       },
       isVisible: watch("typeOfEmployment") === "GOVERNMENT",
     },
     {
-      name: "honorariumRewardGovtEmployment.taxExempted",
+      name: "honorariumRewardGovt.taxExempted",
       type: "number",
       label: "",
       disabled: true,
@@ -1381,7 +1377,7 @@ export const useFormFields = (
       isVisible: watch("typeOfEmployment") === "GOVERNMENT",
     },
     {
-      name: "overtimeAllowanceGovtEmployment.amount",
+      name: "overtimeAllowanceGovt.amount",
       type: "number",
       label: "",
       disabled: false,
@@ -1393,12 +1389,12 @@ export const useFormFields = (
       onBlur: (val) => {
         calculateScheduleOneGovtTotals();
         if (typeof val === "string")
-          setValue("overtimeAllowanceGovtEmployment.taxExempted", val);
+          setValue("overtimeAllowanceGovt.taxExempted", val);
       },
       isVisible: watch("typeOfEmployment") === "GOVERNMENT",
     },
     {
-      name: "overtimeAllowanceGovtEmployment.taxExempted",
+      name: "overtimeAllowanceGovt.taxExempted",
       type: "number",
       label: "",
       disabled: true,
@@ -1410,7 +1406,7 @@ export const useFormFields = (
       isVisible: watch("typeOfEmployment") === "GOVERNMENT",
     },
     {
-      name: "banglaNoboborshoAllowancesGovtEmployment.amount",
+      name: "banglaNoboborshoAllowancesGovt.amount",
       type: "number",
       label: "",
       disabled: false,
@@ -1422,12 +1418,12 @@ export const useFormFields = (
       onBlur: (val) => {
         calculateScheduleOneGovtTotals();
         if (typeof val === "string")
-          setValue("banglaNoboborshoAllowancesGovtEmployment.taxExempted", val);
+          setValue("banglaNoboborshoAllowancesGovt.taxExempted", val);
       },
       isVisible: watch("typeOfEmployment") === "GOVERNMENT",
     },
     {
-      name: "banglaNoboborshoAllowancesGovtEmployment.taxExempted",
+      name: "banglaNoboborshoAllowancesGovt.taxExempted",
       type: "number",
       label: "",
       disabled: true,
@@ -1439,7 +1435,7 @@ export const useFormFields = (
       isVisible: watch("typeOfEmployment") === "GOVERNMENT",
     },
     {
-      name: "interestAccruedProvidentFundGovtEmployment.amount",
+      name: "interestAccruedProvidentFundGovt.amount",
       type: "number",
       label: "",
       disabled: false,
@@ -1451,15 +1447,12 @@ export const useFormFields = (
       onBlur: (val) => {
         calculateScheduleOneGovtTotals();
         if (typeof val === "string")
-          setValue(
-            "interestAccruedProvidentFundGovtEmployment.taxExempted",
-            val
-          );
+          setValue("interestAccruedProvidentFundGovt.taxExempted", val);
       },
       isVisible: watch("typeOfEmployment") === "GOVERNMENT",
     },
     {
-      name: "interestAccruedProvidentFundGovtEmployment.taxExempted",
+      name: "interestAccruedProvidentFundGovt.taxExempted",
       type: "number",
       label: "",
       disabled: true,
@@ -1471,7 +1464,7 @@ export const useFormFields = (
       isVisible: watch("typeOfEmployment") === "GOVERNMENT",
     },
     {
-      name: "lumpGrantGovtEmployment.amount",
+      name: "lumpGrantGovt.amount",
       type: "number",
       label: "",
       disabled: false,
@@ -1482,13 +1475,12 @@ export const useFormFields = (
       imageIndex: 3,
       onBlur: (val) => {
         calculateScheduleOneGovtTotals();
-        if (typeof val === "string")
-          setValue("lumpGrantGovtEmployment.taxExempted", val);
+        if (typeof val === "string") setValue("lumpGrantGovt.taxExempted", val);
       },
       isVisible: watch("typeOfEmployment") === "GOVERNMENT",
     },
     {
-      name: "lumpGrantGovtEmployment.taxExempted",
+      name: "lumpGrantGovt.taxExempted",
       type: "number",
       label: "",
       disabled: true,
@@ -1500,7 +1492,7 @@ export const useFormFields = (
       isVisible: watch("typeOfEmployment") === "GOVERNMENT",
     },
     {
-      name: "gratuityGovtEmployment.amount",
+      name: "gratuityGovt.amount",
       type: "number",
       label: "",
       disabled: false,
@@ -1511,13 +1503,12 @@ export const useFormFields = (
       imageIndex: 3,
       onBlur: (val) => {
         calculateScheduleOneGovtTotals();
-        if (typeof val === "string")
-          setValue("gratuityGovtEmployment.taxExempted", val);
+        if (typeof val === "string") setValue("gratuityGovt.taxExempted", val);
       },
       isVisible: watch("typeOfEmployment") === "GOVERNMENT",
     },
     {
-      name: "gratuityGovtEmployment.taxExempted",
+      name: "gratuityGovt.taxExempted",
       type: "number",
       label: "",
       disabled: true,
@@ -1530,7 +1521,7 @@ export const useFormFields = (
     },
 
     {
-      name: "otherAllowanceGovtEmployment.amount",
+      name: "otherAllowanceGovt.amount",
       type: "number",
       label: "",
       disabled: false,
@@ -1546,7 +1537,7 @@ export const useFormFields = (
       isVisible: watch("typeOfEmployment") === "GOVERNMENT",
     },
     {
-      name: "otherAllowanceGovtEmployment.taxExempted",
+      name: "otherAllowanceGovt.taxExempted",
       type: "number",
       label: "",
       disabled: false,
@@ -1562,7 +1553,7 @@ export const useFormFields = (
       isVisible: watch("typeOfEmployment") === "GOVERNMENT",
     },
     {
-      name: "otherAllowanceGovtEmployment.taxable",
+      name: "otherAllowanceGovt.taxable",
       type: "number",
       label: "",
       disabled: true,
@@ -1574,7 +1565,7 @@ export const useFormFields = (
       isVisible: watch("typeOfEmployment") === "GOVERNMENT",
     },
     {
-      name: "totalGovtEmployment.amount",
+      name: "totalGovt.amount",
       type: "number",
       label: "",
       disabled: true,
@@ -1586,7 +1577,7 @@ export const useFormFields = (
       isVisible: watch("typeOfEmployment") === "GOVERNMENT",
     },
     {
-      name: "totalGovtEmployment.taxExempted",
+      name: "totalGovt.taxExempted",
       type: "number",
       label: "",
       disabled: true,
@@ -1598,7 +1589,7 @@ export const useFormFields = (
       isVisible: watch("typeOfEmployment") === "GOVERNMENT",
     },
     {
-      name: "totalGovtEmployment.taxable",
+      name: "totalGovt.taxable",
       type: "number",
       label: "",
       disabled: true,
@@ -1613,7 +1604,7 @@ export const useFormFields = (
     // private
 
     {
-      name: "basicPayPrivateEmployment",
+      name: "basicPayPrivate",
       type: "number",
       label: "",
       x: 630,
@@ -1627,7 +1618,7 @@ export const useFormFields = (
       isVisible: watch("typeOfEmployment") === "PRIVATE",
     },
     {
-      name: "allowancesPrivateEmployment",
+      name: "allowancesPrivate",
       type: "number",
       label: "",
       x: 630,
@@ -1641,7 +1632,7 @@ export const useFormFields = (
       isVisible: watch("typeOfEmployment") === "PRIVATE",
     },
     {
-      name: "advanceArrearSalaryPrivateEmployment",
+      name: "advanceArrearSalaryPrivate",
       type: "number",
       label: "",
       // disabled: true,
@@ -1656,7 +1647,7 @@ export const useFormFields = (
       isVisible: watch("typeOfEmployment") === "PRIVATE",
     },
     {
-      name: "gratuityAnnuityPensionOrSimilarBenefitPrivateEmployment",
+      name: "gratuityAnnuityPensionOrSimilarBenefitPrivate",
       type: "number",
       label: "",
       // disabled: true,
@@ -1671,7 +1662,7 @@ export const useFormFields = (
       isVisible: watch("typeOfEmployment") === "PRIVATE",
     },
     {
-      name: "perquisitesPrivateEmployment",
+      name: "perquisitesPrivate",
       type: "number",
       label: "",
       // disabled: true,
@@ -1686,7 +1677,7 @@ export const useFormFields = (
       isVisible: watch("typeOfEmployment") === "PRIVATE",
     },
     {
-      name: "receiptInLieuOfOrInAdditionToSalaryOrWagesPrivateEmployment",
+      name: "receiptInLieuOfOrInAdditionToSalaryOrWagesPrivate",
       type: "number",
       label: "",
       // disabled: true,
@@ -1701,7 +1692,7 @@ export const useFormFields = (
       isVisible: watch("typeOfEmployment") === "PRIVATE",
     },
     {
-      name: "incomeFromEmployeeShareSchemePrivateEmployment",
+      name: "incomeFromEmployeeShareSchemePrivate",
       type: "number",
       label: "",
       // disabled: true,
@@ -1716,7 +1707,7 @@ export const useFormFields = (
       isVisible: watch("typeOfEmployment") === "PRIVATE",
     },
     {
-      name: "accommodationFacilityPrivateEmployment",
+      name: "accommodationFacilityPrivate",
       type: "number",
       label: "",
       // disabled: true,
@@ -1731,7 +1722,7 @@ export const useFormFields = (
       isVisible: watch("typeOfEmployment") === "PRIVATE",
     },
     {
-      name: "transporFacilityPrivateCheck",
+      name: "transportFacilityPrivateCheck",
       type: "checkbox",
       label: "",
       x: 295,
@@ -1742,11 +1733,12 @@ export const useFormFields = (
       onBlur() {
         calculatePrivateEmploymentTotals();
       },
+
       isVisible: watch("typeOfEmployment") === "PRIVATE",
     },
 
     {
-      name: "tranportFacilityPrivateVehicleCC",
+      name: "transportFacilityPrivateVehicleCC",
       type: "select",
       label: "",
       placeholder: "Choose One",
@@ -1763,11 +1755,11 @@ export const useFormFields = (
       height: 18,
       imageIndex: 3,
       isVisible:
-        watch("transporFacilityPrivateCheck") &&
+        watch("transportFacilityPrivateCheck") &&
         watch("typeOfEmployment") === "PRIVATE",
     },
     {
-      name: "transportFacilityPrivateEmployment",
+      name: "transportFacilityPrivate",
       type: "number",
       label: "",
       disabled: true,
@@ -1780,7 +1772,7 @@ export const useFormFields = (
     },
 
     {
-      name: "anyOtherFacilityProvidedByEmployerPrivateEmployment",
+      name: "anyOtherFacilityProvidedByEmployerPrivate",
       type: "number",
       label: "",
       // disabled: true,
@@ -1795,7 +1787,7 @@ export const useFormFields = (
       isVisible: watch("typeOfEmployment") === "PRIVATE",
     },
     {
-      name: "employerContributionToProvidentFundPrivateEmployment",
+      name: "employerContributionToProvidentFundPrivate",
       type: "number",
       label: "",
       x: 630,
@@ -1806,7 +1798,7 @@ export const useFormFields = (
       onBlur() {
         const floatValue =
           parseFloat(
-            watch("employerContributionToProvidentFundPrivateEmployment") || "0"
+            watch("employerContributionToProvidentFundPrivate") || "0"
           ) * 2;
         setValue("selfAndEmployersContribution", floatValue.toString());
 
@@ -1815,7 +1807,7 @@ export const useFormFields = (
       isVisible: watch("typeOfEmployment") === "PRIVATE",
     },
     {
-      name: "otherIncomePrivateEmployment",
+      name: "otherIncomePrivate",
       type: "number",
       label: "",
       // disabled: true,
@@ -1830,7 +1822,7 @@ export const useFormFields = (
       isVisible: watch("typeOfEmployment") === "PRIVATE",
     },
     {
-      name: "totalSalaryReceivedPrivateEmployment",
+      name: "totalSalaryReceivedPrivate",
       type: "number",
       label: "",
       disabled: true,
@@ -1842,7 +1834,7 @@ export const useFormFields = (
       isVisible: watch("typeOfEmployment") === "PRIVATE",
     },
     {
-      name: "totalSalaryReceivedPrivateEmployment",
+      name: "totalSalaryReceivedPrivate",
       type: "number",
       label: "",
       disabled: true,
@@ -1854,7 +1846,7 @@ export const useFormFields = (
       isVisible: watch("typeOfEmployment") === "PRIVATE",
     },
     {
-      name: "exemptedAmountPrivateEmployment",
+      name: "exemptedAmountPrivate",
       type: "number",
       label: "",
       disabled: true,
@@ -1866,7 +1858,7 @@ export const useFormFields = (
       isVisible: watch("typeOfEmployment") === "PRIVATE",
     },
     {
-      name: "exemptedAmountPrivateEmployment",
+      name: "exemptedAmountPrivate",
       type: "number",
       label: "",
       disabled: true,
@@ -1878,7 +1870,7 @@ export const useFormFields = (
       isVisible: watch("typeOfEmployment") === "PRIVATE",
     },
     {
-      name: "totalIncomeFromSalaryPrivateEmployment",
+      name: "totalIncomeFromSalaryPrivate",
       type: "number",
       label: "",
       disabled: true,
@@ -1890,7 +1882,7 @@ export const useFormFields = (
       isVisible: watch("typeOfEmployment") === "PRIVATE",
     },
     {
-      name: "totalIncomeFromSalaryPrivateEmployment",
+      name: "totalIncomeFromSalaryPrivate",
       type: "number",
       label: "",
       disabled: true,
@@ -2865,7 +2857,7 @@ export const useFormFields = (
       isVisible: true,
     },
     {
-      name: "incomeFromCapitaGainsTotal.capitalGain",
+      name: "incomeFromCapitalGainsTotal.capitalGain",
       type: "number",
       label: "",
       disabled: true,
@@ -2877,7 +2869,7 @@ export const useFormFields = (
       isVisible: true,
     },
     {
-      name: "incomeFromCapitaGainsTotal.exemptedAmount",
+      name: "incomeFromCapitalGainsTotal.exemptedAmount",
       type: "number",
       label: "",
       disabled: true,
@@ -2889,7 +2881,7 @@ export const useFormFields = (
       isVisible: true,
     },
     {
-      name: "incomeFromCapitaGainsTotal.taxableAmount",
+      name: "incomeFromCapitalGainsTotal.taxableAmount",
       type: "number",
       label: "",
       disabled: true,
@@ -4286,7 +4278,7 @@ export const useFormFields = (
       isVisible: true,
     },
     {
-      name: "totalIncomeRebateTable.rebate",
+      name: "totalIncomeRebateTable",
       type: "number",
       label: "",
       disabled: true,
@@ -4310,7 +4302,7 @@ export const useFormFields = (
       isVisible: true,
     },
     {
-      name: "totalAllowableInvestmentRebateTable.rebate",
+      name: "totalAllowableInvestmentRebateTable",
       type: "number",
       label: "",
       disabled: true,
@@ -4322,7 +4314,7 @@ export const useFormFields = (
       isVisible: true,
     },
     {
-      name: "taka1000000.totalAmount",
+      name: "taka1000000",
       type: "number",
       label: "",
       disabled: true,
@@ -4334,7 +4326,7 @@ export const useFormFields = (
       isVisible: true,
     },
     {
-      name: "taka1000000.rebate",
+      name: "taka1000000",
       type: "number",
       label: "",
       disabled: true,
@@ -4403,7 +4395,7 @@ export const useFormFields = (
 
     {
       name: "expensesForFood.comment",
-      type: "number",
+      type: "text",
       label: "",
       x: 719,
       y: 218,
@@ -4683,7 +4675,7 @@ export const useFormFields = (
     {
       name: "totalExpenseIndividualPerson.comment",
       type: "text",
-      label: "total",
+      label: "",
       x: 719,
       y: 581,
       width: 203,
@@ -4695,12 +4687,29 @@ export const useFormFields = (
     {
       name: "signature",
       type: "signature",
-      label: "Signature",
-      x: 650,
-      y: 540,
-      width: 200,
-      height: 40,
+      label: "",
+      x: 730,
+      y: 720,
+      width: 240,
+      height: 60,
+      disabled: true,
       imageIndex: 8,
+      isVisible: true,
+    },
+
+    {
+      name: "dateOfSignature",
+      type: "date",
+      label: "",
+      x: 538,
+      y: 910,
+      width: 397,
+      height: 29,
+      disabled: true,
+      imageIndex: 8,
+      dayPosition: { x: 760, y: 790, width: 40, height: 29 },
+      monthPosition: { x: 810, y: 790, width: 40, height: 29 },
+      yearPosition: { x: 860, y: 790, width: 60, height: 29 },
       isVisible: true,
     },
 
@@ -5787,6 +5796,9 @@ export const useFormFields = (
       height: 18,
       imageIndex: 10,
       isVisible: true,
+      onBlur() {
+        calculateTotalCashInHandAndFund();
+      },
     },
     {
       name: "otherFundDesc",
@@ -5809,6 +5821,9 @@ export const useFormFields = (
       height: 18,
       imageIndex: 10,
       isVisible: true,
+      onBlur() {
+        calculateTotalCashInHandAndFund();
+      },
     },
 
     {
@@ -5867,21 +5882,22 @@ export const useFormFields = (
     {
       name: "signature",
       type: "signature",
-      label: "Signature",
+      label: "",
       x: 650,
-      y: 850,
-      width: 200,
-      height: 40,
+      y: 880,
+      width: 300,
+      height: 70,
+      disabled: true,
       imageIndex: 10,
       isVisible: true,
     },
     {
       name: "taxpayerName",
       type: "text",
-      label: "taxpayerName",
+      label: "",
       disabled: true,
       x: 150,
-      y: 905,
+      y: 903,
       width: 340,
       height: 16,
       imageIndex: 10,
@@ -5889,6 +5905,18 @@ export const useFormFields = (
     },
 
     // Image 12
+    {
+      name: "assessmentYear",
+      type: "text",
+      label: "",
+      x: 568,
+      y: 330,
+      width: 115,
+      height: 32,
+      imageIndex: 11,
+      isVisible: true,
+      disabled: true,
+    },
     {
       name: "taxpayerName",
       type: "text",

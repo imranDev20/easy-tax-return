@@ -23,6 +23,7 @@ export async function registerUser(input: RegisterFormData) {
       data: {
         name: validatedFields.name,
         email: validatedFields.email,
+        phone: validatedFields.phone,
         password: hashedPassword,
       },
     });
