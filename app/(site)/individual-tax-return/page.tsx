@@ -1,4 +1,4 @@
-import IndividualTaxReturnForm from "./_components/individual-tax-return.form";
+import IndividualTaxReturnForm from "./_components/individual-tax-return-form";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -36,7 +36,18 @@ export const metadata: Metadata = {
 export default function IndividualTaxReturnPage() {
   return (
     <>
-      <IndividualTaxReturnForm />
+      <div className="bg-lightGray min-h-screen">
+        <div className="container mx-auto py-12">
+          <h1 className="text-4xl md:text-5xl font-bold text-primary mb-4 font-serif text-center">
+            Online Tax Return Form
+          </h1>
+          <p className="text-gray-700 mb-8 text-center max-w-2xl mx-auto">
+            Complete your tax return easily and securely. Our form is designed
+            to guide you through the process step by step.
+          </p>
+          <IndividualTaxReturnForm />
+        </div>
+      </div>
     </>
   );
 }

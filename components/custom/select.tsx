@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import { ChevronDown } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useFormContext, FieldError } from "react-hook-form";
 
 interface Option {
   label: string;
@@ -34,6 +35,12 @@ const CustomSelect: React.FC<CustomSelectProps> = ({
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const selectRef = useRef<HTMLDivElement>(null);
+  const {
+    formState: { errors },
+  } = useFormContext();
+  const fieldError = errors[name as keyof typeof errors] as
+    | FieldError
+    | undefined;
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -73,7 +80,10 @@ const CustomSelect: React.FC<CustomSelectProps> = ({
     >
       <div
         className={cn(
-          "w-full h-full bg-white border border-sky-300 hover:border-sky-500 cursor-pointer relative",
+          "w-full h-full bg-white border cursor-pointer relative",
+          fieldError
+            ? "border-red-500 bg-red-300/10 hover:border-red-700"
+            : "border-sky-300 hover:border-sky-500",
           isVisible ? "block" : "hidden"
         )}
         onClick={() => setIsOpen(!isOpen)}
@@ -83,18 +93,28 @@ const CustomSelect: React.FC<CustomSelectProps> = ({
             {selectedOption ? (
               selectedOption.label
             ) : (
-              <span className={placeholder.length > 50 ? "text-xs" : ""}>
+              <span
+                className={cn(
+                  placeholder.length > 50 ? "text-xs" : "",
+                  fieldError ? "text-red-500" : ""
+                )}
+              >
                 {placeholder}
               </span>
             )}
           </span>
           <ChevronDown
-            className="flex-shrink-0"
+            className={cn("flex-shrink-0", fieldError ? "text-red-500" : "")}
             style={{ width: "8%", height: "40%" }}
           />
 
           {required && (
-            <span className="absolute top-0 right-0 -translate-y-1/2 translate-x-1/2 h-10 w-10 bg-sky-300/70 rotate-45 transform origin-center transition-colors">
+            <span
+              className={cn(
+                "absolute top-0 right-0 -translate-y-1/2 translate-x-1/2 h-10 w-10 rotate-45 transform origin-center transition-colors",
+                fieldError ? "bg-red-500/70" : "bg-sky-300/70"
+              )}
+            >
               <span className="absolute text-white top-[23px] left-[17px] text-lg">
                 *
               </span>
@@ -102,14 +122,16 @@ const CustomSelect: React.FC<CustomSelectProps> = ({
           )}
         </div>
       </div>
+
       {isOpen && (
         <div className="absolute top-full left-0 right-0 mt-1 bg-white border border-gray-300 rounded shadow-lg z-10">
           {options.map((option) => (
             <div
               key={option.value}
-              className={`cursor-pointer hover:bg-gray-100 ${
-                option.value === value ? "bg-blue-100" : ""
-              }`}
+              className={cn(
+                "cursor-pointer hover:bg-gray-100",
+                option.value === value && "bg-blue-100"
+              )}
               onClick={() => handleSelect(option)}
               style={{
                 padding: `${0.5 * scale}rem ${1 * scale}rem`,

@@ -1,30 +1,37 @@
 import React, { useState, useEffect } from "react";
-import { UseFormRegister, FieldValues } from "react-hook-form";
+import { useFormContext } from "react-hook-form";
 
 interface CustomCheckboxProps {
   label: string;
   name: string;
-  register: UseFormRegister<FieldValues>;
   style?: React.CSSProperties;
   scale: number;
   width: number;
   height: number;
   required: boolean;
   onBlur?: (val: string | boolean) => void;
+  value?: boolean;
+  onChange?: (value: boolean) => void;
 }
 
 const CustomCheckbox: React.FC<CustomCheckboxProps> = ({
   label,
   name,
-  register,
   style,
   scale,
   width,
   height,
   required,
   onBlur,
+  value,
+  onChange,
 }) => {
-  const [isChecked, setIsChecked] = useState(false);
+  const [internalChecked, setInternalChecked] = useState(false);
+  const {
+    register,
+    formState: { errors },
+  } = useFormContext();
+  const isChecked = value !== undefined ? value : internalChecked;
 
   const combinedStyle = {
     ...style,
@@ -33,21 +40,33 @@ const CustomCheckbox: React.FC<CustomCheckboxProps> = ({
     height: `${height / 10}%`,
   };
 
-  const { onChange, ...rest } = register(name);
+  const { onChange: registerOnChange, ...rest } = register(name);
 
   useEffect(() => {
-    const storedValue = localStorage.getItem(name);
-    if (storedValue) {
-      setIsChecked(JSON.parse(storedValue));
+    if (value !== undefined) {
+      setInternalChecked(value);
     }
-  }, [name]);
+  }, [value]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newCheckedState = e.target.checked;
-    setIsChecked(newCheckedState);
-    onChange(e);
-    if (onBlur) onBlur(e.target.checked);
+
+    if (value === undefined) {
+      setInternalChecked(newCheckedState);
+    }
+
+    if (onChange) {
+      onChange(newCheckedState);
+    }
+
+    registerOnChange(e);
+
+    if (onBlur) {
+      onBlur(newCheckedState);
+    }
   };
+
+  const fieldError = errors[name];
 
   return (
     <div className="relative" style={combinedStyle}>
@@ -59,9 +78,19 @@ const CustomCheckbox: React.FC<CustomCheckboxProps> = ({
           {...rest}
           className="absolute opacity-0 w-0 h-0"
         />
-        <span className="relative overflow-hidden w-full h-full border border-sky-300 rounded-none bg-sky-300/10 focus:border-sky-500 focus:ring-0 focus:outline-0 focus:bg-transparent hover:border-sky-500">
+        <span
+          className={`relative overflow-hidden w-full h-full border rounded-none
+            ${
+              fieldError
+                ? "border-red-500 bg-red-300/10 hover:border-red-700"
+                : "border-sky-300 bg-sky-300/10 hover:border-sky-500"
+            } focus:border-sky-500 focus:ring-0 focus:outline-0 focus:bg-transparent`}
+        >
           {required && (
-            <span className="absolute top-0 right-0 -translate-y-1/2 translate-x-1/2 h-10 w-10 bg-sky-300/70 rotate-45 transform origin-center transition-colors">
+            <span
+              className={`absolute top-0 right-0 -translate-y-1/2 translate-x-1/2 h-10 w-10 rotate-45 transform origin-center transition-colors
+                ${fieldError ? "bg-red-400/70" : "bg-sky-300/70"}`}
+            >
               <span className="absolute text-white top-[23px] left-[17px] text-lg">
                 *
               </span>
