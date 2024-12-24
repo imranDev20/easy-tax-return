@@ -5,6 +5,11 @@ import Image from "next/image";
 import { X, Edit2, Type, Upload } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
+type SignatureCanvasRef = SignatureCanvas & {
+  clear: () => void;
+  toDataURL: () => string;
+};
+
 interface SignatureFieldProps {
   onChange: (signatureData: string | null) => void;
   value: string | null;
@@ -27,7 +32,7 @@ const SignatureField: React.FC<SignatureFieldProps> = ({
     null
   );
   const [isUploading, setIsUploading] = useState(false);
-  const signatureCanvasRef = useRef<SignatureCanvas>(null);
+  const signatureCanvasRef = useRef<SignatureCanvasRef | null>(null);
   const { toast } = useToast();
 
   const handleUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -126,7 +131,7 @@ const SignatureField: React.FC<SignatureFieldProps> = ({
           {mode === "draw" && (
             <div className="border rounded-lg p-4">
               <SignatureCanvas
-                ref={signatureCanvasRef}
+                ref={signatureCanvasRef as React.Ref<SignatureCanvas>}
                 canvasProps={{
                   style: {
                     width: "100%",
