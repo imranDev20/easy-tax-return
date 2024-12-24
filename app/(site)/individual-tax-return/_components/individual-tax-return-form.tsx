@@ -1682,8 +1682,9 @@ const IndividualTaxReturnForm = ({
                       )}
                       <Image
                         src={image}
-                        loading="lazy"
+                        loading="eager"
                         placeholder="blur"
+                        quality={50}
                         alt={`Form Background ${index + 1}`}
                         layout="responsive"
                         className={`rounded-lg transition-opacity duration-300 ${
