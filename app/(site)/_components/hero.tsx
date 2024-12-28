@@ -14,6 +14,7 @@ import AvatarFour from "@/public/review-avatars/avatar-4.jpg";
 import VatIcon from "@/public/icons/vat-icon";
 import { usePathname, useRouter } from "next/navigation";
 import { useCallback } from "react";
+import PersonalWealthIcon from "@/public/icons/personal-wealth-icon";
 
 const HERO_CARD_OPTIONS = [
   {
@@ -36,6 +37,13 @@ const HERO_CARD_OPTIONS = [
     href: "vat-related-services",
     color: "bg-[rgba(46,213,115,0.2)]",
     hoverColor: "bg-[rgba(46,213,115,0.4)]",
+  },
+  {
+    label: "Personal Wealth Management",
+    Icon: PersonalWealthIcon, // Placeholder for the icon
+    href: "wealth-management",
+    color: "bg-[rgba(147,51,234,0.2)]", // Purple base color
+    hoverColor: "bg-[rgba(147,51,234,0.4)]",
   },
   {
     label: "Consult with Tax Expert",
@@ -78,7 +86,7 @@ export default function Hero() {
   );
 
   return (
-    <section className="bg-white">
+    <section className="relative overflow-hidden bg-gradient-to-tr from-green-200 via-white to-green-100 pb-20">
       <div className="container mx-auto py-8 px-4 md:px-6 grid grid-cols-1 lg:grid-cols-5 gap-8 items-center">
         <div className="lg:col-span-3 text-center lg:text-left">
           <h1 className="text-[2.5rem] md:text-5xl lg:text-[4rem] leading-tight lg:leading-none font-bold text-primary mb-4 font-serif">
@@ -161,7 +169,7 @@ export default function Hero() {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 px-4 sm:grid-cols-2 lg:grid-cols-4 gap-1 container mx-auto">
+      <div className="grid grid-cols-1 px-4 sm:grid-cols-2 lg:grid-cols-5 gap-1 container mx-auto">
         {HERO_CARD_OPTIONS.map((item) => (
           <Link
             href={item.href}
@@ -176,7 +184,7 @@ export default function Hero() {
             ></div>
             <div className="relative z-10 flex flex-col items-center lg:items-start">
               <item.Icon height={36} width={36} className="sm:h-12 sm:w-12" />
-              <h3 className="text-font font-serif text-lg sm:text-[1.35rem] mt-2 sm:mt-3 text-center lg:text-left">
+              <h3 className="text-font font-serif text-lg sm:text-2xl mt-2 sm:mt-3 text-center lg:text-left">
                 {item.label}
               </h3>
               <div className="text-xs sm:text-sm mt-2 flex items-center text-gray-600 group-hover:text-gray-900 transition-colors duration-300">

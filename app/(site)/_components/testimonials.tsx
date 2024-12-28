@@ -51,8 +51,8 @@ const Testimonials: React.FC = () => {
           <div className="text-center md:text-left">
             <SectionSubtitle subtitle="Testimonials" />
             <SectionTitle
-              title="Our client's reviews inspired us the most to improve our
-            services"
+              title="Our Client's Reviews Inspired Us the Most to Improve Our
+            Services"
             />
           </div>
 
